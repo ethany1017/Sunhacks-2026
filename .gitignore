@@ -1,0 +1,21 @@
+# OS and secrets
+.DS_Store
+.env
+*.key
+
+# Large raw downloads (rebuild with scripts/)
+data/**/On_Time_Reporting_Carrier_*.csv
+data/**/*.zip
+data/kphx_operations/faa_dtpp_2611/d-TPP_Metafile.xml
+
+# Third-party documents we should not redistribute
+data/reference_and_rules/vt_trani_nextor_2018_rot/
+data/reference_and_rules/nasa_ntrs_20190027149_pushback/
+
+# Agent working notes and duplicate reports (the catalog and research-atc.md are the deliverables)
+research_notes/
+reports/
+data/reference_and_rules/arxiv_2201_11654_arot/
+data/reference_and_rules/mit_simaiakis_atio2011/
+data/reference_and_rules/tudelft_joas_arot/
+data/reference_and_rules/vt_mirmohammadsadeghi_rot_dissertation/

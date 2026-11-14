@@ -1,0 +1,1428 @@
+SUSAD KPHXK2 IAHA  K2011075 ITW                    IAHAN33254119W111595218E0120011360     NARPHOENIX SKY HARBOR INTL       265951903
+SUSAD KPHXK2 ICWJ  K2011175 ITWN                   ICWJN33262432W111591971E0120011490     NARPHOENIX SKY HARBOR INTL       265961909
+SUSAD KPHXK2 IPHX  K2011150 ITW                    IPHXN33255408W111591911E0120011430     NARPHOENIX SKY HARBOR INTL       265971903
+SUSAD KPHXK2 IRJG  K2011075 ITWN                   IRJGN33254119W111595218E0120011170     NARPHOENIX SKY HARBOR INTL       265981904
+SUSAD KPHXK2 ISYQ  K2011175 ITW                    ISYQN33262432W111591971E0120011490     NARPHOENIX SKY HARBOR INTL       265991903
+SUSAP KPHXK2APHX     0     114YHN33260340W112004170E012001135         1800018000C    MNAR    PHOENIX SKY HARBOR INTL       877500903
+SUSAP KPHXK2CADWOT K20    W     N33254393W112040812                       E0097     NAR           ADWOT                    877512403
+SUSAP KPHXK2CADYAN K20    R     N33524515W109530746                       E0090     NAR           ADYAN                    877522605
+SUSAP KPHXK2CAGGLA K20    W     N33192511W112212694                       E0097     NAR           AGGLA                    877532605
+SUSAP KPHXK2CALOGE K20    R     N33254393W112041171                       E0097     NAR           ALOGE                    877542403
+SUSAP KPHXK2CANNTI K20    W     N33524710W112031128                       E0097     NAR           ANNTI                    877552605
+SUSAP KPHXK2CANZEL K20    W     N33213611W111475946                       E0096     NAR           ANZEL                    877562403
+SUSAP KPHXK2CAZCRD K20    W     N33233919W111501549                       E0096     NAR           AZCRD                    877572605
+SUSAP KPHXK2CBALTE K20    C     N33254379W112124072                       E0097     NAR           BALTE                    877582605
+SUSAP KPHXK2CBARLL K20    W     N33253659W111325643                       E0095     NAR           BARLL                    877592605
+SUSAP KPHXK2CBASSL K20    W     N33333395W111404204                       E0096     NAR           BASSL                    877602403
+SUSAP KPHXK2CBDWIL K20    W     N33543398W112092463                       E0098     NAR           BDWIL                    877612403
+SUSAP KPHXK2CBNNKR K20    W     N32280868W110423512                       E0091     NAR           BNNKR                    877622605
+SUSAP KPHXK2CBOHTX K20    W     N33474359W111335930                       E0096     NAR           BOHTX                    877632403
+SUSAP KPHXK2CBRAAK K20    W     N32591315W111582926                       E0096     NAR           BRAAK                    877642403
+SUSAP KPHXK2CBRDEY K20    W     N32544033W111291860                       E0094     NAR           BRDEY                    877652605
+SUSAP KPHXK2CBRIEZ K20    W     N33391852W111574399                       E0097     NAR           BRIEZ                    877662403
+SUSAP KPHXK2CBRUSR K20    C     N34051029W112081350                       E0098     NAR           BRUSR                    877672605
+SUSAP KPHXK2CBUDME K20    R     N33254171W111401045                       E0095     NAR           BUDME                    877682605
+SUSAP KPHXK2CCAGOR K20    C     N33254348W112165809                       E0097     NAR           CAGOR                    877692605
+SUSAP KPHXK2CCERLA K20    R     N33255183W112020624                       E0096     NAR           CERLA                    877702605
+SUSAP KPHXK2CCERUN K20    C     N33262298W111353769                       E0095     NAR           CERUN                    877712605
+SUSAP KPHXK2CCHAVO K20    W     N33205140W112053446                       E0097     NAR           CHAVO                    877722403
+SUSAP KPHXK2CCHOCK K20    W     N33212172W112093817                       E0097     NAR           CHOCK                    877732605
+SUSAP KPHXK2CDDUKE K20    W     N33091896W111511519                       E0096     NAR           DDUKE                    877742403
+SUSAP KPHXK2CDELSE K20    R     N33262680W111572837                       E0096     NAR           DELSE                    877752605
+SUSAP KPHXK2CDERVL K20    W     N33280492W111451977                       E0096     NAR           DERVL                    877762403
+SUSAP KPHXK2CDOJOE K20    C     N34472257W109380916                       E0090     NAR           DOJOE                    877772605
+SUSAP KPHXK2CDRRVR K20    W     N32103089W109172583                       E0086     NAR           DRRVR                    877782403
+SUSAP KPHXK2CDUTEY K20    W     N34515348W112191944                       E0100     NAR           DUTEY                    877792403
+SUSAP KPHXK2CENSEA K20    W     N33450207W112112571                       E0097     NAR           ENSEA                    877802605
+SUSAP KPHXK2CESDEE K20    W     N33383866W111362709                       E0095     NAR           ESDEE                    877812605
+SUSAP KPHXK2CETVIW K20    W     N33262705W112153368                       E0097     NAR           ETVIW                    877822605
+SUSAP KPHXK2CFALGO K20    C     N33254303W112211546                       E0097     NAR           FALGO                    877832605
+SUSAP KPHXK2CFANON K20    W     N33373250W112121604                       E0097     NAR           FANON                    877842605
+SUSAP KPHXK2CFBALL K20    W     N33405417W112121800                       E0097     NAR           FBALL                    877852605
+SUSAP KPHXK2CFFIXA K20    W     N33253987W112355944                       E0098     NAR           FFIXA(CNF)               877862605
+SUSAP KPHXK2CFINAP K20    W     N33241178W111444669                       E0096     NAR           FINAP                    877872403
+SUSAP KPHXK2CFIXAR K20    C     N33254064W111355595                       E0095     NAR           FIXAR                    877882605
+SUSAP KPHXK2CFOWLE K20    C     N33255172W112122496                       E0097     NAR           FOWLE                    877892605
+SUSAP KPHXK2CFUTEP K20    W     N33260574W111522224                       E0096     NAR           FUTEP                    877902605
+SUSAP KPHXK2CFYRBD K20    W     N32572332W112402612                       E0098     NAR           FYRBD                    877912605
+SUSAP KPHXK2CGEELA K20    W     N33164979W112491775                       E0099     NAR           GEELA                    877922403
+SUSAP KPHXK2CGEENO K20    W     N33421926W111440771                       E0096     NAR           GEENO                    877932605
+SUSAP KPHXK2CGILAA K20    C     N33331929W110532626                       E0093     NAR           GILAA                    877942605
+SUSAP KPHXK2CGIPSE K20    C     N33254293W111484662                       E0096     NAR           GIPSE                    877952605
+SUSAP KPHXK2CGOALY K20    W     N33390562W111501178                       E0096     NAR           GOALY                    877962605
+SUSAP KPHXK2CGUMMO K20    R     N34190359W111013243                       E0094     NAR           GUMMO                    877972605
+SUSAP KPHXK2CHAMEK K20    C     N33254231W111442854                       E0096     NAR           HAMEK                    877982403
+SUSAP KPHXK2CHATRK K20    C     N34311483W112180950                       E0099     NAR           HATRK                    877992605
+SUSAP KPHXK2CHIKID K20    R     N33262658W112212608                       E0098     NAR           HIKID                    878002403
+SUSAP KPHXK2CHINEY K20    W     N33313040W112042713                       E0097     NAR           HINEY                    878012605
+SUSAP KPHXK2CHIRVU K20    W     N33264233W112114884                       E0097     NAR           HIRVU                    878022605
+SUSAP KPHXK2CHYBRD K20    W     N32335996W110525021                       E0092     NAR           HYBRD                    878032403
+SUSAP KPHXK2CIEGOR K20    W     N33262726W112082946                       E0097     NAR           IEGOR                    878042605
+SUSAP KPHXK2CILIKE K20    R     N33262696W112170867                       E0097     NAR           ILIKE                    878052605
+SUSAP KPHXK2CJAGAL K20    C     N33262574W111484639                       E0096     NAR           JAGAL                    878062605
+SUSAP KPHXK2CJAMIL K20    C     N33262719W112125126                       E0097     NAR           JAMIL                    878072605
+SUSAP KPHXK2CJEPES K20    W     N33254347W112153421                       E0097     NAR           JEPES                    878082605
+SUSAP KPHXK2CJESSE K20    R     N34350072W110563755                       E0095     NAR           JESSE                    878092403
+SUSAP KPHXK2CJINOL K20    W     N33255393W112040447                       E0097     NAR           JINOL                    878102403
+SUSAP KPHXK2CJOLAR K20    W     N33440053W111510111                       E0096     NAR           JOLAR                    878112605
+SUSAP KPHXK2CJURAZ K20    W     N33313837W111510375                       E0096     NAR           JURAZ                    878122605
+SUSAP KPHXK2CJUTAK K20    W     N33233228W112112751                       E0097     NAR           JUTAK                    878132605
+SUSAP KPHXK2CKIRKM K20    W     N34500978W109413808                       E0090     NAR           KIRKM                    878142605
+SUSAP KPHXK2CKONTE K20    R     N33254370W111565341                       E0096     NAR           KONTE                    878152605
+SUSAP KPHXK2CKUCOO K20    W     N33314057W111543905                       E0096     NAR           KUCOO                    878162605
+SUSAP KPHXK2CLEMOE K20    W     N33204427W111561046                       E0096     NAR           LEMOE                    878172605
+SUSAP KPHXK2CLGACY K20    W     N33181529W112044409                       E0096     NAR           LGACY                    878182605
+SUSAP KPHXK2CMAHEM K20    C     N34001643W112065790                       E0098     NAR           MAHEM                    878192403
+SUSAP KPHXK2CMASVE K20    W     N33211874W111551132                       E0096     NAR           MASVE                    878202605
+SUSAP KPHXK2CMHAVI K20    W     N33222196W113270096                       E0101     NAR           MHAVI                    878212403
+SUSAP KPHXK2CNAVOQ K20    W     N33254342W111532101                       E0096     NAR           NAVOQ                    878222605
+SUSAP KPHXK2CNEELE K20    W     N33203065W112212304                       E0097     NAR           NEELE                    878232605
+SUSAP KPHXK2CNEPTN K20    R     N34450523W110103021                       E0092     NAR           NEPTN                    878242605
+SUSAP KPHXK2COAKLI K20    W     N33215037W112005192                       E0096     NAR           OAKLI                    878252605
+SUSAP KPHXK2COBASE K20    W     N33313146W112080244                       E0097     NAR           OBASE                    878262605
+SUSAP KPHXK2COSGUE K20    W     N33260733W112115030                       E0097     NAR           OSGUE                    878272605
+SUSAP KPHXK2COVNUY K20    W     N33254388W112082369                       E0097     NAR           OVNUY                    878282605
+SUSAP KPHXK2COXYGN K20    W     N33365605W112101516                       E0097     NAR           OXYGN                    878292605
+SUSAP KPHXK2CPAAAR K20    W     N33041436W111335830                       E0094     NAR           PAAAR                    878302605
+SUSAP KPHXK2CPANTD K20    W     N35113602W112233565                       E0100     NAR           PANTD                    878312605
+SUSAP KPHXK2CPETRS K20    W     N33255187W112040812                       E0097     NAR           PETRS                    878322403
+SUSAP KPHXK2CPGSKN K20    W     N33351664W112132919                       E0097     NAR           PGSKN                    878332605
+SUSAP KPHXK2CPINNG K20    W     N32444818W111114900                       E0093     NAR           PINNG                    878342605
+SUSAP KPHXK2CPOCCK K20    W     N33474726W111472262                       E0096     NAR           POCCK                    878352605
+SUSAP KPHXK2CPRUNN K20    R     N33262631W111524400                       E0096     NAR           PRUNN                    878362605
+SUSAP KPHXK2CPUKRE K20    W     N33134106W111383837                       E0095     NAR           PUKRE                    878372605
+SUSAP KPHXK2CPUNNT K20    W     N33194688W112412496                       E0098     NAR           PUNNT                    878382605
+SUSAP KPHXK2CPURCH K20    R     N33255182W112032510                       E0097     NAR           PURCH                    878392403
+SUSAP KPHXK2CPYPPE K20    W     N33153506W111555566                       E0096     NAR           PYPPE                    878402605
+SUSAP KPHXK2CQAQCE K20    W     N33255124W112184374                       E0097     NAR           QAQCE(CNF)               878412605
+SUSAP KPHXK2CQUENY K20    W     N33372928W111531387                       E0096     NAR           QUENY                    878422605
+SUSAP KPHXK2CRAXEE K20    W     N33342397W112170074                       E0097     NAR           RAXEE                    878432605
+SUSAP KPHXK2CRIICH K20    W     N33142592W112054309                       E0096     NAR           RIICH                    878442605
+SUSAP KPHXK2CRKDAM K20    W     N33031496W113220503                       E0100     NAR           RKDAM                    878452605
+SUSAP KPHXK2CRVANN K20    W     N33140493W111582643                       E0096     NAR           RVANN                    878462605
+SUSAP KPHXK2CSARTE K20    R     N33262606W112254134                       E0098     NAR           SARTE                    878472605
+SUSAP KPHXK2CSCADE K20    R     N33254347W111532120                       E0096     NAR           SCADE                    878482605
+SUSAP KPHXK2CSLIDR K20    C     N34422742W109512639                       E0091     NAR           SLIDR                    878492605
+SUSAP KPHXK2CSNRRA K20    W     N33201407W113273872                       E0101     NAR           SNRRA                    878502403
+SUSAP KPHXK2CSPINK K20    W     N33260790W113564651                       E0102     NAR           SPINK                    878512605
+SUSAP KPHXK2CSPRKY K20    W     N33260901W111532782                       E0096     NAR           SPRKY                    878522605
+SUSAP KPHXK2CSTRRM K20    W     N32531057W111543221                       E0095     NAR           STRRM                    878532605
+SUSAP KPHXK2CSWOON K20    W     N33175059W113134907                       E0100     NAR           SWOON                    878542605
+SUSAP KPHXK2CTEICH K20    W     N33240682W112300345                       E0098     NAR           TEICH                    878552605
+SUSAP KPHXK2CTEKUY K20    W     N33254368W111571339                       E0096     NAR           TEKUY                    878562605
+SUSAP KPHXK2CTENTS K20    W     N35293188W112270690                       E0101     NAR           TENTS                    878572605
+SUSAP KPHXK2CTESLE K20    C     N33254243W112253140                       E0098     NAR           TESLE                    878582605
+SUSAP KPHXK2CTEYYI K20    W     N33255014W111442842                       E0096     NAR           TEYYI                    878592403
+SUSAP KPHXK2CTINIZ K20    W     N34293887W110253895                       E0093     NAR           TINIZ                    878602403
+SUSAP KPHXK2CTINKM K20    W     N33262631W111524388                       E0096     NAR           TINKM                    878612605
+SUSAP KPHXK2CTIPLE K20    W     N33254335W111531478                       E0096     NAR           TIPLE                    878622605
+SUSAP KPHXK2CTLMAN K20    W     N33273345W112150885                       E0097     NAR           TLMAN                    878632605
+SUSAP KPHXK2CTODRE K20    C     N33262499W111442827                       E0096     NAR           TODRE                    878642403
+SUSAP KPHXK2CTOTIE K20    R     N33254388W112083007                       E0097     NAR           TOTIE                    878652605
+SUSAP KPHXK2CUPNIW K20    W     N33255151W112154119                       E0097     NAR           UPNIW                    878662605
+SUSAP KPHXK2CUSCUP K20    R     N35120677W114565359                       E0108     NAR           USCUP                    878672605
+SUSAP KPHXK2CUSEYE K20    W     N33210154W111520658                       E0096     NAR           USEYE                    878682605
+SUSAP KPHXK2CUVIYO K20    W     N33254836W111353790                       E0095     NAR           UVIYO                    878692605
+SUSAP KPHXK2CUXCUN K20    W     N33255126W111525459                       E0096     NAR           UXCUN                    878702605
+SUSAP KPHXK2CVISTL K20    W     N33203068W112103501                       E0097     NAR           VISTL                    878712605
+SUSAP KPHXK2CVNNOM K20    W     N33473327W111284819                       E0095     NAR           VNNOM                    878722605
+SUSAP KPHXK2CWAZUP K20    C     N33262727W112083386                       E0097     NAR           WAZUP                    878732605
+SUSAP KPHXK2CWEBAD K20    R     N34195180W112120116                       E0098     NAR           WEBAD                    878742605
+SUSAP KPHXK2CWETAL K20    W     N33172926W112091899                       E0097     NAR           WETAL                    878752403
+SUSAP KPHXK2CWIGWM K20    W     N33042048W111434657                       E0095     NAR           WIGWM                    878762605
+SUSAP KPHXK2CWINER K20    W     N35043440W113090494                       E0103     NAR           WINER                    878772403
+SUSAP KPHXK2CWIVLA K20    W     N33262925W112041405                       E0097     NAR           WIVLA                    878782403
+SUSAP KPHXK2CWULKO K20    W     N33232564W112114948                       E0097     NAR           WULKO                    878792605
+SUSAP KPHXK2CYASCU K20    W     N33255159W111570549                       E0096     NAR           YASCU                    878802605
+SUSAP KPHXK2CYECXY K20    W     N33255186W112082387                       E0097     NAR           YECXY                    878812605
+SUSAP KPHXK2CYOVKU K20    W     N33255942W112115063                       E0097     NAR           YOVKU                    878822605
+SUSAP KPHXK2CZAMEX K20    W     N33255078W111484651                       E0096     NAR           ZAMEX                    878832605
+SUSAP KPHXK2CZEMOS K20    R     N33262409W111401015                       E0095     NAR           ZEMOS                    878842605
+SUSAP KPHXK2CZIDOG K20    W     N33314664W112114539                       E0097     NAR           ZIDOG                    878852605
+SUSAP KPHXK2CZILUB K20    W     N33445832W112000123                       E0097     NAR           ZILUB                    878862605
+SUSAP KPHXK2CZINGA K20    R     N33255188W112070020                       E0097     NAR           ZINGA                    878872605
+SUSAP KPHXK2CZOLUP K20    W     N33254601W112040436                       E0097     NAR           ZOLUP                    878882403
+SUSAP KPHXK2DBALDY31RW07L 010         0        VA                     0780        + 01550     18000                        878891903
+SUSAP KPHXK2DBALDY31RW07L 020         0        VD PXR K2              07500040D                                            878901903
+SUSAP KPHXK2DBALDY31RW07L 030         0 E      VM                     1000                                                 878911903
+SUSAP KPHXK2DBALDY31RW07R 010         0        VA                     0780        + 01550     18000                        878921903
+SUSAP KPHXK2DBALDY31RW07R 020         0        VD PXR K2              07000040D                                            878931903
+SUSAP KPHXK2DBALDY31RW07R 030         0 E      VM                     1000                                                 878941903
+SUSAP KPHXK2DBALDY31RW08  010         0        VA                     0781        + 01550     18000                        878951903
+SUSAP KPHXK2DBALDY31RW08  020         0        VD PXR K2              08000040D                                            878961903
+SUSAP KPHXK2DBALDY31RW08  030         0 E      VM                     1000                                                 878971903
+SUSAP KPHXK2DBALDY31RW25L 010         0        VA                     2580        + 01550     18000                        878981903
+SUSAP KPHXK2DBALDY31RW25L 020         0        VD PXR K2              24000090D                                            878991903
+SUSAP KPHXK2DBALDY31RW25L 030         0 E  L   VMY                    1400                                                 879001903
+SUSAP KPHXK2DBALDY31RW25R 010         0        VA                     2581        + 01550     18000                        879011903
+SUSAP KPHXK2DBALDY31RW25R 020         0        VD PXR K2              24000090D                                            879021903
+SUSAP KPHXK2DBALDY31RW25R 030         0 E  L   VMY                    1400                                                 879031903
+SUSAP KPHXK2DBALDY31RW26  010         0        VA                     2581        + 01550     18000                        879041903
+SUSAP KPHXK2DBALDY31RW26  020         0        VD PXR K2              24000090D                                            879051903
+SUSAP KPHXK2DBALDY31RW26  030         0 E  L   VMY                    1400                                                 879061903
+SUSAP KPHXK2DBALDY32      010GILAAK2PC0E       IF                                             18000                        879071903
+SUSAP KPHXK2DBALDY32      020ADYANK2PC0E       TF                                 + 14000                                  879081903
+SUSAP KPHXK2DBALDY32      030         0        VI                     0550                                                 879091903
+SUSAP KPHXK2DBALDY32      040MAXXOK2EA0EE      CF CNX K2      2591050607850715D                                            879101903
+SUSAP KPHXK2DBALDY33ACH   010MAXXOK2EA0E       IF                                             18000                        879111903
+SUSAP KPHXK2DBALDY33ACH   020ACH  K2D 0VE      TF                                                                          879121903
+SUSAP KPHXK2DBALDY33CNX   010MAXXOK2EA0E       IF                                             18000                        879131903
+SUSAP KPHXK2DBALDY33CNX   020CNX  K2D 0VE      TF                                                                          879141903
+SUSAP KPHXK2DBROAK14RW07B 010         0        VA                     0780        + 01635     18000                        879151806
+SUSAP KPHXK2DBROAK14RW07B 020SPRKYK2PC0EY      DF                                                                          879161806
+SUSAP KPHXK2DBROAK14RW07B 030BROAKK2EA0EE      DF                                                                          879171806
+SUSAP KPHXK2DBROAK14RW08  010         0        VA                     0781        + 01635     18000                        879181806
+SUSAP KPHXK2DBROAK14RW08  020SPRKYK2PC0EY      DF                                                                          879191806
+SUSAP KPHXK2DBROAK14RW08  030BROAKK2EA0EE      DF                                                                          879201806
+SUSAP KPHXK2DBROAK14RW25L 010         0        VI                     2581                    18000                        879211806
+SUSAP KPHXK2DBROAK14RW25L 020JUTAKK2PC0E       CF PXR K2      2457011424000071D                                            879221806
+SUSAP KPHXK2DBROAK14RW25L 030WETALK2PC0E       TF                                                                          879231806
+SUSAP KPHXK2DBROAK14RW25L 040RIICHK2PC0E       TF                                                                          879241806
+SUSAP KPHXK2DBROAK14RW25L 050PYPPEK2PC0E       TF                                                                          879251806
+SUSAP KPHXK2DBROAK14RW25L 060BARLLK2PC0E       TF                                                                          879261806
+SUSAP KPHXK2DBROAK14RW25L 070BROAKK2EA0EE      TF                                                                          879271806
+SUSAP KPHXK2DBROAK14RW25R 010         0        VI                     2581                    18000                        879281806
+SUSAP KPHXK2DBROAK14RW25R 020JUTAKK2PC0E       CF PXR K2      2457011424000075D                                            879291806
+SUSAP KPHXK2DBROAK14RW25R 030WETALK2PC0E       TF                                                                          879301806
+SUSAP KPHXK2DBROAK14RW25R 040RIICHK2PC0E       TF                                                                          879311806
+SUSAP KPHXK2DBROAK14RW25R 050PYPPEK2PC0E       TF                                                                          879321806
+SUSAP KPHXK2DBROAK14RW25R 060BARLLK2PC0E       TF                                                                          879331806
+SUSAP KPHXK2DBROAK14RW25R 070BROAKK2EA0EE      TF                                                                          879341806
+SUSAP KPHXK2DBROAK14RW26  010         0        VA                     2581        + 01635     18000                        879351806
+SUSAP KPHXK2DBROAK14RW26  020JUTAKK2PC0E       DF                                                                          879361806
+SUSAP KPHXK2DBROAK14RW26  030WETALK2PC0E       TF                                                                          879371806
+SUSAP KPHXK2DBROAK14RW26  040RIICHK2PC0E       TF                                                                          879381806
+SUSAP KPHXK2DBROAK14RW26  050PYPPEK2PC0E       TF                                                                          879391806
+SUSAP KPHXK2DBROAK14RW26  060BARLLK2PC0E       TF                                                                          879401806
+SUSAP KPHXK2DBROAK14RW26  070BROAKK2EA0EE      TF                                                                          879411806
+SUSAP KPHXK2DBROAK15      010BROAKK2EA0E       IF                                             18000                        879421806
+SUSAP KPHXK2DBROAK15      020FTHLSK2EA0EE      TF                                                                          879431806
+SUSAP KPHXK2DBROAK16ABQ   010FTHLSK2EA0E       IF                                             18000                        879441806
+SUSAP KPHXK2DBROAK16ABQ   020JNIPRK2EA0E       TF                                                                          879451806
+SUSAP KPHXK2DBROAK16ABQ   030JSSUAK2EA0E       TF                                                                          879461806
+SUSAP KPHXK2DBROAK16ABQ   040ABQ  K2D 0VE      TF                                                                          879471806
+SUSAP KPHXK2DBROAK16JNIPR 010FTHLSK2EA0E       IF                                             18000                        879481806
+SUSAP KPHXK2DBROAK16JNIPR 020JNIPRK2EA0EE      TF                                                                          879491806
+SUSAP KPHXK2DBROAK16MAXXO 010FTHLSK2EA0E       IF                                             18000                        879501806
+SUSAP KPHXK2DBROAK16MAXXO 020JNIPRK2EA0E       TF                                                                          879511806
+SUSAP KPHXK2DBROAK16MAXXO 030JSSUAK2EA0E       TF                                                                          879521806
+SUSAP KPHXK2DBROAK16MAXXO 040MAXXOK2EA0EE      TF                                                                          879531806
+SUSAP KPHXK2DBXK4  1RW07L 010         0        VA                     0780        + 01550     18000                        879541507
+SUSAP KPHXK2DBXK4  1RW07L 020         0        VD PXR K2              07500040D                                            879551507
+SUSAP KPHXK2DBXK4  1RW07L 030         0        VM                     1000                                                 879561507
+SUSAP KPHXK2DBXK4  1RW07L 040BXK  K2D 0VE      DF                                                                          879571507
+SUSAP KPHXK2DBXK4  1RW07R 010         0        VA                     0780        + 01550     18000                        879581507
+SUSAP KPHXK2DBXK4  1RW07R 020         0        VD PXR K2              07000040D                                            879591507
+SUSAP KPHXK2DBXK4  1RW07R 030         0        VM                     1000                                                 879601507
+SUSAP KPHXK2DBXK4  1RW07R 040BXK  K2D 0VE      DF                                                                          879611507
+SUSAP KPHXK2DBXK4  1RW08  010         0        VA                     0781        + 01550     18000                        879621507
+SUSAP KPHXK2DBXK4  1RW08  020         0        VD PXR K2              08000040D                                            879631507
+SUSAP KPHXK2DBXK4  1RW08  030         0        VM                     1000                                                 879641507
+SUSAP KPHXK2DBXK4  1RW08  040BXK  K2D 0VE      DF                                                                          879651507
+SUSAP KPHXK2DBXK4  1RW25L 010         0        VA                     2580        + 01550     18000                        879661507
+SUSAP KPHXK2DBXK4  1RW25L 020         0        VD PXR K2              24000130D                                            879671507
+SUSAP KPHXK2DBXK4  1RW25L 030         0        VI                     2800                                                 879681507
+SUSAP KPHXK2DBXK4  1RW25L 040BXK  K2D 0VE      CF BXK K2      0000000025700210D                                            879691507
+SUSAP KPHXK2DBXK4  1RW25R 010         0        VA                     2581        + 01550     18000                        879701507
+SUSAP KPHXK2DBXK4  1RW25R 020         0        VD PXR K2              24000130D                                            879711507
+SUSAP KPHXK2DBXK4  1RW25R 030         0        VI                     2800                                                 879721507
+SUSAP KPHXK2DBXK4  1RW25R 040BXK  K2D 0VE      CF BXK K2      0000000025700210D                                            879731507
+SUSAP KPHXK2DBXK4  1RW26  010         0        VA                     2581        + 01550     18000                        879741507
+SUSAP KPHXK2DBXK4  1RW26  020         0        VD PXR K2              24000130D                                            879751507
+SUSAP KPHXK2DBXK4  1RW26  030         0        VI                     2800                                                 879761507
+SUSAP KPHXK2DBXK4  1RW26  040BXK  K2D 0VE      CF BXK K2      0000000025700210D                                            879771507
+SUSAP KPHXK2DBXK4  3BLH   010BXK  K2D 0V       IF                                             18000                        879781507
+SUSAP KPHXK2DBXK4  3BLH   020BLH  K2D 0VE      TF                                                                          879792303
+SUSAP KPHXK2DBXK4  3PKE   010BXK  K2D 0V       IF                                             18000                        879801507
+SUSAP KPHXK2DBXK4  3PKE   020PKE  K2D 0VE      TF                                                                          879812303
+SUSAP KPHXK2DBXK4  3PMD   010BXK  K2D 0V       IF                                             18000                        879821507
+SUSAP KPHXK2DBXK4  3PMD   020CURIVK2EA0E       TF                                                                          879832303
+SUSAP KPHXK2DBXK4  3PMD   030DECASK2EA0E       TF                                                                          879842303
+SUSAP KPHXK2DBXK4  3PMD   040PMD  K2D 0VE      TF                                                                          879852303
+SUSAP KPHXK2DBXK4  3PSP   010BXK  K2D 0V       IF                                             18000                        879861507
+SUSAP KPHXK2DBXK4  3PSP   020CURIVK2EA0E       TF                                                                          879872303
+SUSAP KPHXK2DBXK4  3PSP   030DECASK2EA0E       TF                                                                          879882303
+SUSAP KPHXK2DBXK4  3PSP   040PSP  K2D 0VE      TF                                                                          879892303
+SUSAP KPHXK2DCHILY41RW07L 010         0        VA                     0780        + 01550     18000                        879901507
+SUSAP KPHXK2DCHILY41RW07L 020         0        VD PXR K2              07500040D                                            879911507
+SUSAP KPHXK2DCHILY41RW07L 030         0        VM                     0450                                                 879921507
+SUSAP KPHXK2DCHILY41RW07L 040ZEPERK2EA0EE      CF PXR K2      3210040032100400D                                            879931507
+SUSAP KPHXK2DCHILY41RW07R 010         0        VA                     0780        + 01550     18000                        879941507
+SUSAP KPHXK2DCHILY41RW07R 020         0        VD PXR K2              07000040D                                            879951507
+SUSAP KPHXK2DCHILY41RW07R 030         0        VM                     0450                                                 879961507
+SUSAP KPHXK2DCHILY41RW07R 040ZEPERK2EA0EE      CF PXR K2      3210040032100400D                                            879971507
+SUSAP KPHXK2DCHILY41RW08  010         0        VA                     0781        + 01550     18000                        879981507
+SUSAP KPHXK2DCHILY41RW08  020         0        VD PXR K2              08000040D                                            879991507
+SUSAP KPHXK2DCHILY41RW08  030         0        VM                     0450                                                 880001507
+SUSAP KPHXK2DCHILY41RW08  040ZEPERK2EA0EE      CF PXR K2      3210040032100400D                                            880011507
+SUSAP KPHXK2DCHILY41RW25L 010         0        VA                     2580        + 01550     18000                        880021507
+SUSAP KPHXK2DCHILY41RW25L 020         0        VD PXR K2              26500090D                                            880031507
+SUSAP KPHXK2DCHILY41RW25L 030         0    R   VMY                    3600                                                 880041507
+SUSAP KPHXK2DCHILY41RW25L 040ZEPERK2EA0EE      CF PXR K2      3210040032100400D                                            880051507
+SUSAP KPHXK2DCHILY41RW25R 010         0        VA                     2581        + 01550     18000                        880061507
+SUSAP KPHXK2DCHILY41RW25R 020         0        VD PXR K2              26000090D                                            880071507
+SUSAP KPHXK2DCHILY41RW25R 030         0    R   VMY                    3600                                                 880081507
+SUSAP KPHXK2DCHILY41RW25R 040ZEPERK2EA0EE      CF PXR K2      3210040032100400D                                            880091507
+SUSAP KPHXK2DCHILY41RW26  010         0        VA                     2581        + 01550     18000                        880101507
+SUSAP KPHXK2DCHILY41RW26  020         0        VD PXR K2              26000090D                                            880111507
+SUSAP KPHXK2DCHILY41RW26  030         0    R   VMY                    3600                                                 880121507
+SUSAP KPHXK2DCHILY41RW26  040ZEPERK2EA0EE      CF PXR K2      3210040032100400D                                            880131507
+SUSAP KPHXK2DCHILY42      010ZEPERK2EA0E       IF                                             18000                        880141507
+SUSAP KPHXK2DCHILY42      020KARLOK2EA0E       TF                                                                          880152303
+SUSAP KPHXK2DCHILY42      030CHILYK2EA0EE      TF                                                                          880162303
+SUSAP KPHXK2DCHILY43BTY   010CHILYK2EA0E       IF                                             18000                        880171507
+SUSAP KPHXK2DCHILY43BTY   020RAMSYK2EA0E       TF                                                                          880182303
+SUSAP KPHXK2DCHILY43BTY   030SISIEK2EA0E       TF                                                                          880192303
+SUSAP KPHXK2DCHILY43BTY   040DOVEEK2EA0E       TF                                                                          880202303
+SUSAP KPHXK2DCHILY43BTY   050BTY  K2D 0VE      TF                                                                          880212303
+SUSAP KPHXK2DCHILY43EED   010CHILYK2EA0E       IF                                             18000                        880221507
+SUSAP KPHXK2DCHILY43EED   020EED  K2D 0VE      TF                                                                          880232303
+SUSAP KPHXK2DCHILY43HOBES 010CHILYK2EA0E       IF                                             18000                        880241507
+SUSAP KPHXK2DCHILY43HOBES 020HOBESK2EA0EE      TF                                                                          880252303
+SUSAP KPHXK2DCHILY43IGM   010CHILYK2EA0E       IF                                             18000                        880261507
+SUSAP KPHXK2DCHILY43IGM   020RAMSYK2EA0E       TF                                                                          880272303
+SUSAP KPHXK2DCHILY43IGM   030SISIEK2EA0E       TF                                                                          880282303
+SUSAP KPHXK2DCHILY43IGM   040IGM  K2D 0VE      TF                                                                          880292303
+SUSAP KPHXK2DECLPS14RW07B 010         0        VA                     0780        + 01635     18000                        880301806
+SUSAP KPHXK2DECLPS14RW07B 020SPRKYK2PC0EY      DF                                                                          880311806
+SUSAP KPHXK2DECLPS14RW07B 030ECLPSK2EA0EE      DF                                                                          880321806
+SUSAP KPHXK2DECLPS14RW08  010         0        VA                     0781        + 01635     18000                        880331806
+SUSAP KPHXK2DECLPS14RW08  020SPRKYK2PC0EY      DF                                                                          880341806
+SUSAP KPHXK2DECLPS14RW08  030ECLPSK2EA0EE      DF                                                                          880351806
+SUSAP KPHXK2DECLPS14RW25L 010         0        VI                     2581                    18000                        880361806
+SUSAP KPHXK2DECLPS14RW25L 020JUTAKK2PC0E       CF PXR K2      2457011424000071D                                            880371806
+SUSAP KPHXK2DECLPS14RW25L 030WETALK2PC0E       TF                                                                          880381806
+SUSAP KPHXK2DECLPS14RW25L 040RIICHK2PC0E       TF                                                                          880391806
+SUSAP KPHXK2DECLPS14RW25L 050ECLPSK2EA0EE      TF                                                                          880401806
+SUSAP KPHXK2DECLPS14RW25R 010         0        VI                     2581                    18000                        880411806
+SUSAP KPHXK2DECLPS14RW25R 020JUTAKK2PC0E       CF PXR K2      2457011424000075D                                            880421806
+SUSAP KPHXK2DECLPS14RW25R 030WETALK2PC0E       TF                                                                          880431806
+SUSAP KPHXK2DECLPS14RW25R 040RIICHK2PC0E       TF                                                                          880441806
+SUSAP KPHXK2DECLPS14RW25R 050ECLPSK2EA0EE      TF                                                                          880451806
+SUSAP KPHXK2DECLPS14RW26  010         0        VA                     2581        + 01635     18000                        880461806
+SUSAP KPHXK2DECLPS14RW26  020JUTAKK2PC0E       DF                                                                          880471806
+SUSAP KPHXK2DECLPS14RW26  030WETALK2PC0E       TF                                                                          880481806
+SUSAP KPHXK2DECLPS14RW26  040RIICHK2PC0E       TF                                                                          880491806
+SUSAP KPHXK2DECLPS14RW26  050ECLPSK2EA0EE      TF                                                                          880501806
+SUSAP KPHXK2DECLPS15      010ECLPSK2EA0E       IF                                             18000                        880511806
+SUSAP KPHXK2DECLPS15      020KATMNK2EA0EE      TF                                                                          880521806
+SUSAP KPHXK2DECLPS16PHASE 010KATMNK2EA0E       IF                                             18000                        880531806
+SUSAP KPHXK2DECLPS16PHASE 020BOXXRK2EA0E       TF                                                                          880541806
+SUSAP KPHXK2DECLPS16PHASE 030PHASEK2EA0EB      TF                                                                          880551806
+SUSAP KPHXK2DFORPE14RW07B 010         0        VA                     0780        + 01635     18000                        880561806
+SUSAP KPHXK2DFORPE14RW07B 020SPRKYK2PC0EY      DF                                                                          880571806
+SUSAP KPHXK2DFORPE14RW07B 030FORPEK2EA0EE      DF                                                                          880581806
+SUSAP KPHXK2DFORPE14RW08  010         0        VA                     0781        + 01635     18000                        880591806
+SUSAP KPHXK2DFORPE14RW08  020SPRKYK2PC0EY      DF                                                                          880601806
+SUSAP KPHXK2DFORPE14RW08  030FORPEK2EA0EE      DF                                                                          880611806
+SUSAP KPHXK2DFORPE14RW25L 010         0        VA                     2581        + 01635     18000                        880621806
+SUSAP KPHXK2DFORPE14RW25L 020ZOLUPK2PC0E       DF                                                                          880631806
+SUSAP KPHXK2DFORPE14RW25L 030YOVKUK2PC0E       TF                                                                          880641806
+SUSAP KPHXK2DFORPE14RW25L 040ZIDOGK2PC0E       TF                                 + 05000          230               -     880651806
+SUSAP KPHXK2DFORPE14RW25L 050OXYGNK2PC0E       TF                                                                          880661806
+SUSAP KPHXK2DFORPE14RW25L 060ZILUBK2PC0E       TF                                                                          880671806
+SUSAP KPHXK2DFORPE14RW25L 070FORPEK2EA0EE      TF                                                                          880681806
+SUSAP KPHXK2DFORPE14RW25R 010         0        VA                     2581        + 01635     18000                        880691806
+SUSAP KPHXK2DFORPE14RW25R 020JINOLK2PC0E       DF                                                                          880701806
+SUSAP KPHXK2DFORPE14RW25R 030OSGUEK2PC0E       TF                                                                          880711806
+SUSAP KPHXK2DFORPE14RW25R 040ZIDOGK2PC0E       TF                                 + 05000          230               -     880721806
+SUSAP KPHXK2DFORPE14RW25R 050OXYGNK2PC0E       TF                                                                          880731806
+SUSAP KPHXK2DFORPE14RW25R 060ZILUBK2PC0E       TF                                                                          880741806
+SUSAP KPHXK2DFORPE14RW25R 070FORPEK2EA0EE      TF                                                                          880751806
+SUSAP KPHXK2DFORPE14RW26  010         0        VA                     2581        + 01635     18000                        880761806
+SUSAP KPHXK2DFORPE14RW26  020WIVLAK2PC0E       DF                                                                          880771806
+SUSAP KPHXK2DFORPE14RW26  030HIRVUK2PC0E       TF                                                                          880781806
+SUSAP KPHXK2DFORPE14RW26  040ZIDOGK2PC0E       TF                                 + 05000          230               -     880791806
+SUSAP KPHXK2DFORPE14RW26  050OXYGNK2PC0E       TF                                                                          880801806
+SUSAP KPHXK2DFORPE14RW26  060ZILUBK2PC0E       TF                                                                          880811806
+SUSAP KPHXK2DFORPE14RW26  070FORPEK2EA0EE      TF                                                                          880821806
+SUSAP KPHXK2DFORPE15      010FORPEK2EA0E       IF                                             18000                        880831806
+SUSAP KPHXK2DFORPE15      020LALUZK2EA0EE      TF                                                                          880841806
+SUSAP KPHXK2DFORPE16ABQ   010LALUZK2EA0E       IF                                             18000                        880851806
+SUSAP KPHXK2DFORPE16ABQ   020SJN  K2D 0V       TF                                                                          880861806
+SUSAP KPHXK2DFORPE16ABQ   030ABQ  K2D 0VE      TF                                                                          880871806
+SUSAP KPHXK2DFORPE16MAXXO 010LALUZK2EA0E       IF                                             18000                        880881806
+SUSAP KPHXK2DFORPE16MAXXO 020SJN  K2D 0V       TF                                                                          880891806
+SUSAP KPHXK2DFORPE16MAXXO 030JSSUAK2EA0E       TF                                                                          880901806
+SUSAP KPHXK2DFORPE16MAXXO 040MAXXOK2EA0EE      TF                                                                          880911806
+SUSAP KPHXK2DFORPE16SJN   010LALUZK2EA0E       IF                                             18000                        880921806
+SUSAP KPHXK2DFORPE16SJN   020SJN  K2D 0VE      TF                                                                          880931806
+SUSAP KPHXK2DFYRBD14RW07B 010         0        VA                     0780        + 01635     18000                        880941806
+SUSAP KPHXK2DFYRBD14RW07B 020FUTEPK2PC0E       DF                                                                          880951806
+SUSAP KPHXK2DFYRBD14RW07B 030AZCRDK2PC0E       TF                                                                          880961806
+SUSAP KPHXK2DFYRBD14RW07B 040USEYEK2PC0E       TF                                                                          880971806
+SUSAP KPHXK2DFYRBD14RW07B 050MASVEK2PC0E       TF                                 + 07000          220               -     880981806
+SUSAP KPHXK2DFYRBD14RW07B 060OAKLIK2PC0E       TF                                                                          880991806
+SUSAP KPHXK2DFYRBD14RW07B 070FYRBDK2PC0EE      TF                                                                          881001806
+SUSAP KPHXK2DFYRBD14RW08  010         0        VA                     0781        + 01635     18000                        881011806
+SUSAP KPHXK2DFYRBD14RW08  020FUTEPK2PC0E       DF                                                                          881021806
+SUSAP KPHXK2DFYRBD14RW08  030AZCRDK2PC0E       TF                                                                          881031806
+SUSAP KPHXK2DFYRBD14RW08  040USEYEK2PC0E       TF                                                                          881041806
+SUSAP KPHXK2DFYRBD14RW08  050MASVEK2PC0E       TF                                 + 07000          220               -     881051806
+SUSAP KPHXK2DFYRBD14RW08  060OAKLIK2PC0E       TF                                                                          881061806
+SUSAP KPHXK2DFYRBD14RW08  070FYRBDK2PC0EE      TF                                                                          881071806
+SUSAP KPHXK2DFYRBD14RW25L 010         0        VI                     2581                    18000                        881081806
+SUSAP KPHXK2DFYRBD14RW25L 020JUTAKK2PC0E       CF PXR K2      2457011424000071D                                            881091806
+SUSAP KPHXK2DFYRBD14RW25L 030WETALK2PC0EY      TF                                                                          881101806
+SUSAP KPHXK2DFYRBD14RW25L 040FYRBDK2PC0EE      TF                                                                          881111806
+SUSAP KPHXK2DFYRBD14RW25R 010         0        VI                     2581                    18000                        881121806
+SUSAP KPHXK2DFYRBD14RW25R 020JUTAKK2PC0E       CF PXR K2      2457011424000075D                                            881131806
+SUSAP KPHXK2DFYRBD14RW25R 030WETALK2PC0EY      TF                                                                          881141806
+SUSAP KPHXK2DFYRBD14RW25R 040FYRBDK2PC0EE      TF                                                                          881151806
+SUSAP KPHXK2DFYRBD14RW26  010         0        VA                     2581        + 01635     18000                        881161806
+SUSAP KPHXK2DFYRBD14RW26  020JUTAKK2PC0E       DF                                                                          881171806
+SUSAP KPHXK2DFYRBD14RW26  030WETALK2PC0EY      TF                                                                          881181806
+SUSAP KPHXK2DFYRBD14RW26  040FYRBDK2PC0EE      TF                                                                          881191806
+SUSAP KPHXK2DFYRBD15      010FYRBDK2PC0E       IF                                             18000                        881201806
+SUSAP KPHXK2DFYRBD15      020JUDTHK2EA0EE      TF                                                                          881211806
+SUSAP KPHXK2DFYRBD16MOHAK 010JUDTHK2EA0E       IF                                             18000                        881221806
+SUSAP KPHXK2DFYRBD16MOHAK 020MOHAKK2EA0EE      TF                                                                          881231806
+SUSAP KPHXK2DKEENS34RW07B 010         0        VA                     0780        + 01635     18000       KPHX  K2PA       881242401
+SUSAP KPHXK2DKEENS34RW07B 020FUTEPK2PC0E       DF                                                                          881252401
+SUSAP KPHXK2DKEENS34RW07B 030AZCRDK2PC0E       TF                                                                          881262401
+SUSAP KPHXK2DKEENS34RW07B 040USEYEK2PC0E       TF                                                                          881272401
+SUSAP KPHXK2DKEENS34RW07B 050MASVEK2PC0E       TF                                 + 07000          220               -     881282401
+SUSAP KPHXK2DKEENS34RW07B 060OAKLIK2PC0E       TF                                                                          881292401
+SUSAP KPHXK2DKEENS34RW07B 070KEENSK2EA0EE      TF                                                                          881302401
+SUSAP KPHXK2DKEENS34RW08  010         0        VA                     0781        + 01635     18000                        881312401
+SUSAP KPHXK2DKEENS34RW08  020FUTEPK2PC0E       DF                                                                          881322401
+SUSAP KPHXK2DKEENS34RW08  030AZCRDK2PC0E       TF                                                                          881332401
+SUSAP KPHXK2DKEENS34RW08  040USEYEK2PC0E       TF                                                                          881342401
+SUSAP KPHXK2DKEENS34RW08  050MASVEK2PC0E       TF                                 + 07000          220               -     881352401
+SUSAP KPHXK2DKEENS34RW08  060OAKLIK2PC0E       TF                                                                          881362401
+SUSAP KPHXK2DKEENS34RW08  070KEENSK2EA0EE      TF                                                                          881372401
+SUSAP KPHXK2DKEENS34RW25L 010         0        VI                     2581                    18000                        881382401
+SUSAP KPHXK2DKEENS34RW25L 020WULKOK2PC0E       CF PXR K2      2455011724000074D                                            881392401
+SUSAP KPHXK2DKEENS34RW25L 030KEENSK2EA0EE      TF                                                                          881402401
+SUSAP KPHXK2DKEENS34RW25R 010         0        VI                     2581                    18000                        881412401
+SUSAP KPHXK2DKEENS34RW25R 020WULKOK2PC0E       CF PXR K2      2455011724000079D                                            881422401
+SUSAP KPHXK2DKEENS34RW25R 030KEENSK2EA0EE      TF                                                                          881432401
+SUSAP KPHXK2DKEENS34RW26  010         0        VA                     2581        + 01635     18000                        881442401
+SUSAP KPHXK2DKEENS34RW26  020WULKOK2PC0E   L   DF                                                                          881452401
+SUSAP KPHXK2DKEENS34RW26  030KEENSK2EA0EE      TF                                                                          881462401
+SUSAP KPHXK2DKEENS35      010KEENSK2EA0E       IF                                             18000                        881472401
+SUSAP KPHXK2DKEENS35      020IZZZOK2EA0EE      TF                                                                          881482401
+SUSAP KPHXK2DKEENS36BLH   010IZZZOK2EA0E       IF                                             18000                        881492401
+SUSAP KPHXK2DKEENS36BLH   020SALOMK2EA0E       TF                                                                          881502401
+SUSAP KPHXK2DKEENS36BLH   030BLH  K2D 0VE      TF                                                                          881512401
+SUSAP KPHXK2DKEENS36HRRBR 010IZZZOK2EA0E       IF                                             18000                        881522401
+SUSAP KPHXK2DKEENS36HRRBR 020CULTSK2EA0E       TF                                                                          881532401
+SUSAP KPHXK2DKEENS36HRRBR 030HRRBRK2EA0EE      TF                                                                          881542401
+SUSAP KPHXK2DKEENS36WLVRN 010IZZZOK2EA0E       IF                                             18000                        881552401
+SUSAP KPHXK2DKEENS36WLVRN 020WLVRNK2EA0EE      TF                                                                          881562401
+SUSAP KPHXK2DMOBIE41RW07L 010         0        VA                     0780        + 01550     18000                        881571507
+SUSAP KPHXK2DMOBIE41RW07L 020         0        VD PXR K2              07500040D                                            881581507
+SUSAP KPHXK2DMOBIE41RW07L 030         0        VM                     1000                                                 881591507
+SUSAP KPHXK2DMOBIE41RW07L 040MOBIEK2EA0EE      DF                                                                          881601507
+SUSAP KPHXK2DMOBIE41RW07R 010         0        VA                     0780        + 01550     18000                        881611507
+SUSAP KPHXK2DMOBIE41RW07R 020         0        VD PXR K2              07000040D                                            881621507
+SUSAP KPHXK2DMOBIE41RW07R 030         0        VM                     1000                                                 881631507
+SUSAP KPHXK2DMOBIE41RW07R 040MOBIEK2EA0EE      DF                                                                          881641507
+SUSAP KPHXK2DMOBIE41RW08  010         0        VA                     0781        + 01550     18000                        881651507
+SUSAP KPHXK2DMOBIE41RW08  020         0        VD PXR K2              08000040D                                            881661507
+SUSAP KPHXK2DMOBIE41RW08  030         0        VM                     1000                                                 881671507
+SUSAP KPHXK2DMOBIE41RW08  040MOBIEK2EA0EE      DF                                                                          881681507
+SUSAP KPHXK2DMOBIE41RW25L 010         0        VA                     2580        + 01550     18000                        881691507
+SUSAP KPHXK2DMOBIE41RW25L 020         0        VD PXR K2              24000090D                                            881701507
+SUSAP KPHXK2DMOBIE41RW25L 030         0        VM                     1600                                                 881711507
+SUSAP KPHXK2DMOBIE41RW25L 040MOBIEK2EA0EE      DF                                                                          881721507
+SUSAP KPHXK2DMOBIE41RW25R 010         0        VA                     2581        + 01550     18000                        881731507
+SUSAP KPHXK2DMOBIE41RW25R 020         0        VD PXR K2              24000090D                                            881741507
+SUSAP KPHXK2DMOBIE41RW25R 030         0        VM                     1600                                                 881751507
+SUSAP KPHXK2DMOBIE41RW25R 040MOBIEK2EA0EE      DF                                                                          881761507
+SUSAP KPHXK2DMOBIE41RW26  010         0        VA                     2581        + 01550     18000                        881771507
+SUSAP KPHXK2DMOBIE41RW26  020         0        VD PXR K2              24000090D                                            881781507
+SUSAP KPHXK2DMOBIE41RW26  030         0        VM                     1600                                                 881791507
+SUSAP KPHXK2DMOBIE41RW26  040MOBIEK2EA0EE      DF                                                                          881801507
+SUSAP KPHXK2DMOBIE43GBN   010MOBIEK2EA0E       IF                                             18000                        881811507
+SUSAP KPHXK2DMOBIE43GBN   020GBN  K2D 0VE      TF                                                                          881822303
+SUSAP KPHXK2DMRBIL14RW07B 010         0        VA                     0780        + 01635     18000                        881831806
+SUSAP KPHXK2DMRBIL14RW07B 020SPRKYK2PC0EY      DF                                                                          881841806
+SUSAP KPHXK2DMRBIL14RW07B 030GOALYK2PC0E       DF                                 - 09000                                  881851806
+SUSAP KPHXK2DMRBIL14RW07B 040POCCKK2PC0E       TF                                                                          881861806
+SUSAP KPHXK2DMRBIL14RW07B 050MRBILK2EA0EE      TF                                                                          881871806
+SUSAP KPHXK2DMRBIL14RW08  010         0        VA                     0781        + 01635     18000                        881881806
+SUSAP KPHXK2DMRBIL14RW08  020SPRKYK2PC0EY      DF                                                                          881891806
+SUSAP KPHXK2DMRBIL14RW08  030GOALYK2PC0E       DF                                 - 09000                                  881901806
+SUSAP KPHXK2DMRBIL14RW08  040POCCKK2PC0E       TF                                                                          881911806
+SUSAP KPHXK2DMRBIL14RW08  050MRBILK2EA0EE      TF                                                                          881921806
+SUSAP KPHXK2DMRBIL14RW25L 010         0        VA                     2581        + 01635     18000                        881931806
+SUSAP KPHXK2DMRBIL14RW25L 020ZOLUPK2PC0E       DF                                                                          881941806
+SUSAP KPHXK2DMRBIL14RW25L 030YOVKUK2PC0E       TF                                                                          881951806
+SUSAP KPHXK2DMRBIL14RW25L 040ZIDOGK2PC0E       TF                                 + 05000          230               -     881961806
+SUSAP KPHXK2DMRBIL14RW25L 050OXYGNK2PC0E       TF                                                                          881971806
+SUSAP KPHXK2DMRBIL14RW25L 060ZILUBK2PC0E       TF                                                                          881981806
+SUSAP KPHXK2DMRBIL14RW25L 070MRBILK2EA0EE      TF                                                                          881991806
+SUSAP KPHXK2DMRBIL14RW25R 010         0        VA                     2581        + 01635     18000                        882001806
+SUSAP KPHXK2DMRBIL14RW25R 020JINOLK2PC0E       DF                                                                          882011806
+SUSAP KPHXK2DMRBIL14RW25R 030OSGUEK2PC0E       TF                                                                          882021806
+SUSAP KPHXK2DMRBIL14RW25R 040ZIDOGK2PC0E       TF                                 + 05000          230               -     882031806
+SUSAP KPHXK2DMRBIL14RW25R 050OXYGNK2PC0E       TF                                                                          882041806
+SUSAP KPHXK2DMRBIL14RW25R 060ZILUBK2PC0E       TF                                                                          882051806
+SUSAP KPHXK2DMRBIL14RW25R 070MRBILK2EA0EE      TF                                                                          882061806
+SUSAP KPHXK2DMRBIL14RW26  010         0        VA                     2581        + 01635     18000                        882071806
+SUSAP KPHXK2DMRBIL14RW26  020WIVLAK2PC0E       DF                                                                          882081806
+SUSAP KPHXK2DMRBIL14RW26  030HIRVUK2PC0E       TF                                                                          882091806
+SUSAP KPHXK2DMRBIL14RW26  040ZIDOGK2PC0E       TF                                 + 05000          230               -     882101806
+SUSAP KPHXK2DMRBIL14RW26  050OXYGNK2PC0E       TF                                                                          882111806
+SUSAP KPHXK2DMRBIL14RW26  060ZILUBK2PC0E       TF                                                                          882121806
+SUSAP KPHXK2DMRBIL14RW26  070MRBILK2EA0EE      TF                                                                          882131806
+SUSAP KPHXK2DMRBIL15      010MRBILK2EA0E       IF                                             18000                        882141806
+SUSAP KPHXK2DMRBIL15      020YOTESK2EA0EE      TF                                                                          882151806
+SUSAP KPHXK2DMRBIL16GCN   010YOTESK2EA0E       IF                                             18000                        882161806
+SUSAP KPHXK2DMRBIL16GCN   020GCN  K2D 0VE      TF                                                                          882171806
+SUSAP KPHXK2DMRBIL16JARPA 010YOTESK2EA0E       IF                                             18000                        882181806
+SUSAP KPHXK2DMRBIL16JARPA 020JARPAK2EA0EE      TF                                                                          882191806
+SUSAP KPHXK2DMRBIL16YOOPR 010YOTESK2EA0E       IF                                             18000                        882201806
+SUSAP KPHXK2DMRBIL16YOOPR 020YOOPRK2EA0EE      TF                                                                          882211806
+SUSAP KPHXK2DQUAKY14RW07B 010         0        VA                     0780        + 01635     18000                        882221806
+SUSAP KPHXK2DQUAKY14RW07B 020SPRKYK2PC0EY      DF                                                                          882231806
+SUSAP KPHXK2DQUAKY14RW07B 030GOALYK2PC0E       DF                                 - 09000                                  882241806
+SUSAP KPHXK2DQUAKY14RW07B 040QUAKYK2EA0EE      TF                                                                          882251806
+SUSAP KPHXK2DQUAKY14RW08  010         0        VA                     0781        + 01635     18000                        882261806
+SUSAP KPHXK2DQUAKY14RW08  020SPRKYK2PC0EY      DF                                                                          882271806
+SUSAP KPHXK2DQUAKY14RW08  030GOALYK2PC0E       DF                                 - 09000                                  882281806
+SUSAP KPHXK2DQUAKY14RW08  040QUAKYK2EA0EE      TF                                                                          882291806
+SUSAP KPHXK2DQUAKY14RW25L 010         0        VA                     2581        + 01635     18000                        882301806
+SUSAP KPHXK2DQUAKY14RW25L 020ZOLUPK2PC0E       DF                                                                          882311806
+SUSAP KPHXK2DQUAKY14RW25L 030YOVKUK2PC0E       TF                                                                          882321806
+SUSAP KPHXK2DQUAKY14RW25L 040ZIDOGK2PC0E       TF                                 + 05000          230               -     882331806
+SUSAP KPHXK2DQUAKY14RW25L 050OXYGNK2PC0E       TF                                                                          882341806
+SUSAP KPHXK2DQUAKY14RW25L 060ZILUBK2PC0E       TF                                                                          882351806
+SUSAP KPHXK2DQUAKY14RW25L 070QUAKYK2EA0EE      TF                                                                          882361806
+SUSAP KPHXK2DQUAKY14RW25R 010         0        VA                     2581        + 01635     18000                        882371806
+SUSAP KPHXK2DQUAKY14RW25R 020JINOLK2PC0E       DF                                                                          882381806
+SUSAP KPHXK2DQUAKY14RW25R 030OSGUEK2PC0E       TF                                                                          882391806
+SUSAP KPHXK2DQUAKY14RW25R 040ZIDOGK2PC0E       TF                                 + 05000          230               -     882401806
+SUSAP KPHXK2DQUAKY14RW25R 050OXYGNK2PC0E       TF                                                                          882411806
+SUSAP KPHXK2DQUAKY14RW25R 060ZILUBK2PC0E       TF                                                                          882421806
+SUSAP KPHXK2DQUAKY14RW25R 070QUAKYK2EA0EE      TF                                                                          882431806
+SUSAP KPHXK2DQUAKY14RW26  010         0        VA                     2581        + 01635     18000                        882441806
+SUSAP KPHXK2DQUAKY14RW26  020WIVLAK2PC0E       DF                                                                          882451806
+SUSAP KPHXK2DQUAKY14RW26  030HIRVUK2PC0E       TF                                                                          882461806
+SUSAP KPHXK2DQUAKY14RW26  040ZIDOGK2PC0E       TF                                 + 05000          230               -     882471806
+SUSAP KPHXK2DQUAKY14RW26  050OXYGNK2PC0E       TF                                                                          882481806
+SUSAP KPHXK2DQUAKY14RW26  060ZILUBK2PC0E       TF                                                                          882491806
+SUSAP KPHXK2DQUAKY14RW26  070QUAKYK2EA0EE      TF                                                                          882501806
+SUSAP KPHXK2DQUAKY15      010QUAKYK2EA0E       IF                                             18000                        882511806
+SUSAP KPHXK2DQUAKY15      020SNOBLK2EA0EE      TF                                                                          882521806
+SUSAP KPHXK2DQUAKY16CARTL 010SNOBLK2EA0E       IF                                             18000                        882531806
+SUSAP KPHXK2DQUAKY16CARTL 020CARTLK2EA0EE      TF                                                                          882541806
+SUSAP KPHXK2DQUAKY16GCN   010SNOBLK2EA0E       IF                                             18000                        882551806
+SUSAP KPHXK2DQUAKY16GCN   020CARTLK2EA0E       TF                                                                          882561806
+SUSAP KPHXK2DQUAKY16GCN   030LOFTSK2EA0E       TF                                                                          882571806
+SUSAP KPHXK2DQUAKY16GCN   040RIMMMK2EA0E       TF                                                                          882581806
+SUSAP KPHXK2DQUAKY16GCN   050GCN  K2D 0VE      TF                                                                          882591806
+SUSAP KPHXK2DQUAKY16JARPA 010SNOBLK2EA0E       IF                                             18000                        882601806
+SUSAP KPHXK2DQUAKY16JARPA 020CARTLK2EA0E       TF                                                                          882611806
+SUSAP KPHXK2DQUAKY16JARPA 030JARPAK2EA0EE      TF                                                                          882621806
+SUSAP KPHXK2DQUAKY16RIMMM 010SNOBLK2EA0E       IF                                             18000                        882631806
+SUSAP KPHXK2DQUAKY16RIMMM 020CARTLK2EA0E       TF                                                                          882641806
+SUSAP KPHXK2DQUAKY16RIMMM 030LOFTSK2EA0E       TF                                                                          882651806
+SUSAP KPHXK2DQUAKY16RIMMM 040RIMMMK2EA0EE      TF                                                                          882661806
+SUSAP KPHXK2DQUAKY16YOOPR 010SNOBLK2EA0E       IF                                             18000                        882671806
+SUSAP KPHXK2DQUAKY16YOOPR 020CARTLK2EA0E       TF                                                                          882681806
+SUSAP KPHXK2DQUAKY16YOOPR 030YOOPRK2EA0EE      TF                                                                          882691806
+SUSAP KPHXK2DSJN9  1RW07L 010         0        VA                     0780        + 01550     18000                        882701903
+SUSAP KPHXK2DSJN9  1RW07L 020         0        VD PXR K2              07500040D                                            882711903
+SUSAP KPHXK2DSJN9  1RW07L 030         0        VI                     0450                                                 882721903
+SUSAP KPHXK2DSJN9  1RW07L 040FORPEK2EA0E       CF PXR K2      0544038305400280D                                            882731903
+SUSAP KPHXK2DSJN9  1RW07L 050SJN  K2D 0VE      TF                                                                          882741903
+SUSAP KPHXK2DSJN9  1RW07R 010         0        VA                     0780        + 01550     18000                        882751903
+SUSAP KPHXK2DSJN9  1RW07R 020         0        VD PXR K2              07000040D                                            882761903
+SUSAP KPHXK2DSJN9  1RW07R 030         0        VI                     0450                                                 882771903
+SUSAP KPHXK2DSJN9  1RW07R 040FORPEK2EA0E       CF PXR K2      0544038305400280D                                            882781903
+SUSAP KPHXK2DSJN9  1RW07R 050SJN  K2D 0VE      TF                                                                          882791903
+SUSAP KPHXK2DSJN9  1RW08  010         0        VA                     0781        + 01550     18000                        882801903
+SUSAP KPHXK2DSJN9  1RW08  020         0        VD PXR K2              08000040D                                            882811903
+SUSAP KPHXK2DSJN9  1RW08  030         0        VI                     0450                                                 882821903
+SUSAP KPHXK2DSJN9  1RW08  040FORPEK2EA0E       CF PXR K2      0544038305400280D                                            882831903
+SUSAP KPHXK2DSJN9  1RW08  050SJN  K2D 0VE      TF                                                                          882841903
+SUSAP KPHXK2DSJN9  1RW25L 010         0        VA                     2580        + 01550     18000                        882851903
+SUSAP KPHXK2DSJN9  1RW25L 020         0        VD PXR K2              26500090D                                            882861903
+SUSAP KPHXK2DSJN9  1RW25L 030         0    R   VMY                    3600                                                 882871903
+SUSAP KPHXK2DSJN9  1RW25L 040FORPEK2EA0E   R   CF PXR K2      0544038305400380D                                            882881903
+SUSAP KPHXK2DSJN9  1RW25L 050SJN  K2D 0VE      TF                                                                          882891903
+SUSAP KPHXK2DSJN9  1RW25R 010         0        VA                     2581        + 01550     18000                        882901903
+SUSAP KPHXK2DSJN9  1RW25R 020         0        VD PXR K2              26000090D                                            882911903
+SUSAP KPHXK2DSJN9  1RW25R 030         0    R   VMY                    3600                                                 882921903
+SUSAP KPHXK2DSJN9  1RW25R 040FORPEK2EA0E   R   CF PXR K2      0544038305400380D                                            882931903
+SUSAP KPHXK2DSJN9  1RW25R 050SJN  K2D 0VE      TF                                                                          882941903
+SUSAP KPHXK2DSJN9  1RW26  010         0        VA                     2581        + 01550     18000                        882951903
+SUSAP KPHXK2DSJN9  1RW26  020         0        VD PXR K2              26000090D                                            882961903
+SUSAP KPHXK2DSJN9  1RW26  030         0    R   VMY                    3600                                                 882971903
+SUSAP KPHXK2DSJN9  1RW26  040FORPEK2EA0E   R   CF PXR K2      0544038305400380D                                            882981903
+SUSAP KPHXK2DSJN9  1RW26  050SJN  K2D 0VE      TF                                                                          882991903
+SUSAP KPHXK2DSJN9  3ABQ   010SJN  K2D 0V       IF                                             18000                        883001903
+SUSAP KPHXK2DSJN9  3ABQ   020ABQ  K2D 0VE      TF                                                                          883011903
+SUSAP KPHXK2DSTRRM14RW07B 010         0        VA                     0780        + 01635     18000                        883021806
+SUSAP KPHXK2DSTRRM14RW07B 020SPRKYK2PC0EY      DF                                 + 02600          220               -     883031806
+SUSAP KPHXK2DSTRRM14RW07B 030ANZELK2PC0E       DF                                                                          883041806
+SUSAP KPHXK2DSTRRM14RW07B 040DDUKEK2PC0E       TF                                                                          883051806
+SUSAP KPHXK2DSTRRM14RW07B 050BNYRDK2EA0EE      TF                                                                          883061806
+SUSAP KPHXK2DSTRRM14RW08  010         0        VA                     0781        + 01635     18000                        883071806
+SUSAP KPHXK2DSTRRM14RW08  020SPRKYK2PC0EY      DF                                 + 02600          220               -     883081806
+SUSAP KPHXK2DSTRRM14RW08  030ANZELK2PC0E       DF                                                                          883091806
+SUSAP KPHXK2DSTRRM14RW08  040DDUKEK2PC0E       TF                                                                          883101806
+SUSAP KPHXK2DSTRRM14RW08  050BNYRDK2EA0EE      TF                                                                          883111806
+SUSAP KPHXK2DSTRRM14RW25L 010         0        VI                     2581                    18000                        883121806
+SUSAP KPHXK2DSTRRM14RW25L 020JUTAKK2PC0E       CF PXR K2      2457011424000071D                                            883131806
+SUSAP KPHXK2DSTRRM14RW25L 030WETALK2PC0E       TF                                                                          883141806
+SUSAP KPHXK2DSTRRM14RW25L 040BNYRDK2EA0EE      TF                                                                          883151806
+SUSAP KPHXK2DSTRRM14RW25R 010         0        VI                     2581                    18000                        883161806
+SUSAP KPHXK2DSTRRM14RW25R 020JUTAKK2PC0E       CF PXR K2      2457011424000075D                                            883171806
+SUSAP KPHXK2DSTRRM14RW25R 030WETALK2PC0E       TF                                                                          883181806
+SUSAP KPHXK2DSTRRM14RW25R 040BNYRDK2EA0EE      TF                                                                          883191806
+SUSAP KPHXK2DSTRRM14RW26  010         0        VA                     2581        + 01635     18000                        883201806
+SUSAP KPHXK2DSTRRM14RW26  020JUTAKK2PC0E       DF                                                                          883211806
+SUSAP KPHXK2DSTRRM14RW26  030WETALK2PC0E       TF                                                                          883221806
+SUSAP KPHXK2DSTRRM14RW26  040BNYRDK2EA0EE      TF                                                                          883231806
+SUSAP KPHXK2DSTRRM15      010BNYRDK2EA0E       IF                                             18000                        883241806
+SUSAP KPHXK2DSTRRM15      020STRRMK2PC0EE      TF                                                                          883251806
+SUSAP KPHXK2DSTRRM16TUS   010STRRMK2PC0E       IF                                             18000                        883261806
+SUSAP KPHXK2DSTRRM16TUS   020TUS  K2D 0VE      TF                                                                          883271806
+SUSAP KPHXK2DTFD4  1RW07L 010         0        VA                     0780        + 01550     18000                        883281507
+SUSAP KPHXK2DTFD4  1RW07L 020         0        VD PXR K2              07500040D                                            883291507
+SUSAP KPHXK2DTFD4  1RW07L 030         0        VM                     1000                                                 883301507
+SUSAP KPHXK2DTFD4  1RW07L 040TFD  K2D 0VE      CF TFD K2      0000000016000330D                                            883311507
+SUSAP KPHXK2DTFD4  1RW07R 010         0        VA                     0780        + 01550     18000                        883321507
+SUSAP KPHXK2DTFD4  1RW07R 020         0        VD PXR K2              07000040D                                            883331507
+SUSAP KPHXK2DTFD4  1RW07R 030         0        VM                     1000                                                 883341507
+SUSAP KPHXK2DTFD4  1RW07R 040TFD  K2D 0VE      CF TFD K2      0000000016000320D                                            883351507
+SUSAP KPHXK2DTFD4  1RW08  010         0        VA                     0781        + 01550     18000                        883361507
+SUSAP KPHXK2DTFD4  1RW08  020         0        VD PXR K2              08000040D                                            883371507
+SUSAP KPHXK2DTFD4  1RW08  030         0        VM                     1000                                                 883381507
+SUSAP KPHXK2DTFD4  1RW08  040TFD  K2D 0VE      CF TFD K2      0000000016000340D                                            883391507
+SUSAP KPHXK2DTFD4  1RW25B 010         0        VA                     2581        + 01550     18000                        883401507
+SUSAP KPHXK2DTFD4  1RW25B 020         0        VD PXR K2              24000090D                                            883411507
+SUSAP KPHXK2DTFD4  1RW25B 030         0    L   VMY                    1600                                                 883421507
+SUSAP KPHXK2DTFD4  1RW25B 040TFD  K2D 0VE      CF TFD K2      0000000016000340D                                            883431507
+SUSAP KPHXK2DTFD4  1RW26  010         0        VA                     2581        + 01550     18000                        883441507
+SUSAP KPHXK2DTFD4  1RW26  020         0        VD PXR K2              24000090D                                            883451507
+SUSAP KPHXK2DTFD4  1RW26  030         0    L   VMY                    1600                                                 883461507
+SUSAP KPHXK2DTFD4  1RW26  040TFD  K2D 0VE      CF TFD K2      0000000016000340D                                            883471507
+SUSAP KPHXK2DTFD4  3OLIIN 010TFD  K2D 0V       IF                                             18000                        883481507
+SUSAP KPHXK2DTFD4  3OLIIN 020PUSCHK2EA0E       TF                                                                          883492303
+SUSAP KPHXK2DTFD4  3OLIIN 030OLIINK2EA0EE      TF                                                                          883502303
+SUSAP KPHXK2DTFD4  3TUS   010TFD  K2D 0V       IF                                             18000                        883511507
+SUSAP KPHXK2DTFD4  3TUS   020TUS  K2D 0VE      TF                                                                          883522303
+SUSAP KPHXK2DZEPER24RW07B 010         0        VA                     0780        + 01635     18000                        883532006
+SUSAP KPHXK2DZEPER24RW07B 020SPRKYK2PC0EY      DF                                                                          883542006
+SUSAP KPHXK2DZEPER24RW07B 030GOALYK2PC0E       DF                                 - 09000                                  883552006
+SUSAP KPHXK2DZEPER24RW07B 040JOLARK2PC0E       TF                                                                          883562006
+SUSAP KPHXK2DZEPER24RW07B 050ZEPERK2EA0EE      TF                                                                          883572006
+SUSAP KPHXK2DZEPER24RW08  010         0        VA                     0781        + 01635     18000                        883582006
+SUSAP KPHXK2DZEPER24RW08  020SPRKYK2PC0EY      DF                                                                          883592006
+SUSAP KPHXK2DZEPER24RW08  030GOALYK2PC0E       DF                                 - 09000                                  883602006
+SUSAP KPHXK2DZEPER24RW08  040JOLARK2PC0E       TF                                                                          883612006
+SUSAP KPHXK2DZEPER24RW08  050ZEPERK2EA0EE      TF                                                                          883622006
+SUSAP KPHXK2DZEPER24RW25L 010         0        VA                     2581        + 01635     18000                        883632006
+SUSAP KPHXK2DZEPER24RW25L 020ZOLUPK2PC0E       DF                                                                          883642006
+SUSAP KPHXK2DZEPER24RW25L 030YOVKUK2PC0E       TF                                                                          883652006
+SUSAP KPHXK2DZEPER24RW25L 040ZIDOGK2PC0E       TF                                 + 05000          230               -     883662006
+SUSAP KPHXK2DZEPER24RW25L 050FANONK2PC0E       TF                                                                          883672006
+SUSAP KPHXK2DZEPER24RW25L 060ZEPERK2EA0EE      TF                                                                          883682006
+SUSAP KPHXK2DZEPER24RW25R 010         0        VA                     2581        + 01635     18000                        883692006
+SUSAP KPHXK2DZEPER24RW25R 020JINOLK2PC0E       DF                                                                          883702006
+SUSAP KPHXK2DZEPER24RW25R 030OSGUEK2PC0E       TF                                                                          883712006
+SUSAP KPHXK2DZEPER24RW25R 040ZIDOGK2PC0E       TF                                 + 05000          230               -     883722006
+SUSAP KPHXK2DZEPER24RW25R 050FANONK2PC0E       TF                                                                          883732006
+SUSAP KPHXK2DZEPER24RW25R 060ZEPERK2EA0EE      TF                                                                          883742006
+SUSAP KPHXK2DZEPER24RW26  010         0        VA                     2581        + 01635     18000                        883752006
+SUSAP KPHXK2DZEPER24RW26  020WIVLAK2PC0E       DF                                                                          883762006
+SUSAP KPHXK2DZEPER24RW26  030HIRVUK2PC0E       TF                                                                          883772006
+SUSAP KPHXK2DZEPER24RW26  040ZIDOGK2PC0E       TF                                 + 05000          230               -     883782006
+SUSAP KPHXK2DZEPER24RW26  050FANONK2PC0E       TF                                                                          883792006
+SUSAP KPHXK2DZEPER24RW26  060ZEPERK2EA0EE      TF                                                                          883802006
+SUSAP KPHXK2DZEPER26RRSTA 010ZEPERK2EA0E       IF                                             18000                        883812006
+SUSAP KPHXK2DZEPER26RRSTA 020MAYSAK2EA0E       TF                                                                          883822006
+SUSAP KPHXK2DZEPER26RRSTA 030RRSTAK2EA0EE      TF                                                                          883832006
+SUSAP KPHXK2EARLIN41BLH   010BLH  K2D 0V       IF                                             18000                        883841705
+SUSAP KPHXK2EARLIN41BLH   020SCOLEK2EA0E       TF                                                                          883851705
+SUSAP KPHXK2EARLIN41BLH   030CALIEK2EA0E       TF                                                                          883861705
+SUSAP KPHXK2EARLIN41BLH   040HYDRRK2EA0E       TF                                                                          883872013
+SUSAP KPHXK2EARLIN41BLH   050PAYNTK2EA0E       TF                                                  250                     883881705
+SUSAP KPHXK2EARLIN41BLH   060ARLINK2EA0EE      TF                                                                          883892013
+SUSAP KPHXK2EARLIN41MOHAK 010MOHAKK2EA0E       IF                                             18000                        883901705
+SUSAP KPHXK2EARLIN41MOHAK 020JUDTHK2EA0E       TF                                                                          883911705
+SUSAP KPHXK2EARLIN41MOHAK 030HYDRRK2EA0E       TF                                                                          883922013
+SUSAP KPHXK2EARLIN41MOHAK 040PAYNTK2EA0E       TF                                                  250                     883931705
+SUSAP KPHXK2EARLIN41MOHAK 050ARLINK2EA0EE      TF                                                                          883942013
+SUSAP KPHXK2EARLIN43RW07B 010ARLINK2EA0EE      IF                                             18000                        883952013
+SUSAP KPHXK2EARLIN43RW08  010ARLINK2EA0EE      IF                                             18000                        883962013
+SUSAP KPHXK2EARLIN43RW25B 010ARLINK2EA0E       IF                                             18000                        883972013
+SUSAP KPHXK2EARLIN43RW25B 020AMBRRK2EA0E       TF                                                                          883981705
+SUSAP KPHXK2EARLIN43RW25B 030ALEYSK2EA0E       TF                                                                          883991705
+SUSAP KPHXK2EARLIN43RW25B 040TUKEEK2EA0EE      TF                                                                          884001705
+SUSAP KPHXK2EARLIN43RW26  010ARLINK2EA0E       IF                                             18000                        884012013
+SUSAP KPHXK2EARLIN43RW26  020AMBRRK2EA0E       TF                                                                          884021705
+SUSAP KPHXK2EARLIN43RW26  030ALEYSK2EA0E       TF                                                                          884031705
+SUSAP KPHXK2EARLIN43RW26  040TUKEEK2EA0EE      TF                                                                          884041705
+SUSAP KPHXK2EBLH5  1BLH   010BLH  K2D 0V       IF                                             18000                        884051705
+SUSAP KPHXK2EBLH5  1BLH   020SALOMK2EA0E       TF                                                                          884061705
+SUSAP KPHXK2EBLH5  1BLH   030SADLLK2EA0E       TF                                                                          884071705
+SUSAP KPHXK2EBLH5  1BLH   040HYDRRK2EA0E       TF                                                                          884082102
+SUSAP KPHXK2EBLH5  1BLH   050PAYNTK2EA0E       TF                                                                          884091705
+SUSAP KPHXK2EBLH5  1BLH   060ARLINK2EA0EE      TF                                                                          884102102
+SUSAP KPHXK2EBLH5  3RW07B 010ARLINK2EA0EE      IF                                             18000                        884112102
+SUSAP KPHXK2EBLH5  3RW08  010ARLINK2EA0EE      IF                                             18000                        884122102
+SUSAP KPHXK2EBLH5  3RW25B 010ARLINK2EA0E       IF                                             18000                        884132102
+SUSAP KPHXK2EBLH5  3RW25B 020AMBRRK2EA0E       TF                                                                          884141705
+SUSAP KPHXK2EBLH5  3RW25B 030ALEYSK2EA0E       TF                                                                          884151705
+SUSAP KPHXK2EBLH5  3RW25B 040TUKEEK2EA0EE      TF                                                                          884161705
+SUSAP KPHXK2EBLH5  3RW26  010ARLINK2EA0E       IF                                             18000                        884172102
+SUSAP KPHXK2EBLH5  3RW26  020AMBRRK2EA0E       TF                                                                          884181705
+SUSAP KPHXK2EBLH5  3RW26  030ALEYSK2EA0E       TF                                                                          884191705
+SUSAP KPHXK2EBLH5  3RW26  040TUKEEK2EA0EE      TF                                                                          884201705
+SUSAP KPHXK2EBRUSR14TENTS 010TENTSK2PC0E       IF                                             18000                        884212103
+SUSAP KPHXK2EBRUSR14TENTS 020PANTDK2PC0E       TF                                   FL290                                  884222103
+SUSAP KPHXK2EBRUSR14TENTS 030DUTEYK2PC0E       TF                                 B FL290FL240                             884232103
+SUSAP KPHXK2EBRUSR14TENTS 040MAIERK2EA0EE      TF                                 B FL250FL190     270                     884242103
+SUSAP KPHXK2EBRUSR14WOTRO 010WOTROK2EA0E       IF                                             18000                        884252103
+SUSAP KPHXK2EBRUSR14WOTRO 020WINERK2PC0E       TF                                   FL290                                  884262103
+SUSAP KPHXK2EBRUSR14WOTRO 030DRK  K2D 0V       TF                                 B FL290FL240                             884272103
+SUSAP KPHXK2EBRUSR14WOTRO 040MAIERK2EA0EE      TF                                 B FL250FL190     270                     884282103
+SUSAP KPHXK2EBRUSR15      010MAIERK2EA0E       IF                                 B FL250FL19018000270                     884291410
+SUSAP KPHXK2EBRUSR15      020BRUSRK2PC0EE      TF                                 B 1700013000     250                     884302103
+SUSAP KPHXK2EBRUSR16RW07L 010BRUSRK2PC0E       IF                                 B 170001300018000250                     884312103
+SUSAP KPHXK2EBRUSR16RW07L 020BDWILK2PC0E       TF                                 B 1200009000     250                     884322103
+SUSAP KPHXK2EBRUSR16RW07L 030ENSEAK2PC0E       TF                                 B 1000008000     230                     884332103
+SUSAP KPHXK2EBRUSR16RW07L 040FBALLK2PC0E       TF                                 B 1000007000     210                     884342103
+SUSAP KPHXK2EBRUSR16RW07L 050PGSKNK2PC0E       TF                                   06000          210                     884352103
+SUSAP KPHXK2EBRUSR16RW07L 060TLMANK2PC0E       TF                                                                          884362103
+SUSAP KPHXK2EBRUSR16RW07L 070FOWLEK2PC0EE      TF                                 + 04000                                  884372103
+SUSAP KPHXK2EBRUSR16RW07R 010BRUSRK2PC0E       IF                                 B 170001300018000250                     884382103
+SUSAP KPHXK2EBRUSR16RW07R 020BDWILK2PC0E       TF                                 B 1200009000     250                     884392103
+SUSAP KPHXK2EBRUSR16RW07R 030ENSEAK2PC0E       TF                                 B 1000008000     230                     884402103
+SUSAP KPHXK2EBRUSR16RW07R 040FBALLK2PC0E       TF                                 B 1000007000     210                     884412103
+SUSAP KPHXK2EBRUSR16RW07R 050PGSKNK2PC0E       TF                                   06000          210                     884422103
+SUSAP KPHXK2EBRUSR16RW07R 060TLMANK2PC0E       TF                                                                          884432103
+SUSAP KPHXK2EBRUSR16RW07R 070BALTEK2PC0EY      TF                                 + 04000                                  884442103
+SUSAP KPHXK2EBRUSR16RW07R 080BALTEK2PC0EE      FM PXR K2      256901211194    D                                            884451410
+SUSAP KPHXK2EBRUSR16RW08  010BRUSRK2PC0E       IF                                 B 170001300018000250                     884462103
+SUSAP KPHXK2EBRUSR16RW08  020BDWILK2PC0E       TF                                 B 1200009000     250                     884472103
+SUSAP KPHXK2EBRUSR16RW08  030ENSEAK2PC0E       TF                                 B 1000008000     230                     884482103
+SUSAP KPHXK2EBRUSR16RW08  040FBALLK2PC0E       TF                                 B 1000007000     210                     884492103
+SUSAP KPHXK2EBRUSR16RW08  050PGSKNK2PC0E       TF                                   06000          210                     884502103
+SUSAP KPHXK2EBRUSR16RW08  060TLMANK2PC0E       TF                                                                          884512103
+SUSAP KPHXK2EBRUSR16RW08  070JAMILK2PC0EY      TF                                 + 04000                                  884522103
+SUSAP KPHXK2EBRUSR16RW08  080JAMILK2PC0EE      FM PXR K2      260301231079    D                                            884531410
+SUSAP KPHXK2EBRUSR16RW25B 010BRUSRK2PC0E       IF                                 B 170001300018000250                     884542103
+SUSAP KPHXK2EBRUSR16RW25B 020ANNTIK2PC0E       TF                                 B 1200011000                             884552103
+SUSAP KPHXK2EBRUSR16RW25B 030ZILUBK2PC0E       TF                                   09000          250                     884562103
+SUSAP KPHXK2EBRUSR16RW25B 040BRIEZK2PC0E       TF                                 B 0900008000     230                     884572103
+SUSAP KPHXK2EBRUSR16RW25B 050KUCOOK2PC0E       TF                                   07000          210                     884582103
+SUSAP KPHXK2EBRUSR16RW25B 060JURAZK2PC0EY      TF                                                                          884592103
+SUSAP KPHXK2EBRUSR16RW25B 070JURAZK2PC0EE      FM PXR K2      034600820787    D                                            884601410
+SUSAP KPHXK2EBRUSR16RW26  010BRUSRK2PC0E       IF                                 B 170001300018000250                     884612103
+SUSAP KPHXK2EBRUSR16RW26  020ANNTIK2PC0E       TF                                 B 1200011000                             884622103
+SUSAP KPHXK2EBRUSR16RW26  030ZILUBK2PC0E       TF                                   09000          250                     884632103
+SUSAP KPHXK2EBRUSR16RW26  040BRIEZK2PC0E       TF                                 B 0900008000     230                     884642103
+SUSAP KPHXK2EBRUSR16RW26  050KUCOOK2PC0E       TF                                   07000          210                     884652103
+SUSAP KPHXK2EBRUSR16RW26  060JURAZK2PC0EY      TF                                                                          884662103
+SUSAP KPHXK2EBRUSR16RW26  070JURAZK2PC0EE      FM PXR K2      034600820787    D                                            884671410
+SUSAP KPHXK2EBUNTR31GUP   010GUP  K2D 0V       IF                                             18000                        884682103
+SUSAP KPHXK2EBUNTR31GUP   020SLIDRK2PC0E       TF                                                                          884691702
+SUSAP KPHXK2EBUNTR31GUP   030PAYSOK2EA0E       TF                                                                          884701702
+SUSAP KPHXK2EBUNTR31GUP   040EAGULK2EA0E       TF                                                                          884711702
+SUSAP KPHXK2EBUNTR31GUP   050PICHRK2EA0E       TF                                                                          884722103
+SUSAP KPHXK2EBUNTR31GUP   060DBACKK2EA0E       TF                                                                          884731702
+SUSAP KPHXK2EBUNTR31GUP   070HOMRRK2EA0E       TF                                                  250                     884742103
+SUSAP KPHXK2EBUNTR31GUP   080BUNTRK2EA0EB      TF                                                                          884751702
+SUSAP KPHXK2EBUNTR31INW   010INW  K2D 0V       IF                                             18000                        884761702
+SUSAP KPHXK2EBUNTR31INW   020JESSEK2PC0E       TF                                                                          884771702
+SUSAP KPHXK2EBUNTR31INW   030GUMMOK2PC0E       TF                                                                          884782103
+SUSAP KPHXK2EBUNTR31INW   040EAGULK2EA0E       TF                                                                          884791702
+SUSAP KPHXK2EBUNTR31INW   050PICHRK2EA0E       TF                                                                          884802103
+SUSAP KPHXK2EBUNTR31INW   060DBACKK2EA0E       TF                                                                          884811702
+SUSAP KPHXK2EBUNTR31INW   070HOMRRK2EA0E       TF                                                  250                     884822103
+SUSAP KPHXK2EBUNTR31INW   080BUNTRK2EA0EB      TF                                                                          884831702
+SUSAP KPHXK2EBUNTR31ZUN   010ZUN  K2D 0V       IF                                             18000                        884842103
+SUSAP KPHXK2EBUNTR31ZUN   020DOJOEK2PC0E       TF                                                                          884851702
+SUSAP KPHXK2EBUNTR31ZUN   030SLIDRK2PC0E       TF                                                                          884861702
+SUSAP KPHXK2EBUNTR31ZUN   040PAYSOK2EA0E       TF                                                                          884871702
+SUSAP KPHXK2EBUNTR31ZUN   050EAGULK2EA0E       TF                                                                          884881702
+SUSAP KPHXK2EBUNTR31ZUN   060PICHRK2EA0E       TF                                                                          884892103
+SUSAP KPHXK2EBUNTR31ZUN   070DBACKK2EA0E       TF                                                                          884901702
+SUSAP KPHXK2EBUNTR31ZUN   080HOMRRK2EA0E       TF                                                  250                     884912103
+SUSAP KPHXK2EBUNTR31ZUN   090BUNTRK2EA0EB      TF                                                                          884921702
+SUSAP KPHXK2EBUNTR32ALL   010BUNTRK2EA0E       IF                                             18000                        884931702
+SUSAP KPHXK2EBUNTR32ALL   020KPHX K2PA0AE      VM                     2250                                                 884941702
+SUSAP KPHXK2ECOYOT51BLD   010BLD  K2D 0V       IF                                             18000                        884952008
+SUSAP KPHXK2ECOYOT51BLD   020PRFUMK2EA0E       TF                                                                          884962008
+SUSAP KPHXK2ECOYOT51BLD   030SINHOK2EA0E       TF                                                                          884972008
+SUSAP KPHXK2ECOYOT51BLD   040WOTROK2EA0E       TF                                                                          884982102
+SUSAP KPHXK2ECOYOT51BLD   050DRK  K2D 0V       TF                                                                          884992008
+SUSAP KPHXK2ECOYOT51BLD   060HATRKK2PC0E       TF                                                                          885002008
+SUSAP KPHXK2ECOYOT51BLD   070MAIERK2EA0E       TF                                                                          885012008
+SUSAP KPHXK2ECOYOT51BLD   080WEBADK2PC0E       TF                                                                          885022008
+SUSAP KPHXK2ECOYOT51BLD   090COYOTK2EA0EE      TF                                                                          885032008
+SUSAP KPHXK2ECOYOT51DRK   010DRK  K2D 0V       IF                                             18000                        885042008
+SUSAP KPHXK2ECOYOT51DRK   020HATRKK2PC0E       TF                                                                          885052008
+SUSAP KPHXK2ECOYOT51DRK   030MAIERK2EA0E       TF                                                                          885062008
+SUSAP KPHXK2ECOYOT51DRK   040WEBADK2PC0E       TF                                                                          885072008
+SUSAP KPHXK2ECOYOT51DRK   050COYOTK2EA0EE      TF                                                                          885082008
+SUSAP KPHXK2ECOYOT51HEC   010HEC  K2D 0V       IF                                             18000                        885092008
+SUSAP KPHXK2ECOYOT51HEC   020GFS  K2D 0V       TF                                                                          885102008
+SUSAP KPHXK2ECOYOT51HEC   030USCUPK2PC0E       TF                                                                          885112104
+SUSAP KPHXK2ECOYOT51HEC   040PRFUMK2EA0E       TF                                                                          885122008
+SUSAP KPHXK2ECOYOT51HEC   050SINHOK2EA0E       TF                                                                          885132008
+SUSAP KPHXK2ECOYOT51HEC   060WOTROK2EA0E       TF                                                                          885142102
+SUSAP KPHXK2ECOYOT51HEC   070DRK  K2D 0V       TF                                                                          885152008
+SUSAP KPHXK2ECOYOT51HEC   080HATRKK2PC0E       TF                                                                          885162008
+SUSAP KPHXK2ECOYOT51HEC   090MAIERK2EA0E       TF                                                                          885172008
+SUSAP KPHXK2ECOYOT51HEC   100WEBADK2PC0E       TF                                                                          885182008
+SUSAP KPHXK2ECOYOT51HEC   110COYOTK2EA0EE      TF                                                                          885192008
+SUSAP KPHXK2ECOYOT52ALL   010COYOTK2EA0E       IF                                             18000                        885202008
+SUSAP KPHXK2ECOYOT52ALL   020BRUSRK2PC0E       TF                                                                          885212008
+SUSAP KPHXK2ECOYOT52ALL   030MAHEMK2PC0E       TF                                                                          885222008
+SUSAP KPHXK2ECOYOT52ALL   040PXR  K2D 0VE      TF                                                                          885232008
+SUSAP KPHXK2EDSERT24FLG   010FLG  K2D 0V       IF                                             18000                        885241412
+SUSAP KPHXK2EDSERT24FLG   020DSERTK2EA0EE      TF                                                                          885252103
+SUSAP KPHXK2EDSERT24INW   010INW  K2D 0V       IF                                             18000                        885261412
+SUSAP KPHXK2EDSERT24INW   020DSERTK2EA0EE      TF                                                                          885272103
+SUSAP KPHXK2EDSERT24KIDDR 010KIDDRK2EA0E       IF                                             18000                        885281412
+SUSAP KPHXK2EDSERT24KIDDR 020SMALLK2EA0E       TF                                                                          885291412
+SUSAP KPHXK2EDSERT24KIDDR 030DSERTK2EA0EE      TF                                                                          885302103
+SUSAP KPHXK2EDSERT24LJAYY 010LJAYYK2EA0E       IF                                             18000                        885311412
+SUSAP KPHXK2EDSERT24LJAYY 020KORIIK2EA0E       TF                                                                          885321412
+SUSAP KPHXK2EDSERT24LJAYY 030DSERTK2EA0EE      TF                                                                          885332103
+SUSAP KPHXK2EDSERT25ALL   010DSERTK2EA0E       IF                                             18000                        885342103
+SUSAP KPHXK2EDSERT25ALL   020SHOCKK2EA0E       TF                                                                          885352103
+SUSAP KPHXK2EDSERT25ALL   030BUSTDK2EA0E       TF                                                                          885361412
+SUSAP KPHXK2EDSERT25ALL   040YOLOWK2EA0E       TF                                                                          885371412
+SUSAP KPHXK2EDSERT25ALL   050CACTYK2EA0EY      TF                                                                          885381412
+SUSAP KPHXK2EDSERT25ALL   060CACTYK2EA0EE      FM PXR K2      339300601790    D                                            885391412
+SUSAP KPHXK2EEAGUL64GUP   010GUP  K2D 0V       IF                                             18000                        885402103
+SUSAP KPHXK2EEAGUL64GUP   020KIRKMK2PC0E       TF                                                                          885412103
+SUSAP KPHXK2EEAGUL64GUP   030SLIDRK2PC0E       TF                                                                          885422103
+SUSAP KPHXK2EEAGUL64GUP   040TINIZK2PC0E       TF                                 - FL330          270                     885432103
+SUSAP KPHXK2EEAGUL64GUP   050PAYSOK2EA0E       TF                                 B FL300FL240     270                     885442103
+SUSAP KPHXK2EEAGUL64GUP   060EAGULK2EA0EE      TF                                 + FL180          260                     885452103
+SUSAP KPHXK2EEAGUL64INW   010INW  K2D 0V       IF                                             18000                        885461410
+SUSAP KPHXK2EEAGUL64INW   020EAGULK2EA0EE      TF                                 + FL180          260                     885472103
+SUSAP KPHXK2EEAGUL64ZUN   010ZUN  K2D 0V       IF                                             18000                        885482103
+SUSAP KPHXK2EEAGUL64ZUN   020DOJOEK2PC0E       TF                                                                          885492103
+SUSAP KPHXK2EEAGUL64ZUN   030SLIDRK2PC0E       TF                                                                          885502103
+SUSAP KPHXK2EEAGUL64ZUN   040TINIZK2PC0E       TF                                 - FL330          270                     885512103
+SUSAP KPHXK2EEAGUL64ZUN   050PAYSOK2EA0E       TF                                 B FL300FL240     270                     885522103
+SUSAP KPHXK2EEAGUL64ZUN   060EAGULK2EA0EE      TF                                 + FL180          260                     885532103
+SUSAP KPHXK2EEAGUL65      010EAGULK2EA0E       IF                                 + FL180     18000260                     885542103
+SUSAP KPHXK2EEAGUL65      020HOMRRK2EA0EE      TF                                 - 17000          250                     885552103
+SUSAP KPHXK2EEAGUL66RW07B 010HOMRRK2EA0E       IF                                 - 17000     18000250                     885562103
+SUSAP KPHXK2EEAGUL66RW07B 020BOHTXK2PC0E       TF                                 B 1400013000                             885572103
+SUSAP KPHXK2EEAGUL66RW07B 030GEENOK2PC0E       TF                                 B 1200011000     230                     885582103
+SUSAP KPHXK2EEAGUL66RW07B 040QUENYK2PC0E       TF                                   10000          210                     885592103
+SUSAP KPHXK2EEAGUL66RW07B 050HINEYK2PC0E       TF                                   07000          210                     885602103
+SUSAP KPHXK2EEAGUL66RW07B 060OBASEK2PC0EY      TF                                   07000          210                     885612103
+SUSAP KPHXK2EEAGUL66RW07B 070OBASEK2PC0EE      FM PXR K2      292000992584    D                                            885621410
+SUSAP KPHXK2EEAGUL66RW08  010HOMRRK2EA0E       IF                                 - 17000     18000250                     885632103
+SUSAP KPHXK2EEAGUL66RW08  020BOHTXK2PC0E       TF                                 B 1400013000                             885642103
+SUSAP KPHXK2EEAGUL66RW08  030GEENOK2PC0E       TF                                 B 1200011000     230                     885652103
+SUSAP KPHXK2EEAGUL66RW08  040QUENYK2PC0E       TF                                   10000          210                     885662103
+SUSAP KPHXK2EEAGUL66RW08  050HINEYK2PC0E       TF                                   07000          210                     885672103
+SUSAP KPHXK2EEAGUL66RW08  060OBASEK2PC0EY      TF                                   07000          210                     885682103
+SUSAP KPHXK2EEAGUL66RW08  070OBASEK2PC0EE      FM PXR K2      292000992584    D                                            885691410
+SUSAP KPHXK2EEAGUL66RW25L 010HOMRRK2EA0E       IF                                 - 17000     18000250                     885702103
+SUSAP KPHXK2EEAGUL66RW25L 020VNNOMK2PC0E       TF                                 + 09400                                  885712103
+SUSAP KPHXK2EEAGUL66RW25L 030ESDEEK2PC0E       TF                                 B 1000008100     210                     885722103
+SUSAP KPHXK2EEAGUL66RW25L 040BASSLK2PC0E       TF                                 + 06000                                  885732103
+SUSAP KPHXK2EEAGUL66RW25L 050DERVLK2PC0E       TF                                 B 0550004500     210                     885742103
+SUSAP KPHXK2EEAGUL66RW25L 060GIPSEK2PC0EE      TF                                 + 04000                                  885752103
+SUSAP KPHXK2EEAGUL66RW25R 010HOMRRK2EA0E       IF                                 - 17000     18000250                     885762103
+SUSAP KPHXK2EEAGUL66RW25R 020VNNOMK2PC0E       TF                                 + 09400                                  885772103
+SUSAP KPHXK2EEAGUL66RW25R 030ESDEEK2PC0E       TF                                 B 1000008100     210                     885782103
+SUSAP KPHXK2EEAGUL66RW25R 040BASSLK2PC0E       TF                                 + 06000                                  885792103
+SUSAP KPHXK2EEAGUL66RW25R 050DERVLK2PC0E       TF                                 B 0550004500     210                     885802103
+SUSAP KPHXK2EEAGUL66RW25R 060ZAMEXK2PC0EE      TF                                 + 04000                                  885812103
+SUSAP KPHXK2EEAGUL66RW26  010HOMRRK2EA0E       IF                                 - 17000     18000250                     885822103
+SUSAP KPHXK2EEAGUL66RW26  020VNNOMK2PC0E       TF                                 + 09400                                  885832103
+SUSAP KPHXK2EEAGUL66RW26  030ESDEEK2PC0E       TF                                 B 1000008100     210                     885842103
+SUSAP KPHXK2EEAGUL66RW26  040BASSLK2PC0E       TF                                 + 06000                                  885852103
+SUSAP KPHXK2EEAGUL66RW26  050DERVLK2PC0E       TF                                 B 0550004500     210                     885862103
+SUSAP KPHXK2EEAGUL66RW26  060JAGALK2PC0EE      TF                                 + 04000                                  885872103
+SUSAP KPHXK2EHYDRR14BLH   010BLH  K2D 0V       IF                                             18000                        885882103
+SUSAP KPHXK2EHYDRR14BLH   020SCOLEK2EA0E       TF                                   FL250          280                     885892103
+SUSAP KPHXK2EHYDRR14BLH   030SPINKK2PC0E       TF                                 + FL240                                  885902103
+SUSAP KPHXK2EHYDRR14BLH   040SNRRAK2PC0E       TF                                 - FL220                                  885912103
+SUSAP KPHXK2EHYDRR14BLH   050SWOONK2PC0E       TF                                                                          885922103
+SUSAP KPHXK2EHYDRR14BLH   060HYDRRK2EA0EE      TF                                 B FL19015000     265                     885932103
+SUSAP KPHXK2EHYDRR14HOGGZ 010HOGGZK2EA0E       IF                                             18000                        885941410
+SUSAP KPHXK2EHYDRR14HOGGZ 020JUDTHK2EA0E       TF                                 + FL250          280                     885952103
+SUSAP KPHXK2EHYDRR14HOGGZ 030RKDAMK2PC0E       TF                                 - FL220                                  885962103
+SUSAP KPHXK2EHYDRR14HOGGZ 040HYDRRK2EA0EE      TF                                 B FL19015000     265                     885972103
+SUSAP KPHXK2EHYDRR14SALOM 010SALOMK2EA0E       IF                                 - FL230     18000280                     885981410
+SUSAP KPHXK2EHYDRR14SALOM 020MHAVIK2PC0E       TF                                 - FL220                                  885992103
+SUSAP KPHXK2EHYDRR14SALOM 030SWOONK2PC0E       TF                                                                          886002103
+SUSAP KPHXK2EHYDRR14SALOM 040HYDRRK2EA0EE      TF                                 B FL19015000     265                     886012103
+SUSAP KPHXK2EHYDRR15      010HYDRRK2EA0E       IF                                 B FL1901500018000265                     886022103
+SUSAP KPHXK2EHYDRR15      020GEELAK2PC0EE      TF                                 B 1700011000     250                     886032103
+SUSAP KPHXK2EHYDRR16RW07L 010GEELAK2PC0E       IF                                 B 170001100018000250                     886042103
+SUSAP KPHXK2EHYDRR16RW07L 020PUNNTK2PC0E       TF                                 B 1200010000     230                     886052103
+SUSAP KPHXK2EHYDRR16RW07L 030TEICHK2PC0E       TF                                 B 0900008000     210                     886062103
+SUSAP KPHXK2EHYDRR16RW07L 040TESLEK2PC0E       TF                                   07000                                  886072103
+SUSAP KPHXK2EHYDRR16RW07L 050FALGOK2PC0E       TF                                   06000          210                     886082103
+SUSAP KPHXK2EHYDRR16RW07L 060CAGORK2PC0E       TF                                 + 05000                                  886092103
+SUSAP KPHXK2EHYDRR16RW07L 070FOWLEK2PC0EE      TF                                 + 04000                                  886102103
+SUSAP KPHXK2EHYDRR16RW07R 010GEELAK2PC0E       IF                                 B 170001100018000250                     886112103
+SUSAP KPHXK2EHYDRR16RW07R 020PUNNTK2PC0E       TF                                 B 1200010000     230                     886122103
+SUSAP KPHXK2EHYDRR16RW07R 030TEICHK2PC0E       TF                                 B 0900008000     210                     886132103
+SUSAP KPHXK2EHYDRR16RW07R 040TESLEK2PC0E       TF                                   07000                                  886142103
+SUSAP KPHXK2EHYDRR16RW07R 050FALGOK2PC0E       TF                                   06000          210                     886152103
+SUSAP KPHXK2EHYDRR16RW07R 060CAGORK2PC0E       TF                                 + 05000                                  886162103
+SUSAP KPHXK2EHYDRR16RW07R 070BALTEK2PC0EE      TF                                 + 04000                                  886172103
+SUSAP KPHXK2EHYDRR16RW08  010GEELAK2PC0E       IF                                 B 170001100018000250                     886182103
+SUSAP KPHXK2EHYDRR16RW08  020PUNNTK2PC0E       TF                                 B 1200010000     230                     886192103
+SUSAP KPHXK2EHYDRR16RW08  030TEICHK2PC0E       TF                                 B 0900008000     210                     886202103
+SUSAP KPHXK2EHYDRR16RW08  040TESLEK2PC0E       TF                                   07000                                  886212103
+SUSAP KPHXK2EHYDRR16RW08  050FALGOK2PC0E       TF                                   06000          210                     886222103
+SUSAP KPHXK2EHYDRR16RW08  060CAGORK2PC0E       TF                                 + 05000                                  886232103
+SUSAP KPHXK2EHYDRR16RW08  070JAMILK2PC0EE      TF                                 + 04000                                  886242103
+SUSAP KPHXK2EHYDRR16RW25B 010GEELAK2PC0E       IF                                 B 170001100018000250                     886252103
+SUSAP KPHXK2EHYDRR16RW25B 020AGGLAK2PC0E       TF                                 B 1400011000     250                     886262103
+SUSAP KPHXK2EHYDRR16RW25B 030CHAVOK2PC0E       TF                                   09000          210                     886272103
+SUSAP KPHXK2EHYDRR16RW25B 040LEMOEK2PC0EY      TF                                   07000          210                     886282103
+SUSAP KPHXK2EHYDRR16RW25B 050LEMOEK2PC0EE      FM PXR K2      149900550788    D                                            886291410
+SUSAP KPHXK2EHYDRR16RW26  010GEELAK2PC0E       IF                                 B 170001100018000250                     886302103
+SUSAP KPHXK2EHYDRR16RW26  020AGGLAK2PC0E       TF                                 B 1400011000     250                     886312103
+SUSAP KPHXK2EHYDRR16RW26  030CHAVOK2PC0E       TF                                   09000          210                     886322103
+SUSAP KPHXK2EHYDRR16RW26  040LEMOEK2PC0EY      TF                                   07000          210                     886332103
+SUSAP KPHXK2EHYDRR16RW26  050LEMOEK2PC0EE      FM PXR K2      149900550788    D                                            886341410
+SUSAP KPHXK2EJESSE31GUP   010GUP  K2D 0V       IF                                             18000                        886352112
+SUSAP KPHXK2EJESSE31GUP   020NEPTNK2PC0E       TF                                                                          886362112
+SUSAP KPHXK2EJESSE31GUP   030JESSEK2PC0EE      TF                                                                          886372112
+SUSAP KPHXK2EJESSE31INW   010INW  K2D 0V       IF                                             18000                        886382112
+SUSAP KPHXK2EJESSE31INW   020JESSEK2PC0EE      TF                                                                          886392112
+SUSAP KPHXK2EJESSE31ZUN   010ZUN  K2D 0V       IF                                             18000                        886402112
+SUSAP KPHXK2EJESSE31ZUN   020NEPTNK2PC0E       TF                                                                          886412112
+SUSAP KPHXK2EJESSE31ZUN   030JESSEK2PC0EE      TF                                                                          886422112
+SUSAP KPHXK2EJESSE32ALL   010JESSEK2PC0E       IF                                             18000                        886432112
+SUSAP KPHXK2EJESSE32ALL   020GUMMOK2PC0E       TF                                                                          886442112
+SUSAP KPHXK2EJESSE32ALL   030EAGULK2EA0E       TF                                                                          886452112
+SUSAP KPHXK2EJESSE32ALL   040DBACKK2EA0E       TF                                                                          886462112
+SUSAP KPHXK2EJESSE32ALL   050HOMRRK2EA0E       TF                                                                          886472112
+SUSAP KPHXK2EJESSE32ALL   060BUNTRK2EA0EY      TF                                                                          886482112
+SUSAP KPHXK2EJESSE32ALL   070KPHX K2PA0AE      VM                     2250                                                 886492112
+SUSAP KPHXK2EPINNG14DRRVR 010DRRVRK2PC0E       IF                                             18000                        886501410
+SUSAP KPHXK2EPINNG14DRRVR 020BNNKRK2PC0E       TF                                 B FL280FL250     280                     886512103
+SUSAP KPHXK2EPINNG14DRRVR 030HYBRDK2PC0E       TF                                 B FL250FL220                             886522103
+SUSAP KPHXK2EPINNG14DRRVR 040PINNGK2PC0EE      TF                                 + 17000          270                     886532103
+SUSAP KPHXK2EPINNG14HOTTT 010HOTTTK2EA0E       IF                                 B FL250FL22018000280                     886541410
+SUSAP KPHXK2EPINNG14HOTTT 020PINNGK2PC0EE      TF                                 + 17000          270                     886552103
+SUSAP KPHXK2EPINNG15      010PINNGK2PC0E       IF                                 + 17000     18000270                     886562103
+SUSAP KPHXK2EPINNG15      020BRDEYK2PC0EE      TF                                 + 13000          250                     886572103
+SUSAP KPHXK2EPINNG16RW07B 010BRDEYK2PC0E       IF                                 + 13000     18000250                     886582103
+SUSAP KPHXK2EPINNG16RW07B 020WIGWMK2PC0E       TF                                 B 1400012000     250                     886592103
+SUSAP KPHXK2EPINNG16RW07B 030DDUKEK2PC0E       TF                                 B 1200010000                             886602103
+SUSAP KPHXK2EPINNG16RW07B 040RVANNK2PC0E       TF                                 B 0900008000     230                     886612103
+SUSAP KPHXK2EPINNG16RW07B 050LGACYK2PC0E       TF                                   07000          210                     886622103
+SUSAP KPHXK2EPINNG16RW07B 060VISTLK2PC0E       TF                                                                          886632103
+SUSAP KPHXK2EPINNG16RW07B 070NEELEK2PC0EY      TF                                   07000          210                     886642103
+SUSAP KPHXK2EPINNG16RW07B 080NEELEK2PC0EE      FM PXR K2      242402022581    D                                            886651410
+SUSAP KPHXK2EPINNG16RW08  010BRDEYK2PC0E       IF                                 + 13000     18000250                     886662103
+SUSAP KPHXK2EPINNG16RW08  020WIGWMK2PC0E       TF                                 B 1400012000     250                     886672103
+SUSAP KPHXK2EPINNG16RW08  030DDUKEK2PC0E       TF                                 B 1200010000                             886682103
+SUSAP KPHXK2EPINNG16RW08  040RVANNK2PC0E       TF                                 B 0900008000     230                     886692103
+SUSAP KPHXK2EPINNG16RW08  050LGACYK2PC0E       TF                                   07000          210                     886702103
+SUSAP KPHXK2EPINNG16RW08  060VISTLK2PC0E       TF                                                                          886712103
+SUSAP KPHXK2EPINNG16RW08  070NEELEK2PC0EY      TF                                   07000          210                     886722103
+SUSAP KPHXK2EPINNG16RW08  080NEELEK2PC0EE      FM PXR K2      242402022581    D                                            886731410
+SUSAP KPHXK2EPINNG16RW25L 010BRDEYK2PC0E       IF                                 + 13000     18000250                     886742103
+SUSAP KPHXK2EPINNG16RW25L 020PAAARK2PC0E       TF                                 B 1200010000     230                     886752103
+SUSAP KPHXK2EPINNG16RW25L 030PUKREK2PC0E       TF                                 B 0900008000     210                     886762103
+SUSAP KPHXK2EPINNG16RW25L 040FINAPK2PC0E       TF                                 B 0600005000                             886772103
+SUSAP KPHXK2EPINNG16RW25L 050GIPSEK2PC0EE      TF                                 + 04000                                  886782103
+SUSAP KPHXK2EPINNG16RW25R 010BRDEYK2PC0E       IF                                 + 13000     18000250                     886792103
+SUSAP KPHXK2EPINNG16RW25R 020PAAARK2PC0E       TF                                 B 1200010000     230                     886802103
+SUSAP KPHXK2EPINNG16RW25R 030PUKREK2PC0E       TF                                 B 0900008000     210                     886812103
+SUSAP KPHXK2EPINNG16RW25R 040FINAPK2PC0E       TF                                 B 0600005000                             886822103
+SUSAP KPHXK2EPINNG16RW25R 050ZAMEXK2PC0EE      TF                                 + 04000                                  886832103
+SUSAP KPHXK2EPINNG16RW26  010BRDEYK2PC0E       IF                                 + 13000     18000250                     886842103
+SUSAP KPHXK2EPINNG16RW26  020PAAARK2PC0E       TF                                 B 1200010000     230                     886852103
+SUSAP KPHXK2EPINNG16RW26  030PUKREK2PC0E       TF                                 B 0900008000     210                     886862103
+SUSAP KPHXK2EPINNG16RW26  040FINAPK2PC0E       TF                                 B 0600005000                             886872103
+SUSAP KPHXK2EPINNG16RW26  050JAGALK2PC0EE      TF                                 + 04000                                  886882103
+SUSAP KPHXK2ESUNSS81SSO   010SSO  K2D 0V       IF                                             18000                        886891705
+SUSAP KPHXK2ESUNSS81SSO   020ITEMMK2EA0E       TF                                                                          886902103
+SUSAP KPHXK2ESUNSS81SSO   030TELGEK2EA0E       TF                                                                          886911705
+SUSAP KPHXK2ESUNSS81SSO   040BAYBIK2EA0EE      TF                                                                          886922103
+SUSAP KPHXK2ESUNSS81TUS   010TUS  K2D 0V       IF                                             18000                        886931705
+SUSAP KPHXK2ESUNSS81TUS   020HOTTTK2EA0E       TF                                                                          886941705
+SUSAP KPHXK2ESUNSS81TUS   030BAYBIK2EA0EE      TF                                                                          886952103
+SUSAP KPHXK2ESUNSS82ALL   010BAYBIK2EA0E       IF                                             18000                        886962103
+SUSAP KPHXK2ESUNSS82ALL   020SQUEZK2EA0E       TF                                                                          886972103
+SUSAP KPHXK2ESUNSS82ALL   030SUNSSK2EA0EY      TF                                                                          886981705
+SUSAP KPHXK2ESUNSS82ALL   040KPHX K2PA0AE      VM                     2900                                                 886991705
+SUSAP KPHXK2FI07L  AAVONA 010AVONAK2EA0E  A    IF                                             18000                 0 DS   887001107
+SUSAP KPHXK2FI07L  AAVONA 020QAQCEK2PC0E       TF                                 + 04000                           0 DS   887011310
+SUSAP KPHXK2FI07L  AAVONA 030FOWLEK2PC0EE B    CF IPHXK2      2581010907800053PI  + 04000                           0 DS   887021310
+SUSAP KPHXK2FI07L  I      010FOWLEK2PC0E  I    IF IPHXK2      25810109        PI  J 040000260018000                 0 DS   887031310
+SUSAP KPHXK2FI07L  I      020ZINGAK2PC0E  F    CF IPHXK2      2581006407800045PI  H 0260002600            PXR   K2D 0 DS   887042107
+SUSAP KPHXK2FI07L  I      030RW07LK2PG0GY M    CF IPHXK2      2581001907800045PI    01167             -300          0 DS   887051107
+SUSAP KPHXK2FI07L  I      040         0  M     CA                     0780        + 05000                           0 DS   887061107
+SUSAP KPHXK2FI07L  I      050PXR  K2D 0VY  L   DF                                 + 05000                           0 DS   887071107
+SUSAP KPHXK2FI07L  I      060PXR  K2D 0VE  R   HM                     2550T010    + 05000                           0 DS   887081107
+SUSAP KPHXK2FI07R  AALLIS 010ALLISK2EA0E  A    IF                                             18000                 0 DS   887091202
+SUSAP KPHXK2FI07R  AALLIS 020FFIXAK2PC0E       TF                                 + 07000                           0 DS   887101310
+SUSAP KPHXK2FI07R  AALLIS 030TESLEK2PC0EE B    CF IAHAK2      2580021507800088PI  + 07000                           0 DS   887112213
+SUSAP KPHXK2FI07R  I      010TESLEK2PC0E  I    IF IAHAK2      25800215        PI  J 070000300018000                 0 DS   887122213
+SUSAP KPHXK2FI07R  I      011FALGOK2PC0E       CF IAHAK2      2580017907800036PI  + 06000                           0 DS   887132213
+SUSAP KPHXK2FI07R  I      012CAGORK2PC0E       CF IAHAK2      2580014307800036PI  + 05000                           0 DS   887142213
+SUSAP KPHXK2FI07R  I      013BALTEK2PC0E       CF IAHAK2      2580010707800036PI  + 04000                           0 DS   887152213
+SUSAP KPHXK2FI07R  I      020TOTIEK2PC0E  F    CF IAHAK2      2580007207800035PI  H 0300003000            PXR   K2D 0 DS   887162107
+SUSAP KPHXK2FI07R  I      030RW07RK2PG0GY M    CF IAHAK2      2580001507800058PI    01168             -300          0 DS   887171202
+SUSAP KPHXK2FI07R  I      040         0  M     CA                     0780        + 03300                           0 DS   887181202
+SUSAP KPHXK2FI07R  I      050         0    R   VIY                    2500                                          0 DS   887191202
+SUSAP KPHXK2FI07R  I      060POPKEK2EA0EY      CF PXR K2      1626015016260120D   + 05000                           0 DS   887201202
+SUSAP KPHXK2FI07R  I      070POPKEK2EA0EE  R   HM                     34260040    + 05000                           0 DS   887211202
+SUSAP KPHXK2FI08   AALLIS 010ALLISK2EA0E  A    IF                                             18000                 0 NS   887222201
+SUSAP KPHXK2FI08   AALLIS 020         0        VI                     1230        + 06000                           0 NS   887232201
+SUSAP KPHXK2FI08   AALLIS 030SARTEK2PC0E       CF ISYQK2      2581022107810094PI  + 06000                           0 NS   887242201
+SUSAP KPHXK2FI08   AALLIS 040HIKIDK2PC0E       CF ISYQK2      2581018507810036PI  + 06000                           0 NS   887252201
+SUSAP KPHXK2FI08   AALLIS 050ILIKEK2PC0EE B    CF ISYQK2      2581014907810036PI  + 05000                           0 NS   887262201
+SUSAP KPHXK2FI08   I      010ILIKEK2PC0E  I    IF ISYQK2      25810149        PI  J 050000300018000                 0 NS   887272201
+SUSAP KPHXK2FI08   I      011JAMILK2PC0E       CF ISYQK2      2581011307800036PI  + 04000                           0 NS   887282201
+SUSAP KPHXK2FI08   I      020WAZUPK2PC0E  F    CF ISYQK2      2581007707800036PI  H 0300003000            PXR   K2D 0 NS   887292201
+SUSAP KPHXK2FI08   I      030RW08 K2PG0GY M    CF ISYQK2      2581001907800058PI    01168             -300          0 NS   887302201
+SUSAP KPHXK2FI08   I      040         0  M     CA                     0781        + 03000                           0 NS   887312201
+SUSAP KPHXK2FI08   I      050         0    L   VIY                    2800                                          0 NS   887322201
+SUSAP KPHXK2FI08   I      060AVENTK2EA0EY      CF PXR K2      3360015933600129D   + 05000                           0 NS   887332201
+SUSAP KPHXK2FI08   I      070AVENTK2EA0EE  R   HM                     1560T010    + 05000                           0 NS   887342201
+SUSAP KPHXK2FI25L  AZERLO 010ZERLOK2EA0E       IF                                             18000                 0 NS   887351202
+SUSAP KPHXK2FI25L  AZERLO 020FIXARK2PC0E  A    TF                                 + 06000                           0 NS   887361310
+SUSAP KPHXK2FI25L  AZERLO 030BUDMEK2PC0E       TF                                 + 05000                           0 NS   887371310
+SUSAP KPHXK2FI25L  AZERLO 040HAMEKK2PC0EE B    CF IRJGK2      0780014525800036PI  + 04000                           0 NS   887382213
+SUSAP KPHXK2FI25L  I      010HAMEKK2PC0E  I    IF IRJGK2      07800145        PI  J 040000300018000                 0 NS   887392213
+SUSAP KPHXK2FI25L  I      011GIPSEK2PC0E       CF IRJGK2      0780010925800036PI  + 04000                           0 NS   887402213
+SUSAP KPHXK2FI25L  I      020SCADEK2PC0E  F    CF IRJGK2      0780007125800038PI  H 0300003000            PXR   K2D 0 NS   887412107
+SUSAP KPHXK2FI25L  I      030RW25LK2PG0GY M    CF IRJGK2      0780001425800056PI    01175             -300          0 NS   887421202
+SUSAP KPHXK2FI25L  I      040         0  M     CA                     2580        + 03000                           0 NS   887431202
+SUSAP KPHXK2FI25L  I      050         0    L   VIY                    1300                                          0 NS   887441202
+SUSAP KPHXK2FI25L  I      060POPKEK2EA0EY      CF PXR K2      1626015016260030D   + 05000                           0 NS   887451202
+SUSAP KPHXK2FI25L  I      070POPKEK2EA0EE  R   HM                     34260040    + 05000                           0 NS   887461202
+SUSAP KPHXK2FI26   AZERLO 010ZERLOK2EA0E       IF                                             18000                 0 NS   887471909
+SUSAP KPHXK2FI26   AZERLO 020CERUNK2PC0E  A    TF                                 + 07000                           0 NS   887481909
+SUSAP KPHXK2FI26   AZERLO 030ZEMOSK2PC0E       TF                                 + 06000                           0 NS   887491909
+SUSAP KPHXK2FI26   AZERLO 040TODREK2PC0EE B    CF ICWJK2      0781014725810036PI  + 05000                           0 NS   887501909
+SUSAP KPHXK2FI26   I      010TODREK2PC0E  I    IF ICWJK2      07810147        PI  J 050000300018000                 0 NS   887511909
+SUSAP KPHXK2FI26   I      011JAGALK2PC0E       CF ICWJK2      0781011125800036PI  + 04000                           0 NS   887521909
+SUSAP KPHXK2FI26   I      020PRUNNK2PC0E  F    CF ICWJK2      0781007725800033PI  H 0300003000            PXR   K2D 0 NS   887531909
+SUSAP KPHXK2FI26   I      030RW26 K2PG0GY M    CF ICWJK2      0781002125800057PI    01189             -300          0 NS   887541909
+SUSAP KPHXK2FI26   I      040         0  M     CA                     2581        + 02500                           0 NS   887551909
+SUSAP KPHXK2FI26   I      050         0    R   VIY                    0300                                          0 NS   887561909
+SUSAP KPHXK2FI26   I      060AVENTK2EA0EY      CF PXR K2      3360015933600100D   + 05000                           0 NS   887571909
+SUSAP KPHXK2FI26   I      070AVENTK2EA0EE  R   HM                     1560T010    + 05000                           0 NS   887581909
+SUSAP KPHXK2FL07L  AAVONA 010AVONAK2EA0E  A    IF                                             18000                 0 DS   887591107
+SUSAP KPHXK2FL07L  AAVONA 020QAQCEK2PC0E       TF                                 + 04000                           0 DS   887601310
+SUSAP KPHXK2FL07L  AAVONA 030FOWLEK2PC0EE B    CF IPHXK2      2581010907800053PI  + 04000                           0 DS   887611310
+SUSAP KPHXK2FL07L  L      010FOWLEK2PC0E  I    IF IPHXK2      25810109        PI  + 04000     18000                 0 DS   887621310
+SUSAP KPHXK2FL07L  L      020ZINGAK2PC0E  F    CF IPHXK2      2581006407800045PI  + 02600                 PXR   K2D 0 DS   887631310
+SUSAP KPHXK2FL07L  L      021PURCHK2PC0E S     CF IPHXK2      2580003407800030PI  + 01620             -301          0 DS   887641310
+SUSAP KPHXK2FL07L  L      030CERLAK2PC0EY M    CF IPHXK2      2581002307800011PI    01295             -301          0 DS   887651310
+SUSAP KPHXK2FL07L  L      040         0  M     CA                     0780        + 05000                           0 DS   887661107
+SUSAP KPHXK2FL07L  L      050PXR  K2D 0VY  L   DF                                 + 05000                           0 DS   887671107
+SUSAP KPHXK2FL07L  L      060PXR  K2D 0VE  R   HM                     2550T010    + 05000                           0 DS   887681107
+SUSAP KPHXK2FL07R  AALLIS 010ALLISK2EA0E  A    IF                                             18000                 0 DS   887691202
+SUSAP KPHXK2FL07R  AALLIS 020FFIXAK2PC0E       TF                                 + 07000                           0 DS   887701310
+SUSAP KPHXK2FL07R  AALLIS 030TESLEK2PC0EE B    CF IAHAK2      2580021507800088PI  + 07000                           0 DS   887712213
+SUSAP KPHXK2FL07R  L      010TESLEK2PC0E  I    IF IAHAK2      25800215        PI  + 07000     18000                 0 DS   887722213
+SUSAP KPHXK2FL07R  L      011FALGOK2PC0E       CF IAHAK2      2580017907800036PI  + 06000                           0 DS   887732213
+SUSAP KPHXK2FL07R  L      012CAGORK2PC0E       CF IAHAK2      2580014307800036PI  + 05000                           0 DS   887742213
+SUSAP KPHXK2FL07R  L      013BALTEK2PC0E       CF IAHAK2      2580010707800036PI  + 04000                           0 DS   887752213
+SUSAP KPHXK2FL07R  L      020TOTIEK2PC0E  F    CF IAHAK2      2580007207800035PI  + 03000                 PXR   K2D 0 DS   887761310
+SUSAP KPHXK2FL07R  L      021ALOGEK2PC0E S     CF IAHAK2      2580003607800036PI  + 01840             -301          0 DS   887771310
+SUSAP KPHXK2FL07R  L      030RW07RK2PG0GY M    CF IAHAK2      2580001507800022PI    01168             -301          0 DS   887781202
+SUSAP KPHXK2FL07R  L      040         0  M     CA                     0780        + 03300                           0 DS   887791202
+SUSAP KPHXK2FL07R  L      050         0    R   VIY                    2500                                          0 DS   887801202
+SUSAP KPHXK2FL07R  L      060POPKEK2EA0EY      CF PXR K2      1626015016260120D   + 05000                           0 DS   887811202
+SUSAP KPHXK2FL07R  L      070POPKEK2EA0EE  R   HM                     34260040    + 05000                           0 DS   887821202
+SUSAP KPHXK2FL08   AALLIS 010ALLISK2EA0E  A    IF                                             18000                 0 NS   887832201
+SUSAP KPHXK2FL08   AALLIS 020         0        VI                     1230        + 06000                           0 NS   887842201
+SUSAP KPHXK2FL08   AALLIS 030SARTEK2PC0E       CF ISYQK2      2581022107810094PI  + 06000                           0 NS   887852201
+SUSAP KPHXK2FL08   AALLIS 040HIKIDK2PC0E       CF ISYQK2      2581018507810036PI  + 06000                           0 NS   887862201
+SUSAP KPHXK2FL08   AALLIS 050ILIKEK2PC0EE B    CF ISYQK2      2581014907810036PI  + 05000                           0 NS   887872201
+SUSAP KPHXK2FL08   L      010ILIKEK2PC0E  I    IF ISYQK2      25810149        PI  + 05000     18000                 0 NS   887882201
+SUSAP KPHXK2FL08   L      011JAMILK2PC0E       CF ISYQK2      2581011307800036PI  + 04000                           0 NS   887892201
+SUSAP KPHXK2FL08   L      020WAZUPK2PC0E  F    CF ISYQK2      2581007707800036PI  + 03000                 PXR   K2D 0 NS   887902201
+SUSAP KPHXK2FL08   L      030RW08 K2PG0GY M    CF ISYQK2      2581001907800058PI    01168             -297          0 NS   887912201
+SUSAP KPHXK2FL08   L      040         0  M     CA                     0781        + 03000                           0 NS   887922201
+SUSAP KPHXK2FL08   L      050         0    L   VIY                    2800                                          0 NS   887932201
+SUSAP KPHXK2FL08   L      060AVENTK2EA0EY      CF PXR K2      3360015933600129D   + 05000                           0 NS   887942201
+SUSAP KPHXK2FL08   L      070AVENTK2EA0EE  R   HM                     1560T010    + 05000                           0 NS   887952201
+SUSAP KPHXK2FL25L  AZERLO 010ZERLOK2EA0E       IF                                             18000                 0 NS   887961202
+SUSAP KPHXK2FL25L  AZERLO 020FIXARK2PC0E  A    TF                                 + 06000                           0 NS   887971310
+SUSAP KPHXK2FL25L  AZERLO 030BUDMEK2PC0E       TF                                 + 05000                           0 NS   887981310
+SUSAP KPHXK2FL25L  AZERLO 040HAMEKK2PC0EE B    CF IRJGK2      0780014525800036PI  + 04000                           0 NS   887992213
+SUSAP KPHXK2FL25L  L      010HAMEKK2PC0E  I    IF IRJGK2      07800145        PI  + 04000     18000                 0 NS   888002213
+SUSAP KPHXK2FL25L  L      011GIPSEK2PC0E       CF IRJGK2      0780010925800036PI  + 04000                           0 NS   888012213
+SUSAP KPHXK2FL25L  L      020SCADEK2PC0E  F    CF IRJGK2      0780007125800038PI  + 03000                 PXR   K2D 0 NS   888021310
+SUSAP KPHXK2FL25L  L      021KONTEK2PC0E S     CF IRJGK2      0780004125800030PI  + 02040             -305          0 NS   888031310
+SUSAP KPHXK2FL25L  L      030RW25LK2PG0GY M    CF IRJGK2      0780001425800027PI    01175             -305          0 NS   888041202
+SUSAP KPHXK2FL25L  L      040         0  M     CA                     2580        + 03000                           0 NS   888051202
+SUSAP KPHXK2FL25L  L      050         0    L   VIY                    1300                                          0 NS   888061202
+SUSAP KPHXK2FL25L  L      060POPKEK2EA0EY      CF PXR K2      1626015016260030D   + 05000                           0 NS   888071202
+SUSAP KPHXK2FL25L  L      070POPKEK2EA0EE  R   HM                     34260040    + 05000                           0 NS   888081202
+SUSAP KPHXK2FL26   AZERLO 010ZERLOK2EA0E       IF                                             18000                 0 NS   888091909
+SUSAP KPHXK2FL26   AZERLO 020CERUNK2PC0E  A    TF                                 + 07000                           0 NS   888101909
+SUSAP KPHXK2FL26   AZERLO 030ZEMOSK2PC0E       TF                                 + 06000                           0 NS   888111909
+SUSAP KPHXK2FL26   AZERLO 040TODREK2PC0EE B    CF ICWJK2      0781014725810036PI  + 05000                           0 NS   888121909
+SUSAP KPHXK2FL26   L      010TODREK2PC0E  I    IF ICWJK2      07810147        PI  + 05000     18000                 0 NS   888131909
+SUSAP KPHXK2FL26   L      011JAGALK2PC0E       CF ICWJK2      0781011125800036PI  + 04000                           0 NS   888141909
+SUSAP KPHXK2FL26   L      020PRUNNK2PC0E  F    CF ICWJK2      0781007725800033PI  + 03000                 PXR   K2D 0 NS   888151909
+SUSAP KPHXK2FL26   L      021DELSEK2PC0E S     CF ICWJK2      0781003825800039PI  + 01740             -306          0 NS   888161909
+SUSAP KPHXK2FL26   L      030RW26 K2PG0GY M    CF ICWJK2      0781002125800017PI    01189             -306          0 NS   888171909
+SUSAP KPHXK2FL26   L      040         0  M     CA                     2581        + 02500                           0 NS   888181909
+SUSAP KPHXK2FL26   L      050         0    R   VIY                    0300                                          0 NS   888191909
+SUSAP KPHXK2FL26   L      060AVENTK2EA0EY      CF PXR K2      3360015933600100D   + 05000                           0 NS   888201909
+SUSAP KPHXK2FL26   L      070AVENTK2EA0EE  R   HM                     1560T010    + 05000                           0 NS   888211909
+SUSAP KPHXK2FR07LY ABXK   010BXK  K2D 0V       IF                                             18000                 A JS   888220903
+SUSAP KPHXK2FR07LY ABXK   020AVONAK2EA0E  A 010TF                                 + 05000                           A JS   888232101
+SUSAP KPHXK2FR07LY ABXK   030UPNIWK2PC0EE B 010TF                                 + 04000                           A JS   888242101
+SUSAP KPHXK2FR07LY APXR   010PXR  K2D 0V       IF                                             18000                 A JS   888250903
+SUSAP KPHXK2FR07LY APXR   020UPNIWK2PC0EY   010TF                                 + 04000                           A JS   888262101
+SUSAP KPHXK2FR07LY APXR   030UPNIWK2PC0EE AL   HF                     07790040    + 04000                           A JS   888271310
+SUSAP KPHXK2FR07LY R      010UPNIWK2PC0E  I    IF                                 + 04000     18000                 A JS   888281310
+SUSAP KPHXK2FR07LY R      020YECXYK2PC1E  F 010TF                                 + 03000                 RW07L K2PGA JS   888292101
+SUSAP KPHXK2FR07LY R      020YECXYK2PC2WALPV       ALNAV/VNAV ALNAV                                                   JS   888301310
+SUSAP KPHXK2FR07LY R      021PETRSK2PC0E S  031TF                                 V 0184001840        -300          A JS   888312101
+SUSAP KPHXK2FR07LY R      030RW07LK2PG0GY M 031TF                                   01167             -300          A JS   888322101
+SUSAP KPHXK2FR07LY R      040         0  M     CA                     0780        + 01389                           A JS   888330903
+SUSAP KPHXK2FR07LY R      050UXCUNK2PC0E    010DF                                                                   A JS   888342101
+SUSAP KPHXK2FR07LY R      060IWA  K2D 0VY   010TF                                 + 05000                           A JS   888352101
+SUSAP KPHXK2FR07LY R      070IWA  K2D 0VE  R   HM                     36000050    + 05000                           A JS   888360910
+SUSAP KPHXK2FR07RY ABXK   010BXK  K2D 0V       IF                                             18000                 A JS   888370903
+SUSAP KPHXK2FR07RY ABXK   020ALLISK2EA0E  A 010TF                                 + 05000                           A JS   888382101
+SUSAP KPHXK2FR07RY ABXK   030JEPESK2PC0EE B 010TF                                 + 04300                           A JS   888392101
+SUSAP KPHXK2FR07RY APXR   010PXR  K2D 0V       IF                                             18000                 A JS   888400903
+SUSAP KPHXK2FR07RY APXR   020JEPESK2PC0EY   010TF                                 + 04300                           A JS   888412101
+SUSAP KPHXK2FR07RY APXR   030JEPESK2PC0EE AR   HF                     07790050    + 04300                           A JS   888421310
+SUSAP KPHXK2FR07RY R      010JEPESK2PC0E  I    IF                                 + 04300     18000                 A JS   888431310
+SUSAP KPHXK2FR07RY R      020OVNUYK2PC1E  F 010TF                                 + 03000                 RW07R K2PGA JS   888442101
+SUSAP KPHXK2FR07RY R      020OVNUYK2PC2WALPV       ALNAV/VNAV ALNAV                                                   JS   888451310
+SUSAP KPHXK2FR07RY R      021ADWOTK2PC0E S  031TF                                 V 0184001840        -300          A JS   888462101
+SUSAP KPHXK2FR07RY R      030RW07RK2PG0GY M 031TF                                   01168             -300          A JS   888472101
+SUSAP KPHXK2FR07RY R      040         0  M     CA                     0780        + 01390                           A JS   888480903
+SUSAP KPHXK2FR07RY R      050NAVOQK2PC0E    010DF                                                                   A JS   888492101
+SUSAP KPHXK2FR07RY R      060IWA  K2D 0VY   010TF                                 + 05000                           A JS   888502101
+SUSAP KPHXK2FR07RY R      070IWA  K2D 0VE  R   HM                     36000050    + 05000                           A JS   888510910
+SUSAP KPHXK2FR08-Y ABXK   010BXK  K2D 0V       IF                                             18000                 A JS   888520903
+SUSAP KPHXK2FR08-Y ABXK   020ALLISK2EA0E  A 010TF                                 + 05000                           A JS   888532101
+SUSAP KPHXK2FR08-Y ABXK   030ETVIWK2PC0EE B 010TF                                 + 04100                           A JS   888542101
+SUSAP KPHXK2FR08-Y APXR   010PXR  K2D 0V       IF                                             18000                 A JS   888550903
+SUSAP KPHXK2FR08-Y APXR   020ETVIWK2PC0EY   010TF                                 + 04100                           A JS   888562101
+SUSAP KPHXK2FR08-Y APXR   030ETVIWK2PC0EE AR   HF                     07790050    + 04100                           A JS   888571310
+SUSAP KPHXK2FR08-Y R      010ETVIWK2PC0E  I    IF                                 + 04100     18000                 A JS   888581310
+SUSAP KPHXK2FR08-Y R      020IEGORK2PC1E  F 010TF                                 + 03000                 RW08  K2PGA JS   888592211
+SUSAP KPHXK2FR08-Y R      020IEGORK2PC2WALPV       N          ALNAV                                                   JS   888602211
+SUSAP KPHXK2FR08-Y R      030RW08 K2PG0GY M 031TF                                   01167             -300          A JS   888612101
+SUSAP KPHXK2FR08-Y R      040         0  M     CA                     0780        + 03000                           A JS   888622211
+SUSAP KPHXK2FR08-Y R      050AVENTK2EA0EY  L010DF                                 + 05000                           A JS   888632211
+SUSAP KPHXK2FR08-Y R      060AVENTK2EA0EE  R   HM                     15600050    + 05000                           A JS   888642211
+SUSAP KPHXK2FR25LY AIWA   010IWA  K2D 0V  A    IF                                             18000                 A JS   888650903
+SUSAP KPHXK2FR25LY AIWA   020HAMEKK2PC0EE B 010TF                                 + 05000                           A JS   888662101
+SUSAP KPHXK2FR25LY AZERLO 010ZERLOK2EA0E       IF                                             18000                 A JS   888670903
+SUSAP KPHXK2FR25LY AZERLO 020FIXARK2PC0E  A 010TF                                 + 07000                           A JS   888682101
+SUSAP KPHXK2FR25LY AZERLO 030HAMEKK2PC0EE B 010TF                                 + 05000                           A JS   888692101
+SUSAP KPHXK2FR25LY R      010HAMEKK2PC0E  I    IF                                 + 05000     18000                 A JS   888701310
+SUSAP KPHXK2FR25LY R      011GIPSEK2PC0E    010TF                                 + 04000                           A JS   888712101
+SUSAP KPHXK2FR25LY R      020TIPLEK2PC1E  F 010TF                                 + 03000                 RW25L K2PGA JS   888722205
+SUSAP KPHXK2FR25LY R      020TIPLEK2PC2WALPV       ALNAV/VNAV ALNAV                                                   JS   888732205
+SUSAP KPHXK2FR25LY R      021TEKUYK2PC0E S  031TF                                 V 0194001940        -300          A JS   888742205
+SUSAP KPHXK2FR25LY R      030RW25LK2PG0GY M 031TF                                   01175             -300          A JS   888752101
+SUSAP KPHXK2FR25LY R      040         0  M     CA                     2581        + 01900                           A JS   888762205
+SUSAP KPHXK2FR25LY R      050CHOCKK2PC0E   L010DF                                                                   A JS   888772205
+SUSAP KPHXK2FR25LY R      060BRAAKK2PC0EY   010TF                                 + 05000                           A JS   888782205
+SUSAP KPHXK2FR25LY R      070BRAAKK2PC0EE  R   HM                     25300050    + 05000                           A JS   888792205
+SUSAP KPHXK2FR25RY AIWA   010IWA  K2D 0V  A    IF                                             18000                 A JS   888800903
+SUSAP KPHXK2FR25RY AIWA   020TEYYIK2PC0EE B 010TF                                 + 05000                           A JS   888812101
+SUSAP KPHXK2FR25RY AZERLO 010ZERLOK2EA0E       IF                                             18000                 A JS   888820903
+SUSAP KPHXK2FR25RY AZERLO 020UVIYOK2PC0E  A 010TF                                 + 07000                           A JS   888832101
+SUSAP KPHXK2FR25RY AZERLO 030TEYYIK2PC0EE B 010TF                                 + 05000                           A JS   888842101
+SUSAP KPHXK2FR25RY R      010TEYYIK2PC0E  I    IF                                 + 05000     18000                 A JS   888851310
+SUSAP KPHXK2FR25RY R      011ZAMEXK2PC0E    010TF                                 + 04000                           A JS   888862101
+SUSAP KPHXK2FR25RY R      020UXCUNK2PC1E  F 010TF                                 + 03000                 RW25R K2PGA JS   888872101
+SUSAP KPHXK2FR25RY R      020UXCUNK2PC2WALPV       ALNAV/VNAV ALNAV                                                   JS   888881310
+SUSAP KPHXK2FR25RY R      021YASCUK2PC0E S  031TF                                 V 0186001862        -300          A JS   888892101
+SUSAP KPHXK2FR25RY R      030RW25RK2PG0GY M 031TF                                   01189             -300          A JS   888902101
+SUSAP KPHXK2FR25RY R      040         0  M     CA                     2581        + 01439                           A JS   888910903
+SUSAP KPHXK2FR25RY R      050YECXYK2PC0E    010DF                                                                   A JS   888921310
+SUSAP KPHXK2FR25RY R      060BXK  K2D 0VY   010TF                                 + 05000                           A JS   888932101
+SUSAP KPHXK2FR25RY R      070BXK  K2D 0VE  R   HM                     08360050    + 05000                           A JS   888942101
+SUSAP KPHXK2FR26-Y AIWA   010IWA  K2D 0V  A    IF                                             18000                 A JS   888950903
+SUSAP KPHXK2FR26-Y AIWA   020TODREK2PC0EE B 010TF                                 + 05000                           A JS   888962101
+SUSAP KPHXK2FR26-Y AZERLO 010ZERLOK2EA0E  A    IF                                             18000                 A JS   888970903
+SUSAP KPHXK2FR26-Y AZERLO 020CERUNK2PC0E    010TF                                 + 07000                           A JS   888982101
+SUSAP KPHXK2FR26-Y AZERLO 030TODREK2PC0EE B 010TF                                 + 05000                           A JS   888992101
+SUSAP KPHXK2FR26-Y R      010TODREK2PC0E  I    IF                                 + 05000     18000                 A JS   889001310
+SUSAP KPHXK2FR26-Y R      011JAGALK2PC0E    010TF                                 + 04000                           A JS   889012101
+SUSAP KPHXK2FR26-Y R      020TINKMK2PC1E  F 010TF                                 + 03000                 RW26  K2PGA JS   889022205
+SUSAP KPHXK2FR26-Y R      020TINKMK2PC2WALPV       ALNAV/VNAV ALNAV                                                   JS   889032205
+SUSAP KPHXK2FR26-Y R      030RW26 K2PG0GY M 031TF                                   01189             -300          A JS   889042101
+SUSAP KPHXK2FR26-Y R      040         0  M     CA                     2581        + 01700                           A JS   889052205
+SUSAP KPHXK2FR26-Y R      050RAXEEK2PC0EY  R010DF                                 + 06000                           A JS   889062205
+SUSAP KPHXK2FR26-Y R      060RAXEEK2PC0EE  R   HM                     28640050    + 06000                           A JS   889072205
+SUSAP KPHXK2GRW07L   0103000780 N33255181W112013757         +0308501110000057150IIPHX1                                     889081903
+SUSAP KPHXK2GRW07R   0078000780 N33254389W112013757         +0308801111000057150IIAHA1                                     889091612
+SUSAP KPHXK2GRW08    0114890780 N33262709W112013666         +0309301113089855150IISYQ1                                     889101612
+SUSAP KPHXK2GRW25L   0078002580 N33254384W112000554         +0313501126000049150IIRJG1                                     889111612
+SUSAP KPHXK2GRW25R   0103002580 N33255173W111593604         +0315901134000055150R                                          889121903
+SUSAP KPHXK2GRW26    0114892580 N33262696W111593169         +0316101135000055150IICWJ1                                     889131612
+SUSAP KPHXK2IIAHA1   011075RW07RN33254383W1115952290780N33254663W1120125091123 10570449300E01205701107                     889142213
+SUSAP KPHXK2IICWJ1   011175RW26 N33262711W1120159232581N33262960W1115944431014 10800321300E01205501129                     889151406
+SUSAP KPHXK2IIPHX1   011150RW07LN33255172W1115920370780N33254905W1120125211325 10470345300E01205701107                     889162501
+SUSAP KPHXK2IIRJG1   011075RW25LN33254390W1120146942580N33254093W1120016871023 09600449300E01204901120                     889172501
+SUSAP KPHXK2IISYQ1   011175RW08 N33262695W1115919740781N33262965W1120124631012 10190346300E01205501112                     889182201
+SUSAP KPHXK2PR07LY RW07L001Y0000W07A0N3325518085W11201375645+030850300N3325517200W11159322100107000096000567F4005003457442B889190903
+SUSAP KPHXK2PR07LY RW07L002E      +03384+03384LPV       65811                                                              889200903
+SUSAP KPHXK2PR07RY RW07R001Y0000W07B0N3325438910W11201375670+030880300N3325438400W11200055400106500000000567F4005005EE912F4889210903
+SUSAP KPHXK2PR07RY RW07R002E      +03386+03386LPV       73011                                                              889220903
+SUSAP KPHXK2PR08-Y RW08 001Y0000W08A0N3326270905W11201366570+030930300N3326269640W11159316780106750000000540F400500BFEEA53B889232211
+SUSAP KPHXK2PR08-Y RW08 002E      +03391+03391LPV       86611                                                              889240903
+SUSAP KPHXK2PR25LY RW25L001Y0000W25B0N3325438350W11200055410+031350300N3325438995W11201520025106750376000490F400500E3008066889252205
+SUSAP KPHXK2PR25LY RW25L002E      +03433+03433LPV       82211                                                              889260903
+SUSAP KPHXK2PR25RY RW25R001Y0000W25A0N3325517270W11159360450+031590300N3325518100W11201375600106750000000550F400500F8812001889270903
+SUSAP KPHXK2PR25RY RW25R002E      +03456+03456LPV       40022                                                              889280903
+SUSAP KPHXK2PR26-Y RW26 001Y0000W26A0N3326269640W11159316880+031610300N3326270990W11201472645106750000000540F400500134DBA43889292205
+SUSAP KPHXK2PR26-Y RW26 002E      +03459+03459LPV       70321                                                              889302101
+SUSAP KPHXK2SKPHX K2PA                0   18018006125                                                                  M   889312401
+SUSAP KPHXK2SPXR  K2D                 0   010160058251602800622528001004825                                            M   889321107
+SUSAP KPHXK2SRW07LK2PG                0   18018006125                                                                  M   889330804
+SUSAP KPHXK2SRW07RK2PG                0   18018006125                                                                  M   889342014
+SUSAP KPHXK2SRW08 K2PG                0   18018006125                                                                  M   889352014
+SUSAP KPHXK2SRW25LK2PG                0   18018006125                                                                  M   889362014
+SUSAP KPHXK2SRW25RK2PG                0   18018006125                                                                  M   889372014
+SUSAP KPHXK2SRW26 K2PG                0   18018006125                                                                  M   889380804
+SUSAUCK2TKPHX PAB  A00100     G N33303400W112085100                              GND  A09000MPHOENIX AREA A                612151703
+SUSAUCK2TKPHX PAB  A00200     G N33303400W112064500                                                                        612161703
+SUSAUCK2TKPHX PAB  A00300     G N33274400W112021500                                                                        612171703
+SUSAUCK2TKPHX PAB  A00400     G N33274340W112010470                                                                        612181703
+SUSAUCK2TKPHX PAB  A00500     G N33273380W112002920                                                                        612191703
+SUSAUCK2TKPHX PAB  A00600     G N33272900W111585900                                                                        612201703
+SUSAUCK2TKPHX PAB  A00700     G N33300700W111543200                                                                        612211703
+SUSAUCK2TKPHX PAB  A00800     G N33300700W111532852                                                                        612221703
+SUSAUCK2TKPHX PAB  A00900     R N33300700W111530000N33255900W11158130000600466                                             612231703
+SUSAUCK2TKPHX PAB  A01000     G N33212500W111533300                                                                        612241703
+SUSAUCK2TKPHX PAB  A01100     G N33212500W111545500                                                                        612251703
+SUSAUCK2TKPHX PAB  A01200     G N33243700W111583800                                                                        612261703
+SUSAUCK2TKPHX PAB  A01300     G N33243400W112021300                                                                        612271703
+SUSAUCK2TKPHX PAB  A01400     G N33214500W112062000                                                                        612281703
+SUSAUCK2TKPHX PAB  A01500     REN33214500W112090300N33255900W11158130001002451                                             612291703
+SUSAUCK2TKPHX PAB  B01600     G N33303400W112085100                              03000M09000MPHOENIX AREA B                612301703
+SUSAUCK2TKPHX PAB  B01700     L N33303000W112151900N33255900W11158130001502876                                             612311703
+SUSAUCK2TKPHX PAB  B01800     L N33240000W112155900N33255900W11158130001502625                                             612321703
+SUSAUCK2TKPHX PAB  B01900     G N33200000W112143900                                                                        612331703
+SUSAUCK2TKPHX PAB  B02000     G N33192900W112142200                                                                        612341703
+SUSAUCK2TKPHX PAB  B02100     G N33192716W112142055                                                                        612351703
+SUSAUCK2TKPHX PAB  B02200     G N33191816W112141455                                                                        612361703
+SUSAUCK2TKPHX PAB  B02300     G N33190916W112140855                                                                        612371703
+SUSAUCK2TKPHX PAB  B02400     G N33190316W112140155                                                                        612381703
+SUSAUCK2TKPHX PAB  B02500     G N33190116W112135455                                                                        612391703
+SUSAUCK2TKPHX PAB  B02600     G N33190016W112134555                                                                        612401703
+SUSAUCK2TKPHX PAB  B02700     G N33190016W112133355                                                                        612411703
+SUSAUCK2TKPHX PAB  B02800     G N33190116W112132255                                                                        612421703
+SUSAUCK2TKPHX PAB  B02900     G N33190316W112130755                                                                        612431703
+SUSAUCK2TKPHX PAB  B03000     G N33190316W112125754                                                                        612441703
+SUSAUCK2TKPHX PAB  B03100     G N33190016W112125054                                                                        612451703
+SUSAUCK2TKPHX PAB  B03200     G N33185616W112124454                                                                        612461703
+SUSAUCK2TKPHX PAB  B03300     G N33185216W112123654                                                                        612471703
+SUSAUCK2TKPHX PAB  B03400     G N33184816W112122754                                                                        612481703
+SUSAUCK2TKPHX PAB  B03500     G N33184316W112121854                                                                        612491703
+SUSAUCK2TKPHX PAB  B03600     G N33183716W112120854                                                                        612501703
+SUSAUCK2TKPHX PAB  B03700     G N33183017W112120654                                                                        612511703
+SUSAUCK2TKPHX PAB  B03800     G N33181817W112120254                                                                        612521703
+SUSAUCK2TKPHX PAB  B03900     G N33214500W112062000                                                                        612531703
+SUSAUCK2TKPHX PAB  B04000     REN33214500W112090300N33255900W11158130001002451                                             612541703
+SUSAUCK2TKPHX PAB  C04100     R N33300700W111530000N33255900W11158130000600466   02700M09000MPHOENIX AREA C                612551703
+SUSAUCK2TKPHX PAB  C04200     G N33212500W111533300                                                                        612561703
+SUSAUCK2TKPHX PAB  C04300     L N33212500W111473500N33255900W11158130001001171                                             612571703
+SUSAUCK2TKPHX PAB  C04400     R N33240200W111463000N33273900W11143420000432130                                             612581703
+SUSAUCK2TKPHX PAB  C04500     G N33243500W111471800                                                                        612591703
+SUSAUCK2TKPHX PAB  C04600     GEN33300800W111472000                                                                        612601703
+SUSAUCK2TKPHX PAB  D04700     G N33303400W112064500                              05000M09000MPHOENIX AREA D                612611703
+SUSAUCK2TKPHX PAB  D04800     G N33274400W112021500                                                                        612621703
+SUSAUCK2TKPHX PAB  D04900     G N33274340W112010470                                                                        612631703
+SUSAUCK2TKPHX PAB  D05000     G N33273380W112002920                                                                        612641703
+SUSAUCK2TKPHX PAB  D05100     G N33272900W111585900                                                                        612651703
+SUSAUCK2TKPHX PAB  D05200     G N33300700W111543200                                                                        612661703
+SUSAUCK2TKPHX PAB  D05300     G N33300700W111532852                                                                        612671703
+SUSAUCK2TKPHX PAB  D05400     G N33350000W111532800                                                                        612681703
+SUSAUCK2TKPHX PAB  D05500     G N33350000W112070000                                                                        612691703
+SUSAUCK2TKPHX PAB  D05600     G N33335400W112065900                                                                        612701703
+SUSAUCK2TKPHX PAB  D05700     GEN33332700W112064300                                                                        612711703
+SUSAUCK2TKPHX PAB  E05800     G N33243700W111583800                              05000M09000MPHOENIX AREA E                612721703
+SUSAUCK2TKPHX PAB  E05900     G N33243400W112021300                                                                        612731703
+SUSAUCK2TKPHX PAB  E06000     G N33214500W112062000                                                                        612741703
+SUSAUCK2TKPHX PAB  E06100     G N33181817W112120254                                                                        612751703
+SUSAUCK2TKPHX PAB  E06200     G N33181617W112115554                                                                        612761703
+SUSAUCK2TKPHX PAB  E06300     G N33180617W112114554                                                                        612771703
+SUSAUCK2TKPHX PAB  E06400     G N33180217W112114154                                                                        612781703
+SUSAUCK2TKPHX PAB  E06500     G N33175417W112113854                                                                        612791703
+SUSAUCK2TKPHX PAB  E06600     G N33174717W112113954                                                                        612801703
+SUSAUCK2TKPHX PAB  E06700     G N33174117W112114154                                                                        612811703
+SUSAUCK2TKPHX PAB  E06800     G N33173317W112114354                                                                        612821703
+SUSAUCK2TKPHX PAB  E06900     G N33172817W112114754                                                                        612831703
+SUSAUCK2TKPHX PAB  E07000     G N33172217W112114954                                                                        612841703
+SUSAUCK2TKPHX PAB  E07100     G N33171417W112114854                                                                        612851703
+SUSAUCK2TKPHX PAB  E07200     G N33170617W112114654                                                                        612861703
+SUSAUCK2TKPHX PAB  E07300     G N33165517W112114854                                                                        612871703
+SUSAUCK2TKPHX PAB  E07400     G N33164417W112114954                                                                        612881703
+SUSAUCK2TKPHX PAB  E07500     G N33163717W112114754                                                                        612891703
+SUSAUCK2TKPHX PAB  E07600     G N33163117W112114654                                                                        612901703
+SUSAUCK2TKPHX PAB  E07700     G N33162417W112114254                                                                        612911703
+SUSAUCK2TKPHX PAB  E07800     G N33161717W112113854                                                                        612921703
+SUSAUCK2TKPHX PAB  E07900     G N33160717W112113454                                                                        612931703
+SUSAUCK2TKPHX PAB  E08000     G N33160000W112113500                                                                        612941703
+SUSAUCK2TKPHX PAB  E08100     G N33160000W111484000                                                                        612951703
+SUSAUCK2TKPHX PAB  E08200     GEN33212500W111545500                                                                        612961703
+SUSAUCK2TKPHX PAB  F08300     G N33350000W112260700                              04000M09000MPHOENIX AREA F                612971703
+SUSAUCK2TKPHX PAB  F08400     G N33350000W112154000                                                                        612981703
+SUSAUCK2TKPHX PAB  F08500     G N33350000W112070000                                                                        612991703
+SUSAUCK2TKPHX PAB  F08600     G N33335400W112065900                                                                        613001703
+SUSAUCK2TKPHX PAB  F08700     G N33332700W112064300                                                                        613011703
+SUSAUCK2TKPHX PAB  F08800     G N33303400W112064500                                                                        613021703
+SUSAUCK2TKPHX PAB  F08900     G N33303400W112085100                                                                        613031703
+SUSAUCK2TKPHX PAB  F09000     L N33303000W112151900N33255900W11158130001502876                                             613041703
+SUSAUCK2TKPHX PAB  F09100     G N33240000W112155900                                                                        613051703
+SUSAUCK2TKPHX PAB  F09200     G N33240000W112213000                                                                        613061703
+SUSAUCK2TKPHX PAB  F09300     R N33240000W112275900N33255900W11158130002502656                                             613071703
+SUSAUCK2TKPHX PAB  F09400     REN33303400W112273600N33255900W11158130002502807                                             613081703
+SUSAUCK2TKPHX PAB  G09500     G N33212500W111545500                              04000M09000MPHOENIX AREA G                613091703
+SUSAUCK2TKPHX PAB  G09600     G N33212500W111533300                                                                        613101703
+SUSAUCK2TKPHX PAB  G09700     L N33212500W111473500N33255900W11158130001001171                                             613111703
+SUSAUCK2TKPHX PAB  G09800     L N33240200W111463000N33255900W11158130001001012                                             613121703
+SUSAUCK2TKPHX PAB  G09900     G N33300800W111472000                                                                        613131703
+SUSAUCK2TKPHX PAB  G10000     G N33300700W111530000                                                                        613141703
+SUSAUCK2TKPHX PAB  G10100     G N33300700W111532852                                                                        613151703
+SUSAUCK2TKPHX PAB  G10200     G N33350000W111532800                                                                        613161703
+SUSAUCK2TKPHX PAB  G10300     R N33350000W111435100N33255900W11158130001500531                                             613171703
+SUSAUCK2TKPHX PAB  G10400     G N33160000W111445000                                                                        613181703
+SUSAUCK2TKPHX PAB  G10500     GEN33160000W111484000                                                                        613191703
+SUSAUCK2TKPHX PAB  H10600     G N33240000W112213000                              05000M09000MPHOENIX AREA H                613201703
+SUSAUCK2TKPHX PAB  H10700     L N33240000W112155900N33255900W11158130001502625                                             613211703
+SUSAUCK2TKPHX PAB  H10800     G N33200000W112143900                                                                        613221703
+SUSAUCK2TKPHX PAB  H10900     GEN33200000W112213000                                                                        613231703
+SUSAUCK2TKPHX PAB  I11000     R N33350000W111435100N33255900W11158130001500531   05000M09000MPHOENIX AREA I                613241703
+SUSAUCK2TKPHX PAB  I11100     G N33160000W111445000                                                                        613251703
+SUSAUCK2TKPHX PAB  I11200     G N33160000W111373100                                                                        613261703
+SUSAUCK2TKPHX PAB  I11300     L N33160000W111305100N33255900W11158130002501134                                             613271703
+SUSAUCK2TKPHX PAB  I11400     G N33350000W111301800                                                                        613281703
+SUSAUCK2TKPHX PAB  I11500     GEN33350000W111365100                                                                        613291703
+SUSAUCK2TKPHX PAB  J11600     G N33350000W112154000                              06000M09000MPHOENIX AREA J                613301703
+SUSAUCK2TKPHX PAB  J11700     G N33353090W112153860                                                                        613311703
+SUSAUCK2TKPHX PAB  J11800     G N33353180W112153960                                                                        613321703
+SUSAUCK2TKPHX PAB  J11900     G N33355880W112152700                                                                        613331703
+SUSAUCK2TKPHX PAB  J12000     G N33362530W112145270                                                                        613341703
+SUSAUCK2TKPHX PAB  J12100     G N33365040W112142460                                                                        613351703
+SUSAUCK2TKPHX PAB  J12200     G N33365920W112142240                                                                        613361703
+SUSAUCK2TKPHX PAB  J12300     G N33380320W112142150                                                                        613371703
+SUSAUCK2TKPHX PAB  J12400     G N33390590W112135670                                                                        613381703
+SUSAUCK2TKPHX PAB  J12500     G N33394070W112135570                                                                        613391703
+SUSAUCK2TKPHX PAB  J12600     G N33400000W112134500                                                                        613401703
+SUSAUCK2TKPHX PAB  J12700     R N33414100W112130500N33255900W11158130002003217                                             613411703
+SUSAUCK2TKPHX PAB  J12800     G N33455450W112004320                                                                        613421703
+SUSAUCK2TKPHX PAB  J12900     G N33402200W112000100                                                                        613431703
+SUSAUCK2TKPHX PAB  J13000     G N33402280W111582280                                                                        613441703
+SUSAUCK2TKPHX PAB  J13100     G N33394870W111570430                                                                        613451703
+SUSAUCK2TKPHX PAB  J13200     G N33391090W111540300                                                                        613461703
+SUSAUCK2TKPHX PAB  J13300     G N33390070W111534840                                                                        613471703
+SUSAUCK2TKPHX PAB  J13400     G N33384590W111533320                                                                        613481703
+SUSAUCK2TKPHX PAB  J13500     G N33383900W111533100                                                                        613491703
+SUSAUCK2TKPHX PAB  J13600     R N33433800W111465400N33255900W11158130002000282                                             613501703
+SUSAUCK2TKPHX PAB  J13700     G N33350000W111365100                                                                        613511703
+SUSAUCK2TKPHX PAB  J13800     G N33350000W111435100                                                                        613521703
+SUSAUCK2TKPHX PAB  J13900     G N33350000W111532800                                                                        613531703
+SUSAUCK2TKPHX PAB  J14000     GEN33350000W112070000                                                                        613541703
+SUSAUCK2TKPHX PAB  K14100     G N33160000W112143900                              06000M09000MPHOENIX AREA K                613551703
+SUSAUCK2TKPHX PAB  K14200     G N33160000W112113500                                                                        613561703
+SUSAUCK2TKPHX PAB  K14300     G N33160000W111484000                                                                        613571703
+SUSAUCK2TKPHX PAB  K14400     G N33160000W111445000                                                                        613581703
+SUSAUCK2TKPHX PAB  K14500     R N33160000W111373100N33255900W11158130002001198                                             613591703
+SUSAUCK2TKPHX PAB  K14600     G N33070200W111502600                                                                        613601703
+SUSAUCK2TKPHX PAB  K14700     REN33093900W111522800N33255900W11158130001701635                                             613611703
+SUSAUCK2TKPHX PAB  L14800     G N33240000W112275900                              06000M09000MPHOENIX AREA L                613621703
+SUSAUCK2TKPHX PAB  L14900     G N33240000W112213000                                                                        613631703
+SUSAUCK2TKPHX PAB  L15000     G N33200000W112213000                                                                        613641703
+SUSAUCK2TKPHX PAB  L15100     L N33200000W112143900N33255900W11158130001502466                                             613651703
+SUSAUCK2TKPHX PAB  L15200     G N33192900W112142200                                                                        613661703
+SUSAUCK2TKPHX PAB  L15300     G N33192716W112142055                                                                        613671703
+SUSAUCK2TKPHX PAB  L15400     G N33191816W112141455                                                                        613681703
+SUSAUCK2TKPHX PAB  L15500     G N33190916W112140855                                                                        613691703
+SUSAUCK2TKPHX PAB  L15600     G N33190316W112140155                                                                        613701703
+SUSAUCK2TKPHX PAB  L15700     G N33190116W112135455                                                                        613711703
+SUSAUCK2TKPHX PAB  L15800     G N33190016W112134555                                                                        613721703
+SUSAUCK2TKPHX PAB  L15900     G N33190016W112133355                                                                        613731703
+SUSAUCK2TKPHX PAB  L16000     G N33190116W112132255                                                                        613741703
+SUSAUCK2TKPHX PAB  L16100     G N33190316W112130755                                                                        613751703
+SUSAUCK2TKPHX PAB  L16200     G N33190316W112125754                                                                        613761703
+SUSAUCK2TKPHX PAB  L16300     G N33190016W112125054                                                                        613771703
+SUSAUCK2TKPHX PAB  L16400     G N33185616W112124454                                                                        613781703
+SUSAUCK2TKPHX PAB  L16500     G N33185216W112123654                                                                        613791703
+SUSAUCK2TKPHX PAB  L16600     G N33184816W112122754                                                                        613801703
+SUSAUCK2TKPHX PAB  L16700     G N33184316W112121854                                                                        613811703
+SUSAUCK2TKPHX PAB  L16800     G N33183716W112120854                                                                        613821703
+SUSAUCK2TKPHX PAB  L16900     G N33183017W112120654                                                                        613831703
+SUSAUCK2TKPHX PAB  L17000     G N33181817W112120254                                                                        613841703
+SUSAUCK2TKPHX PAB  L17100     G N33181617W112115554                                                                        613851703
+SUSAUCK2TKPHX PAB  L17200     G N33180617W112114554                                                                        613861703
+SUSAUCK2TKPHX PAB  L17300     G N33180217W112114154                                                                        613871703
+SUSAUCK2TKPHX PAB  L17400     G N33175417W112113854                                                                        613881703
+SUSAUCK2TKPHX PAB  L17500     G N33174717W112113954                                                                        613891703
+SUSAUCK2TKPHX PAB  L17600     G N33174117W112114154                                                                        613901703
+SUSAUCK2TKPHX PAB  L17700     G N33173317W112114354                                                                        613911703
+SUSAUCK2TKPHX PAB  L17800     G N33172817W112114754                                                                        613921703
+SUSAUCK2TKPHX PAB  L17900     G N33172217W112114954                                                                        613931703
+SUSAUCK2TKPHX PAB  L18000     G N33171417W112114854                                                                        613941703
+SUSAUCK2TKPHX PAB  L18100     G N33170617W112114654                                                                        613951703
+SUSAUCK2TKPHX PAB  L18200     G N33165517W112114854                                                                        613961703
+SUSAUCK2TKPHX PAB  L18300     G N33164417W112114954                                                                        613971703
+SUSAUCK2TKPHX PAB  L18400     G N33163717W112114754                                                                        613981703
+SUSAUCK2TKPHX PAB  L18500     G N33163117W112114654                                                                        613991703
+SUSAUCK2TKPHX PAB  L18600     G N33162417W112114254                                                                        614001703
+SUSAUCK2TKPHX PAB  L18700     G N33161717W112113854                                                                        614011703
+SUSAUCK2TKPHX PAB  L18800     G N33160717W112113454                                                                        614021703
+SUSAUCK2TKPHX PAB  L18900     G N33160000W112113500                                                                        614031703
+SUSAUCK2TKPHX PAB  L19000     G N33160000W112143900                                                                        614041703
+SUSAUCK2TKPHX PAB  L19100     REN33160000W112253500N33255900W11158130002502466                                             614051703
+SUSAUCK2TKPHX PAB  M19200     R N33414100W112130500N33255900W11158130002003217   07000M09000MPHOENIX AREA M                614061703
+SUSAUCK2TKPHX PAB  M19300     G N33455450W112004320                                                                        614071703
+SUSAUCK2TKPHX PAB  M19400     L N33505340W112012100N33255900W11158130002503540                                             614081703
+SUSAUCK2TKPHX PAB  M19500     GEN33480200W112122400                                                                        614091703
+SUSAUCK2TKPHX PAB  N19600     G N33455450W112004320                              07000M09000MPHOENIX AREA N                614101703
+SUSAUCK2TKPHX PAB  N19700     G N33402200W112000100                                                                        614111703
+SUSAUCK2TKPHX PAB  N19800     G N33402280W111582280                                                                        614121703
+SUSAUCK2TKPHX PAB  N19900     G N33394870W111570430                                                                        614131703
+SUSAUCK2TKPHX PAB  N20000     G N33391090W111540300                                                                        614141703
+SUSAUCK2TKPHX PAB  N20100     G N33390070W111534840                                                                        614151703
+SUSAUCK2TKPHX PAB  N20200     G N33384590W111533320                                                                        614161703
+SUSAUCK2TKPHX PAB  N20300     G N33383900W111533100                                                                        614171703
+SUSAUCK2TKPHX PAB  N20400     LEN33433800W111465400N33255900W11158130002000282                                             614181703
+SUSAUCK2TKPHX PAB  O20500     R N33433800W111465400N33255900W11158130002000282   07000M09000MPHOENIX AREA O                614191703
+SUSAUCK2TKPHX PAB  O20600     G N33350000W111365100                                                                        614201703
+SUSAUCK2TKPHX PAB  O20700     L N33350000W111301800N33255900W11158130002500688                                             614211703
+SUSAUCK2TKPHX PAB  O20800     L N33404600W111340300N33255900W11158130002500537                                             614221703
+SUSAUCK2TKPHX PAB  O20900     GEN33471100W111421600                                                                        614231703
+SUSAUCK2TKPHX PAB  P21000     R N33160000W111373100N33255900W11158130002001198   07000M09000MPHOENIX AREA P                614241703
+SUSAUCK2TKPHX PAB  P21100     G N33070200W111502600                                                                        614251703
+SUSAUCK2TKPHX PAB  P21200     L N33024400W111470900N33255900W11158130002501581                                             614261703
+SUSAUCK2TKPHX PAB  P21300     L N33105200W111342500N33255900W11158130002501270                                             614271703
+SUSAUCK2TKPHX PAB  P21400     GEN33160000W111305100                                                                        614281703
+SUSAUCK2TKPHX PAB  Q21500     R N33534800W112115000N33255900W11158130003003378   08000M09000MPHOENIX AREA Q                614291703
+SUSAUCK2TKPHX PAB  Q21600     G N33555230W112015880                                                                        614301703
+SUSAUCK2TKPHX PAB  Q21700     L N33505340W112012100N33255900W11158130002503540                                             614311703
+SUSAUCK2TKPHX PAB  Q21800     GEN33480200W112122400                                                                        614321703
+SUSAUCK2TKPHX PAB  R21900     R N33503800W111373900N33255900W11158130003000348   08000M09000MPHOENIX AREA R                614331703
+SUSAUCK2TKPHX PAB  R22000     G N33434400W111291400                                                                        614341703
+SUSAUCK2TKPHX PAB  R22100     L N33404600W111340300N33255900W11158130002500537                                             614351703
+SUSAUCK2TKPHX PAB  R22200     GEN33471100W111421600                                                                        614361703
+SUSAUCK2TKPHX PAB  S22300     G N33105200W111342500                              08000M09000MPHOENIX AREA S                614371703
+SUSAUCK2TKPHX PAB  S22400     R N33075000W111294100N33255900W11158130003001270                                             614381703
+SUSAUCK2TKPHX PAB  S22500     G N32583000W111435400                                                                        614391703
+SUSAUCK2TKPHX PAB  S22600     LEN33024400W111470900N33255900W11158130002501581                                             614401703
+SUSAUCK2TKPHX PAB  T22700     G N33303400W112273600                              07000M09000MPHOENIX AREA T                614411703
+SUSAUCK2TKPHX PAB  T22800     L N33303400W112333900N33255900W11158130003002789                                             614421703
+SUSAUCK2TKPHX PAB  T22900     G N33160000W112315900                                                                        614431703
+SUSAUCK2TKPHX PAB  T23000     R N33160000W112253500N33255900W11158130002502466                                             614441703
+SUSAUCK2TKPHX PAB  T23100     REN33240000W112275900N33255900W11158130002502656                                             614451703
+SUSAUCK2TKPHX PAB  U23200     L N33240200W111463000N33255900W11158130001001012   03400M09000MPHOENIX AREA U                614461703
+SUSAUCK2TKPHX PAB  U23300     G N33300800W111472000                                                                        614471703
+SUSAUCK2TKPHX PAB  U23400     LEN33243500W111471800N33273900W11143420000432246                                             614481703

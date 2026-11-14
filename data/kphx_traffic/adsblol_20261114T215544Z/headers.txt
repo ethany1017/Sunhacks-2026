@@ -1,0 +1,11 @@
+HTTP/2 200 
+server: istio-envoy
+content-type: application/json
+cache-control: no-store
+content-length: 28555
+x-envoy-upstream-service-time: 1
+set-cookie: globe-reapi-sticky3="9e7db72553c59ed0"; Max-Age=600; HttpOnly
+strict-transport-security: max-age=31536000; includeSubDomains
+vary: Accept-Encoding
+date: Sat, 14 Nov 2026 21:55:45 GMT
+

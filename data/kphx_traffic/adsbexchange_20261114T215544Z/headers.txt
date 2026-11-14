@@ -1,0 +1,14 @@
+HTTP/2 402 
+date: Sat, 14 Nov 2026 21:55:47 GMT
+content-type: application/json; charset=utf-8
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+server: cloudflare
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=HJ6h3yhPUjXi4T4tlnUaaXjhGM61%2FoeDGplFbR9w%2FiGnABmeWuXQRf0R2a8UzGdgyf0K7KAm6cCOK39RTQJp2H3SwzOAr6RxivBQHdO%2Fu9JAbgPw9W6nvLA4CT6l6dVuALs%3D"}]}
+vary: Accept-Encoding
+x-custom-api-ray: Z2Vvc3BhdGlhbA==
+x-request-id: a1d151d6-58b7-4f75-8498-9e66f235c444
+x-envoy-upstream-service-time: 0
+x-custom-api-proxy: =hpV2elb
+cf-cache-status: DYNAMIC
+cf-ray: a5a9432b299c13a3-LAX
+

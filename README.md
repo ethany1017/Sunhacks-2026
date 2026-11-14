@@ -71,11 +71,18 @@ Weather comes from the NOAA Aviation Weather Center API (METAR observations and 
 
 ## Demo scope
 
-- **Airport:** [airport]
+- **Airport:** Phoenix Sky Harbor International (KPHX)
 - **Mode:** autonomous simulation with simulated pilots
-- **Scenario:** [demo scenario]
+- **Scenario (draft, to confirm):** a scripted haboob (dust storm) disruption at KPHX with 10-12 simulated aircraft, opening with a hold-short and readback exchange and a refused unsafe clearance, then a weather change that forces a replan. The weather replay uses real observations from the August 25, 2025 haboob.
 
 Not in the hackathon demo: live traffic observation, historical replay, and gate/ramp integration.
+
+## Research and data
+
+- [`data-catalog.md`](data-catalog.md): every data source for the build, with verified or unverified status, file paths, limits, conflicts, gaps and what must be synthetic. Part 2 merges Ethan's research (including the Deer Valley material, kept as a fallback).
+- [`research-atc.md`](research-atc.md): the earlier research report on the problem, existing systems, safety constraints and demo scope.
+- `data/`: downloaded samples (KPHX geometry, procedures, weather, traffic, aircraft and rules). Large raw files are not committed; the fetch scripts in `scripts/` rebuild them.
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md): proposed simulator architecture and build order.
 
 ## Getting started
 
@@ -83,7 +90,7 @@ Not in the hackathon demo: live traffic observation, historical replay, and gate
 
 ## Tech stack
 
-[To be decided.]
+Proposed, not yet agreed (see [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)): a custom Python simulator on a KPHX taxiway graph built from OpenStreetMap, an append-only JSONL event log, a small web API with WebSocket updates, and a MapLibre + deck.gl dashboard.
 
 ## Limitations
 

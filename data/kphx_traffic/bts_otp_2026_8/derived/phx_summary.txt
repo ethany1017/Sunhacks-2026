@@ -1,0 +1,8 @@
+file: On_Time_Reporting_Carrier_On_Time_Performance_(1987_present)_2026_8.csv
+days: 31 (2026-08-01..2026-08-31)  PHX flights: 29524 (dep 14757, arr 14767)
+avg per day: dep 476, arr 476
+taxi-out (min) n,mean,median,p90: (14678, 16.59, 14.0, 26.0)
+taxi-in  (min) n,mean,median,p90: (14666, 7.15, 6.0, 11.0)
+cancelled: 170  diverted: 177
+carriers: WN=9955, AA=8219, OO=3947, MQ=2200, DL=1672, UA=1438, F9=1079, AS=916, B6=62, G4=36
+busiest sched-dep hours (local): 08h=57.4/day, 10h=43.4/day, 15h=34.7/day

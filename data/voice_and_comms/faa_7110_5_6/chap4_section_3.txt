@@ -1,0 +1,519 @@
+
+Chapter 4. IFR
+7110.65BB
+7110.65 by Chapter Number
+Chapter 0. General Information
+Chapter 1. General
+Chapter 2. General Control
+Chapter 3. Airport Traffic Control - Terminal
+Chapter 4. IFR
+Chapter 5. Radar
+Chapter 6. Nonradar
+Chapter 7. Visual
+Chapter 8. Offshore/Oceanic Procedures
+Chapter 9. Special Flights
+Chapter 10. Emergencies
+Chapter 11. Traffic Management Procedures
+Chapter 12. Canadian Airspace Procedures
+Chapter 13. Decision Support Tools
+Chapter 14. Data Link Communications
+Appendix A
+Appendix B
+ATPUBS
+JO 7110.65BB by Topic
+General Information
+Explanation of Changes
+General
+Introduction
+Terms of Reference
+General Control
+General
+Flight Plans and Control Information
+Flight Progress Strips
+Radio and Interphone Communications
+Route and NAVAID Description
+Weather Information
+Altimeter Settings
+Runway Visibility Reporting- Terminal
+Automatic Terminal Information Service Procedures
+Team Position Responsibilities
+Airport Traffic Control - Terminal
+General
+Visual Signals
+Airport Conditions
+Airport Lighting
+Runway Selection
+Airport Surface Detection Procedures
+Taxi and Ground Movement Procedures
+Spacing and Sequencing
+Departure Procedures and Separation
+Arrival Procedures and Separation
+Helicopter Operations
+Sea Lane Operations
+IFR
+NAVAID Use Limitations
+Clearances
+Departure Procedures
+Route Assignment
+Altitude Assignment and Verification
+Holding Aircraft
+Arrival Procedures
+Approach Clearance Procedures
+Radar
+General
+Beacon/ADS-B Systems
+Radar Identification
+Transfer of Radar Identification
+Radar Separation
+Vectoring
+Speed Adjustment
+Radar Departures
+Radar Arrivals
+Radar Approaches- Terminal
+Surveillance Approaches- Terminal
+PAR Approaches- Terminal
+Automation- En Route
+Standard Terminal Automation Replacement System (STARS)-Terminal
+Nonradar
+General
+Initial Separation of Successive Departing Aircraft
+Initial Separation of Departing and Arriving Aircraft
+Longitudinal Separation
+Lateral Separation
+Vertical Separation
+Timed Approaches
+Visual
+General
+Visual Separation
+VFR‐On‐Top
+Approaches
+Special VFR (SVFR)
+Basic Radar Service to VFR Aircraft- Terminal
+Terminal Radar Service Area (TRSA)-Terminal
+Class C Service- Terminal
+Class B Service Area- Terminal
+Offshore/Oceanic Procedures
+General
+Coordination
+Longitudinal Separation
+Lateral Separation
+Offshore/Oceanic Transition Procedures
+Separation from Airspace Reservations
+North Atlantic ICAO Region
+Caribbean ICAO Region
+Pacific ICAO Region
+North American ICAO Region
+Special Flights
+General
+Special Operations
+Special Use, ATC-Assigned Airspace, and Stationary ALTRVs
+Fuel Dumping
+Jettisoning of External Stores
+Unmanned Free Balloons
+Parachute Operations
+Unidentified Anomalous Phenomena (UAP) Reports
+Emergencies
+General
+Emergency Assistance
+Overdue Aircraft
+Control Actions
+Miscellaneous Operations
+Oceanic Emergency Procedures
+Ground Missile Emergencies
+Traffic Management Procedures
+General
+Canadian Airspace Procedures
+General Control
+Decision Support Tools
+ERAM - En Route
+ATOP - Oceanic
+Data Link Communications
+Terminal Procedures for Issuing Automated Clearances
+En Route Controller Pilot Data Link Communications (CPDLC) - Domestic
+Advanced Technologies and Oceanic Procedures (ATOP) - Oceanic Controller Pilot Data Link Communications (CPDLC)
+Appendix A
+Appendix B
+IFR
+Departure Procedures
+Chapter 4. IFR
+Section 3. Departure Procedures
+4-3-1. DEPARTURE TERMINOLOGY
+Avoid using the term “takeoff” except to actually clear an aircraft for takeoff or to cancel a takeoff clearance. Use such terms as “depart,” “departure,” or “fly” in clearances when necessary.
+REFERENCE-
+FAA Order JO 7110.65, Para 
+3-9-10
+, Takeoff Clearance.
+FAA Order JO 7110.65, Para 
+3-9-11
+, Cancellation of Takeoff Clearance.
+4-3-2. DEPARTURE CLEARANCES
+Include the following items in IFR departure clearances:
+NOTE-
+When considered necessary, controllers or pilots may initiate read backs of a clearance. Some pilots may be required by company rule to do so.
+Always include the airport of departure when issuing a departure clearance for relay to an aircraft by an FSS, dispatcher, etc.
+Clearance Limit. 
+Specify the destination airport when practicable, even though it is outside controlled airspace. Issue short range clearances as provided for in any procedures established for their use.
+When the clearance limit is an airport, the word “airport” must follow the airport name.
+PHRASEOLOGY-
+CLEARED TO (destination) AIRPORT
+When the clearance limit is a NAVAID and the NAVAID type is known, the type of NAVAID must follow the NAVAID name.
+PHRASEOLOGY-
+CLEARED TO (NAVAID name and type)
+When the clearance limit is an intersection or waypoint and the type is known, the type must follow the intersection or waypoint name.
+PHRASEOLOGY-
+CLEARED TO (intersection or waypoint name and type)
+For Air Force One (AF1) operations, do not specify the destination airport.
+NOTE-
+Presidential detail is responsible for ensuring the accuracy of the destination airport.
+PHRASEOLOGY-
+DESTINATION AS FILED.
+Departure Procedures.
+Specify direction of takeoff/turn or initial heading to be flown after takeoff as follows:
+Locations with Airport Traffic Control Service-Specify direction of takeoff/turn or initial heading as necessary, consistent with published:
+Departure Procedures (DP). If an aircraft is vectored off a published Standard Instrument Departure (SID) or Obstacle Departure Procedure (ODP), that vector cancels the DP and ATC becomes responsible for separation from terrain and /or obstructions. IFR aircraft must be assigned an altitude.
+Diverse Vector Areas (DVA). The assignment of an initial heading using a DVA can be given to the pilot as part of the initial clearance, but must be given no later than with the takeoff clearance. Once airborne, an aircraft assigned headings within the DVA can be vectored below the MVA/MIA. Controllers cannot interrupt an aircraft's climb in the DVA until the aircraft is at or above the MVA/MIA.
+NOTE-
+It is important for controllers to understand that there can be differences in published climb gradients applicable to individual departure procedures serving the same airport or runway. Assigning a different departure procedure without the pilot being able to re-brief may result in the pilot rejecting the new procedure.
+When a departure clearance includes a SID, concurrent use of a diverse vector area (DVA) is not permitted.
+REFERENCE-
+AIM, Para 5-2-7, Departure Control.
+AIM, Para 5-2-9, Instrument Departure Procedures (DP) - Obstacle Departure Procedures (ODP) and Standard Instrument Departures (SID).
+Locations without Airport Traffic Control Service, but within a Class E surface area− specify direction of takeoff/turn or initial heading if necessary. Obtain/solicit the pilot's concurrence concerning a turn or heading before issuing them in a clearance.
+NOTE-
+Direction of takeoff and turn after takeoff can be obtained/solicited directly from the pilot, or relayed by an FSS, dispatcher, etc., as obtained/solicited from the pilot.
+At all other airports- Do not specify direction of takeoff/turn after takeoff. If necessary to specify an initial heading to be flown after takeoff, issue the initial heading so as to apply only within controlled airspace.
+Where an ODP has been published for a location and pilot compliance is necessary to ensure separation, include the procedure as part of the ATC clearance. Additionally, when an ODP is included in the clearance and the Visual Climb over Airport (VCOA) is requested by the pilot or assigned by ATC when it is the only procedure published in the ODP, include an instruction to remain within the published visibility of the VCOA.
+EXAMPLE-
+“Depart via the (airport name)(runway number) obstacle departure procedure. Remain within (number of miles) miles of the (airport name) during visual climb” if applicable. Or,
+“Depart via the (graphic ODP name) obstacle departure procedure. Remain within (number of miles) miles of the (airport name) during visual climb” if applicable.
+NOTE-
+Pilots will advise ATC of their intent to use the VCOA option when requesting their IFR clearance.
+Some aircraft are required by 14 CFR 91.175 to depart a runway under IFR using the ODP absent other instructions from ATC.
+IFR takeoff minimums and obstacle departure procedures are prescribed for specific airports/runways and published in either a textual, or graphic form with the label (OBSTACLE) in the procedure title, and documented on an appropriate FAA Form 8260. To alert pilots of their existence, instrument approach procedure charts are annotated with a symbol:
+Compatibility with a procedure issued may be verified by asking the pilot if items obtained/ solicited will allow him/her to comply with local traffic pattern, terrain, or obstruction avoidance.
+PHRASEOLOGY-
+FLY RUNWAY HEADING.
+DEPART (direction or runway).
+TURN LEFT/RIGHT.
+WHEN ENTERING CONTROLLED AIRSPACE (instruction), FLY HEADING (degrees) UNTIL REACHING (altitude, point, or fix) BEFORE PROCEEDING ON COURSE.
+FLY A (degree) BEARING/AZIMUTH FROM/TO (fix) UNTIL (time),
+or
+UNTIL REACHING (fix or altitude),
+and if required,
+BEFORE PROCEEDING ON COURSE.
+EXAMPLE-
+“Verify right turn after departure will allow compliance with local traffic pattern,”or “Verify this clearance will allow compliance with terrain or obstruction avoidance.”
+NOTE-
+If a published IFR departure procedure is not included in an ATC clearance, compliance with such a procedure is the pilot's prerogative.
+SIDs:
+Assign a SID (including transition if necessary). Assign an ADR/ADAR, when applicable or the route filed by the pilot, when a SID is not established for the departure route to be flown, or the pilot has indicated that he/she does not wish to use a SID.
+NOTE-
+Departure procedure descriptive text contained within parentheses (for example, “Jimmy One (RNAV) Departure”) is not included in departure clearance phraseology.
+PHRASEOLOGY-
+(SID name and number) DEPARTURE.
+(SID name and number) DEPARTURE, (transition name) TRANSITION.
+EXAMPLE-
+“BARII Three Departure.”
+“BARII Three Departure, SINKR Transition.”
+NOTE-
+If a pilot does not wish to use a SID issued in an ATC clearance, or any other SID published for that location, he/she is expected to advise ATC.
+If it is necessary to assign a crossing altitude which differs from the SID altitude emphasize the change to the pilot.
+PHRASEOLOGY-
+(SID name and number) DEPARTURE, EXCEPT CROSS (revised altitude information).
+EXAMPLE-
+“BRUWN Seven Departure, except cross HURBE at five thousand.”
+“CCOBB Three Departure, except cross SAAMS waypoint at six thousand.”
+Specify altitudes when they are not included in the SID. 
+PHRASEOLOGY-
+(SID name and number) DEPARTURE. CROSS (fix) AT (altitude).
+EXAMPLE-
+“HHOWE Four Departure. Cross WNNGZ intersection at five thousand. Cross HHOWE intersection at niner thousand.”
+“KAYLN Three Departure. Cross FDRCH waypoint at or above niner thousand. Cross KAYLN waypoint at or above one zero thousand. Cross SMUUV waypoint at one two thousand.”
+Route of flight. Specify one or more of the following:
+Airway, route, course, heading, azimuth, arc, or vector.
+The routing a pilot can expect if any part of the route beyond a short range clearance limit differs from that filed.
+PHRASEOLOGY-
+EXPECT FURTHER CLEARANCE VIA (airways, routes, or fixes.)
+Altitude. Use one of the following in the order of preference listed.
+NOTE-
+Turbojet aircraft equipped with afterburner engines may occasionally be expected to use afterburning during their climb to the en route altitude. When so advised by the pilot, the controller may be able to plan his/her traffic to accommodate the high performance climb and allow the pilot to climb to his/her planned altitude without restriction.
+REFERENCE-
+P/CG, Climb Via, Top Altitude
+To the maximum extent possible, Air Force One will be cleared unrestricted climb to:
+9,000' AGL or higher.
+If unable 9,000' AGL or higher, then the highest available altitude below 9,000' AGL.
+Assign the altitude requested by the pilot.
+Assign an altitude, as near as possible to the altitude requested by the pilot, and
+Inform the pilot when to expect clearance to the requested altitude unless instructions are contained in the specified SID, or
+If the requested altitude is not expected to be available, inform the pilot what altitude can be expected and when/where to expect it.
+Use one of the following when the SID contains published crossing restrictions: 
+Instruct aircraft to “Climb via SID.”
+Instruct the aircraft to “Climb via SID except maintain (altitude)” when a top altitude is not published or when it is necessary to issue an interim altitude. 
+EXAMPLE-
+“Cleared to Johnston Airport, Scott One departure, Jonez transition, Q One Forty-five. Climb via SID.” 
+“Cleared to Johnston Airport, Scott One departure, Jonez transition, Q One Forty-five, Climb via SID except maintain flight level one eight zero.” 
+“Cleared to Johnston Airport, Scott One departure, Jonez transition, Q One Forty-five, Climb Via SID except maintain flight level one eight zero, expect flight level three five zero one zero minutes after departure.”
+NOTE-
+Use of “Climb via SID Except Maintain” to emphasize a published procedural constraint is an inappropriate use of this phraseology.
+Considering the principle that the last ATC clearance issued has precedence over the previous, the phraseology “maintain (altitude)” alone cancels previously issued altitude restrictions, including SID/STAR altitude restrictions, unless they are restated or modified.
+REFERENCE-
+FAA Order JO 7110.65, Para 
+4-2-5
+, Route or Altitude Amendments.
+AIM, Para 4-4-10, Adherence to Clearance.
+When a SID does not contain published crossing restrictions and/or is a SID with a Radar Vector segment or a Radar Vector SID; or a SID is constructed with a Radar Vector segment and contains published crossing restrictions after the vector segment, instruct aircraft to “MAINTAIN (altitude).”
+NOTE-
+14 CFR section 91.185, says that in the event of a two‐way radio communication failure, in VFR conditions or if VFR conditions are encountered after the failure, the pilot must continue the flight under VFR and land as soon as practicable. That section also says that when the failure occurs in IFR conditions the pilot must continue flight at the highest of the following altitudes or flight levels for the route segment being flown:
+a.
+The altitude or flight level assigned in the last ATC clearance received.
+b.
+The minimum altitude (converted, if appropriate, to minimum flight level as prescribed in 14 CFR section 91.121(c)) for IFR operations. (This altitude should be consistent with MEAs, MOCAs, etc.)
+c.
+The altitude or flight level ATC has advised may be expected in a further clearance.
+If the expected altitude is the highest of the preceding choices, the pilot should begin to climb to that expected altitude at the time or fix specified in the clearance. The choice to climb to the expected altitude is not applicable if the pilot has proceeded beyond the specified fix or if the time designated in the clearance has expired.
+PHRASEOLOGY-
+CLIMB AND MAINTAIN (the altitude as near as possible to the pilot's requested altitude). EXPECT (the requested altitude or an altitude different from the requested altitude) AT (time or fix),
+and if applicable,
+(pilot's requested altitude) IS NOT AVAILABLE.
+EXAMPLE-
+A pilot has requested flight level 350. Flight level 230 is immediately available and flight level 350 will be available at the Appleton zero five zero radial 35 mile fix. The clearance will read:
+“Climb and maintain flight level two three zero. Expect flight level three five zero at Appleton zero five zero radial three five mile fix.”
+A pilot has requested 9,000 feet. An altitude restriction is required because of facility procedures or requirements. Assign the altitude and advise the pilot at what fix/time the pilot may expect the requested altitude. The clearance could read:
+“Climb and maintain five thousand. Expect niner thousand one zero minutes after departure.”
+A pilot has requested 17,000 feet which is unavailable. You plan 15,000 feet to be the pilot's highest altitude prior to descent to the pilot's destination but only 13,000 feet is available until San Jose VOR. Advise the pilot of the expected altitude change and at what fix/time to expect clearance to 15,000 feet. The clearance will read: 
+“Climb and maintain one three thousand. Expect one five thousand at San Jose. One seven thousand is not available.”
+REFERENCE-
+FAA Order JO 7110.65, Para 
+4-3-3
+, Abbreviated Departure Clearance.
+FAA Order JO 7110.65, Para 
+5-8-2
+, Initial Heading.
+FAA Order JO 7110.65 Para 
+4-2-5
+, Route or Altitude Amendments.
+AIM, Para 4-4-10, Adherence to Clearance.
+4-3-3. ABBREVIATED DEPARTURE CLEARANCE
+Issue an abbreviated departure clearance if its use reduces verbiage and the following conditions are met:
+REFERENCE-
+FAA Order JO 7110.65, Para 
+4-2-8
+, IFR‐VFR and VFR‐IFR Flights.
+The route of flight filed with ATC has not been changed by the pilot, company, operations officer, input operator, or in the stored flight plan program prior to departure.
+NOTE-
+A pilot will not accept an abbreviated clearance if the route of flight filed with ATC has been changed by him/her or the company or the operations officer before departure. He/she is expected to inform the control facility on initial radio contact if he/she cannot accept the clearance. It is the responsibility of the company or operations officer to inform the pilot when they make a change.
+All ATC facilities concerned have sufficient route of flight information to exercise their control responsibilities.
+NOTE-
+The route of flight information to be provided may be covered in letters of agreement.
+When the flight will depart IFR, destination airport information is relayed between the facilities concerned prior to departure.
+EXAMPLE-
+A tower or flight service station relay of destination airport information to the center when requesting clearance:
+ “Request clearance for United Four Sixty‐One to O'Hare.”
+A center relay to the tower or flight service station when initiating a clearance:
+ “Clearance for United Four Sixty‐One to O'Hare.”
+NOTE-
+Pilots are expected to furnish the facility concerned with destination airport information on initial radio call‐up. This will provide the information necessary for detecting any destination airport differences on facility relay.
+The assigned altitude, according to the provisions in paragraph 
+4-3-2
+, Departure Clearances, subparagraph e, is stated in the clearance.
+If it is necessary to modify a filed route of flight in order to achieve computer acceptance due, for example, to incorrect fix or airway identification, the contraction “FRC,” meaning “Full Route Clearance Necessary,” or “FRC/(fix),” will be added to the remarks. “FRC” or “FRC/(fix)” must always be the first item of intra‐center remarks. When “FRC” or “FRC/(fix)” appears on a flight progress strip, the controller issuing the ATC clearance to the aircraft must issue a full route clearance to the specified fix, or, if no fix is specified, for the entire route.
+EXAMPLE-
+“Cleared to Missoula International Airport, Chief Two Departure to Angley; direct Salina; then as filed; maintain one seven thousand.”
+NOTE-
+Changes, such as those made to conform with traffic flows and preferred routings, are only permitted to be made by the pilot (or his/her operations office) or the controller responsible for initiating the clearance to the aircraft.
+Specify the destination airport in the clearance.
+When no changes are required in the filed route, state the phrase: “Cleared to (destination) airport, ([SIDname and number] and SID transition, as appropriate); then, as filed.” If a SID is not assigned, follow with “As filed.” If required, add any additional instructions or information, including requested altitude if different than assigned.
+Use one of the following when the SID contains published crossing restrictions:
+Instruct aircraft to “Climb via SID.”
+Instruct aircraft to “Climb via SID except maintain (altitude)” when a top altitude is not published or when it is necessary to issue an interim altitude.
+NOTE-
+Use of “Climb via SID Except Maintain” to emphasize a published procedural constraint is an inappropriate use of this phraseology.
+Instruct aircraft to MAINTAIN (altitude) when:
+No SID is assigned.
+A SID does not contain published crossing restrictions and/or is a SID with a Radar Vector segment or is a Radar Vector SID.
+A SID is constructed with a Radar Vector segment and contains published crossing restrictions after the vector segment.
+PHRASEOLOGY-
+CLEARED TO (destination) AIRPORT;
+and as appropriate,
+(SID name and number) DEPARTURE,
+THEN AS FILED.
+When the SID does not contain published crossing restrictions and/or is a SID with a Radar Vector segment or a Radar Vector SID; or is a SID with a radar vector segment and contains published crossing restrictions after the vector segment.
+MAINTAIN (altitude); (additional instructions or
+information).
+Or when a SID contains published crossing restrictions,
+CLIMB VIA SID.
+CLIMB VIA SID EXCEPT MAINTAIN (altitude); (additional instructions or information).
+If a SID is not assigned,
+CLEARED TO (destination) AIRPORT AS FILED.
+MAINTAIN (altitude);
+and if required,
+(additional instructions or information).
+EXAMPLE-
+“Cleared to Reynolds Airport; David Two Departure, Kingham Transition; then, as filed. Maintain niner thousand. Expect flight level four one zero, one zero minutes after departure.”
+“Cleared to Reynolds Airport; David Two Departure, Kingham Transition; then, as filed. Climb via SID.”
+“Cleared to Reynolds Airport; David Two Departure, Kingham Transition; then, as filed. Climb via SID except maintain flight level two four zero. Expect flight level four one zero, one zero minutes after departure.
+“Cleared to Reynolds Airport as filed. Maintain niner thousand. Expect flight level four one zero, one zero minutes after departure.”
+NOTE-
+SIDs are excluded from “cleared as filed” procedures.
+If a pilot does not wish to accept an ATC clearance to fly a SID, he/she is expected to advise ATC or state “NO SID” in his/her flight plan remarks.
+REFERENCE-
+P/CG, Climb Via, Top Altitude.
+When a filed route will require revisions, the controller responsible for initiating the clearance to the aircraft must either:
+Issue a FRC/FRC until a fix.
+Specify the assigned altitude to maintain, or Climb Via SID, or Climb Via SID except maintain (altitude), as appropriate.
+PHRASEOLOGY-
+CLEARED TO (destination) AIRPORT.
+Or when the SID does not contain published crossing restrictions and/ or is a SID with a Radar Vector segment or a Radar Vector SID
+(SID name and number) DEPARTURE,
+(transition name) TRANSITION; THEN, AS FILED, EXCEPT CHANGE ROUTE TO READ (amended route portion). MAINTAIN (altitude);
+Or when the SID contains published crossing restrictions,
+CLIMB VIA SID
+CLIMB VIA SID EXCEPT MAINTAIN (altitude).
+and if required,
+(additional instructions or information).
+If a SID is not assigned,
+CLEARED TO (destination) AIRPORT AS FILED,
+EXCEPT CHANGE ROUTE TO READ (amended route
+portion). MAINTAIN (altitude);
+and if required,
+(additional instructions or information).
+EXAMPLE-
+“Cleared to Reynolds Airport; South Boston One Departure; then, as filed, except change route to read South Boston Victor Twenty Greensboro. Maintain eight thousand, report leaving four thousand.”
+“Cleared to Reynolds Airport; South Boston One Departure; then, as filed, except change route to read South Boston Victor Twenty Greensboro; climb via SID.”
+“Cleared to Reynolds Airport; South Boston One Departure; then, as filed, except change route to read South Boston Victor Twenty Greensboro; climb via SID except maintain flight level one eight zero, expect flight level three one zero one zero minutes after departure.”
+“Cleared to Reynolds Airport as filed, except change route to read South Boston Victor Twenty Greensboro. Maintain eight thousand, report leaving four thousand.”
+“Cleared to Reynolds Airport via Victor Ninety‐one Albany, then as filed. Maintain six thousand.”
+In a nonradar environment specify one, two, or more fixes, as necessary, to identify the initial route of flight.
+Specify the destination airport, when practicable, followed by the word “airport” even though it is outside controlled airspace.
+PHRASEOLOGY-
+CLEARED TO (destination) AIRPORT
+When the clearance limit is a NAVAID, the type of NAVAID must follow the NAVAID name.
+PHRASEOLOGY-
+CLEARED TO (NAVAID name and type)
+When the clearance limit is an intersection or waypoint and the type is known, the type must follow the intersection or waypoint name.
+PHRASEOLOGY-
+CLEARED TO (intersection or waypoint name and type)
+EXAMPLE-
+The filed route of flight is from Hutchinson V10 Emporia, thence V10N and V77 to St. Joseph. The clearance will read:
+“Cleared to Watson Airport as filed via Emporia, maintain Seven Thousand.”
+Do not apply these procedures when a pilot requests a detailed clearance or to military operations conducted within ALTRV, stereo routes, operations above FL 600, and other military operations requiring special handling.
+NOTE-
+Departure clearance procedures and phraseology for military operations within approved altitude reservations, military operations above FL 600, and other military operations requiring special handling are contained in separate procedures in this order or in a LOA, as appropriate.
+REFERENCE-
+FAA Order JO 7110.65, Para 
+4-2-7
+, ALTRV Clearance.
+FAA Order JO 7110.65, Para 
+9-2-14
+, Military Operations Above FL 600.
+4-3-4. DEPARTURE RELEASE, HOLD FOR RELEASE, RELEASE TIMES, DEPARTURE RESTRICTIONS, AND CLEARANCE VOID TIMES
+Assign departure restrictions, clearance void times, or release times to separate departures from other traffic or to restrict or regulate the departure flow. Departures from an airport without an operating control tower must be issued either a departure release, a hold for release, or a release time.
+REFERENCE-
+FAA Order JO 7110.65, Para 
+10-3-1
+, Overdue Aircraft.
+FAA Order JO 7110.65, Para 
+10-4-1
+, Traffic Restrictions.
+FAA Order JO 7110.65, Para 
+10-4-3
+, Traffic Resumption.
+Departure Release. When conditions allow, release the aircraft as soon as possible.
+PHRASEOLOGY-
+To another controller,
+(aircraft identification) RELEASED.
+To a flight service specialist, or Flight Data Communication Specialist (FDCS).
+ADVISE (aircraft identification) RELEASED FOR DEPARTURE.
+To a pilot at an airport without an operating control tower,
+(aircraft identification) RELEASED FOR DEPARTURE.
+Hold For Release (HFR).
+“Hold for release” instructions must be used to inform a pilot or a controller that a departure clearance is not valid until additional instructions are received.
+REFERENCE-
+P/CG Term - Hold for Release.
+When issuing hold for release instructions, include departure delay information.
+PHRASEOLOGY-
+(aircraft identification) HOLD FOR RELEASE, EXPECT (time in hours and/or minutes) DEPARTURE DELAY.
+Release Times.
+Release times must be issued to pilots when necessary to specify the earliest time an aircraft may depart.
+NOTE-
+A release time is a departure restriction issued to a pilot (either directly or through authorized relay) to separate a departing aircraft from other traffic.
+The facility issuing a release time to a pilot must issue a time check. A release time using a specified number of minutes does not require a time check.
+PHRASEOLOGY-
+(aircraft identification) RELEASED FOR DEPARTURE AT (time in hours and/or minutes),
+and if required,
+IF NOT OFF BY (time), ADVISE (facility) NOT LATER THAN (time) OF INTENTIONS.
+TIME (time in hours, minutes, and nearest quarter minute).
+(aircraft identification) RELEASED FOR DEPARTURE IN (number of minutes) MINUTES
+and if required,
+IF NOT OFF IN (number of minutes) MINUTES, ADVISE (facility) OF INTENTIONS WITHIN (number of minutes) MINUTES.
+When expect departure clearance times (EDCT) are assigned through traffic management programs, excluding overriding call for release (CFR) operations as described in subparagraph e, the departure terminal must, to the extent possible, plan ground movement of aircraft destined to the affected airport(s) so that flights are sequencedto depart no earlier than 5 minutes before, and no later than 5 minutes after the EDCT.  Do not release aircraft on their assigned EDCT if a ground stop (GS) applicable to that aircraft is in effect, unless approval has been received from the originator of the GS.
+If an aircraft has begun to taxi or requests taxi in a manner consistent with meeting the EDCT, the aircraft must be released. Additional coordination is not required.
+If an aircraft requests taxi or clearance for departure inconsistent with meeting the EDCT window, ask the pilot to verify the EDCT.
+If the pilot's EDCT is the same as the FAA EDCT, the aircraft is released consistent with the EDCT.
+If the pilot's EDCT is not the same as the FAA EDCT, refer to Trust and Verify note below.
+If an aircraft requests taxi too late to meet the EDCT, contact the ATCSCC through the appropriate TMU. 
+NOTE-
+(Trust & Verify) EDCTs are revised by Air Carriers and Traffic Management for changing conditions en route or at affected airport(s). Terminal controllers' use of aircraft reported EDCT for departure sequencing should be verified with the appropriate TMU prior to departure if this can be accomplished without the aircraft incurring delay beyond the EDCT reported by the aircraft. The preferred method for verification is the Flight Schedule Monitor (FSM). If the EDCT cannot be verified without incurring additional delay, the aircraft should be released based on the pilot reported EDCT. The aircraft operator is responsible for operating in a manner consistent to meet the EDCT.
+Call for Release (CFR). When CFR is in effect, release aircraft so they are airborne within a window that extends from 2 minutes prior and ends 1 minute after the assigned time, unless otherwise coordinated.
+NOTE-
+Subparagraph 
+e
+ applies to all facilities.
+Coordination may be verbal, electronic, or written.
+Clearance Void Times.
+When issuing clearance void times at airports without an operating control tower, provide alternative instructions requiring the pilots to advise ATC of their intentions no later than 30 minutes after the clearance void time if not airborne.
+The facility delivering a clearance void time to a pilot must issue a time check. A void time issued using a specified number of minutes does not require a time check.
+NOTE-
+If the clearance void time expires, it does not cancel the departure clearance or IFR flight plan. It withdraws the pilot's authority to depart IFR until a new departure release/release time has been issued by ATC and acknowledged by the pilot.
+PHRASEOLOGY-
+CLEARANCE VOID IF NOT OFF BY (clearance void time),
+and if required,
+IF NOT OFF BY (clearance void time), ADVISE (facility) NOT LATER THAN (time) OF INTENTIONS.
+TIME (time in hours, minutes, and the nearest quarter minute).
+Or
+CLEARANCE VOID IF NOT OFF IN (number of minutes) MINUTES
+and if required,
+IF NOT OFF IN (number of minutes) MINUTES, ADVISE (facility) OF INTENTIONS WITHIN (number of minutes) MINUTES.
+4-3-5. GROUND STOP
+Do not release an aircraft if a ground stop (GS) applicable to that aircraft is in effect, without the approval of the originator of the GS.
+4-3-6. DELAY SEQUENCING
+When aircraft elect to take delay on the ground before departure, issue departure clearances to them in the order in which the requests for clearance were originally made if practicable.
+4-3-7. FORWARD DEPARTURE DELAY INFORMATION
+Inform approach control facilities and/or towers of anticipated departure delays.
+4-3-8. COORDINATION WITH RECEIVING FACILITY
+Coordinate with the receiving facility before the departure of an aircraft if the departure point is less than 15 minutes flying time from the transferring facility's boundary unless an automatic transfer of data between automated systems will occur, in which case, the flying time requirement may be reduced to 5 minutes or replaced with a mileage from the boundary parameter when mutually agreeable to both facilities.
+NOTE-
+Agreements requiring additional time are encouraged between facilities that need earlier coordination. However, when agreements establish mandatory radar handoff procedures, coordination needs only be effected in a timely manner prior to transfer of control.
+REFERENCE-
+FAA Order JO 7110.65, 
+Chapter 5
+, 
+Section 4
+, Transfer of Radar Identification, Para 
+5-4-1
+, Application.
+The actual departure time or a subsequent strip posting time must be forwarded to the receiving facility unless assumed departure times are agreed upon and that time is within 3 minutes of the actual departure time.
+4-3-9. VFR RELEASE OF IFR DEPARTURE
+When an aircraft which has filed an IFR flight plan requests a VFR departure through a terminal facility, FSS, ARTCC Flight Data Unit, or air/ground communications station:
+After obtaining, if necessary, approval from the facility/sector responsible for issuing the IFR clearance, you may authorize an IFR flight planned aircraft to depart VFR. Inform the pilot of the proper frequency and, if appropriate, where or when to contact the facility responsible for issuing the clearance.
+PHRASEOLOGY-
+VFR DEPARTURE AUTHORIZED. CONTACT (facility) ON (frequency) AT (location or time if required) FOR CLEARANCE.
+If the facility/sector responsible for issuing the clearance is unable to issue a clearance, inform the pilot, and suggest that the delay be taken on the ground. If the pilot insists upon taking off VFR and obtaining an IFR clearance in the air, inform the facility/sector holding the flight plan of the pilot's intentions and, if possible, the VFR departure time.
+4-3-10. FORWARDING DEPARTURE TIMES
+TERMINAL
+Unless alternate procedures are prescribed in a letter of agreement or automatic departure messages are being transmitted between automated facilities, forward departure times to the facility from which you received the clearance and also to the terminal departure controller when that position is involved in the departure sequence.
+NOTE-
+Letters of agreement prescribing assumed departure times or mandatory radar handoff procedures are alternatives for providing equivalent procedures.
+The letters “DM” flashing in the data block signify unsuccessful transmission of a departure message.
+Previous
+ | 
+Top
+ | 
+Next
+7110.65
+ | 
+ATPUBS
+ | 
+FAA
+ | 
+              Send your comments regarding this website.

@@ -1,0 +1,40 @@
+icao_type,icao_model_full_name,icao_desc_code,icao_wtc_letter,faa_cwt_A_to_I,faa_srs,faa_lahso_group,recat15_A_to_F,recat2_apxA,recat2_apxB,faa_weight_class,aac_approach_category,aac_min,aac_max,adg,tdg,approach_speed_kt_acd_vref_proxy,wingspan_ft_no_winglets,wingspan_ft_with_winglets,length_ft,tail_height_ft,main_gear_width_ft,mtow_lb_acd,malw_lb_acd,openap_mtow_kg,openap_wing_span_m,openap_fuselage_len_m,openap_vmo_kt,openap_to_dist_opt_km,openap_to_dist_min_km,openap_to_dist_max_km,openap_to_liftoff_v_opt,openap_ld_touchdown_v_opt,openap_ld_brake_dist_opt_km,openap_ld_brake_dist_max_km,in_acd,in_7360_1K,in_icao,in_openap
+A319,VC-1 ACJ,L2J,M,F,III,7,D,D,C,Large,C,,,III,3,126,111.9,117.5,111,39.7,29.4,168653,134482,75500,35.8,33.84,350,1.51,1.06,2.41,82.7,66.2,1.38,4.18,True,True,True,True
+A320,A-320 Prestige,L2J,M,F,III,7,D,D,C,Large,C,,,III,3,136,111.9,117.5,123.3,39.6,29.4,171961,145505,78000,35.8,37.57,350,1.65,1.06,2.24,85.3,69.4,1.08,3.21,True,True,True,True
+A321,A-321,L2J,M,F,III,7,D,D,C,Large,D,C,D,III,3,142,111.9,117.5,146,39.7,29.4,200621,171520,93500,35.8,44.51,350,1.85,1.18,2.52,90.8,72.9,1.55,3.94,True,True,True,True
+A20N,A-320neo,L2J,M,F,III,7,D,D,C,Large,C,,,III,3,137,,117.5,123.3,39.6,29.4,174165,148591,79000,35.8,37.57,350,,,,,,,,True,True,True,True
+A21N,A-321neo,L2J,M,F,III,7,D,D,C,Large,C,,,III,3,136,,117.5,146,39.7,29.4,209439,174606,97000,35.8,44.51,350,,,,,,,,True,True,True,True
+B737,737-700,L2J,M,F,III,8,D,D,C,Large,C,,,III,3,130,112.6,117.4,110.3,41.6,22.9,154500,145600,70000,34.32,33.6,340,1.5,1.03,2.58,83.6,68.8,1.91,4.39,True,True,True,True
+B738,737-800,L2J,M,F,III,8,D,D,C,Large,D,C,D,III,3,144,112.6,117.4,129.5,41.4,23,174200,146275,79000,34.32,39.47,340,1.64,1.13,2.63,86.5,75.4,1.25,3.6,True,True,True,True
+B739,737-900,L2J,M,F,III,8,D,D,C,Large,D,C,D,III,3,149,112.6,117.4,138.2,41.4,23,187700,71400,85100,34.32,42.11,340,1.91,1.14,2.9,91.3,76.8,1.45,4.22,True,True,True,True
+B38M,737 MAX 8,L2J,M,F,III,8,D,D,C,Large,D,C,D,III,2B,145,117.8,,129.7,40.3,18.8,181200,152800,82000,34.32,39.47,340,,,,,,,,True,True,True,True
+B39M,737 MAX 9,L2J,M,F,III,8,D,D,C,Large,D,C,D,III,3,150,117.8,,138.3,40.8,23.1,194700,163900,88000,34.32,42.11,340,,,,,,,,True,True,True,True
+B752,757-200,L2J,M,E,III,7,D,D,C,Large,C,,,IV,4,137,124.8,134.8,155.3,45.1,28,255500,198000,115600,38.0,47.3,350,1.7,0.98,2.66,90.5,66.7,1.21,3.43,True,True,True,True
+B763,767-300,L2J,H,C,III,9,C,C,B,Heavy,C,,,IV,5,140,156.1,167,180.3,52.6,35.8,412000,320000,158700,47.57,54.94,360,1.82,1.03,2.61,92.4,72.1,1.51,3.71,True,True,True,True
+A332,A-330-200 Prestige,L2J,H,B,III,8,B,B,A,Heavy,C,,,V,5,136,197.8,,193.6,59.8,41.4,533519,401241,230000,60.3,58.82,330,1.97,1.16,2.79,89.9,70.7,1.54,3.67,True,True,True,True
+A333,A-330-300,L2J,H,B,III,8,B,B,A,Heavy,C,,,V,5,137,197.8,,209,45.7,41.4,533519,412264,242000,60.3,63.67,330,1.86,1.27,3.01,89.9,71.5,1.48,3.79,True,True,True,True
+A359,ACJ-350-900,L2J,H,B,III,9,B,B,A,Heavy,C,,,V,5,140,,212.43,218.54,57.3,42.22,617295,456357,280000,64.75,66.8,340,,,,,,,,True,True,True,True
+B772,777-200,L2J,H,B,III,9,B,B,A,Heavy,C,,,V,5,140,199.9,,209.1,61.5,42.3,656000,470000,297000,60.93,63.73,330,,,,,,,,True,True,True,True
+B77W,777-300ER,L2J,H,B,III,7,B,B,A,Heavy,D,,,V,6,149,212.6,,242.3,61.8,42.3,775000,554000,351500,64.8,73.86,330,2.21,1.38,3.04,96.4,76.9,1.49,3.52,True,True,True,True
+B788,787-8 Dreamliner,L2J,H,B,III,7,B,B,A,Heavy,D,C,D,V,5,144,197.3,,186.1,56.1,38.1,502500,380000,228000,60.12,56.72,515,2.16,1.08,3.25,90.3,71.3,2.08,3.71,True,True,True,True
+B789,787-9 Dreamliner,L2J,H,B,III,7,B,B,A,Heavy,D,C,D,V,5,144,197.3,,206.1,56.1,38.9,560000,425000,254000,60.12,62.81,515,2.49,1.31,3.69,96.1,74,2.49,4.31,True,True,True,True
+E75L,175 (long wing),L2J,M,G,III,6,E,D,D,Large,C,,,III,3,126,,101.7,106,32.4,29.6,85517,74957,38790,26.00,29.90,320,,,,,,,,True,True,True,True
+E75S,175 (short wing),L2J,M,G,III,6,E,D,D,Large,C,,,III,1B,124,,94.2,103.9,32.4,14.8,82673,74957,,,,,,,,,,,,True,True,True,False
+E170,170,L2J,M,G,III,7,E,D,D,Large,C,,,III,3,124,,85.3,98.1,32.3,20.5,85098,73413,34200,26.00,29.90,320,,,,,,,,True,True,True,True
+E145,E-99,L2J,M,G,III,7,E,D,D,Large,C,,,II,2B,124,65.8,,98,22.2,15.7,48502,41226,22000,20.04,29.87,320,,,,,,,,True,True,True,True
+CRJ2,CL-600 Challenger 800,L2J,M,G,III,7,E,D,D,Large,D,,,II,1B,141,68.7,,87.8,20.8,13.3,47450,44700,,,,,,,,,,,,True,True,True,False
+CRJ7,CL-600  Regional Jet CRJ-550,L2J,M,G,III,7,E,D,D,Large,C,,,II,2B,135,76.3,,106.6,24.8,16.4,75000,67000,,,,,,,,,,,,True,True,True,False
+CRJ9,CL-600 Challenger 890,L2J,M,G,III,8,E,D,D,Large,D,C,D,III,2B,141,81.5,,118.8,24.1,16.4,80500,73500,37421,23.24,33.50,320,,,,,,,,True,True,True,True
+DH8D,DHC-8-400 Dash 8,L2T,M,F,III,6,D,D,C,Large,C,,,III,5,125,93.3,,107.8,27.4,31.4,64500,61750,,,,,,,,,,,,True,True,True,False
+MD82,MD-82,L2J,M,F,III,7,D,D,C,Large,C,,,III,4,135,107.9,,147.8,30.2,20.4,149500,130000,,,,,,,,,,,,True,True,True,False
+C172,172,L1P,L,I,I,1,F,F,F,Small,A,,,I,1A,62,36.1,,27.2,8.9,8.4,2550,2450,,,,,,,,,,,,True,True,True,False
+C182,182,L1P,L,I,I,2,F,F,F,Small,A,,,I,1A,65,36,,29,9.3,9,3100,2950,,,,,,,,,,,,True,True,True,False
+SR22,SR-22,L1P,L,I,I,1,F,F,F,Small,A,,,I,1A,78,38.3,,26,8.9,11.7,2358,3400,,,,,,,,,,,,True,True,True,False
+PC12,PC-12,L1T,L,I,I,4,F,F,F,Small,A,,,II,2A,85,,53.3,47.3,14,15.2,10450,9921,,,,,,,,,,,,True,True,True,False
+C208,208 Caravan 1,L1T,L,I,I,3,F,F,F,Small,A,,,II,1A,79,52.1,,37.6,15.1,11.7,9062,7800,,,,,,,,,,,,True,True,True,False
+BE20,200 Super King Air,L2T,L/M,I,III,7,F,F,F,Small+,B,,,II,2A,107,54.5,,43.8,15,17.2,12500,12500,,,,,,,,,,,,True,False,True,False
+C25A,525A Citation CJ2,L2J,L,I,III,7,F,F,F,Small,B,,,II,2A,114,49.8,,47.7,14,15.9,12500,11525,,,,,,,,,,,,True,True,True,False
+C56X,560XL Citation Excel,L2J,M,H,III,7,F,E,E,Small+,B,,,II,1B,116,56.3,,51.8,17.2,14.9,20200,18700,,,,,,,,,,,,True,True,True,False
+C550,550 Citation 2,L2J,L,I,III,7,F,F,F,Small+,B,,,II,2A,105,51.7,,47.3,15,17.6,15100,13500,6849,15.90,14.39,270,,,,,,,,True,True,True,True
+C680,680 Citation Sovereign,L2J,M,H,III,6,F,E,E,Small+,B,,,II,1B,108,63.1,,63.5,20.3,10,30300,27100,,,,,,,,,,,,True,True,True,False
+P28A,PA-28-140 Cherokee,L1P,L,I,I,1,F,F,F,Small,A,,,I,1A,70,35,,23.8,7.3,10.5,2440,2130,,,,,,,,,,,,True,True,True,False

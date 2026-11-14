@@ -1,0 +1,12 @@
+file: On_Time_Reporting_Carrier_On_Time_Performance_(1987_present)_2025_8.csv
+days: 31 (2025-08-01..2025-08-31)  PHX flights: 28770 (dep 14380, arr 14390)
+avg per day: dep 464, arr 464
+taxi-out (min) n,mean,median,p90: (14324, 15.34, 14.0, 23.0)
+taxi-in  (min) n,mean,median,p90: (14318, 6.97, 6.0, 11.0)
+cancelled: 127  diverted: 130
+carriers: WN=10257, AA=8168, OO=3521, DL=1692, MQ=1590, UA=1453, F9=1054, AS=815, HA=62, B6=62, NK=52, G4=44
+busiest sched-dep hours (local): 08h=49.2/day, 10h=47.0/day, 16h=36.4/day
+
+haboob date 2025-08-25: PHX flights 976 (dep 487, arr 489), cancelled 3, diverted 40
+  taxi-out n,mean,median,p90: (485, 17.91, 15.0, 30.0)
+  taxi-in  n,mean,median,p90: (488, 8.74, 7.0, 16.0)

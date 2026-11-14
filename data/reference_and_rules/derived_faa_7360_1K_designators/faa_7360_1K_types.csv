@@ -1,0 +1,2558 @@
+icao_type,aircraft_class,faa_engine_count_type_weightclass,icao_wtc_word,cwt_category_A_to_I,srs_category,lahso_group,manufacturer_model_raw
+A002,Gyroplane,1P/S,Light,I,I,,"IRKUT, A-002"
+A1,Fixed-wing,1P/S+,Medium,H,III,,
+A10,Fixed-wing,2J/L,Medium,G,III,,"FAIRCHILD (1), A-10 Thunderbolt 2 FAIRCHILD (1), OA-10 Thunderbolt 2"
+A109,Helicopter,2T/S,Light,I,I,,
+A119,Helicopter,1T/S,Light,I,I,,
+A122,Fixed-wing,1P/S,Light,I,I,,"AEROTEC (1), A-122 Uirapuru AEROTEC (1), T-23 Uirapuru"
+A124,Fixed-wing,4J/H,Heavy,D,III,,"ANTONOV, An-124 Ruslan"
+A129,Helicopter,2T/S,Light,I,I,,
+A139,Helicopter,2T/S+,Light,I,I,,
+A140,Fixed-wing,2T/L,Medium,G,III,,"ANTONOV, An-140 HESA, IRAN-140 Faraz"
+A148,Fixed-wing,2J/L,Medium,F,III,,"ANTONOV, An-148"
+A149,Helicopter,2T/S+,Medium,H,I,,
+A158,Fixed-wing,2J/L,Medium,F,III,,"ANTONOV, An-158"
+A169,Helicopter,2T/S,Light,I,I,,
+A178,Fixed-wing,2J/L,Medium,F,III,,"ANTONOV, An-178"
+A189,Helicopter,2T/S+,Medium,H,I,,
+A19,Fixed-wing,1P/S,Light,I,I,,"AEROPRACT, A-19"
+A19N,Fixed-wing,2J/L,Medium,F,III,7,"AIRBUS, A-319neo AIRBUS, ACJ-319neo"
+A20,Fixed-wing,2P/S+,Medium,H,III,,"DOUGLAS, A-20 Havoc"
+A205,Gyroplane,1P/S,Light,I,I,,"OSKBES-MAI, MAI-205"
+A20J,Fixed-wing,1J/S,Light,I,III,,"SCHLEICHER, ASW-20J"
+A20N,Fixed-wing,2J/L,Medium,F,III,7,"AIRBUS, A-320neo AIRBUS, ACJ-320neo"
+A21,Fixed-wing,1P/S,Light,I,I,,"AEROPRACT, A-21 Solo"
+A210,Fixed-wing,1P/S,Light,I,I,,
+A211,Fixed-wing,1P/S,Light,I,I,,"ALFA-M, A-211"
+A21N,Fixed-wing,2J/L,Medium,F,III,7,"AIRBUS, A-321neo"
+A22,Fixed-wing,1P/S,Light,I,I,,"SADLER, A-22 Piranha"
+A223,Fixed-wing,1P/S,Light,I,I,,"OSKBES-MAI, MAI-223 Kityonok"
+A225,Fixed-wing,6J/J,Heavy,A,III,,"ANTONOV, An-225 Mriya"
+A23,Fixed-wing,1P/S,Light,I,I,,"AEROPRACT, A-23 Dragon"
+A27,Fixed-wing,1P/S,Light,I,I,,"AEROPRACT, A-27 AVANTAGE, A-27"
+A270,Fixed-wing,1T/S,Light,I,I,,"AERO (2), Ae-270 Propjet IBIS (1), Ae-270 Propjet"
+A29,Fixed-wing,1P/S,Light,I,I,,"AVANTAGE, A-29"
+A2RT,Helicopter,2T/S,Light,I,I,,"KAZAN, Ansat 2RT"
+A3,Fixed-wing,2J/L,Medium,G,III,,
+A306,Fixed-wing,2J/H,Heavy,C,III,7,
+A30B,Fixed-wing,2J/H,Heavy,C,III,8,
+A31,Fixed-wing,1P/S,Light,I,I,,"AVANTAGE, A-31 Spectrum"
+A310,Fixed-wing,2J/H,Heavy,C,III,7,"AIRBUS, A-310 AIRBUS, CC-150 Polaris"
+A318,Fixed-wing,2J/L,Medium,F,III,7,"AIRBUS, A-318 AIRBUS, A-318 Elite"
+A319,Fixed-wing,2J/L,Medium,F,III,7,
+A320,Fixed-wing,2J/L,Medium,F,III,7,"AIRBUS, A-320 AIRBUS, A-320 Prestige"
+A321,Fixed-wing,2J/L,Medium,F,III,7,"AIRBUS, A-321"
+A32E,Fixed-wing,1E/S,Light,I,I,,"SCHLEICHER, ASG-32EL"
+A32P,Fixed-wing,1P/S,Light,I,I,,"SCHLEICHER, ASG-32Mi"
+A33,Fixed-wing,1P/S,Light,I,I,,"AEROPRACT, A-33"
+A332,Fixed-wing,2J/H,Heavy,B,III,8,
+A333,Fixed-wing,2J/H,Heavy,B,III,8,"AIRBUS, A-330-300"
+A337,Fixed-wing,2J/H,Heavy,D,III,,"AIRBUS, A-330-700 Beluga XL"
+A338,Fixed-wing,2J/H,Heavy,D,III,8,"AIRBUS, A-330-800 AIRBUS, ACJ-330-800"
+A339,Fixed-wing,2J/H,Heavy,D,III,9,"AIRBUS, A-330-900 AIRBUS, ACJ-330-900"
+A33E,Fixed-wing,1E/S,Light,I,I,,"SCHLEICHER, AS-33Me"
+A33P,Fixed-wing,1P/S,Light,I,I,,"SCHLEICHER, AS-33Es"
+A342,Fixed-wing,4J/H,Heavy,D,III,9,"AIRBUS, A-340-200 AIRBUS, A-340-200 Prestige"
+A343,Fixed-wing,4J/H,Heavy,B,III,9,"AIRBUS, A-340-300 AIRBUS, A-340-300 Prestige"
+A345,Fixed-wing,4J/H,Heavy,B,III,9,"AIRBUS, A-340-500 AIRBUS, A-340-500 Prestige"
+A346,Fixed-wing,4J/H,Heavy,B,III,9,"AIRBUS, A-340-600 AIRBUS, A-340-600 Prestige"
+A34E,Fixed-wing,1E/S,Light,I,I,,"SCHLEICHER, AS-34Me"
+A35,Fixed-wing,1P/S,Light,I,I,,"AVANTAGE, A-35 Scanner"
+A359,Fixed-wing,2J/H,Heavy,B,III,9,
+A35K,Fixed-wing,2J/H,Heavy,D,III,9,
+A37,Fixed-wing,2J/S+,Light,I,III,,
+A388,Fixed-wing,4J/J,Super,A,III,10,"AIRBUS, A-380-800 AIRBUS, A-380-800 Prestige"
+A3ST,Fixed-wing,2J/H,Heavy,D,III,,
+A4,Fixed-wing,1J/S+,Medium,H,III,,
+A400,Fixed-wing,4T/H,Heavy,D,III,,"AIRBUS, A-400M Atlas AIRBUS, A-400M Grizzly"
+A411,Fixed-wing,2P/S,Light,I,II,,"OSKBES-MAI, MAI-411"
+A50,Fixed-wing,4J/H,Heavy,D,III,,
+A500,Fixed-wing,2P/S,Light,I,II,,"ADAM (2), A-500 ADAM (2), A-500 CarbonAero"
+A504,Fixed-wing,1P/S,Light,I,I,,"AVRO, 504 AVRO, 504 Replica"
+A6,Fixed-wing,2J/L,Medium,G,III,,
+A600,Helicopter,1P/S,Light,I,I,,"ROTORWAY, A-600 Talon"
+A660,Fixed-wing,1T/S+,Light,I,III,,"AYRES, S-2R-T660 Turbo Thrush THRUSH, S-2R-660 Turbo Thrush 660"
+A700,Fixed-wing,2J/S,Light,I,III,,"ADAM (2), A-700 AdamJet"
+A743,Fixed-wing,2J/L,Medium,F,III,,"ANTONOV, An-74-300"
+A748,Fixed-wing,2T/L,Medium,F,III,5,
+A890,Fixed-wing,1P/S,Light,I,I,,"AVIATIKA, MAI-890 OSKBES-MAI, MAI-890"
+A9,Fixed-wing,1P/S,Light,I,I,,
+A900,Fixed-wing,1P/S,Light,I,I,,"AVIATIKA, MAI-900 Acrobat OSKBES-MAI, MAI-900 Acrobat"
+A910,Fixed-wing,1P/S,Light,I,I,,
+AA1,Fixed-wing,1P/S,Light,I,I,1,
+AA37,Fixed-wing,2P/S,Light,I,II,,"AEROPRACT, A-37"
+AA5,Fixed-wing,1P/S,Light,I,I,1,
+AAT3,Fixed-wing,1P/S,Light,I,I,,"AERO (3), AT-3"
+AAT4,Fixed-wing,1P/S,Light,I,I,,"AERO (3), AT-4 GOBOSH, G-700"
+AB11,Fixed-wing,1P/S,Light,I,I,,"AERO BOERO, AB-115"
+AB15,Fixed-wing,1P/S,Light,I,I,,"AERO BOERO, AB-150"
+AB18,Fixed-wing,1P/S,Light,I,I,,"AERO BOERO, AB-180"
+AB95,Fixed-wing,1P/S,Light,I,I,,"AERO BOERO, AB-95"
+AC10,Gyroplane,1P/S,Light,I,I,,"FD-COMPOSITES, ArrowCopter"
+AC11,Fixed-wing,1P/S,Light,I,I,2,
+AC31,Helicopter,1T/S,Light,I,I,,"AVICOPTER, AC-311"
+AC33,Helicopter,3T/S+,Medium,H,I,,"AVICOPTER, AC-313"
+AC4,Fixed-wing,1P/S,Light,I,I,,"LIGHT WING, AC-4"
+AC50,Fixed-wing,2P/S,Light,I,II,3,
+AC52,Fixed-wing,2P/S,Light,I,II,1,"AERO (1), Commander 520"
+AC56,Fixed-wing,2P/S,Light,I,II,4,
+AC5A,Fixed-wing,1P/S,Light,I,I,,"NANJING, AC-500 Aircar"
+AC5M,Fixed-wing,1P/S,Light,I,I,,"AVIASTROITEL, AC-5M"
+AC68,Fixed-wing,2P/S,Light,I,II,5,
+AC6L,Fixed-wing,2P/S,Light,I,II,6,
+AC72,Fixed-wing,2P/S,Light,I,II,4,"AERO (1), Commander 720 Alti Cruiser"
+AC80,Fixed-wing,2T/S,Light,I,II,4,
+AC90,Fixed-wing,2T/S,Light,I,II,4,
+AC95,Fixed-wing,2T/S,Light,I,II,6,
+ACAM,Fixed-wing,2P/S,Light,I,II,,
+ACAR,Fixed-wing,1P/S,Light,I,I,,
+ACED,Fixed-wing,1P/S,Light,I,I,,"POWELL, P-70 Acey Deucy"
+ACR2,Fixed-wing,1P/S,Light,I,I,,"ACRO SPORT, Acro-Sport 2 EAA, Acro-Sport 2"
+ACRD,Fixed-wing,2P/S,Light,I,II,,"AVIA (3), Accord"
+ACRO,Fixed-wing,1P/S,Light,I,I,,
+ACSR,Fixed-wing,1P/S,Light,I,I,,"VICTA, Aircruiser"
+AD20,Fixed-wing,1P/S,Light,I,I,,"BEIJING KEYUAN, AD-200 NANJING UNIVERSITY, AD-200"
+ADEL,Gyroplane,1P/S,Light,I,I,,"USTINOV, Adel"
+ADVE,Fixed-wing,1P/S,Light,I,I,,"AUSTER, J-5 Adventurer"
+AE45,Fixed-wing,2P/S,Light,I,II,,
+AEA1,Fixed-wing,1P/S,Light,I,I,,"AMERICAN EAGLE, A-1 AMERICAN EAGLE, A-101"
+AERK,Fixed-wing,1P/S,Light,I,I,,
+AEST,Fixed-wing,2P/S,Light,I,II,5,
+AFOX,Fixed-wing,1P/S,Light,I,I,,"HALLEY, Apollo Fox"
+AG02,Fixed-wing,1P/S,Light,I,I,,"GATARD, AG-02 Poussin"
+AG04,Fixed-wing,1P/S,Light,I,I,,"GATARD, AG-04 Pigeon"
+AG10,Fixed-wing,1P/S,Light,I,I,,"CAIGA, AG-100 CIRRUS, SR-10"
+AG14,Fixed-wing,1P/S,Light,I,I,,
+AI10,Fixed-wing,1P/S,Light,I,I,,"IKAR, Ai-10 Ikar"
+AIGT,Fixed-wing,1P/S,Light,I,I,,
+AIRD,Fixed-wing,1P/S,Light,I,I,,"BEAGLE, A-109 Airedale BEAGLE-AUSTER, A-109 Airedale"
+AIRL,Fixed-wing,2P/S,Light,I,II,,"AERONIX, Airelle"
+AJ27,Fixed-wing,2J/L,Medium,G,III,,"COMAC, ARJ-21-700 COMAC, ARJ-21-700 Xiangfeng"
+AJET,Fixed-wing,2J/S+,Medium,H,III,,
+AKRO,Fixed-wing,1P/S,Light,I,I,,"STEPHENS, Akro"
+ALBU,Fixed-wing,1P/S,Light,I,I,,"AVIATION DEVELOPMENT, Alaskan Bushmaster"
+ALC1,Fixed-wing,1P/S,Light,I,I,,"ALTAIR COELHO, AC-11"
+ALGR,Fixed-wing,1P/S,Light,I,I,,"FANTASY AIR, Allegro LSA AMERICA, Allegro"
+ALH,Helicopter,2T/S,Light,I,I,,"HINDUSTAN, ALH Dhruv"
+ALIG,Fixed-wing,1P/S,Light,I,I,,"ARION, LS-1 Lightning"
+ALIZ,Fixed-wing,1T/S+,Medium,H,III,,"BREGUET, 1050 Alizé"
+ALO2,Helicopter,1T/S,Light,I,I,,
+ALO3,Helicopter,1T/S,Light,I,I,,
+ALPI,Fixed-wing,1P/S,Light,I,I,,"AUSTER, J-5Q Alpine AUSTER, J-5R Alpine"
+ALSL,Fixed-wing,1P/S,Light,I,I,,"AIRLONY, Skylane"
+ALTO,Fixed-wing,1P/S,Light,I,I,,"DIRECT FLY, Alto"
+AM3,Fixed-wing,1P/S,Light,I,I,,
+AMX,Fixed-wing,1J/S+,Medium,H,III,,
+AN12,Fixed-wing,4T/L,Medium,F,III,,"ANTONOV, An-12 SHAANXI, Y-8"
+AN2,Fixed-wing,1P/S,Light,I,I,,
+AN22,Fixed-wing,4T/H,Heavy,D,III,,"ANTONOV, An-22 Antheus"
+AN24,Fixed-wing,2T/L,Medium,F,III,,
+AN26,Fixed-wing,2T/L,Medium,F,III,,"ANTONOV, An-26 XIAN, Y-7H"
+AN28,Fixed-wing,2T/S+,Light,I,III,,
+AN3,Fixed-wing,1T/S+,Light,I,III,,"ANTONOV, An-3"
+AN30,Fixed-wing,2T/L,Medium,F,III,,"ANTONOV, An-30"
+AN32,Fixed-wing,2T/L,Medium,F,III,,
+AN38,Fixed-wing,2T/S+,Medium,H,III,,"ANTONOV, An-38"
+AN70,Fixed-wing,4T/H,Medium,F,III,,"ANTONOV, An-70"
+AN72,Fixed-wing,2J/L,Medium,F,III,,
+AN8,Fixed-wing,2T/L,Medium,F,III,,"ANTONOV, An-8"
+ANDR,Fixed-wing,1P/S,Light,I,I,,"MILLIOUD, Andromède"
+ANGL,Fixed-wing,2P/S,Light,I,II,,"ANGEL, 44 Angel KING'S, 44 Angel"
+ANSN,Fixed-wing,2P/S,Light,I,II,,"AVRO, 652 Anson"
+ANST,Helicopter,2T/S,Light,I,I,,"KAZAN, Ansat"
+AP20,Fixed-wing,1P/S,Light,I,I,,
+AP22,Fixed-wing,1P/S,Light,I,I,,
+AP26,Fixed-wing,2P/S,Light,I,II,,"AEROPRAKT, A-26 Twin Vista AEROPRAKT, SA-26 Twin Vista"
+AP28,Fixed-wing,2P/S,Light,I,II,,"AEROPRAKT, A-28 Victor AEROPRAKT, SA-28 Victor"
+AP32,Fixed-wing,1P/S,Light,I,I,,"AEROPRAKT, A-32 Vixxen"
+AP36,Fixed-wing,2P/S,Light,I,II,,"AEROPRAKT, A-36 Vulcan"
+APM2,Fixed-wing,1P/S,Light,I,I,,
+APM3,Fixed-wing,1P/S,Light,I,I,,"ISSOIRE, APM-30 Lion"
+APM4,Fixed-wing,1P/S,Light,I,I,,"ISSOIRE, APM-40 Simba ISSOIRE, APM-41 Simba"
+APUP,Fixed-wing,1P/S,Light,I,I,,
+AR11,Fixed-wing,1P/S,Light,I,I,1,"AERONCA, 11 Chief HINDUSTAN, HUL-26 Pushpak"
+AR15,Fixed-wing,1P/S,Light,I,I,2,"AERONCA, 15 Sedan"
+AR50,Fixed-wing,1P/S,Light,I,I,,"AERONCA, 50 Chief"
+AR5T,Fixed-wing,1P/S,Light,I,I,,"AERONCA, 50 Tandem"
+AR65,Fixed-wing,1P/S,Light,I,I,,"AERONCA, 65 Super Chief"
+AR6T,Fixed-wing,1P/S,Light,I,I,,
+ARCE,Fixed-wing,1E/S,Light,I,I,,"SCHEMPP-HIRTH, Arcus E"
+ARCP,Fixed-wing,1P/S,Light,I,I,,"SCHEMPP-HIRTH, Arcus M SCHEMPP-HIRTH, Arcus T"
+ARES,Fixed-wing,1J/S,Light,I,III,,"RUTAN, 151 Ares SCALED, 151 Ares"
+ARV1,Fixed-wing,1P/S,Light,I,I,,
+ARVA,Fixed-wing,2T/S+,Light,I,III,5,
+ARWF,Fixed-wing,1P/S,Light,I,I,,"ARROW (1), F Sport"
+AS02,Fixed-wing,1P/S,Light,I,I,,
+AS14,Fixed-wing,1P/S,Light,I,I,,"SCHLEICHER, ASK-14"
+AS16,Fixed-wing,1P/S,Light,I,I,,"SCHLEICHER, ASK-16"
+AS20,Fixed-wing,1P/S,Light,I,I,,"SCHLEICHER, ASW-20TOP"
+AS21,Fixed-wing,1P/S,Light,I,I,,"SCHLEICHER, ASK-21Mi"
+AS22,Fixed-wing,1P/S,Light,I,I,,
+AS24,Fixed-wing,1P/S,Light,I,I,,"SCHLEICHER, ASW-24E SCHLEICHER, ASW-24TOP"
+AS25,Fixed-wing,1P/S,Light,I,I,,
+AS26,Fixed-wing,1P/S,Light,I,I,,"SCHLEICHER, ASH-26E"
+AS28,Fixed-wing,1P/S,Light,I,I,,"SCHLEICHER, ASW-28E"
+AS29,Fixed-wing,1P/S,Light,I,I,,
+AS2T,Fixed-wing,1T/S,Light,I,I,,"FFA, AS-202-32TP Turbine Bravo"
+AS30,Fixed-wing,1P/S,Light,I,I,,"SCHLEICHER, ASH-30Mi"
+AS31,Fixed-wing,1P/S,Light,I,I,,"SCHLEICHER, ASH-31Mi"
+AS32,Helicopter,2T/S+,Medium,H,I,,
+AS3B,Helicopter,2T/S+,Medium,H,I,,
+AS50,Helicopter,1T/S,Light,I,I,,
+AS55,Helicopter,2T/S,Light,I,I,,
+AS65,Helicopter,2T/S,Light,I,I,,
+AS80,Fixed-wing,1P/S,Light,I,I,,"STARCK, AS-80 Holiday"
+ASO4,Fixed-wing,1P/S,Light,I,I,,
+ASO5,Fixed-wing,1P/S,Light,I,I,,"ASSO AEREI, Asso 5 Champion VIDOR, Asso 5 Champion"
+ASOX,Fixed-wing,1P/S,Light,I,I,,"ASSO AEREI, Asso 10 Jewel VIDOR, Asso 10 Jewel"
+ASTO,Fixed-wing,1P/S,Light,I,I,,"TECNAM, Astore"
+ASTR,Fixed-wing,2J/S+,Medium,H,III,7,
+AT1,Fixed-wing,1P/S,Light,I,I,,"ANTONIEWSKI, AT-1"
+AT2P,Fixed-wing,1P/S,Light,I,I,,"AIR TRACTOR, AT-250"
+AT3,Fixed-wing,2J/S+,Medium,H,III,,"AIDC, AT-3 Tzu-Chung"
+AT3P,Fixed-wing,1P/S,Light,I,I,1,
+AT3T,Fixed-wing,1T/S,Light,I,I,,
+AT43,Fixed-wing,2T/L,Medium,G,III,3,"ATR, ATR-42-300 ATR, ATR-42-320"
+AT44,Fixed-wing,2T/L,Medium,G,III,3,"ATR, ATR-42-400 ATR, ATR-42-400 Surveyor"
+AT45,Fixed-wing,2T/L,Medium,G,III,3,"ATR, ATR-42-500 ATR, ATR-42-500 Surveyor"
+AT46,Fixed-wing,2T/L,Medium,G,III,3,"ATR, ATR-42-600"
+AT5P,Fixed-wing,1P/S,Light,I,I,,"AIR TRACTOR, AT-501"
+AT5T,Fixed-wing,1T/S,Light,I,I,,
+AT6T,Fixed-wing,1T/S,Light,I,I,,"AIR TRACTOR, AT-602"
+AT72,Fixed-wing,2T/L,Medium,G,III,3,"ATR, ATR-72-201  ATR, ATR-72-202"
+AT73,Fixed-wing,2T/L,Medium,G,III,3,"ATR, ATR-72-211  ATR, ATR-72-212"
+AT75,Fixed-wing,2T/L,Medium,G,III,3,"ATR, ATR-72-212A (500)  ATR, ATR-72-500"
+AT76,Fixed-wing,2T/L,Medium,G,III,3,
+ATAC,Fixed-wing,1P/S,Light,I,I,,"AIRCRAFT TECHNOLOGIES, Acro 1"
+ATIS,Fixed-wing,1P/S,Light,I,I,,"AIRCRAFT TECHNOLOGIES, Atlantis"
+ATL,Fixed-wing,1P/S,Light,I,I,,"ROBIN, ATL"
+ATLA,Fixed-wing,2T/L,Medium,F,III,,
+ATP,Fixed-wing,2T/L,Medium,F,III,6,"BRITISH AEROSPACE, ATP JETSTREAM, 61"
+ATTL,Fixed-wing,1P/S,Light,I,I,,"EURONEF, ATTL-1"
+AU11,Fixed-wing,1P/S,Light,I,I,,"BEAGLE-AUSTER, E-3 Auster AOP11"
+AUJ2,Fixed-wing,1P/S,Light,I,I,,"AUSTER, J-2 Arrow"
+AUJ4,Fixed-wing,1P/S,Light,I,I,,"AUSTER, J-4 Archer"
+AURA,Fixed-wing,1P/S,Light,I,I,,"SUNWARD, SA60 Aurora SUNWARD, SA70 Aurora"
+AUS3,Fixed-wing,1P/S,Light,I,I,,"TAYLORCRAFT (2), Auster 3 TAYLORCRAFT (2), E"
+AUS4,Fixed-wing,1P/S,Light,I,I,,"TAYLORCRAFT (2), Auster 4 TAYLORCRAFT (2), G"
+AUS5,Fixed-wing,1P/S,Light,I,I,,
+AUS6,Fixed-wing,1P/S,Light,I,I,,
+AUS7,Fixed-wing,1P/S,Light,I,I,,"AUSTER, Auster T7 AUSTER, Q"
+AUS9,Fixed-wing,1P/S,Light,I,I,,"AUSTER, Auster AOP9 AUSTER, B5"
+AV68,Fixed-wing,1P/S,Light,I,I,,
+AVID,Fixed-wing,1P/S,Light,I,I,,
+AVIN,Fixed-wing,1P/S,Light,I,I,,"AVRO, 594 Avian AVRO, 616 Avian"
+B06,Helicopter,1T/S,Light,I,I,,
+B06T,Helicopter,2T/S,Light,I,I,,"BELL, 206LT TwinRanger TRIDAIR, 206L-ST Gemini ST"
+B1,Fixed-wing,4J/H,Heavy,D,III,,"ROCKWELL, B-1 Lancer"
+B105,Helicopter,2T/S,Light,I,I,,
+B13,Fixed-wing,1P/S,Light,I,I,,"AKAFLIEG BERLIN, B-13"
+B14A,Fixed-wing,1P/S,Light,I,I,1,
+B14B,Fixed-wing,1P/S,Light,I,I,,"DOWNER, 14 Bellanca 260"
+B14C,Fixed-wing,1P/S,Light,I,I,,
+B150,Helicopter,1T/S,Light,I,I,,"WINNER, B-150"
+B17,Fixed-wing,4P/L,Medium,F,III,,"BOEING, B-17 Flying Fortress"
+B18T,Fixed-wing,2T/S,Light,I,II,1,
+B190,Fixed-wing,2T/S+,Medium,H,III,7,
+B2,Fixed-wing,4J/H,Heavy,D,III,,"NORTHROP, B-2 Spirit NORTHROP GRUMMAN, B-2 Spirit"
+B209,Fixed-wing,1P/S,Light,I,I,4,
+B212,Helicopter,2T/S,Light,I,I,,
+B214,Helicopter,1T/S+,Medium,H,I,,
+B222,Helicopter,2T/S,Light,I,I,,"BELL, 222"
+B23,Fixed-wing,2P/L,Medium,F,III,,"DOUGLAS, B-23 Dragon DOUGLAS, UC-67 Dragon"
+B230,Helicopter,2T/S,Light,I,I,,"BELL, 230"
+B23E,Fixed-wing,1E/S,Light,I,I,,"BRM AERO, Bristell B23 Energic"
+B24,Fixed-wing,4P/L,Medium,F,III,,
+B25,Fixed-wing,2P/L,Medium,G,III,,
+B26,Fixed-wing,2P/L,Medium,G,III,,
+B26M,Fixed-wing,2P/S+,Medium,H,III,,"MARTIN, 179 Marauder MARTIN, B-26 Marauder"
+B29,Fixed-wing,4P/L,Medium,F,III,,"BOEING, B-29 Superfortress"
+B305,Helicopter,1P/S,Light,I,I,,"BRANTLY, 305"
+B360,Fixed-wing,1P/S,Light,I,I,,"YAKOVLEV AIRCRAFT, Bear 360"
+B36T,Fixed-wing,1T/S,Light,I,I,1,
+B37M,Fixed-wing,2J/L,Medium,F,III,7,
+B38M,Fixed-wing,2J/L,Medium,F,III,8,
+B39M,Fixed-wing,2J/L,Medium,F,III,8,
+B3XM,Fixed-wing,2J/L,Medium,F,III,,"BOEING, 737 MAX 10 BOEING, 737-10"
+B407,Helicopter,1T/S,Light,I,I,,
+B412,Helicopter,2T/S,Light,I,I,,
+B427,Helicopter,2T/S,Light,I,I,,"BELL, 427 KOREA AEROSPACE, SB-427"
+B429,Helicopter,2T/S,Light,I,I,,"BELL, 429 GlobalRanger"
+B430,Helicopter,2T/S,Light,I,I,,"BELL, 430"
+B461,Fixed-wing,4J/L,Medium,G,III,7,"BRITISH AEROSPACE, BAe-146-100 BRITISH AEROSPACE, BAe-146-100 Statesman"
+B462,Fixed-wing,4J/L,Medium,G,III,7,
+B463,Fixed-wing,4J/L,Medium,G,III,7,"BRITISH AEROSPACE, BAe-146-300"
+B47G,Helicopter,1P/S,Light,I,I,,
+B47J,Helicopter,1P/S,Light,I,I,,
+B47T,Helicopter,1T/S,Light,I,I,,"SOLOY, Bell 47"
+B505,Helicopter,1T/S,Light,I,I,,"BELL, 505 Jet Ranger X"
+B52,Fixed-wing,8J/H,Heavy,D,III,,"BOEING, B-52 Stratofortress"
+B525,Helicopter,2T/S+,Medium,H,I,,"BELL, 525 Relentless"
+B58T,Fixed-wing,2P/S,Light,I,II,6,"BEECH, 58P Pressurized Baron BEECH, 58TC Baron"
+B60,Fixed-wing,1P/S,Light,I,I,,
+B609,Powered-lift,2T/S+,Medium,H,II,,"AGUSTAWESTLAND, AW-609 BELL-AGUSTA, BA-609"
+B60T,Fixed-wing,2T/S,Light,I,II,,"BEECH, 60 Royal Turbine Duke NORTHWEST TURBINE, 60 Royal Turbine Duke"
+B701,Fixed-wing,4J/L,Medium,F,III,9,"BOEING, 707-100"
+B703,Fixed-wing,4J/H,Heavy,D,III,9,
+B712,Fixed-wing,2J/L,Medium,F,III,7,"BOEING, 717-200 BOEING, 717-200 Business Express"
+B720,Fixed-wing,4J/L,Medium,F,III,9,"BOEING, 720"
+B721,Fixed-wing,3J/L,Medium,F,III,7,"BOEING, 727-100 BOEING, C-22"
+B722,Fixed-wing,3J/L,Medium,F,III,7,"BOEING, 727-200"
+B732,Fixed-wing,2J/L,Medium,F,III,7,
+B733,Fixed-wing,2J/L,Medium,F,III,7,"BOEING, 737-300"
+B734,Fixed-wing,2J/L,Medium,F,III,8,"BOEING, 737-400"
+B735,Fixed-wing,2J/L,Medium,F,III,7,"BOEING, 737-500"
+B736,Fixed-wing,2J/L,Medium,F,III,7,"BOEING, 737-600"
+B737,Fixed-wing,2J/L,Medium,F,III,8,
+B738,Fixed-wing,2J/L,Medium,F,III,8,"BOEING, 737-800 BOEING, 737-800 BBJ2"
+B739,Fixed-wing,2J/L,Medium,F,III,8,"BOEING, 737-900 BOEING, 737-900 BBJ3"
+B741,Fixed-wing,4J/H,Heavy,D,III,10,"BOEING, 747-100"
+B742,Fixed-wing,4J/H,Heavy,B,III,10,
+B743,Fixed-wing,4J/H,Heavy,D,III,10,"BOEING, 747-300"
+B744,Fixed-wing,4J/H,Heavy,B,III,10,"BOEING, 747-400"
+B748,Fixed-wing,4J/H,Heavy,B,III,8,
+B74R,Fixed-wing,4J/H,Heavy,D,III,10,"BOEING, 747SR"
+B74S,Fixed-wing,4J/H,Heavy,D,III,9,"BOEING, 747SP"
+B752,Fixed-wing,2J/L,Medium,E,III,7,"BOEING, 757-200 BOEING, C-32"
+B753,Fixed-wing,2J/L,Medium,E,III,8,"BOEING, 757-300"
+B762,Fixed-wing,2J/H,Heavy,C,III,9,
+B763,Fixed-wing,2J/H,Heavy,C,III,9,"BOEING, 767-300"
+B764,Fixed-wing,2J/H,Heavy,C,III,9,"BOEING, 767-400"
+B772,Fixed-wing,2J/H,Heavy,B,III,9,"BOEING, 777-200 BOEING, 777-200ER"
+B773,Fixed-wing,2J/H,Heavy,B,III,9,"BOEING, 777-300"
+B778,Fixed-wing,2J/H,Heavy,D,III,,"BOEING, 777-8 BOEING, 777-8F"
+B779,Fixed-wing,2J/H,Heavy,D,III,,"BOEING, 777-9"
+B77L,Fixed-wing,2J/H,Heavy,B,III,7,
+B77W,Fixed-wing,2J/H,Heavy,B,III,7,"BOEING, 777-300ER BOEING, 777-300ER BBJ"
+B788,Fixed-wing,2J/H,Heavy,B,III,7,"BOEING, 787-8 BBJ BOEING, 787-8 Dreamliner"
+B789,Fixed-wing,2J/H,Heavy,B,III,7,"BOEING, 787-9 BBJ BOEING, 787-9 Dreamliner"
+B78X,Fixed-wing,2J/H,Heavy,D,III,8,"BOEING, 787-10 Dreamliner"
+BA11,Fixed-wing,2J/L,Medium,F,III,7,
+BABY,Helicopter,1P/S,Light,I,I,,"CANADIAN HOME ROTORS, Baby Belle CANADIAN HOME ROTORS, Safari"
+BARC,Fixed-wing,1P/S,Light,I,I,,"BUETHE, Barracuda JEFFAIR, Barracuda"
+BASS,Fixed-wing,2P/S,Light,I,II,8,
+BBAT,Fixed-wing,1P/S,Light,I,I,,"BRADLEY, BA-100 Aerobat"
+BBIR,Fixed-wing,1P/S,Light,I,I,,"HOVEY, Beta Bird"
+BCA3,Fixed-wing,1P/S,Light,I,I,,"BUHL, CA-3 Sport Airsedan"
+BCAT,Fixed-wing,1P/S+,Light,I,III,,"GRUMMAN, F8F Bearcat GRUMMAN, G-58 Bearcat"
+BCS1,Fixed-wing,2J/L,Medium,F,III,7,
+BCS3,Fixed-wing,2J/L,Medium,F,III,7,"AIRBUS, A-220-300 BOMBARDIER, BD-500 CSeries CS300"
+BD10,Fixed-wing,1J/S,Light,I,III,,
+BD17,Fixed-wing,1P/S,Light,I,I,,"BEDE, BD-17 Nuggett"
+BD4,Fixed-wing,1P/S,Light,I,I,,"BEDE, BD-4 TENNESSEE VALLEY, BD-4"
+BD5,Fixed-wing,1P/S,Light,I,I,,
+BD5J,Fixed-wing,1J/S,Light,I,III,,
+BD5T,Fixed-wing,1T/S,Light,I,I,,"BD-MICRO, BD-5T Micro BEDE, BD-5TP Micro"
+BDOG,Fixed-wing,1P/S,Light,I,I,,
+BE10,Fixed-wing,2T/S,Light,I,II,7,"BEECH, 100 King Air BEECH, U-21F Ute"
+BE17,Fixed-wing,1P/S,Light,I,I,2,
+BE18,Fixed-wing,2P/S,Light,I,II,4,
+BE19,Fixed-wing,1P/S,Light,I,I,1,"BEECH, 19 Musketeer Sport BEECH, 19 Sport"
+BE22,Fixed-wing,1T/S,Light,I,I,,"BEECHCRAFT, 220 Denali TEXTRON, 220 Denali"
+BE23,Fixed-wing,1P/S,Light,I,I,2,"BEECH, 23 Musketeer BEECH, 23 Sundowner"
+BE24,Fixed-wing,1P/S,Light,I,I,3,"BEECH, 24 Musketeer Super BEECH, 24 Sierra"
+BE30,Fixed-wing,2T/S+,Light,I,III,6,"BEECH, 300 Super King Air RAYTHEON, 300 Super King Air"
+BE32,Fixed-wing,2T/S+,Medium,H,III,,"BERIEV, Be-30 BERIEV, Be-32"
+BE33,Fixed-wing,1P/S,Light,I,I,4,
+BE35,Fixed-wing,1P/S,Light,I,I,3,"BEECH, 35 Bonanza COLEMILL, Starfire Bonanza 35"
+BE36,Fixed-wing,1P/S,Light,I,I,2,
+BE40,Fixed-wing,2J/S+,Medium,H,III,8,
+BE4W,Fixed-wing,2J/S+,Medium,H,III,8,
+BE50,Fixed-wing,2P/S,Light,I,II,4,
+BE55,Fixed-wing,2P/S,Light,I,II,6,
+BE56,Fixed-wing,2P/S,Light,I,II,2,"BEECH, 56 Turbo Baron"
+BE58,Fixed-wing,2P/S,Light,I,II,6,
+BE60,Fixed-wing,2P/S,Light,I,II,8,"BEECH, 60 Duke"
+BE65,Fixed-wing,2P/S,Light,I,II,5,
+BE70,Fixed-wing,2P/S,Light,I,II,1,"BEECH, 70 Queen Air"
+BE76,Fixed-wing,2P/S,Light,I,II,4,"BEECH, 76 Duchess"
+BE77,Fixed-wing,1P/S,Light,I,I,1,"BEECH, 77 Skipper"
+BE80,Fixed-wing,2P/S,Light,I,II,5,
+BE88,Fixed-wing,2P/S,Light,I,II,5,"BEECH, 88 Queen Air"
+BE95,Fixed-wing,2P/S,Light,I,II,5,"BEECH, 95 Travel Air"
+BE99,Fixed-wing,2T/S,Light,I,II,5,"BEECH, 99 Airliner"
+BE9L,Fixed-wing,2T/S,Light,I,II,5,
+BE9T,Fixed-wing,2T/S,Light,I,II,7,"BEECH, 90 (F90) King Air"
+BEAR,Fixed-wing,1P/S,Light,I,I,,
+BELF,Fixed-wing,4T/L,Medium,F,III,,"SHORT, SC-5 Belfast"
+BETA,Fixed-wing,1P/S,Light,I,I,,"ROLLASON, Beta"
+BEVR,Fixed-wing,1P/S,Light,I,I,,"ASAP, Beaver"
+BF19,Fixed-wing,1P/S,Light,I,I,,"PODESVA, Bf-109G-2"
+BFIT,Fixed-wing,1P/S,Light,I,I,,"BRISTOL, F-2B Fighter BRISTOL, F-2B Fighter Replica"
+BILO,Fixed-wing,1P/S,Light,I,I,,"PENA, Bilouis"
+BIPL,Fixed-wing,1P/S,Light,I,I,,"EAA, Biplane"
+BIRD,Fixed-wing,1P/S,Light,I,I,,"TAYLOR (3), TA-2 Bird TAYLOR (3), TA-3 Bird"
+BISC,Fixed-wing,1P/S,Light,I,I,,"BILSAM, Sky Cruiser BOT AIRCRAFT, SC-07 Speed Cruiser"
+BK17,Helicopter,2T/S,Light,I,I,,
+BKUT,Fixed-wing,1P/S,Light,I,I,,
+BL11,Fixed-wing,1P/S,Light,I,I,,"BLERIOT, 11 BLERIOT, 11 Replica"
+BL17,Fixed-wing,1P/S,Light,I,I,1,
+BL19,Fixed-wing,1P/S,Light,I,I,,"AVIABELLANCA, 19 Skyrocket BELLANCA, 19 Skyrocket"
+BL8,Fixed-wing,1P/S,Light,I,I,2,
+BLBU,Fixed-wing,1P/S,Light,I,I,,
+BLCF,Fixed-wing,4J/H,Heavy,D,III,,"BOEING, 747-400LCF Dreamlifter"
+BLEN,Fixed-wing,2P/S+,Light,I,III,,"BRISTOL, 149 Blenheim BRISTOL, 149 Bolingbroke"
+BLKS,Fixed-wing,1P/S,Light,I,I,,
+BM6,Fixed-wing,1P/S,Light,I,I,,"MARANDA, BM-6 Lark"
+BMAN,Fixed-wing,1P/S,Light,I,I,,"AAK, Bushman"
+BN2P,Fixed-wing,2P/S,Light,I,II,1,
+BN2T,Fixed-wing,2T/S,Light,I,II,1,
+BO40,Fixed-wing,1P/S,Light,I,I,,"BOEING, 40"
+BOLT,Fixed-wing,1P/S,Light,I,I,,"STEEN, Skybolt"
+BOOM,Fixed-wing,2P/S,Light,I,II,,"RUTAN, 202 Boomerang"
+BPAT,Fixed-wing,1P/S,Light,I,I,,
+BPUM,Fixed-wing,1P/S,Light,I,I,,"BDC AERO, Puma BORTOLANZA, Puma"
+BR14,Fixed-wing,1P/S,Light,I,I,,"BREGUET, 14 Replica"
+BR23,Fixed-wing,1P/S,Light,I,I,,"BRM AERO, Bristell B23"
+BR54,Gyroplane,1P/S,Light,I,I,,"BARNETT, BRC-540"
+BR60,Fixed-wing,1P/S,Light,I,I,,"BRUMBY, 600 BRUMBY, Brumby"
+BR61,Fixed-wing,1P/S,Light,I,I,,"BRUMBY, 610 Evolution"
+BR8,Fixed-wing,1P/S,Light,I,I,,"BRM AERO, Bristell B8"
+BRAV,Fixed-wing,1P/S,Light,I,I,,"TECNAM, P-2004 Bravo"
+BRB2,Helicopter,1P/S,Light,I,I,,
+BREZ,Fixed-wing,1P/S,Light,I,I,,"AEROSTYLE, Breezer BREEZER, Breezer"
+BROU,Fixed-wing,1P/S,Light,I,I,,"MAX HOLSTE , MH-1521 Broussard"
+BS60,Fixed-wing,2T/S,Light,I,II,,"BEECH-SFERMA, 60 Marquis"
+BSTP,Helicopter,2T/S+,Medium,H,I,,"BELL, 214ST SuperTransport"
+BT36,Fixed-wing,1P/S,Light,I,I,3,
+BT7,Fixed-wing,1J/S,Medium,I,III,,"BOEING, BTX-1 BOEING, T-7 Red Hawk"
+BTUB,Fixed-wing,1P/S,Light,I,I,,"KIMBREL, Dormoy Bathtub"
+BU20,Fixed-wing,3P/S,Light,I,III,2,"AIRCRAFT HYDRO-FORMING, Bushmaster 2000"
+BU31,Fixed-wing,1P/S,Light,I,I,,
+BU33,Fixed-wing,1P/S,Light,I,I,,
+BU81,Fixed-wing,1P/S,Light,I,I,,
+BUC,Fixed-wing,2J/L,Medium,G,III,,"HAWKER SIDDELEY, Buccaneer"
+BUSH,Fixed-wing,1P/S,Light,I,I,,"RAINBOW SKYREACH, BushCat"
+BW60,Fixed-wing,1P/S,Light,I,I,,"BLACKWING, BW-600"
+BW6T,Fixed-wing,1P/S,Light,I,I,,"BLACKWING, BW-635"
+BX2,Fixed-wing,1P/S,Light,I,I,,"BRANDLI, BX-2 Cherry"
+C02T,Fixed-wing,2T/S,Light,I,II,6,
+C04T,Fixed-wing,2T/S,Light,I,II,4,"CESSNA, 404 (turbine) OMNI, 404 Turbo Titan"
+C06T,Fixed-wing,1T/S,Light,I,I,2,"CESSNA, 206 (turbine) SOLOY, Turbine 206"
+C07T,Fixed-wing,1T/S,Light,I,I,2,"CESSNA, 207 (turbine) SOLOY, Turbine 207"
+C1,Fixed-wing,2J/L,Medium,F,III,,"KAWASAKI, C-1 KAWASAKI, EC-1"
+C101,Fixed-wing,1J/S+,Light,I,III,,
+C10T,Fixed-wing,1T/S,Light,I,I,2,
+C119,Fixed-wing,2P/L,Medium,F,III,5,
+C120,Fixed-wing,1P/S,Light,I,I,1,"CESSNA, 120"
+C123,Fixed-wing,2P/L,Medium,F,III,,"FAIRCHILD (1), C-123 Provider"
+C130,Fixed-wing,4T/L,Medium,F,III,,
+C135,Fixed-wing,4J/H,Heavy,D,III,,"BOEING, NC-13 BOEING, WC-135W"
+C140,Fixed-wing,1P/S,Light,I,I,3,"CESSNA, 140"
+C14T,Fixed-wing,2T/S,Light,I,II,5,
+C15,Fixed-wing,4J/L,Medium,F,III,,"MCDONNELL DOUGLAS, YC-15"
+C150,Fixed-wing,1P/S,Light,I,I,1,
+C152,Fixed-wing,1P/S,Light,I,I,1,
+C160,Fixed-wing,2T/L,Medium,F,III,,"TRANSALL, C-160"
+C162,Fixed-wing,1P/S,Light,I,I,2,"CESSNA, 162 Skycatcher SHENYANG, 162 Skycatcher"
+C17,Fixed-wing,4J/H,Heavy,C,III,,
+C170,Fixed-wing,1P/S,Light,I,I,4,"CESSNA, 170"
+C172,Fixed-wing,1P/S,Light,I,I,1,
+C175,Fixed-wing,1P/S,Light,I,I,2,"CESSNA, 175 CESSNA, 175 Skylark"
+C177,Fixed-wing,1P/S,Light,I,I,2,"CESSNA, 177 CESSNA, 177 Cardinal"
+C180,Fixed-wing,1P/S,Light,I,I,2,
+C182,Fixed-wing,1P/S,Light,I,I,2,
+C185,Fixed-wing,1P/S,Light,I,I,2,
+C188,Fixed-wing,1P/S,Light,I,I,1,
+C190,Fixed-wing,1P/S,Light,I,I,2,"CESSNA, 190"
+C195,Fixed-wing,1P/S,Light,I,I,2,"CESSNA, 195 CESSNA, LC-126"
+C2,Fixed-wing,2T/L,Medium,G,III,,"GRUMMAN, C-2 Greyhound"
+C205,Fixed-wing,1P/S,Light,I,I,3,"CESSNA, 205"
+C206,Fixed-wing,1P/S,Light,I,I,2,
+C207,Fixed-wing,1P/S,Light,I,I,2,
+C208,Fixed-wing,1T/S,Light,I,I,3,
+C210,Fixed-wing,1P/S,Light,I,I,2,
+C212,Fixed-wing,2T/S+,Medium,H,III,5,
+C21T,Fixed-wing,2T/S,Light,I,II,5,
+C22J,Fixed-wing,2J/S,Light,I,III,,"CAPRONI VIZZOLA, C-22J Ventura"
+C240,Fixed-wing,1P/S,Light,I,I,7,
+C25A,Fixed-wing,2J/S,Light,I,III,7,"CESSNA, 525A Citation CJ2"
+C25B,Fixed-wing,2J/S+,Light,I,III,7,"CESSNA, 525B Citation CJ3"
+C25C,Fixed-wing,2J/S+,Medium,H,III,7,"CESSNA, 525C Citation CJ4"
+C25M,Fixed-wing,2J/S,Light,I,III,6,"CESSNA, 525 Citation M2"
+C270,Fixed-wing,1P/S,Light,I,I,,
+C27J,Fixed-wing,2T/L,Medium,F,III,,
+C295,Fixed-wing,2T/L,Medium,G,III,,
+C303,Fixed-wing,2P/S,Light,I,II,2,"AVIONES COLOMBIA, T303 CESSNA, T303 Crusader"
+C306,Fixed-wing,1P/S,Light,I,I,,"CEA-UFMG, CB-10 Triathlon CEA-UFMG, CEA-306 CB-10 Triathlon"
+C309,Fixed-wing,1P/S,Light,I,I,,"CEA-UFMG, CEA-309 Mehari"
+C30J,Fixed-wing,4T/L,Medium,F,III,,
+C310,Fixed-wing,2P/S,Light,I,II,4,
+C311,Fixed-wing,1P/S,Light,I,I,,"CEA-UFMG, CEA-311 Anequim"
+C320,Fixed-wing,2P/S,Light,I,II,5,
+C335,Fixed-wing,2P/S,Light,I,II,4,"CESSNA, 335"
+C336,Fixed-wing,2P/S,Light,I,II,3,"CESSNA, 336 Skymaster"
+C337,Fixed-wing,2P/S,Light,I,II,3,
+C340,Fixed-wing,2P/S,Light,I,II,4,
+C365,Fixed-wing,1T/S,Light,I,I,,"EKW, C-3605"
+C402,Fixed-wing,2P/S,Light,I,II,3,
+C404,Fixed-wing,2P/S,Light,I,II,5,"CESSNA, 404 Titan"
+C408,Fixed-wing,2T/S+,Light,I,II,7,"CESSNA, 408 SkyCourier"
+C411,Fixed-wing,2P/S,Light,I,II,4,"CESSNA, 411"
+C414,Fixed-wing,2P/S,Light,I,II,6,
+C42,Fixed-wing,1P/S,Light,I,I,,"IKARUS, C-42 IKARUS, C-42 Bison"
+C421,Fixed-wing,2P/S,Light,I,II,6,
+C425,Fixed-wing,2T/S,Light,I,II,5,"CESSNA, 425 Conquest 1 CESSNA, 425 Corsair"
+C441,Fixed-wing,2T/S,Light,I,II,6,"CESSNA, 441 Conquest CESSNA, 441 Conquest 2"
+C46,Fixed-wing,2P/L,Medium,F,III,,"CURTISS, C-46 Commando CURTISS, CW-20 Commando"
+C500,Fixed-wing,2J/S,Light,I,III,6,"CESSNA, 500 Citation CESSNA, 500 Citation 1"
+C501,Fixed-wing,2J/S,Light,I,III,6,"CESSNA, 501 Citation 1SP"
+C510,Fixed-wing,2J/S,Light,I,III,5,"CESSNA, 510 Citation Mustang"
+C525,Fixed-wing,2J/S,Light,I,III,7,"CESSNA, 525 Citation CJ1 CESSNA, 525 CitationJet"
+C550,Fixed-wing,2J/S+,Light,I,III,7,"CESSNA, 550 Citation 2 CESSNA, S550 Citation S2"
+C551,Fixed-wing,2J/S+,Light,I,III,5,"CESSNA, 551 Citation 2SP"
+C55B,Fixed-wing,2J/S+,Light,I,III,7,"CESSNA, 550B Citation Bravo"
+C560,Fixed-wing,2J/S+,Medium,H,III,8,
+C56X,Fixed-wing,2J/S+,Medium,H,III,7,
+C5M,Fixed-wing,4J/H,Heavy,B,III,,"LOCKHEED, C-5 Super Galaxy"
+C650,Fixed-wing,2J/S+,Medium,H,III,8,
+C680,Fixed-wing,2J/S+,Medium,H,III,6,"CESSNA, 680 Citation Sovereign"
+C68A,Fixed-wing,2J/S+,Medium,H,III,6,"CESSNA, 680A Citation Latitude"
+C700,Fixed-wing,2J/S+,Medium,H,III,7,"CESSNA, 700 Citation Longitude"
+C72R,Fixed-wing,1P/S,Light,I,I,1,"AVIONES COLOMBIA, 172RG CESSNA, 172RG Cutlass RG"
+C750,Fixed-wing,2J/S+,Medium,H,III,9,"CESSNA, 750 Citation 10"
+C77R,Fixed-wing,1P/S,Light,I,I,2,
+C82,Fixed-wing,2P/L,Medium,F,III,,"FAIRCHILD (1), C-82 Packet FAIRCHILD (1), F-78 Packet"
+C82R,Fixed-wing,1P/S,Light,I,I,2,
+C82S,Fixed-wing,1P/S,Light,I,I,2,"CESSNA, T182 Turbo Skylane"
+C82T,Fixed-wing,1P/S,Light,I,I,1,"CESSNA, TR182 Turbo Skylane RG"
+C919,Fixed-wing,2J/L,Medium,F,III,,"COMAC, C-919"
+C97,Fixed-wing,4P/L,Medium,F,III,,"BOEING, C-97 Stratofreighter"
+CA12,Fixed-wing,1T/S,Light,I,I,,"COMP AIR, CA-12 Comp Air 12"
+CA19,Fixed-wing,1P/S,Light,I,I,,"COMMONWEALTH (1), CA-13 Boomerang COMMONWEALTH (1), CA-19 Boomerang"
+CA1P,Fixed-wing,1P/S,Light,I,I,,"AEROCOMP, CA-10 Comp Air 10"
+CA1T,Fixed-wing,1T/S,Light,I,I,,
+CA25,Fixed-wing,1P/S,Light,I,I,,"COMMONWEALTH (1), CA-25 Winjeel"
+CA3,Fixed-wing,1P/S,Light,I,I,,"AEROCOMP, CA-3 Comp Air 3 COMP AIR, CA-3 Comp Air 3"
+CA4,Fixed-wing,1P/S,Light,I,I,,
+CA41,Fixed-wing,1P/S,Light,I,I,,"CORVUS, CA-41 Racer"
+CA6,Fixed-wing,1P/S,Light,I,I,,"AEROCOMP, CA-6 Comp Air 6 COMP AIR, CA-6 Comp Air 6"
+CA61,Fixed-wing,1P/S,Light,I,I,,"CVJETKOVIC, CA-61 Mini Ace"
+CA65,Fixed-wing,1P/S,Light,I,I,,"CVJETKOVIC, CA-65 Skyfly"
+CA7P,Fixed-wing,1P/S,Light,I,I,,
+CA7T,Fixed-wing,1T/S,Light,I,I,,
+CA8,Fixed-wing,1T/S,Light,I,I,,"AEROCOMP, CA-8 Comp Air 8 COMP AIR, CA-8 Comp Air 8"
+CA9,Fixed-wing,1T/S,Light,I,I,,"COMP AIR, CA-9 Comp Air 9"
+CABI,Fixed-wing,1T/S,Light,I,I,,"UNIVERSAL COMPOSITE, Carbon Bird"
+CABN,Fixed-wing,1P/S,Light,I,I,,"PARAMOUNT, Cabinaire"
+CAD2,Fixed-wing,1P/S,Light,I,I,,
+CAD4,Fixed-wing,1P/S,Light,I,I,,
+CAML,Fixed-wing,1P/S,Light,I,I,,"SOPWITH, Camel SOPWITH, Camel Replica"
+CAMP,Fixed-wing,1P/S,Light,I,I,,
+CAN4,Fixed-wing,1P/S,Light,I,I,,"CAMPANA, AN-4"
+CAPL,Fixed-wing,1P/S,Light,I,I,,"CAPELLA, Capella FLIGHTWORKS, Capella"
+CAR,Fixed-wing,1P/S,Light,I,I,,"AEROCAD, Aerocar"
+CARV,Fixed-wing,4P/L,Medium,F,III,,"AVIATION TRADERS, ATL-98 Carvair"
+CASS,Fixed-wing,1P/S,Light,I,I,,"CASSUTT, Special NATIONAL AERONAUTICS, Cassutt 3M"
+CAT1,Fixed-wing,1P/S,Light,I,I,,"CREATIVE FLIGHT, MPA Aerocat SR"
+CAT2,Fixed-wing,2P/S,Light,I,II,,"CREATIVE FLIGHT, MPA Aerocat TR"
+CAW,Fixed-wing,1P/S,Light,I,I,,"CESSNA, AW"
+CB1,Fixed-wing,1P/S,Light,I,I,,"HATZ, CB-1 Biplane MAKELAN, Hatz Classic"
+CC11,Fixed-wing,1P/S,Light,I,I,,
+CC19,Fixed-wing,1P/S,Light,I,I,,"CUB CRAFTERS, CC-19 NXCub CUB CRAFTERS, CC-19 XCub"
+CDC6,Fixed-wing,1P/S,Light,I,I,,"CESSNA, DC-6"
+CDUS,Gyroplane,1P/S,Light,I,I,,"AUTOGYRO, Calidus ROTORSPORT, Calidus"
+CDW1,Fixed-wing,1P/S,Light,I,I,,"CHILTON, DW-1"
+CE43,Fixed-wing,1P/S,Light,I,I,,"CERVA, CE-43 Guepard"
+CEL5,Fixed-wing,1P/S,Light,I,I,,"OTTO, Celera 500L"
+CELR,Fixed-wing,1P/S,Light,I,I,,"MIRAGE, Celerity"
+CENT,Fixed-wing,1P/S,Light,I,I,,"FOUND, 100 Centennial"
+CG3,Fixed-wing,1P/S,Light,I,I,,"CAUDRON, G-3 CAUDRON, G-3 Replica"
+CH1,Fixed-wing,1T/S,Light,I,I,,
+CH10,Fixed-wing,1P/S,Light,I,I,,"ZENAIR, CH-100 Mono-Z ZENAIR, CH-100 Mono-Zénith"
+CH12,Helicopter,1P/S,Light,I,I,,"CICARÉ, CH-12"
+CH14,Helicopter,1T/S,Light,I,I,,"CICARÉ, CH-14 Aguilucho"
+CH15,Fixed-wing,1P/S,Light,I,I,,"ZENAIR, CH-150 Acro-Z ZENAIR, CH-150 Acro-Zénith"
+CH18,Fixed-wing,1P/S,Light,I,I,,"ZENAIR, CH-180 Super Acro-Z ZENAIR, CH-180 Super Acro-Zénith"
+CH20,Fixed-wing,1P/S,Light,I,I,,"HEINTZ , CH-200 Zénith ZENAIR, CH-200 Zénith"
+CH25,Fixed-wing,1P/S,Light,I,I,,"ZENAIR, CH-250 Zénith"
+CH2T,Fixed-wing,1P/S,Light,I,I,,
+CH3,Fixed-wing,1P/S,Light,I,I,,"CHRISLEA, CH-3 Skyjeep CHRISLEA, CH-3 Super Ace"
+CH30,Fixed-wing,1P/S,Light,I,I,,"ZENAIR, CH-300 Tri-Z ZENAIR, CH-300 Tri-Zénith"
+CH40,Fixed-wing,2P/S,Light,I,II,,"CHAMPION, 402 Lancer"
+CH50,Fixed-wing,1P/S,Light,I,I,,"ZENAIR, CH-50 Mini Zénith ZENAIR, CH-50 Mini-Z"
+CH60,Fixed-wing,1P/S,Light,I,I,,
+CH62,Fixed-wing,2P/S,Light,I,II,,"ZENAIR, CH-620 Gemini ZENITH, CH-620 Gemini"
+CH64,Fixed-wing,1P/S,Light,I,I,,"ZENAIR, CH-640 Zodiac ZENITH, CH-640 Zodiac"
+CH65,Fixed-wing,1P/S,Light,I,I,,"AMD, CH-650 Zodiac"
+CH7,Helicopter,1P/S,Light,I,I,,"HELI-SPORT, CH-7 Kompress"
+CH70,Fixed-wing,1P/S,Light,I,I,,
+CH75,Fixed-wing,1P/S,Light,I,I,,
+CH7A,Fixed-wing,1P/S,Light,I,I,1,
+CH7B,Fixed-wing,1P/S,Light,I,I,1,
+CH80,Fixed-wing,1P/S,Light,I,I,,
+CHAN,Fixed-wing,1P/S,Light,I,I,,"CADCOR, Chanute"
+CHCS,Fixed-wing,1P/S,Light,I,I,,"ALPAERO, Choucas NOIN , Choucas"
+CHIC,Fixed-wing,1P/S,Light,I,I,,"PODESVA, Chico"
+CHIF,Helicopter,1P/S,Light,I,I,,"PAWNEE, Chief"
+CHIN,Fixed-wing,1P/S,Light,I,I,,"ASAP, Chinook"
+CHIP,Fixed-wing,1P/S,Light,I,I,,"LEGER, Super-Chipmunk SUPER-CHIPMUNK, Super-Chipmunk"
+CHR1,Fixed-wing,1P/S,Light,I,I,,"ELMWOOD, CA-05 Christavia Mk1"
+CHR4,Fixed-wing,1P/S,Light,I,I,,"ELMWOOD, CH-8 Christavia Mk4"
+CHSY,Gyroplane,1P/S,Light,I,I,,"CHAYAIR, Sycamore"
+CICA,Fixed-wing,2P/S,Light,I,II,,"HYDROPLANE, Cicada HYDROPLANE, SkyWind"
+CJ1,Fixed-wing,1P/S,Light,I,I,,"CORBY, CJ-1 Starlet"
+CJ6,Fixed-wing,1P/S,Light,I,I,,
+CKUO,Fixed-wing,2J/S+,Medium,H,III,,"AIDC, F-CK-1 Ching-Kuo"
+CL30,Fixed-wing,2J/S+,Medium,H,III,7,"BOMBARDIER, BD-100 Challenger 300"
+CL35,Fixed-wing,2J/S+,Medium,H,III,7,"BOMBARDIER, BD-100 Challenger 350 BOMBARDIER, BD-100 Challenger 3500"
+CL41,Fixed-wing,1J/S,Light,I,III,,"CANADAIR, CL-41 Tutor CANADAIR, CT-114 Tutor"
+CL4G,Fixed-wing,4T/L,Medium,F,III,,"CANADAIR, CL-44-O Guppy CONROY, CL-44-O Guppy"
+CL60,Fixed-wing,2J/L,Medium,G,III,8,
+CLA,Fixed-wing,1P/S,Light,I,I,,
+CLB1,Fixed-wing,1P/S,Light,I,I,,
+CLBR,Fixed-wing,1P/S,Light,I,I,,"FISHER, Celebrity FISHER AERO, Celebrity"
+CLD2,Gyroplane,1P/S,Light,I,I,,"ROTORTEC, Cloud Dancer 2"
+CLDS,Fixed-wing,1P/S,Light,I,I,,
+CLON,Gyroplane,1P/S,Light,I,I,,"AUTOGYRO, Cavalon ROTORSPORT, Cavalon"
+CMA3,Fixed-wing,1P/S,Light,I,I,,"COLYAER, Martin 3"
+CMAS,Fixed-wing,1P/S,Light,I,I,,
+CMD1,Gyroplane,1P/S,Light,I,I,,"AIR COMMAND, Commander 147"
+CMDE,Gyroplane,1P/S,Light,I,I,,"AIR COMMAND, Commander Elite Side-by-Side"
+CMDT,Gyroplane,1P/S,Light,I,I,,"AIR COMMAND, Commander Elite Tandem"
+CN12,Fixed-wing,1P/S,Light,I,I,,"CIRCA, Nieuport 12-7/8"
+CN35,Fixed-wing,2T/S+,Medium,H,III,,
+CNBR,Fixed-wing,2J/L,Medium,G,III,,
+CNDR,Fixed-wing,2T/S,Light,I,II,,"GENERAL AVIA, F-20TP Condor"
+CNUK,Fixed-wing,1P/S,Light,I,I,,"FLEET, 80 Canuck LEAVENS, 80 Canuck"
+CO50,Fixed-wing,1P/S,Light,I,I,,"COBALT, Co-50 Valkyrie"
+COAR,Fixed-wing,1P/S,Light,I,I,,"COBRA, Arrow"
+COBR,Fixed-wing,1P/S,Light,I,I,,"DEBORDE-ROLLAND, Cobra"
+COL3,Fixed-wing,1P/S,Light,I,I,6,
+COL4,Fixed-wing,1P/S,Light,I,I,6,
+COLT,Fixed-wing,1P/S,Light,I,I,,"TEXAS AIRCRAFT, Colt TEXAS AIRCRAFT, TA-01"
+COMU,Helicopter,1P/S,Light,I,I,,
+CONI,Fixed-wing,4P/L,Medium,F,III,9,
+CORO,Fixed-wing,1P/S,Light,I,I,,
+CORR,Fixed-wing,1P/S,Light,I,I,,"SIVEL, SD-27 Corriedale"
+CORS,Fixed-wing,1P/S+,Medium,H,III,,
+CORV,Fixed-wing,2P/S,Light,I,II,,"WOLFSBERG, Corvus"
+COUG,Fixed-wing,1P/S,Light,I,I,,
+COUR,Fixed-wing,1P/S,Light,I,I,1,
+COY2,Fixed-wing,1P/S,Light,I,I,,"RAND, S-6 Coyote 2"
+COZJ,Fixed-wing,1J/S,Light,I,III,,"CO-Z, CozyJet"
+COZY,Fixed-wing,1P/S,Light,I,I,,
+CP10,Fixed-wing,1P/S,Light,I,I,4,
+CP13,Fixed-wing,1P/S,Light,I,I,,
+CP20,Fixed-wing,1P/S,Light,I,I,4,"CAARP, CAP-20 MUDRY, CAP-20"
+CP21,Fixed-wing,1P/S,Light,I,I,,"MUDRY, CAP-21"
+CP22,Fixed-wing,1P/S,Light,I,I,,
+CP23,Fixed-wing,1P/S,Light,I,I,,
+CP30,Fixed-wing,1P/S,Light,I,I,,
+CP32,Fixed-wing,1P/S,Light,I,I,,
+CP60,Fixed-wing,1P/S,Light,I,I,,
+CP65,Fixed-wing,1P/S,Light,I,I,,"PORTERFIELD, CP-65 Collegiate"
+CP75,Fixed-wing,1P/S,Light,I,I,,
+CP80,Fixed-wing,1P/S,Light,I,I,,
+CP90,Fixed-wing,1P/S,Light,I,I,,"PIEL, CP-90 Pinocchio 2"
+CPNA,Fixed-wing,1P/S,Light,I,I,,"PENA, Capena"
+CPUP,Fixed-wing,1P/S,Light,I,I,,"CULP, Sopwith Pup"
+CR10,Fixed-wing,1P/S,Light,I,I,,
+CRBN,Fixed-wing,1P/S,Light,I,I,,"CURTISS, 50 Robin CURTISS-ROBERTSON, 50 Robin"
+CRER,Fixed-wing,1P/S,Light,I,I,,"RANS, S-7 Courier"
+CRES,Fixed-wing,1T/S,Light,I,I,,"NEW ZEALAND, Cresco PACIFIC AEROSPACE, Cresco"
+CRJ1,Fixed-wing,2J/L,Medium,G,III,7,"CANADAIR, CL-600 Regional Jet CRJ-100 CANADAIR, CL-600 Regional Jet RJ-100"
+CRJ2,Fixed-wing,2J/L,Medium,G,III,7,
+CRJ7,Fixed-wing,2J/L,Medium,G,III,7,
+CRJ9,Fixed-wing,2J/L,Medium,G,III,8,
+CRJX,Fixed-wing,2J/L,Medium,G,III,8,"BOMBARDIER, CL-600 Regional Jet CRJ-1000"
+CRUZ,Fixed-wing,1P/S,Light,I,I,,
+CT4,Fixed-wing,1P/S,Light,I,I,,
+CTAH,Fixed-wing,1P/S,Light,I,I,,"RAINBOW, Cheetah RAINBOW SKYREACH, Cheetah"
+CUB2,Fixed-wing,1P/S,Light,I,I,,"ACES HIGH, Cuby 2"
+CUCA,Fixed-wing,1P/S,Light,I,I,,
+CUDA,Fixed-wing,1P/S,Light,I,I,,"LANCAIR, NLA-275 Barracuda"
+CULP,Fixed-wing,1P/S,Light,I,I,,"CULP, Special"
+CULV,Fixed-wing,1P/S,Light,I,I,,"CULVER, V"
+CULX,Fixed-wing,2P/S,Light,I,II,,"FISHER AERO, Culex"
+CVLP,Fixed-wing,2P/L,Medium,F,III,7,
+CVLT,Fixed-wing,2T/L,Medium,F,III,7,
+CX5,Fixed-wing,1P/S,Light,I,I,,"THATCHER, CX-5"
+CYGT,Fixed-wing,1P/S,Light,I,I,,"HAWKER, Cygnet HAWKER, Cygnet Replica"
+D1,Fixed-wing,2P/S,Light,I,II,,"DERRINGER, New Derringer WING, D-1 Derringer"
+D11,Fixed-wing,1P/S,Light,I,I,,
+D139,Fixed-wing,1P/S,Light,I,I,,
+D140,Fixed-wing,1P/S,Light,I,I,,
+D150,Fixed-wing,1P/S,Light,I,I,,"JODEL, D-150 Mascaret SAN, D-150 Mascaret"
+D18,Fixed-wing,1P/S,Light,I,I,,
+D201,Fixed-wing,1P/S,Light,I,I,,"D'APUZZO, D-201 Sportwing"
+D21,Fixed-wing,1P/S,Light,I,I,,"FOKKER, D-21 Replica"
+D228,Fixed-wing,2T/S+,Light,I,III,2,
+D25,Fixed-wing,1P/S,Light,I,I,,"NEW STANDARD, D-25"
+D250,Fixed-wing,1P/S,Light,I,I,,"CENTRE EST, DR-200 CENTRE EST, DR-250 Capitaine"
+D253,Fixed-wing,1P/S,Light,I,I,,"CENTRE EST, DR-253 Regent"
+D28D,Fixed-wing,2P/S,Light,I,II,1,
+D28T,Fixed-wing,2T/S,Light,I,II,1,"DORNIER, 128-6 Turbo Skyservant DORNIER, Do-28D-6 Turbo Skyservant"
+D31,Fixed-wing,1P/S,Light,I,I,,
+D328,Fixed-wing,2T/S+,Medium,H,III,7,
+D39,Fixed-wing,1P/S,Light,I,I,,"AKAFLIEG DARMSTADT, D-39"
+D4,Fixed-wing,1P/S,Light,I,I,,"AUSTER, D-4 BEAGLE-AUSTER, D-4"
+D5,Fixed-wing,1P/S,Light,I,I,,
+D5TU,Fixed-wing,1P/S,Light,I,I,,"DRUINE, D-5 Turbi"
+D6,Fixed-wing,1P/S,Light,I,I,,"AUSTER, D-6 BEAGLE-AUSTER, D-6"
+D6CR,Fixed-wing,1P/S,Light,I,I,,
+D7,Fixed-wing,1P/S,Light,I,I,,"FOKKER, D-7 Replica"
+D8,Fixed-wing,1P/S,Light,I,I,,"FOKKER, D-8 Replica"
+DA2,Fixed-wing,1P/S,Light,I,I,,"DAVIS, DA-2"
+DA36,Fixed-wing,1E/S,Light,I,I,,"DIAMOND, DA-36 E-Star"
+DA40,Fixed-wing,1P/S,Light,I,I,4,
+DA42,Fixed-wing,2P/S,Light,I,II,4,
+DA5,Fixed-wing,1P/S,Light,I,I,,"DAVIS, DA-5"
+DA50,Fixed-wing,1P/S,Light,I,I,,"DIAMOND, DA-50 WANFENG DIAMOND, DA-50"
+DA62,Fixed-wing,2P/S,Light,I,II,,"DIAMOND, DA-62"
+DAHU,Fixed-wing,1P/S,Light,I,I,,"PENA, Dahu"
+DAKH,Fixed-wing,1P/S,Light,I,I,,"FISHER, Dakota Hawk"
+DAL1,Fixed-wing,1P/S,Light,I,I,,"SPEZIO, DAL-1 Tuholer"
+DAL4,Fixed-wing,1P/S,Light,I,I,,"DALLACH, D-4 Fascination UL-JIH, Fascination"
+DAL5,Fixed-wing,1P/S,Light,I,I,,"DALLACH, D-5 Evolution UL-JIH, Evolution"
+DART,Fixed-wing,1P/S,Light,I,I,,"PARRISH, Dart"
+DC10,Fixed-wing,3J/H,Heavy,C,III,9,
+DC2,Fixed-wing,2P/S+,Medium,H,III,,"DOUGLAS, DC-2"
+DC3,Fixed-wing,2P/S+,Medium,H,III,,
+DC3S,Fixed-wing,2P/S+,Medium,H,III,8,
+DC3T,Fixed-wing,2T/S+,Medium,H,III,,
+DC4,Fixed-wing,4P/L,Medium,F,III,7,
+DC6,Fixed-wing,4P/L,Medium,F,III,7,
+DC7,Fixed-wing,4P/L,Medium,F,III,8,"DOUGLAS, DC-7 DOUGLAS, DC-7 Seven Seas"
+DC85,Fixed-wing,4J/H,Heavy,D,III,9,
+DC86,Fixed-wing,4J/H,Heavy,D,III,,"DOUGLAS, DC-8-60 MCDONNELL DOUGLAS, DC-8-60"
+DC87,Fixed-wing,4J/H,Heavy,D,III,9,"DOUGLAS, DC-8-70 MCDONNELL DOUGLAS, DC-8-70"
+DC91,Fixed-wing,2J/L,Medium,G,III,8,"DOUGLAS, DC-9-10 MCDONNELL DOUGLAS, DC-9-10"
+DC92,Fixed-wing,2J/L,Medium,F,III,8,"DOUGLAS, DC-9-20 MCDONNELL DOUGLAS, DC-9-20"
+DC93,Fixed-wing,2J/L,Medium,F,III,8,
+DC94,Fixed-wing,2J/L,Medium,F,III,8,"DOUGLAS, DC-9-40 MCDONNELL DOUGLAS, DC-9-40"
+DC95,Fixed-wing,2J/L,Medium,F,III,8,"DOUGLAS, DC-9-50 MCDONNELL DOUGLAS, DC-9-50"
+DEAG,Gyroplane,1P/S,Light,I,I,,"AMAX, Double Eagle"
+DEFI,Fixed-wing,2P/S,Light,I,II,,"RUTAN, 40 Defiant"
+DELF,Fixed-wing,1P/S,Light,I,I,,"LYAVIN, Delfin"
+DFL6,Fixed-wing,1P/S,Light,I,I,,"DAMOURE-FABRE, DFL-6 Saphir"
+DFLY,Fixed-wing,1P/S,Light,I,I,,"SLIPSTREAM, Dragonfly VIKING (1), Dragonfly"
+DG15,Fixed-wing,1P/S,Light,I,I,,
+DG1T,Fixed-wing,1P/S,Light,I,I,,
+DG40,Fixed-wing,1P/S,Light,I,I,,"GLASER-DIRKS, DG-400"
+DG50,Fixed-wing,1P/S,Light,I,I,,"GLASER-DIRKS, DG-500M"
+DG60,Fixed-wing,1P/S,Light,I,I,,"GLASER-DIRKS, DG-600M"
+DG80,Fixed-wing,1P/S,Light,I,I,,"DG FLUGZEUGBAU, DG-800 GLASER-DIRKS, DG-800"
+DH2T,Fixed-wing,1T/S,Light,I,I,2,"DE HAVILLAND CANADA, DHC-2 Mk3 Turbo Beaver"
+DH3T,Fixed-wing,1T/S,Light,I,I,,"DE HAVILLAND CANADA, DHC-3 Turbo Otter VARDAX, Vazar Dash 3"
+DH4T,Fixed-wing,2T/S+,Medium,H,III,,"DE HAVILLAND CANADA, DHC-4 Turbo Caribou"
+DH60,Fixed-wing,1P/S,Light,I,I,,
+DH80,Fixed-wing,1P/S,Light,I,I,,"DE HAVILLAND, DH-80 Puss Moth"
+DH82,Fixed-wing,1P/S,Light,I,I,,
+DH83,Fixed-wing,1P/S,Light,I,I,,"DE HAVILLAND, DH-83 Fox Moth"
+DH84,Fixed-wing,2P/S,Light,I,II,,"DE HAVILLAND, DH-84 Dragon DE HAVILLAND AUSTRALIA, DH-84 Dragon"
+DH85,Fixed-wing,1P/S,Light,I,I,,"DE HAVILLAND, DH-85 Leopard Moth"
+DH87,Fixed-wing,1P/S,Light,I,I,,"DE HAVILLAND, DH-87 Hornet Moth"
+DH88,Fixed-wing,2P/S,Light,I,II,,"DE HAVILLAND, DH-88 Comet Replica"
+DH89,Fixed-wing,2P/S,Light,I,II,,"DE HAVILLAND, DH-89 Dragon Rapide"
+DH8A,Fixed-wing,2T/L,Medium,G,III,4,
+DH8B,Fixed-wing,2T/L,Medium,G,III,4,
+DH8C,Fixed-wing,2T/L,Medium,G,III,5,
+DH8D,Fixed-wing,2T/L,Medium,F,III,6,"BOMBARDIER, DHC-8-400 Dash 8 DE HAVILLAND CANADA, DHC-8-400 Dash 8"
+DH90,Fixed-wing,2P/S,Light,I,II,,"DE HAVILLAND, DH-90 Dragonfly"
+DH94,Fixed-wing,1P/S,Light,I,I,,"DE HAVILLAND, DH-94 Moth Minor"
+DHA3,Fixed-wing,3P/S,Light,I,III,,"DE HAVILLAND AUSTRALIA, DHA-3 Drover"
+DHC1,Fixed-wing,1P/S,Light,I,I,1,
+DHC2,Fixed-wing,1P/S,Light,I,I,2,
+DHC3,Fixed-wing,1P/S,Light,I,I,1,
+DHC4,Fixed-wing,2P/S+,Medium,H,III,5,
+DHC5,Fixed-wing,2T/L,Medium,F,III,1,
+DHC6,Fixed-wing,2T/S,Light,I,II,4,
+DHC7,Fixed-wing,4T/L,Medium,F,III,2,
+DIES,Fixed-wing,1P/S,Light,I,I,,"PENNEC-LUCAS, Dieselis"
+DIMO,Fixed-wing,1P/S,Light,I,I,,
+DISC,Fixed-wing,1P/S,Light,I,I,,
+DJET,Fixed-wing,1J/S,Light,I,III,,"DIAMOND, DJ-1 D-Jet"
+DJIN,Helicopter,1T/S,Light,I,I,,
+DLH2,Fixed-wing,1E/S,Light,I,I,,"LANGE, E-1 Antares DLR-H2"
+DO27,Fixed-wing,1P/S,Light,I,I,1,
+DO28,Fixed-wing,2P/S,Light,I,II,,
+DOCX,Fixed-wing,1P/S,Light,I,I,,"KOVACH-ELMENDORF, ES-3 Doc's RX"
+DON,Fixed-wing,1P/S,Light,I,I,,"UNIKOMTRANSO, Don"
+DOVE,Fixed-wing,2P/S,Light,I,II,4,
+DR1,Fixed-wing,1P/S,Light,I,I,,
+DR10,Fixed-wing,1P/S,Light,I,I,,
+DR22,Fixed-wing,1P/S,Light,I,I,,"CENTRE EST, DR-220 2+2 CENTRE EST, DR-221 Dauphin"
+DR30,Fixed-wing,1P/S,Light,I,I,,
+DR40,Fixed-wing,1P/S,Light,I,I,,
+DRAG,Helicopter,1P/S,Light,I,I,,
+DRIF,Fixed-wing,1P/S,Light,I,I,,"AUSTFLIGHT, Drifter"
+DRTG,Fixed-wing,1P/S,Light,I,I,,
+DSA1,Fixed-wing,1P/S,Light,I,I,,"SMITH (1), DSA-1 Miniplane"
+DSK,Fixed-wing,1P/S,Light,I,I,,"KILLINGSWORTH, DSK-1 Hawk KILLINGSWORTH, DSK-2 Golden Hawk"
+DSLK,Fixed-wing,1P/S,Light,I,I,,"DRIGGS, Skylark"
+DT45,Fixed-wing,1T/S,Light,I,I,,
+DTA1,Fixed-wing,1P/S,Light,I,I,,"VERHEES, D-1 Delta"
+DTA2,Fixed-wing,1P/S,Light,I,I,,"VERHEES, D-2 Delta"
+DUB2,Fixed-wing,1P/S,Light,I,I,,"DUBNA, 2 Osa TAIFUN, DMZ-2 Osa"
+DUCE,Fixed-wing,1P/S,Light,I,I,,"BAKENG, Deuce BAKENG, Duce"
+DUOD,Fixed-wing,1P/S,Light,I,I,,
+DUR5,Fixed-wing,1P/S,Light,I,I,,"DURAND, Mk5"
+DV1,Fixed-wing,1P/S,Light,I,I,,"DOVA, DV-1 Skylark MARSDEN, Skylark"
+DV2,Fixed-wing,1P/S,Light,I,I,,"DOVA, DV-2 Infinity"
+DV20,Fixed-wing,1P/S,Light,I,I,2,
+DW1,Fixed-wing,1P/S,Light,I,I,,"BELLANCA, DW-1 Eagle EAGLE, DW-1 Eagle"
+DWD2,Fixed-wing,1P/S,Light,I,I,,
+DYH2,Helicopter,1P/S,Light,I,I,,"DYNALI, H-2"
+E110,Fixed-wing,2T/S+,Light,I,III,7,
+E120,Fixed-wing,2T/S+,Medium,H,III,7,
+E121,Fixed-wing,2T/S,Light,I,II,,
+E135,Fixed-wing,2J/L,Medium,G,III,7,
+E145,Fixed-wing,2J/L,Medium,G,III,7,
+E170,Fixed-wing,2J/L,Medium,G,III,7,"EMBRAER, 170 EMBRAER, ERJ-170-100"
+E190,Fixed-wing,2J/L,Medium,F,III,7,
+E195,Fixed-wing,2J/L,Medium,F,III,,"EMBRAER, 195 EMBRAER, ERJ-190-200"
+E2,Fixed-wing,2T/L,Medium,G,III,,
+E200,Fixed-wing,1P/S,Light,I,I,,"EXTRA, EA-200"
+E230,Fixed-wing,1P/S,Light,I,I,,"EXTRA, EA-230"
+E290,Fixed-wing,2J/L,Medium,F,III,,"EMBRAER, E190-E2 EMBRAER, ERJ-190-300"
+E295,Fixed-wing,2J/L,Medium,F,III,,"EMBRAER, E195-E2 EMBRAER, ERJ-190-400"
+E29E,Fixed-wing,1E/S,Light,I,I,,"BINDER (2), EB-29DE"
+E2CB,Fixed-wing,1P/S,Light,I,I,,"TAYLOR (1), E-2 Cub"
+E300,Fixed-wing,1P/S,Light,I,I,,
+E314,Fixed-wing,1T/S,Light,I,I,,
+E350,Fixed-wing,1T/S,Light,I,I,,"CESSNA, E350"
+E35L,Fixed-wing,2J/L,Medium,G,III,7,
+E390,Fixed-wing,2J/L,Medium,F,III,,
+E3CF,Fixed-wing,4J/H,Heavy,D,III,,
+E3TF,Fixed-wing,4J/H,Heavy,D,III,,
+E400,Fixed-wing,1P/S,Light,I,I,,"EXTRA, EA-400"
+E45X,Fixed-wing,2J/L,Medium,G,III,7,"EMBRAER, EMB-145XR EMBRAER, ERJ-145XR"
+E500,Fixed-wing,1T/S,Light,I,I,,"EXTRA, EA-500"
+E50P,Fixed-wing,2J/S,Light,I,III,7,"EMBRAER, EMB-500 Phenom 100"
+E530,Fixed-wing,2J/S+,Medium,H,III,,"CESSNA, E530 Scorpion TEXTRON AIRLAND, E530 Scorpion"
+E545,Fixed-wing,2J/S+,Medium,H,III,6,"EMBRAER, EMB-545 Legacy 450 EMBRAER, EMB-545 Praetor 500"
+E550,Fixed-wing,2J/S+,Medium,H,III,6,"EMBRAER, EMB-550 Legacy 500 EMBRAER, EMB-550 Praetor 600"
+E55P,Fixed-wing,2J/S+,Medium,H,III,6,"EMBRAER, EMB-505 Phenom 300"
+E6,Fixed-wing,4J/H,Heavy,D,III,,"BOEING, E-6 Mercury"
+E737,Fixed-wing,2J/L,Medium,F,III,,"BOEING, 737-700 AEWC BOEING, 737-700 Wedgetail"
+E75L,Fixed-wing,2J/L,Medium,G,III,6,"EMBRAER, 175 (long wing)  EMBRAER, ERJ-170-200 (long wing)"
+E75S,Fixed-wing,2J/L,Medium,G,III,6,"EMBRAER, 175 (short wing)  EMBRAER, ERJ-170-200 (short wing)"
+E767,Fixed-wing,2J/H,Heavy,D,III,,"BOEING, E-767"
+EA40,Fixed-wing,1J/S,Light,I,III,,"ECLIPSE, Eclipse 400"
+EA50,Fixed-wing,2J/S,Light,I,III,4,"ECLIPSE, Eclipse 500 ECLIPSE, Eclipse 550"
+EAEA,Fixed-wing,1P/S,Light,I,I,,"GROSSO, Easy Eagle"
+EAGL,Fixed-wing,1P/S,Light,I,I,,"AVIAT, Eagle CHRISTEN, Eagle"
+EAGT,Fixed-wing,1P/S,Light,I,I,,"AMEAGLE, American Eaglet"
+EAGX,Fixed-wing,1P/S,Light,I,I,,
+EB29,Fixed-wing,1P/S,Light,I,I,,"BINDER (2), EB-29 BINDER (2), EB-29D"
+EBOY,Fixed-wing,1P/S,Light,I,I,,"FMA, 20 El Boyero PETROLINI, IAe-20 El Boyero"
+EC20,Helicopter,1T/S,Light,I,I,,
+EC25,Helicopter,2T/S+,Medium,H,I,,
+EC30,Helicopter,1T/S,Light,I,I,,
+EC35,Helicopter,2T/S,Light,I,I,,
+EC45,Helicopter,2T/S,Light,I,I,,
+EC55,Helicopter,2T/S,Light,I,I,,
+EC6,Fixed-wing,1P/S,Light,I,I,,"CROSES, EC-6 Criquet CROSES, EC-8 Tourisme"
+EC75,Helicopter,2T/S+,Medium,I,I,,
+ECHO,Fixed-wing,1P/S,Light,I,I,,
+EDGE,Fixed-wing,1P/S,Light,I,I,,"ZIVKO, Edge 540 ZIVKO, Edge 540A"
+EDGT,Fixed-wing,1P/S,Light,I,I,,"ZIVKO, Edge 540 T"
+EF2,Fixed-wing,1E/S,Light,I,I,,"BYE AEROSPACE, eFlyer 2"
+EFAN,Fixed-wing,2E/S,Light,I,II,,"AIRBUS, E-Fan"
+EFOX,Fixed-wing,1P/S,Light,I,I,,
+EFUS,Fixed-wing,1E/S,Light,I,I,,"MAGNUS, MG-11 eFusion"
+EGL3,Helicopter,1T/S,Light,I,I,,"ROTORWAY, Eagle 300T"
+EGRT,Fixed-wing,1T/S,Light,I,I,,"GROB, D-500 Egrett 2 GROB, G-520 Strato 1"
+EH10,Helicopter,3T/S+,Medium,H,I,,
+EL10,Gyroplane,1P/S,Light,I,I,,"ELA AVIACION, ELA-10 Eclipse"
+EL20,Fixed-wing,1P/S,Light,I,I,,"ELITAR, IE-202"
+ELA7,Gyroplane,1P/S,Light,I,I,,
+ELF,Fixed-wing,1P/S,Light,I,I,,"PARNALL, Elf"
+ELIT,Fixed-wing,2J/S,Light,I,III,,"AIR, Epic Elite  EPIC AIRCRAFT, Epic Elite"
+ELPS,Fixed-wing,1P/S,Light,I,I,,"EXPLORER (1), Ellipse"
+ELSP,Fixed-wing,1P/S,Light,I,I,,"A2 CZ, Ellipse Spirit"
+ELST,Fixed-wing,1P/S,Light,I,I,,"PUTZER, Elster"
+ELTO,Helicopter,1P/S,Light,I,I,,"CONTINENTAL COPTERS, El Tomcat"
+ELTR,Fixed-wing,1P/S,Light,I,I,,"ELITAR, IE-101 Elitar"
+EM10,Fixed-wing,1J/S,Light,I,III,,"MARGANSKI, EM-10 Bielik"
+EM11,Fixed-wing,2P/S,Light,I,II,,"MARGANSKI, EM-11 Orka"
+EN28,Helicopter,1P/S,Light,I,I,,
+EN48,Helicopter,1T/S,Light,I,I,,
+EP9,Fixed-wing,1P/S,Light,I,I,,"EDGAR PERCIVAL, EP-9 LANCASHIRE, EP-9 Prospector"
+EPER,Fixed-wing,1P/S,Light,I,I,,"EPERVIER (1), Epervier"
+EPIC,Fixed-wing,1T/S,Light,I,I,,
+EPX1,Fixed-wing,1P/S,Light,I,I,,"EPERVIER (2), X-1"
+ERAC,Fixed-wing,1P/S,Light,I,I,,"DICKEY, E-Racer"
+ERCO,Fixed-wing,1P/S,Light,I,I,2,
+ES11,Helicopter,1T/S,Light,I,I,,
+ES13,Fixed-wing,1P/S,Light,I,I,,"CLIFFORD AEROWORKS, Spad 13 80% EARLY BIRD, Spad 13 80%"
+ESCA,Fixed-wing,1T/S,Light,I,I,,"AIR, Epic Escape  EPIC AIRCRAFT, Epic Escape"
+ESCP,Fixed-wing,1P/S,Light,I,I,,"JUST, Escapade REALITY, Escapade"
+ETA,Fixed-wing,1P/S,Light,I,I,,"BINDER (2), Eta ETA AIRCRAFT, Eta"
+ETAR,Fixed-wing,1J/S+,Medium,H,III,,"DASSAULT, Etendard 4 DASSAULT, Super Etendard"
+EUFI,Fixed-wing,2J/L,Medium,G,III,,
+EUPA,Fixed-wing,1P/S,Light,I,I,,"EUROPA, Europa"
+EURT,Fixed-wing,1P/S,Light,I,I,,"FFT, Eurotrainer 2000"
+EV55,Fixed-wing,2T/S,Light,I,II,,"EVEKTOR, EV-55 Outback"
+EV97,Fixed-wing,1P/S,Light,I,I,,"EVEKTOR, EV-97 EuroStar EVEKTOR, EV-97 Harmony"
+EVAN,Fixed-wing,2P/S,Light,I,II,,"EVANGEL, 4500 Evangel"
+EVIC,Fixed-wing,1J/S,Light,I,III,,"AIR, Epic Victory  EPIC AIRCRAFT, Epic Victory"
+EVOP,Fixed-wing,1P/S,Light,I,I,,"LANCAIR, Evolution Piston"
+EVOT,Fixed-wing,1T/S,Light,I,I,,
+EVSS,Fixed-wing,1P/S,Light,I,I,,"EVEKTOR, SportStar"
+EX5T,Fixed-wing,1T/S,Light,I,I,,"AEA, Explorer 500T EXPLORER (1), Explorer 500T"
+EXEC,Helicopter,1P/S,Light,I,I,,"HUZHOU TAIXIANG, Exec ROTORWAY, Exec"
+EXEJ,Helicopter,1T/S,Light,I,I,,"ROTORWAY, JetExec"
+EXNG,Fixed-wing,1P/S,Light,I,I,,"EXTRA, NG"
+EXPL,Helicopter,2T/S,Light,I,I,,
+EXPR,Fixed-wing,1P/S,Light,I,I,,
+EZFL,Fixed-wing,1P/S,Light,I,I,,
+EZFT,Fixed-wing,2P/S,Light,I,II,,"BLUE YONDER, Twin E-Z Flyer"
+EZHV,Fixed-wing,1P/S,Light,I,I,,"BLUE YONDER, E-Z Harvard"
+EZKC,Fixed-wing,1P/S,Light,I,I,,"BLUE YONDER, E-Z King Cobra"
+F1,Fixed-wing,2J/S+,Medium,H,III,,"MITSUBISHI, F-1"
+F100,Fixed-wing,2J/L,Medium,F,III,7,"FOKKER, 100"
+F104,Fixed-wing,1J/S+,Medium,H,III,,
+F117,Fixed-wing,2J/L,Medium,G,III,,"LOCKHEED, F-117 Night Hawk"
+F13,Fixed-wing,1P/S,Light,I,I,,"JUNKERS, F-13 Replica RIMOWA, F-13 Replica"
+F14,Fixed-wing,2J/L,Medium,G,III,,"GRUMMAN, F-14 Tomcat"
+F15,Fixed-wing,2J/L,Medium,G,III,,
+F156,Fixed-wing,1P/S,Light,I,I,,
+F16,Fixed-wing,1J/L,Medium,G,III,,
+F18H,Fixed-wing,2J/L,Medium,G,III,,
+F18S,Fixed-wing,2J/L,Medium,G,III,,
+F1FV,Fixed-wing,1P/S,Light,I,I,,"AVION, F-1 Favorit"
+F2,Fixed-wing,1J/L,Medium,G,III,,"MITSUBISHI, F-2"
+F22,Fixed-wing,2J/L,Medium,G,III,,"LOCKHEED MARTIN, F-22 Raptor LOCKHEED MARTIN, L-645 Raptor"
+F260,Fixed-wing,1P/S,Light,I,I,,
+F26T,Fixed-wing,1T/S,Light,I,I,3,
+F27,Fixed-wing,2T/L,Medium,F,III,5,
+F28,Fixed-wing,2J/L,Medium,G,III,7,"FOKKER, F-28 Fellowship"
+F2TH,Fixed-wing,2J/S+,Medium,H,III,8,"DASSAULT, Falcon 2000"
+F30,Fixed-wing,1P/S,Light,I,I,,"GOLDEN AVIO, F-30 Brio GOLDEN CAR, F-30 Brio"
+F35,Fixed-wing,1J/L,Medium,G,III,,"LOCKHEED MARTIN, F-35A Lightning 2 LOCKHEED MARTIN, F-35C Lightning 2"
+F3F,Fixed-wing,1P/S,Light,I,I,,
+F4,Fixed-wing,2J/L,Medium,G,III,,
+F402,Fixed-wing,1T/S,Light,I,I,,"FALCON AIR, Falcon 402"
+F406,Fixed-wing,2T/S,Light,I,II,6,
+F41E,Fixed-wing,2P/S,Light,I,II,,"AEROSAMARA, F-41 El'brus"
+F421,Fixed-wing,1T/S,Light,I,I,,"FALCON AIR, Falcon 421"
+F5,Fixed-wing,2J/S+,Medium,H,III,,
+F50,Fixed-wing,2T/L,Medium,F,III,3,
+F5SA,Fixed-wing,2J/S+,Medium,H,III,,"IRIAF, S-100 Saeghe"
+F60,Fixed-wing,2T/L,Medium,F,III,,"FOKKER, 60"
+F600,Fixed-wing,2T/S,Light,I,II,4,"SIAI-MARCHETTI, SF-600 Canguro VULCANAIR, SF-600 Canguro"
+F70,Fixed-wing,2J/L,Medium,F,III,,"FOKKER, 70"
+F8,Fixed-wing,1J/S+,Medium,H,III,,
+F86,Fixed-wing,1J/L,Medium,G,III,,
+F8L,Fixed-wing,1P/S,Light,I,I,,
+F900,Fixed-wing,3J/L,Medium,G,III,8,"DASSAULT, Falcon 900 DASSAULT, Mystère 900"
+F9F,Fixed-wing,1J/S+,Medium,I,III,,"GRUMMAN, F9F Panther GRUMMAN, G-79 Panther"
+FA01,Fixed-wing,1P/S,Light,I,I,,"FLÄMING AIR, FA-01 Saphir FLÄMING AIR, FA-01 Smaragd"
+FA02,Fixed-wing,1P/S,Light,I,I,,"FLÄMING AIR, FA-02 Smaragd VLA"
+FA03,Fixed-wing,1P/S,Light,I,I,,"FLÄMING AIR, FA-03 Smaragd TMG"
+FA04,Fixed-wing,1P/S,Light,I,I,,"FLÄMING AIR, FA-04 Peregrine"
+FA10,Fixed-wing,2J/S+,Medium,H,III,8,
+FA11,Fixed-wing,1P/S,Light,I,I,,"FAIRCHILD (2), F-11 Husky"
+FA20,Fixed-wing,2J/S+,Medium,H,III,7,
+FA24,Fixed-wing,1P/S,Light,I,I,,
+FA50,Fixed-wing,3J/S+,Medium,H,III,8,"DASSAULT, Falcon 50 DASSAULT, Mystère 50"
+FA62,Fixed-wing,1P/S,Light,I,I,,
+FA6X,Fixed-wing,2J/L,Medium,G,III,,"DASSAULT, Falcon 6X"
+FA7X,Fixed-wing,3J/L,Medium,G,III,4,"DASSAULT, Falcon 7X"
+FA8X,Fixed-wing,3J/L,Medium,G,III,,"DASSAULT, Falcon 8X"
+FAET,Fixed-wing,1P/S,Light,I,I,,"ATEC, 321 Faeta ATEC, 322 Faeta"
+FALC,Fixed-wing,1P/S,Light,I,I,,"AMERICAN AIRCRAFT, Falcon XP"
+FALM,Fixed-wing,1P/S,Light,I,I,,"MILES, M-3 Falcon Major PHILLIPS & POWIS, M-3 Falcon Major"
+FANL,Fixed-wing,1P/S,Light,I,I,,"RHEIN, FL-1 Fanliner"
+FANT,Fixed-wing,1T/S,Light,I,I,,"RHEIN, Fantrainer RTAF, Fantrainer"
+FB1A,Fixed-wing,1P/S,Light,I,I,,"BOWERS, Fly Baby 1A"
+FB1B,Fixed-wing,1P/S,Light,I,I,,"BOWERS, Fly Baby 1B"
+FB5,Fixed-wing,1P/S,Light,I,I,,"EURO-FLY, FB-5 Star Light"
+FBA2,Fixed-wing,1P/S,Light,I,I,,
+FC1,Fixed-wing,1J/S+,Medium,H,III,,
+FD2E,Fixed-wing,1E/S,Light,I,I,,"FLIGHT DESIGN, F-2e"
+FDCT,Fixed-wing,1P/S,Light,I,I,,"FLIGHT DESIGN, CT"
+FDF2,Fixed-wing,1P/S,Light,I,I,,"FLIGHT DESIGN, F-2"
+FDMC,Fixed-wing,1P/S,Light,I,I,,"FLIGHT DESIGN, MC"
+FE51,Fixed-wing,1P/S,Light,I,I,,"FIGHTER ESCORT WINGS, P-51"
+FEST,Fixed-wing,1P/S,Light,I,I,,"AEROSTAR (2), 01 Festival AEROSTAR (2), R40S Festival"
+FFLY,Fixed-wing,1P/S+,Light,I,III,,"FAIREY, Firefly"
+FG01,Fixed-wing,1P/S,Light,I,I,,"FARIGOUX, FG-01 Origan"
+FGT,Fixed-wing,1P/S,Light,I,I,,"MIDWEST AEROSPORT, Formula GT"
+FH11,Helicopter,1T/S,Light,I,I,,
+FIBO,Fixed-wing,1P/S,Light,I,I,,"STARFIRE, Firebolt Convertible"
+FIKD,Fixed-wing,1P/S,Light,I,I,,"FIKE, D"
+FIKE,Fixed-wing,1P/S,Light,I,I,,"FIKE, E"
+FINC,Fixed-wing,1P/S,Light,I,I,,
+FJ10,Fixed-wing,2J/S,Light,I,III,,"AEROSTAR (1), FJ-100"
+FJR3,Fixed-wing,1P/S,Light,I,I,,"FAJR, F-3"
+FK12,Fixed-wing,1P/S,Light,I,I,,"B & F TECHNIK, FK-12 Comet"
+FK14,Fixed-wing,1P/S,Light,I,I,,"B & F TECHNIK, FK-14 Polaris"
+FK9,Fixed-wing,1P/S,Light,I,I,,"B & F TECHNIK, FK-9"
+FL3,Fixed-wing,1P/S,Light,I,I,,"AVIA (1), L-3 Aviastarlet LOMBARDI, FL-3 Aviastarlet"
+FL53,Fixed-wing,1P/S,Light,I,I,,"METEOR, FL-53"
+FL54,Fixed-wing,1P/S,Light,I,I,,"METEOR, FL-54"
+FL55,Fixed-wing,1P/S,Light,I,I,,"METEOR, FL-55"
+FLAM,Fixed-wing,2P/S+,Light,I,III,,"DASSAULT, MD-311 Flamant DASSAULT, MD-312 Flamant"
+FLE2,Fixed-wing,1P/S,Light,I,I,,"FLEET, 2"
+FLE7,Fixed-wing,1P/S,Light,I,I,,"FLEET, 7 FLEET, 7 Fawn"
+FLIZ,Fixed-wing,1P/S,Light,I,I,,"FLITZER, Z-1 Flitzer FLITZER, Z-21 Flitzer"
+FLSH,Fixed-wing,1P/S,Light,I,I,,"EURO-FLY, Flash"
+FLSS,Fixed-wing,1P/S,Light,I,I,,
+FM25,Fixed-wing,1P/S,Light,I,I,,"FLYING MACHINES, FM-250 Vampire"
+FMGO,Fixed-wing,1P/S,Light,I,I,,"AAK, Flamingo"
+FNKB,Fixed-wing,1P/S,Light,I,I,,"AKRON, Funk B FUNK, B"
+FOOF,Fixed-wing,1P/S,Light,I,I,,"STEWART (2), JD-2 Foo Fighter"
+FORT,Fixed-wing,1P/S,Light,I,I,,"FLEET, 60 Fort"
+FOUG,Fixed-wing,2J/S,Light,I,III,,
+FOX,Fixed-wing,1P/S,Light,I,I,,
+FOXT,Fixed-wing,1P/S,Light,I,I,,
+FREE,Fixed-wing,1P/S,Light,I,I,,"CABRINHA, 423 Free Spirit"
+FREL,Helicopter,3T/S+,Medium,H,I,,
+FRNT,Fixed-wing,1P/S,Light,I,I,,"SKY RAIDER, Frontier"
+FRON,Fixed-wing,1P/S,Light,I,I,,"FRONTIER, Frontier MD-2"
+FS51,Fixed-wing,1P/S,Light,I,I,,"FALCONAR, SAL P-51D Mustang"
+FT30,Fixed-wing,1P/S,Light,I,I,,"NAI, FT-300 NANJING UNIVERSITY, FT-300"
+FU24,Fixed-wing,1P/S,Light,I,I,,
+FURY,Fixed-wing,1P/S+,Light,I,III,,"HAWKER, Fury HAWKER, Sea Fury"
+FUSI,Fixed-wing,1P/S,Light,I,I,,
+FW44,Fixed-wing,1P/S,Light,I,I,,"FMA, Fw-44 Stieglitz FOCKE-WULF, Fw-44 Stieglitz"
+FW90,Fixed-wing,1P/S,Light,I,I,,"FLUG WERK, Fw-190 Replica FOCKE-WULF, Fw-190 Replica"
+FX1,Fixed-wing,1P/S,Light,I,I,,"INNOVAVIATION, FX-1"
+G1,Fixed-wing,1P/S,Light,I,I,,
+G103,Fixed-wing,1P/S,Light,I,I,,"GROB, G-103C Twin 3SL"
+G109,Fixed-wing,1P/S,Light,I,I,2,
+G115,Fixed-wing,1P/S,Light,I,I,,
+G120,Fixed-wing,1P/S,Light,I,I,,"GROB, G-120 GROB, G-120 Snunit"
+G12T,Fixed-wing,1T/S,Light,I,I,,"GROB, G-120TP"
+G140,Fixed-wing,1T/S,Light,I,I,,"GROB, G-140TP"
+G150,Fixed-wing,2J/S+,Medium,H,III,4,"GULFSTREAM AEROSPACE, Gulfstream G150 IAI, Gulfstream G150"
+G159,Fixed-wing,2T/S+,Medium,H,III,7,
+G15T,Fixed-wing,1P/S,Light,I,I,,"GROB, G-115T Acro"
+G160,Fixed-wing,1T/S,Light,I,I,,"GROB, G-160 Ranger"
+G164,Fixed-wing,1P/S,Light,I,I,1,
+G180,Fixed-wing,1P/S,Light,I,I,,"GENERAL AIRCRAFT, G1-80 Skyfarer"
+G200,Fixed-wing,1P/S,Light,I,I,,"AKROTECH, G-200 GILES, G-200"
+G202,Fixed-wing,1P/S,Light,I,I,,"AKROTECH, G-202 GILES, G-202"
+G222,Fixed-wing,2T/L,Medium,F,III,,
+G250,Fixed-wing,2J/S+,Medium,H,III,,"GULFSTREAM AEROSPACE, Gulfstream G250 IAI, Gulfstream G250"
+G280,Fixed-wing,2J/S+,Medium,H,III,7,"GULFSTREAM AEROSPACE, Gulfstream G280 IAI, Gulfstream G280"
+G2CA,Helicopter,1P/S,Light,I,I,,"GUIMBAL, G-2 Cabri"
+G2GL,Fixed-wing,1J/S,Light,I,III,,"SOKO, G-2 Galeb SOKO, N-60 Galeb"
+G2T1,Fixed-wing,1P/S,Light,I,I,,
+G3,Fixed-wing,1P/S,Light,I,I,,"REMOS, G-3 Mirage"
+G46,Fixed-wing,1P/S,Light,I,I,,"FIAT, G-46"
+G4SG,Fixed-wing,1J/S+,Light,I,III,,"SOKO, G-4 Super Galeb SOKO, N-62 Super Galeb"
+G59,Fixed-wing,1P/S,Light,I,I,,"FIAT, G-59"
+G64T,Fixed-wing,1T/S,Light,I,I,1,
+G70,Fixed-wing,1P/S,Light,I,I,,"GROPPO, G-70"
+G800,Fixed-wing,1P/S,Light,I,I,,
+G91,Fixed-wing,1J/S,Light,I,III,,"FIAT, G-91R"
+G96,Fixed-wing,2P/S+,Medium,H,III,,
+G97,Fixed-wing,1P/S,Light,I,I,,"SAI (2), G-97 Spotter"
+GA10,Fixed-wing,1T/S,Light,I,I,,"GIPPSAERO, GA-10"
+GA20,Fixed-wing,1P/S,Light,I,I,,"GIPPSLAND, GA-200 Fatman"
+GA4C,Fixed-wing,2J/L,Medium,G,III,,"GULFSTREAM AEROSPACE, G-7 Gulfstream G400"
+GA5C,Fixed-wing,2J/L,Medium,F,III,7,"GULFSTREAM AEROSPACE, G-7 Gulfstream G500"
+GA6C,Fixed-wing,2J/L,Medium,F,III,7,"GULFSTREAM AEROSPACE, G-7 Gulfstream G600"
+GA7,Fixed-wing,2P/S,Light,I,II,1,
+GA7C,Fixed-wing,2J/L,Medium,F,III,,"GULFSTREAM AEROSPACE, G-8 Gulfstream G700"
+GA8,Fixed-wing,1P/S,Light,I,I,,"GIPPSAERO, GA-8 Airvan GIPPSLAND, GA-8 Airvan"
+GA8C,Fixed-wing,2J/L,Medium,F,III,,"GULFSTREAM AEROSPACE, G-8 Gulfstream G800"
+GABR,Fixed-wing,1P/S,Light,I,I,,"BLACKSHAPE, Bk-160 Gabriel BLACKSHAPE, BS-115 Gabriel"
+GALX,Fixed-wing,2J/S+,Medium,H,III,5,
+GAUN,Fixed-wing,1P/S,Light,I,I,,"GLOSTER, Gauntlet"
+GAVI,Fixed-wing,1P/S,Light,I,I,,"AERO MERCANTIL, 358 Gavilan GAVILAN, EL-1 Gavilan 358"
+GAZL,Helicopter,1T/S,Light,I,I,,
+GB1,Fixed-wing,1P/S,Light,I,I,,"GAME COMPOSITES, GB-1 GameBird"
+GBSP,Fixed-wing,1P/S,Light,I,I,,"BEETS, GB Special"
+GC1,Fixed-wing,1P/S,Light,I,I,2,"GLOBE, GC-1 Swift TEMCO, GC-1 Swift"
+GEMI,Fixed-wing,2P/S,Light,I,II,,"MILES, M-65 Gemini"
+GENI,Fixed-wing,1E/S,Light,I,I,,"IFB, E-Genius"
+GEPE,Fixed-wing,1P/S,Light,I,I,,"AERO SERVICES, Guêpe"
+GL5T,Fixed-wing,2J/L,Medium,F,III,7,"BOMBARDIER, BD-700 Global 5000 BOMBARDIER, BD-700 Global 5500"
+GL7T,Fixed-wing,2J/L,Medium,F,III,7,
+GLAD,Fixed-wing,1P/S,Light,I,I,,"GLOSTER, Gladiator"
+GLAS,Fixed-wing,1P/S,Light,I,I,,
+GLEX,Fixed-wing,2J/L,Medium,F,III,7,
+GLF2,Fixed-wing,2J/L,Medium,G,III,8,
+GLF3,Fixed-wing,2J/L,Medium,G,III,8,
+GLF4,Fixed-wing,2J/L,Medium,G,III,8,
+GLF5,Fixed-wing,2J/L,Medium,F,III,7,
+GLF6,Fixed-wing,2J/L,Medium,F,III,8,"GULFSTREAM AEROSPACE, G-6 Gulfstream G650"
+GLSP,Fixed-wing,1P/S,Light,I,I,,"NEW GLASAIR, Sportsman 2+2"
+GLST,Fixed-wing,1P/S,Light,I,I,,
+GLTU,Fixed-wing,1T/S,Light,I,I,,"STODDARD-HAMILTON, Turbine Glasair"
+GM17,Fixed-wing,1T/S,Light,I,I,,"INTRACOM, GM-17 Viper"
+GMGC,Fixed-wing,1P/S,Light,I,I,,"IBIS (2), Grand Magic"
+GNAT,Fixed-wing,1J/S,Light,I,III,,"FOLLAND, Fo-144 Gnat HAWKER SIDDELEY, Gnat"
+GOBU,Gyroplane,1P/S,Light,I,I,,"BUTTERFLY, Golden Butterfly"
+GOLF,Fixed-wing,1P/S,Light,I,I,,"TECNAM, P-96 Golf"
+GP1,Fixed-wing,1P/S,Light,I,I,,"JIHLAVAN, Skyleader GP One ZALL JIHLAVAN, Skyleader GP One"
+GP4,Fixed-wing,1P/S,Light,I,I,,"OSPREY, GP-4 PEREIRA, GP-4"
+GPRO,Fixed-wing,1P/S,Light,I,I,,"GENEVATION, GenPro"
+GR51,Fixed-wing,1T/S,Light,I,I,,"CAMERON, P-51G Grand 51 EXCLUSIVE, P-51G Grand 51"
+GRFN,Fixed-wing,1P/S,Light,I,I,,"GRIFFON AERO, Griffon"
+GRIF,Fixed-wing,1P/S,Light,I,I,,"CANADA AIR RV, Griffin"
+GRIZ,Fixed-wing,1T/S,Light,I,I,,"AEROTEK (2), Turbo Grizzly"
+GSIS,Fixed-wing,1P/S,Light,I,I,,
+GSPN,Fixed-wing,2J/S+,Light,I,III,,"GROB, G-180 SPn Utility Jet"
+GUEP,Fixed-wing,1P/S,Light,I,I,,
+GURI,Fixed-wing,1P/S,Light,I,I,,"AEROMOT, AMT-600 Guri"
+GX,Fixed-wing,1P/S,Light,I,I,,"REMOS, GX STEMME, Remos GX"
+GY10,Fixed-wing,1P/S,Light,I,I,,"GARDAN, GY-100 Bagheera"
+GY20,Fixed-wing,1P/S,Light,I,I,,"CAB, GY-20 Minicab MARANDA, BM-4"
+GY30,Fixed-wing,1P/S,Light,I,I,,"CAB, GY-30 Supercab"
+GY80,Fixed-wing,1P/S,Light,I,I,,
+H111,Fixed-wing,2P/S+,Medium,H,III,,"CASA, 2-111 HEINKEL, He-111"
+H12T,Helicopter,1T/S,Light,I,I,,
+H160,Helicopter,2T/S+,Light,I,I,,"AIRBUS HELICOPTERS, H-160"
+H2,Helicopter,2T/S+,Light,I,I,,
+H202,Fixed-wing,1P/S,Light,I,I,,"HB-AIRCRAFT, HB-202 Fledger"
+H207,Fixed-wing,1P/S,Light,I,I,,"HB-FLUGTECHNIK, HB-207 Alfa"
+H21,Helicopter,1P/S+,Light,I,I,,"VERTOL, 42 Work Horse VERTOL, CH-21 Work horse"
+H25A,Fixed-wing,2J/S+,Medium,H,III,6,
+H25B,Fixed-wing,2J/S+,Medium,H,III,7,
+H25C,Fixed-wing,2J/S+,Medium,H,III,7,"BRITISH AEROSPACE, BAe-125-1000 RAYTHEON, Hawker 1000"
+H269,Helicopter,1P/S,Light,I,I,,
+H40,Fixed-wing,1P/S,Light,I,I,,"HOFFMANN, H-40"
+H43A,Helicopter,1P/S,Light,I,I,,
+H43B,Helicopter,1T/S,Light,I,I,,
+H46,Helicopter,2T/S+,Medium,H,I,,
+H47,Helicopter,2T/L,Medium,G,I,,
+H500,Helicopter,1T/S,Light,I,I,,
+H53,Helicopter,2T/L,Medium,G,I,,
+H53S,Helicopter,3T/L,Medium,G,I,,
+H60,Helicopter,2T/S+,Medium,H,I,,
+H64,Helicopter,2T/S+,Medium,H,I,,
+HA2,Gyroplane,1P/S,Light,I,I,,"HOLLMANN, HA-2 Sportster"
+HA31,Fixed-wing,1P/S,Light,I,I,,"HINDUSTAN, HA-31 Basant"
+HA4T,Fixed-wing,2J/S+,Medium,H,III,7,
+HAHU,Fixed-wing,1P/S,Light,I,I,,"SINDLINGER, HH-1 Hawker Hurricane"
+HAR,Fixed-wing,1J/L,Medium,G,III,,
+HAW3,Gyroplane,1P/S,Light,I,I,,"GROEN, H2X Hawk 3"
+HB21,Fixed-wing,1P/S,Light,I,I,,"BRDITSCHKA, HB-21 Hobbylifter BRDITSCHKA, HB-21 Hobbyliner"
+HB23,Fixed-wing,1P/S,Light,I,I,,
+HB3,Fixed-wing,1P/S,Light,I,I,,"BRDITSCHKA, HB-3"
+HCAT,Fixed-wing,1P/S+,Light,I,III,,"GRUMMAN, F6F Hellcat GRUMMAN, G-50 Hellcat"
+HD34,Fixed-wing,2P/S+,Medium,H,III,,"HUREL-DUBOIS , HD-34"
+HDJT,Fixed-wing,2J/S,Light,I,III,4,"HONDA, HA-420 HondaJet"
+HEAD,Fixed-wing,1P/S,Light,I,I,,"STEWART (2), JD-1 Headwind STEWART (2), SAC-1 Headwind"
+HERN,Fixed-wing,4P/S+,Light,I,III,8,
+HF20,Fixed-wing,2J/S+,Medium,H,III,7,"HFB, HFB-320 Hansa MBB, HFB-320 Hansa"
+HI27,Fixed-wing,1P/S,Light,I,I,,"HIRTH, Hi-27 Acrostar"
+HIGH,Fixed-wing,1P/S,Light,I,I,,"JUST, JA20 Highlander"
+HIND,Fixed-wing,1P/S,Light,I,I,,"HAWKER, Hind"
+HL2,Fixed-wing,1P/S,Light,I,I,,"LAMBACH, HL-2 Replica"
+HLD4,Fixed-wing,1P/S,Light,I,I,,"HALBERSTADT, D-4 Replica"
+HM38,Fixed-wing,1P/S,Light,I,I,,"FALCONAR, HM-380 Ladybug MIGNET, HM-380"
+HN70,Fixed-wing,1P/S,Light,I,I,,"NICOLLIER, HN-700 Menestrel 2"
+HORN,Fixed-wing,1P/S,Light,I,I,,"WALLERKOWSKI, Hornisse"
+HORZ,Fixed-wing,1P/S,Light,I,I,,"FISHER, Horizon FISHER AERO, Horizon"
+HR10,Fixed-wing,1P/S,Light,I,I,,
+HR20,Fixed-wing,1P/S,Light,I,I,,
+HRNT,Fixed-wing,1P/S,Light,I,I,,"AAK, Hornet"
+HROC,Fixed-wing,1P/S,Light,I,I,,"HARMON, Rocket"
+HSMT,Helicopter,1P/S,Light,I,I,,"ROTORSMART, HeliSmart"
+HT16,Fixed-wing,1J/S,Light,I,III,,"HINDUSTAN, HJT-16 Kiran"
+HT2,Fixed-wing,1P/S,Light,I,I,,"HINDUSTAN, HT-2"
+HT36,Fixed-wing,1J/S,Light,I,III,,"HINDUSTAN, HJT-36 Sitara"
+HT40,Fixed-wing,1T/S,Light,I,I,,"HINDUSTAN, HTT-40"
+HU1,Fixed-wing,1P/S,Light,I,I,,"SHENYANG SAILPLANE, HU-1 Seagull"
+HU2,Fixed-wing,1P/S,Light,I,I,,"SHENYANG SAILPLANE, HU-2 Petrel"
+HUCO,Helicopter,1T/S,Light,I,I,,
+HUML,Fixed-wing,1P/S,Light,I,I,,"HUMMEL, Hummel Bird"
+HUNT,Fixed-wing,1J/S+,Medium,H,III,,"HAWKER, Hunter"
+HURI,Fixed-wing,1P/S,Light,I,I,,"HAWKER, Hurricane HAWKER, Sea Hurricane"
+HURK,Fixed-wing,1T/S,Light,I,I,,"TAI, TT-32 Hürkuş"
+HUSK,Fixed-wing,1P/S,Light,I,I,,
+HW4P,Gyroplane,1P/S,Light,I,I,,"GROEN, Hawk 4"
+HW4T,Gyroplane,1T/S,Light,I,I,,"GROEN, Jet Hawk 4T"
+HX2,Helicopter,1T/S,Light,I,I,,"HELOWERKS, HX-2 Wasp"
+HYPR,Fixed-wing,1P/S,Light,I,I,,"P&M AVIATION, HypR"
+I103,Fixed-wing,1P/S,Light,I,I,,"ILYUSHIN, Il-103"
+I114,Fixed-wing,2T/L,Medium,F,III,,"ILYUSHIN, Il-114"
+I115,Fixed-wing,1P/S,Light,I,I,,"AISA, I-115"
+I11B,Fixed-wing,1P/S,Light,I,I,,"AISA, I-11B Peque"
+I153,Fixed-wing,1P/S,Light,I,I,,"POLIKARPOV, I-153"
+I15B,Fixed-wing,1P/S,Light,I,I,,"POLIKARPOV, I-15bis"
+I16,Fixed-wing,1P/S,Light,I,I,,"POLIKARPOV, I-16"
+I22,Fixed-wing,1J/S+,Medium,H,III,,
+I23,Fixed-wing,1P/S,Light,I,I,,"INSTYTUT LOTNICTWA, I-23 Manager PZL-SWIDNIK, I-23 Manager"
+I3,Fixed-wing,1P/S,Light,I,I,,"INTERAVIA, I-3"
+I66,Fixed-wing,1P/S,Light,I,I,,"IANNOTTA, I-66 San Francisco VOLIAMO, I-96 San Francesco"
+IA46,Fixed-wing,1P/S,Light,I,I,,"DINFIA, IA-46 Ranquel DINFIA, IA-46 Super Ranquel"
+IA58,Fixed-wing,2T/S+,Light,I,III,,"FMA, IA-58 Pucará"
+IA63,Fixed-wing,1J/S,Light,I,III,,
+IFUR,Fixed-wing,1P/S,Light,I,I,,"ISAACS, Fury"
+IL14,Fixed-wing,2P/S+,Medium,H,III,,
+IL18,Fixed-wing,4T/L,Medium,F,III,,
+IL28,Fixed-wing,2J/L,Medium,G,III,,
+IL38,Fixed-wing,4T/L,Medium,F,III,,"ILYUSHIN, Il-38"
+IL62,Fixed-wing,4J/H,Heavy,D,III,,"ILYUSHIN, Il-62"
+IL76,Fixed-wing,4J/H,Heavy,D,III,,
+IL86,Fixed-wing,4J/H,Heavy,D,III,,"ILYUSHIN, Il-86 ILYUSHIN, Il-87"
+IL96,Fixed-wing,4J/H,Heavy,D,III,,"ILYUSHIN, Il-96"
+IMPU,Fixed-wing,1P/S,Light,I,I,,
+INCQ,Fixed-wing,1P/S,Light,I,I,,"INPAER, Conquest"
+INEC,Fixed-wing,1P/S,Light,I,I,,"INPAER, Excel"
+INEX,Fixed-wing,1P/S,Light,I,I,,"INPAER, Explorer"
+INTG,Fixed-wing,1P/S,Light,I,I,,"AURA AERO, Integral R AURA AERO, Integral S"
+ION,Fixed-wing,1P/S,Light,I,I,,"ION, Ion"
+IP06,Fixed-wing,1P/S,Light,I,I,,"IPE, IPE-06 Curucaca"
+IP10,Fixed-wing,1P/S,Light,I,I,,"IPE, IPE-010"
+IP26,Fixed-wing,1P/S,Light,I,I,,"IPAI, IPAI-26 Tuca"
+IP6A,Fixed-wing,1P/S,Light,I,I,,"IPE, IPE-06A"
+IPAN,Fixed-wing,1P/S,Light,I,I,,
+IR22,Fixed-wing,1P/S,Light,I,I,,"ICA, IAR-822 ICA, IAR-826"
+IR23,Fixed-wing,1P/S,Light,I,I,,"ICA, IAR-823"
+IR24,Fixed-wing,1P/S,Light,I,I,,"ICA, IAR-824"
+IR25,Fixed-wing,1T/S,Light,I,I,,"ICA, IAR-825TP Triumf"
+IR27,Fixed-wing,1P/S,Light,I,I,,"BUCURESTI, IAR-827 Dacic ICA, IAR-827 Dacic"
+IR28,Fixed-wing,1P/S,Light,I,I,,"ICA, IAR-28MA ICA, IS-28MA"
+IR46,Fixed-wing,1P/S,Light,I,I,,"IAR, IAR-46 Katty"
+IR99,Fixed-wing,1J/S,Light,I,III,,
+IRBS,Fixed-wing,1P/S,Light,I,I,,"KUBICEK, M-4 Irbis"
+IS2,Helicopter,1P/S,Light,I,I,,"INSTYTUT LOTNICTWA, IS-2"
+IS28,Fixed-wing,1P/S,Light,I,I,,"IAR, IS-28M2 ICA, IS-28M2"
+ISAT,Fixed-wing,1P/S,Light,I,I,,"AEROJAMES, 01 Isatis"
+ISPT,Fixed-wing,1P/S,Light,I,I,,"ISAACS, Spitfire"
+J1,Fixed-wing,1P/S,Light,I,I,,
+J10,Fixed-wing,1J/S+,Medium,H,III,,"CHENGDU, F-10 CHENGDU, J-10"
+J177,Fixed-wing,1P/S,Light,I,I,,
+J2,Fixed-wing,1P/S,Light,I,I,1,"PIPER, J-2 Cub TAYLOR (1), J-2 Cub"
+J20,Fixed-wing,2J/L,Medium,G,III,,"CHENGDU, J-20"
+J3,Fixed-wing,1P/S,Light,I,I,1,
+J300,Fixed-wing,1P/S,Light,I,I,,"ALMS, J-300 Joker SAUPER, J-300 Joker"
+J328,Fixed-wing,2J/S+,Medium,H,III,6,
+J4,Fixed-wing,1P/S,Light,I,I,1,"PIPER, J-4 Cub Coupe"
+J400,Fixed-wing,1P/S,Light,I,I,,"JIHLAVAN, JA-400 Skyleader 400 ZALL JIHLAVAN, JA-400 Skyleader 400"
+J40E,Fixed-wing,1E/S,Light,I,I,,"ZALL JIHLAVAN, JA-400 Skyleader 400 Electric"
+J4B2,Gyroplane,1P/S,Light,I,I,,"BARNETT, J4B2"
+J5,Fixed-wing,1P/S,Light,I,I,1,
+J600,Fixed-wing,1P/S,Light,I,I,,
+J8A,Fixed-wing,2J/S+,Medium,H,III,,
+J8B,Fixed-wing,2J/S+,Medium,H,III,,
+JAB2,Fixed-wing,1P/S,Light,I,I,,"JABIRU, Jabiru J160 JABIRU, Jabiru J170"
+JAB4,Fixed-wing,1P/S,Light,I,I,,
+JABI,Fixed-wing,1P/S,Light,I,I,,
+JACE,Fixed-wing,1P/S,Light,I,I,,
+JAG2,Helicopter,1T/S,Light,I,I,,"JAG HELICOPTER, JAG"
+JAGR,Fixed-wing,2J/S+,Medium,H,III,,
+JAJ5,Fixed-wing,1P/S,Light,I,I,,
+JAJ6,Fixed-wing,1P/S,Light,I,I,,"J & AS, J-6 Fregata"
+JANU,Fixed-wing,1P/S,Light,I,I,,
+JARO,Fixed-wing,1P/S,Light,I,I,,"JACKAROO, Thruxton Jackaroo"
+JAS4,Powered-lift,6E/S,Light,I,III,,"JOBY, JAS-4"
+JAST,Fixed-wing,1J/S,Light,I,III,,
+JB15,Fixed-wing,1P/S,Light,I,I,,"OBERLERCHNER, JOB-15"
+JC01,Fixed-wing,1P/S,Light,I,I,,"COUPE, JC-01"
+JC02,Fixed-wing,1P/S,Light,I,I,,"COUPE, JC-02 COUPE, JC-200"
+JCOM,Fixed-wing,2J/S+,Medium,H,III,9,"AERO COMMANDER, 1121 Jet Commander IAI, 1121 Commodore Jet"
+JCRU,Fixed-wing,1T/S,Light,I,I,,"AASI, Jetcruzer"
+JD2,Fixed-wing,1P/S,Light,I,I,,"DYKE, JD-2 Delta"
+JDOE,Fixed-wing,1P/S,Light,I,I,,"AMERICAN HOMEBUILTS, John Doe"
+JE2,Gyroplane,1P/S,Light,I,I,,"EICH, JE-2 Gyroplane"
+JFOX,Fixed-wing,1P/S,Light,I,I,,"AIRO, 1 EUROALA , Jet Fox"
+JH7,Fixed-wing,2J/L,Medium,G,III,,"XIAN, FBC-1 Flying Leopard XIAN, JH-7"
+JK05,Fixed-wing,1P/S,Light,I,I,,
+JL9,Fixed-wing,1J/S+,Medium,H,III,,"GUIZHOU, FTC-2000 Shanying GUIZHOU, JL-9 Shanying"
+JN76,Fixed-wing,1P/S,Light,I,I,,"CAUDRON, CR-760 Cyclone Replica CAUDRON, JN-760 Cyclone Replica"
+JPM1,Fixed-wing,1P/S,Light,I,I,,"MARIE, JPM-01 Medoc MARIE, JPM-01 Tanagra"
+JPRO,Fixed-wing,1J/S,Light,I,III,,
+JRC1,Fixed-wing,1P/S,Light,I,I,,"CHALARD, JRC-01 Julcar"
+JS1J,Fixed-wing,1J/S,Light,I,III,,"JONKER, JS-1 Revelation (jet) M&D FLUGZEUGBAU, JS-MD-1 Single (jet)"
+JS2J,Fixed-wing,1J/S,Light,I,III,,"JONKER, JS-2 Revenant (jet) M&D FLUGZEUGBAU, JS-MD-2 Single (jet)"
+JS2P,Fixed-wing,1P/S,Light,I,I,,"JONKER, JS-2 Revenant (piston) M&D FLUGZEUGBAU, JS-MD-2 Single (piston)"
+JS3,Fixed-wing,2T/S,Light,I,II,,"CENTURY, Jetstream 3 VOLPAR, Century Jetstream 3"
+JS32,Fixed-wing,2T/S+,Medium,H,III,5,"BRITISH AEROSPACE, BAe-3200 Jetstream Super 31 JETSTREAM, BAe-3200 Jetstream Super 31"
+JS3E,Fixed-wing,1E/S,Light,I,I,,"JONKER, JS-3 Rapture (electric) M&D FLUGZEUGBAU, JS-MD-3 Single (electric)"
+JS3J,Fixed-wing,1J/S,Light,I,III,,"JONKER, JS-3 Rapture (jet) M&D FLUGZEUGBAU, JS-MD-3 Single (jet)"
+JS41,Fixed-wing,2T/S+,Medium,H,III,7,
+JSX,Fixed-wing,1J/S,Light,I,III,,"SONEX, JSX SubSonex"
+JT2,Fixed-wing,1P/S,Light,I,I,,"TAYLOR (4), JT-2 Titch"
+JU52,Fixed-wing,3P/S+,Medium,H,III,,"CASA, 352L JUNKERS, Ju-52/3m"
+JUN1,Fixed-wing,1P/S,Light,I,I,,"KAMINSKAS, RK-1 Jungster 1"
+JUN2,Fixed-wing,1P/S,Light,I,I,,"KAMINSKAS, RK-2 Jungster 2"
+JUNR,Fixed-wing,1P/S,Light,I,I,,
+JUPI,Fixed-wing,1P/S,Light,I,I,,"LAMMER GEYER, Jupiter"
+K100,Fixed-wing,1T/S,Light,I,I,1,"DAHER, Kodiak 100 QUEST, Kodiak 100"
+K126,Helicopter,1T/S,Light,I,I,,"ICA, Ka-126 KAMOV, Ka-126"
+K209,Helicopter,1T/S,Light,I,I,,"FAMA, K-209 KISS"
+K226,Helicopter,2T/S,Light,I,I,,"KAMOV, Ka-226 Sergei"
+K35E,Fixed-wing,4J/H,Heavy,D,III,,"BOEING, KC-135E Stratotanker"
+K35R,Fixed-wing,4J/H,Heavy,C,III,,
+K50,Fixed-wing,1J/S+,Medium,H,III,,
+K51,Fixed-wing,1P/S,Light,I,I,,"KOVÁCS, K-51 Peregrino"
+K8,Fixed-wing,1J/S,Light,I,III,,
+K900,Fixed-wing,1T/S,Light,I,I,,
+KA25,Helicopter,2T/S+,Medium,H,I,,"KAMOV, Ka-25"
+KA26,Helicopter,2P/S,Light,I,I,,"KAMOV, Ka-26"
+KA27,Helicopter,2T/S+,Medium,H,I,,
+KA50,Helicopter,2T/S+,Medium,H,I,,
+KA52,Helicopter,2T/S+,Medium,H,I,,"KAMOV, Ka-52 Alligator"
+KA62,Helicopter,2T/S+,Light,I,I,,"KAMOV, Ka-60 Kasatka KAMOV, Ka-62"
+KAK1,Fixed-wing,1P/S,Light,I,I,,"KIEGER, AK-1"
+KAK3,Fixed-wing,1P/S,Light,I,I,,"JUNKERS PROFLY, Junka KIEGER, AK-3"
+KAT3,Fixed-wing,1T/S,Light,I,I,,"KHRUNICHEV, AT-3"
+KATB,Fixed-wing,2P/S,Light,I,II,,"KARI, Twinbee"
+KATR,Fixed-wing,1P/S,Light,I,I,,"AEROSAMARA, Katran"
+KC2,Fixed-wing,2J/H,Heavy,C,III,,
+KE3,Fixed-wing,4J/H,Heavy,D,III,,"BOEING, KE-3"
+KEHA,Fixed-wing,1P/S,Light,I,I,,"KESTREL, Float Hawk KESTREL, Sport Hawk"
+KELA,Fixed-wing,1P/S,Light,I,I,,"KELEHER, Lark"
+KELD,Fixed-wing,1P/S,Light,I,I,,"KELLY, D"
+KERO,Fixed-wing,1P/S,Light,I,I,,"REARWIN, 2000 Ken-Royce"
+KEST,Fixed-wing,1T/S,Light,I,I,,"FARNBOROUGH, F-1 Kestrel"
+KFAB,Fixed-wing,1P/S,Light,I,I,,"KITPLANES FOR AFRICA, Bushbaby KITPLANES FOR AFRICA, Explorer"
+KFAS,Fixed-wing,1P/S,Light,I,I,,"KITPLANES FOR AFRICA, Safari"
+KFIR,Fixed-wing,1J/S+,Medium,H,III,,"IAI, Kfir"
+KH4,Helicopter,1P/S,Light,I,I,,"KAWASAKI, KH-4"
+KIS2,Fixed-wing,1P/S,Light,I,I,,
+KIS4,Fixed-wing,1P/S,Light,I,I,,"PULSAR, Super Cruiser TRI-R, KIS TR-4 Cruiser"
+KITH,Fixed-wing,1P/S,Light,I,I,,"BOURDON, Kitty Hawk VIKING (3), Kitty Hawk"
+KITI,Fixed-wing,1P/S,Light,I,I,,"MITCHELL-PROCTER, Kittiwake"
+KIWI,Fixed-wing,1P/S,Light,I,I,,"TWI, Kiwi VALENTIN, Kiwi"
+KK60,Fixed-wing,1P/S,Light,I,I,,"KARI-KEEN, 60 Coupe"
+KL07,Fixed-wing,1P/S,Light,I,I,,
+KL10,Fixed-wing,1P/S,Light,I,I,,"FLIGHT DESIGN-VESSEL, KLA-100"
+KL25,Fixed-wing,1P/S,Light,I,I,,"KLEMM, L-25"
+KL35,Fixed-wing,1P/S,Light,I,I,,"KLEMM, Kl-35"
+KLBR,Fixed-wing,1P/S,Light,I,I,,"KOLB, King Kolbra"
+KM2,Fixed-wing,1P/S,Light,I,I,,
+KMAX,Helicopter,1T/S,Light,I,I,,"KAMAN, K-1200 K-Max"
+KNTW,Fixed-wing,1P/S,Light,I,I,,"PAYNE, Knight Twister PAYNE, Sunday Knight Twister"
+KOLL,Fixed-wing,1P/S,Light,I,I,,"KOLB, Laser"
+KP2,Fixed-wing,1P/S,Light,I,I,,
+KP5,Fixed-wing,1P/S,Light,I,I,,
+KR1,Fixed-wing,1P/S,Light,I,I,,"RAND, KR-1"
+KR2,Fixed-wing,1P/S,Light,I,I,,"RAND, KR-2"
+KR21,Fixed-wing,1P/S,Light,I,I,,"FAIRCHILD (1), KR-21 KREIDER-REISNER, C-6 Challenger"
+KR30,Fixed-wing,1P/S,Light,I,I,,"EKOLOT, KR-030 Topaz"
+KR31,Fixed-wing,1P/S,Light,I,I,,"FAIRCHILD (1), KR-31 KREIDER-REISNER, C-2 Challenger"
+KR34,Fixed-wing,1P/S,Light,I,I,,"FAIRCHILD (1), KR-34 KREIDER-REISNER, C-4 Challenger"
+KRAG,Fixed-wing,1P/S,Light,I,I,,"SOKO, J-20 Kraguj SOKO, P-2 Kraguj"
+KRAH,Fixed-wing,1P/S,Light,I,I,,"ROCK, Krähe"
+KRIC,Fixed-wing,1P/S,Light,I,I,,"FLSZ, DK-1 Der Kricket"
+KSTK,Fixed-wing,2P/S,Light,I,II,,"PHOENIX-AVIACOR, M-12 Kasatik"
+KT1,Fixed-wing,1T/S,Light,I,I,,
+KTOO,Fixed-wing,1P/S,Light,I,I,,
+KZ2,Fixed-wing,1P/S,Light,I,I,,"SAI (1), KZ-2 Kupe SAI (1), KZ-2 Traener"
+KZ3,Fixed-wing,1P/S,Light,I,I,,"SAI (1), KZ-3"
+KZ4,Fixed-wing,2P/S,Light,I,II,,"SAI (1), KZ-4"
+KZ7,Fixed-wing,1P/S,Light,I,I,,"SAI (1), KZ-7 Laerke"
+KZ8,Fixed-wing,1P/S,Light,I,I,,"SAI (1), KZ-8"
+L10,Fixed-wing,2P/S,Light,I,II,,"LOCKHEED, L-10 Electra LOCKHEED, XR2O Electra"
+L101,Fixed-wing,3J/H,Heavy,D,III,9,"LOCKHEED, L-1011 TriStar"
+L11,Fixed-wing,1P/S,Light,I,I,,"LUSCOMBE, 11A Sedan TEMCO, 11A Sedan"
+L11E,Fixed-wing,1P/S,Light,I,I,,
+L12,Fixed-wing,2P/S,Light,I,II,,
+L13,Fixed-wing,1P/S,Light,I,I,,"CONVAIR, L-13 LONGREN, L-13 Centaur"
+L13M,Fixed-wing,1P/S,Light,I,I,,"LET, L-13 Blanik (single-engine conversions)"
+L13S,Fixed-wing,1P/S,Light,I,I,,"AEROTECHNIK, L-13S Super Vivat AEROTECHNIK, L-13S Vivat"
+L14,Fixed-wing,2P/S+,Medium,H,III,,"LOCKHEED, L-14 Hudson LOCKHEED, L-14 Super Electra"
+L15,Fixed-wing,2J/S+,Medium,H,III,,"HONGDU, L-15 Lieying"
+L159,Fixed-wing,1J/S+,Medium,H,III,,"AERO (2), L-159 AERO (2), L-159 Albatros 2"
+L18,Fixed-wing,2P/L,Medium,G,III,8,
+L181,Fixed-wing,1P/S,Light,I,I,,"ASSOCIATED AIR, Liberty 181"
+L188,Fixed-wing,4T/L,Medium,F,III,7,"LOCKHEED, L-188 Electra"
+L200,Fixed-wing,2P/S,Light,I,II,,"LET, L-200 Morava"
+L29,Fixed-wing,1J/S,Light,I,III,,"AERO (2), L-29 Delfin"
+L29A,Fixed-wing,4J/L,Medium,G,III,8,"LOCKHEED, L-1329 Jetstar 6 LOCKHEED, L-1329 Jetstar 8"
+L29B,Fixed-wing,4J/L,Medium,G,III,9,"LOCKHEED, L-1329 Jetstar 2 LOCKHEED, L-1329 Jetstar 731"
+L37,Fixed-wing,2P/S+,Medium,H,III,,
+L380,Fixed-wing,1P/S,Light,I,I,,"LEDERLIN, 380 Ladybug"
+L39,Fixed-wing,1J/S,Light,I,III,,"AERO (2), L-139 Albatros AERO (2), L-39 Albatros"
+L40,Fixed-wing,1P/S,Light,I,I,,"ORLIČAN (1), L-40 Meta Sokol"
+L410,Fixed-wing,2T/S+,Light,I,III,,
+L5,Fixed-wing,1P/S,Light,I,I,,
+L59,Fixed-wing,1J/S+,Light,I,III,,"AERO (2), L-59"
+L60,Fixed-wing,1P/S,Light,I,I,,
+L610,Fixed-wing,2T/S+,Medium,H,III,,"LET, L-610"
+L70,Fixed-wing,1P/S,Light,I,I,,"VALMET, L-70 Miltrainer VALMET, L-70 Vinka"
+L8,Fixed-wing,1P/S,Light,I,I,3,
+L90,Fixed-wing,1T/S,Light,I,I,,"AERMACCHI, M-290TP Redigo VALMET, L-90TP Redigo"
+LA60,Fixed-wing,1P/S,Light,I,I,,
+LA6T,Fixed-wing,1T/S,Light,I,I,,"AERMACCHI, AL-60 Turbine Grizzly"
+LACO,Fixed-wing,1P/S,Light,I,I,,"LAVEN, LACO-125 LAVEN, LACO-145"
+LAE1,Fixed-wing,1E/S,Light,I,I,,"LANGE, E-1 Antares 20E"
+LAKR,Fixed-wing,1P/S,Light,I,I,,"LASER, Akro Z"
+LAKX,Fixed-wing,1P/S,Light,I,I,,"AEROPLASTIKA, LAK-X AVIA BALTIKA, LAK-X"
+LAMA,Helicopter,1T/S,Light,I,I,,
+LANC,Fixed-wing,4P/L,Medium,F,III,,"AVRO, 683 Lancaster"
+LAR1,Fixed-wing,1J/S,Light,I,III,,"FLARIS, LAR-1"
+LARK,Fixed-wing,1P/S,Light,I,I,1,"NORTH AMERICAN ROCKWELL, 100 Lark Commander"
+LAST,Fixed-wing,1P/S,Light,I,I,,"UTVA, N-63 Lasta"
+LBUG,Fixed-wing,1P/S,Light,I,I,,"LIGHTNING BUG, Lightning Bug REFLEX, Lightning Bug"
+LCA,Fixed-wing,1J/S+,Medium,H,III,,"ADA, LCA Tejas HINDUSTAN, LCA Tejas"
+LCB,Fixed-wing,1P/S,Light,I,I,,"LAIRD, LC-1B Commercial LAIRD, LC-B Commercial"
+LCH,Helicopter,2T/S,Light,I,I,,"HINDUSTAN, LCH"
+LCR,Fixed-wing,1P/S,Light,I,I,,"LAIRD, LC-R Speedwing"
+LEG2,Fixed-wing,1P/S,Light,I,I,,"LANCAIR, Legacy"
+LEGD,Fixed-wing,1P/S,Light,I,I,,"PERFORMANCE, Legend"
+LESP,Fixed-wing,1P/S,Light,I,I,,"LANCAIR, Lancair ES-P"
+LEVI,Fixed-wing,1P/S,Light,I,I,,"TAPANEE, Levitation 4"
+LGEZ,Fixed-wing,1P/S,Light,I,I,,"RUTAN, 61 Long-EZ"
+LGND,Fixed-wing,1P/S,Light,I,I,,
+LH10,Fixed-wing,1P/S,Light,I,I,,"LH AVIATION, LH-10 Ellipse"
+LIBE,Fixed-wing,1P/S,Light,I,I,,"LIBERTY (1), Bellaire"
+LION,Fixed-wing,1P/S,Light,I,I,,"GRIFFON, Lionheart"
+LJ23,Fixed-wing,2J/S,Light,I,III,8,"LEAR JET, 23"
+LJ24,Fixed-wing,2J/S+,Light,I,III,7,"GATES LEARJET, 24 LEAR JET, 24"
+LJ25,Fixed-wing,2J/S+,Light,I,III,9,"GATES LEARJET, 25 LEAR JET, 25"
+LJ28,Fixed-wing,2J/S+,Light,I,III,7,"GATES LEARJET, 28 GATES LEARJET, 29"
+LJ31,Fixed-wing,2J/S+,Medium,H,III,7,"GATES LEARJET, 31 LEARJET, 31"
+LJ35,Fixed-wing,2J/S+,Medium,H,III,9,
+LJ40,Fixed-wing,2J/S+,Medium,H,III,6,"LEARJET, 40"
+LJ45,Fixed-wing,2J/S+,Medium,H,III,6,"LEARJET, 45"
+LJ55,Fixed-wing,2J/S+,Medium,H,III,8,
+LJ60,Fixed-wing,2J/S+,Medium,H,III,8,"LEARJET, 60"
+LJ70,Fixed-wing,2J/S+,Medium,H,III,6,"LEARJET, 70"
+LJ75,Fixed-wing,2J/S+,Medium,H,III,6,"LEARJET, 75 LEARJET, 75 Liberty"
+LK17,Fixed-wing,1P/S,Light,I,I,,
+LK19,Fixed-wing,1P/S,Light,I,I,,"LAK, LAK-19T SPORTINE AVIACIJA, LAK-19T"
+LK20,Fixed-wing,1P/S,Light,I,I,,"LAK, LAK-20M SPORTINE AVIACIJA, LAK-20M"
+LK7E,Fixed-wing,1E/S,Light,I,I,,"LAK, LAK-17 FES SPORTINE AVIACIJA, LAK-17 FES"
+LM5,Fixed-wing,1P/S,Light,I,I,,"LOMBARDI, LM-5 Aviastar"
+LM5X,Fixed-wing,1P/S,Light,I,I,,"LIGHT MINIATURE, LM-5 Super Cub"
+LM7,Fixed-wing,1P/S,Light,I,I,,"LOMBARDI, LM-7"
+LMC1,Fixed-wing,1P/S,Light,I,I,,"CHASLE, LMC-1 Sprintair"
+LMK1,Fixed-wing,1P/S,Light,I,I,,"CATA, LMK-1 Oryx"
+LN27,Fixed-wing,1P/S,Light,I,I,,"FALCOMPOSITE, LN-27 Furio"
+LNC2,Fixed-wing,1P/S,Light,I,I,,
+LNC4,Fixed-wing,1P/S,Light,I,I,,
+LNCE,Fixed-wing,1P/S,Light,I,I,,
+LNP4,Fixed-wing,1T/S,Light,I,I,,"LANCAIR, Lancair PropJet 4 RDD, LX-7 (turboprop)"
+LNT4,Fixed-wing,1T/S,Light,I,I,,"LANCAIR, Sentry 4T"
+LOCA,Fixed-wing,1P/S,Light,I,I,,"AEROLAB, LoCamp"
+LOVE,Fixed-wing,1P/S,Light,I,I,,"LOVING-WAYNE, WR-1 Love"
+LP1,Fixed-wing,1P/S,Light,I,I,,"LOPRESTI, LP-1 Fury"
+LR2T,Helicopter,1T/S,Light,I,I,,"LOAD RANGER, 2000"
+LS10,Fixed-wing,1P/S,Light,I,I,,"DG FLUGZEUGBAU, LS-10ST"
+LS2,Fixed-wing,1P/S,Light,I,I,,"HAT, LS-2"
+LS8,Fixed-wing,1P/S,Light,I,I,,"DG FLUGZEUGBAU, LS-8ST ROLLADEN-SCHNEIDER, LS-8T"
+LS9,Fixed-wing,1P/S,Light,I,I,,"ROLLADEN-SCHNEIDER, LS-9"
+LSTR,Fixed-wing,1P/S,Light,I,I,,"CUSTOM FLIGHT, Lite Star"
+LTNG,Fixed-wing,2J/L,Medium,G,III,,"BAC, Lightning ENGLISH ELECTRIC, Lightning"
+LUL5,Fixed-wing,1P/S,Light,I,I,,"LUCAS, L-5"
+LUL6,Fixed-wing,1P/S,Light,I,I,,"LUCAS, L-6"
+LUL7,Fixed-wing,1P/S,Light,I,I,,"LUCAS, L-7"
+LUL8,Fixed-wing,1P/S,Light,I,I,,"LUCAS, L-8"
+LV51,Fixed-wing,1P/S,Light,I,I,,"LAVIASA, LAV-51 Master LAVIASA, LAV-51 Super Master"
+LW20,Fixed-wing,1P/S,Light,I,I,,"HOWARD HUGHES, Australian LightWing Speed SP-2000"
+LW40,Fixed-wing,1P/S,Light,I,I,,"HOWARD HUGHES, Australian LightWing Speed SP-4000"
+LWIN,Fixed-wing,1P/S,Light,I,I,,
+LX32,Fixed-wing,1P/S,Light,I,I,,
+LX34,Fixed-wing,1P/S,Light,I,I,,"LILIENTHAL, X-34 Bekas"
+LXR,Fixed-wing,1P/S,Light,I,I,,"ELIXIR, Elixir"
+LYNX,Helicopter,2T/S,Light,I,I,,
+LYSA,Fixed-wing,1P/S,Light,I,I,,"NATIONAL STEEL, Lysander WESTLAND, Lysander"
+M10,Fixed-wing,1P/S,Light,I,I,1,"AEROSTAR (1), 90 MOONEY, M-10 Cadet"
+M101,Fixed-wing,1T/S,Light,I,I,,
+M106,Fixed-wing,1P/S,Light,I,I,,"LAMBERT, M-106 Mission"
+M108,Fixed-wing,1P/S,Light,I,I,,"LAMBERT, M-108 Mission"
+M110,Fixed-wing,1P/S,Light,I,I,,"AVIAT, 110 Special MONOCOUPE, 110 Special"
+M15,Fixed-wing,1J/S,Light,I,III,,"PZL-MIELEC, M-15 Belphegor"
+M17,Fixed-wing,1J/L,Medium,F,III,,"MYASISHCHEV, M-17 Stratosfera"
+M18,Fixed-wing,1P/S,Light,I,I,,"AII, AVA-303 PZL-MIELEC, M-18 Dromader"
+M18T,Fixed-wing,1T/S,Light,I,I,,"MELEX, T-45 Turbine Dromader PZL-MIELEC, M-18 Turbine Dromader"
+M2,Fixed-wing,1P/S,Light,I,I,,"KUBICEK, M-2 Scout"
+M200,Fixed-wing,1P/S,Light,I,I,1,
+M203,Fixed-wing,1P/S,Light,I,I,,"MYASISHCHEV, M-203 Barsuk"
+M20P,Fixed-wing,1P/S,Light,I,I,4,
+M20T,Fixed-wing,1P/S,Light,I,I,6,
+M21,Fixed-wing,1P/S,Light,I,I,,"PZL-MIELEC, M-21 Dromader Mini"
+M212,Fixed-wing,1P/S,Light,I,I,,"LAMBERT, M-212 Mission"
+M22,Fixed-wing,1P/S,Light,I,I,3,"MOONEY, M-22 MOONEY, M-22 Mustang"
+M24,Fixed-wing,1P/S,Light,I,I,,"PZL-MIELEC, M-24 Dromader Super"
+M26,Fixed-wing,1P/S,Light,I,I,,"PZL-MIELEC, M-26 Air Wolf PZL-MIELEC, M-26 Iskierka"
+M2HK,Fixed-wing,1P/S,Light,I,I,,
+M308,Fixed-wing,1P/S,Light,I,I,,"GERMAN BIANCO, MB-308 MACCHI, MB-308"
+M326,Fixed-wing,1J/S,Light,I,III,,
+M339,Fixed-wing,1J/S+,Light,I,III,,"AERMACCHI, MB-339 ALENIA AERMACCHI, MB-339"
+M345,Fixed-wing,1J/S,Light,I,III,,
+M346,Fixed-wing,2J/S+,Medium,H,III,,
+M360,Fixed-wing,1P/S,Light,I,I,,"AIRCRAFT TECHNOLOGIES, Meyer-360"
+M36J,Fixed-wing,2P/S,Light,I,II,,"MATRA, M-360 Jupiter"
+M4,Fixed-wing,1P/S,Light,I,I,1,
+M404,Fixed-wing,2P/L,Medium,F,III,3,"MARTIN, 404"
+M5,Fixed-wing,1P/S,Light,I,I,1,
+M55,Fixed-wing,2J/L,Medium,F,III,,"MYASISHCHEV, M-55 Geophysica"
+M6,Fixed-wing,1P/S,Light,I,I,1,"MAULE, M-6 Super Rocket"
+M600,Fixed-wing,1T/S,Light,I,I,5,"PIPER, PA-46-600TP M600"
+M7,Fixed-wing,1P/S,Light,I,I,1,
+M700,Fixed-wing,1T/S,Light,I,I,,"PIPER, PA-46-701TP M700 Fury"
+M74,Helicopter,1P/S,Light,I,I,,"TEXAS HELICOPTER, M-74 Wasp"
+M7T,Fixed-wing,1T/S,Light,I,I,1,
+M8,Fixed-wing,1P/S,Light,I,I,,"MAULE, M-8"
+M9,Fixed-wing,1P/S,Light,I,I,,"MAULE, M-9"
+MA1,Fixed-wing,1P/S,Light,I,I,,
+MA5,Fixed-wing,1P/S,Light,I,I,,"MARQUART, MA-5 Charger"
+MA60,Fixed-wing,2T/L,Medium,F,III,,"XIAN, MA-60"
+MA6H,Fixed-wing,2T/L,Medium,F,III,,"XIAN, MA-60H"
+MAGC,Fixed-wing,1P/S,Light,I,I,,"EAGLE AVIATION, EA-100 IBIS (2), Magic"
+MAGI,Fixed-wing,1P/S,Light,I,I,,"MILES, M-14 Magister PHILLIPS & POWIS, M-14 Magister"
+MAGN,Fixed-wing,1P/S,Light,I,I,,"AIRDALE, Magnum AVID, Magnum"
+MAJR,Fixed-wing,1P/S,Light,I,I,,
+MAKO,Fixed-wing,1P/S,Light,I,I,,"LANCAIR, NLA-450 Mako"
+MAMB,Fixed-wing,1P/S,Light,I,I,,"MELBOURNE, MA-2 Mamba"
+MAME,Fixed-wing,1P/S,Light,I,I,,
+MAVR,Fixed-wing,1P/S,Light,I,I,,"AEA, Maverick"
+MC01,Fixed-wing,1P/S,Light,I,I,,"MONTAER, MC-01"
+MC10,Fixed-wing,2P/S,Light,I,II,,
+MC23,Fixed-wing,2J/L,Medium,F,III,,"IRKUT, MC-21-300"
+MC45,Fixed-wing,1P/S,Light,I,I,,"MEYERS, MAC-145"
+MC90,Fixed-wing,1P/S,Light,I,I,,"MONOCOUPE, 90"
+MCOU,Fixed-wing,1P/S,Light,I,I,,"CHRIS TENA, Mini Coupe"
+MCOY,Fixed-wing,1P/S,Light,I,I,,"MONTANA, Coyote"
+MCR1,Fixed-wing,1P/S,Light,I,I,,
+MCR4,Fixed-wing,1P/S,Light,I,I,,
+MCRR,Fixed-wing,1P/S,Light,I,I,,"DYN'AERO, MCR-R180"
+MCUL,Fixed-wing,1P/S,Light,I,I,,"KIMBALL, McCullocoupe"
+MD11,Fixed-wing,3J/H,Heavy,C,III,9,"BOEING, MD-11 MCDONNELL DOUGLAS, MD-11"
+MD3,Fixed-wing,1P/S,Light,I,I,,
+MD3R,Fixed-wing,1P/S,Light,I,I,,
+MD52,Helicopter,1T/S,Light,I,I,,
+MD60,Helicopter,1T/S,Light,I,I,,
+MD81,Fixed-wing,2J/L,Medium,F,III,7,"BOEING, MD-81 MCDONNELL DOUGLAS, MD-81"
+MD82,Fixed-wing,2J/L,Medium,F,III,7,
+MD83,Fixed-wing,2J/L,Medium,F,III,8,
+MD87,Fixed-wing,2J/L,Medium,F,III,7,"BOEING, MD-87 MCDONNELL DOUGLAS, MD-87"
+MD88,Fixed-wing,2J/L,Medium,F,III,8,"BOEING, MD-88 MCDONNELL DOUGLAS, MD-88"
+MD90,Fixed-wing,2J/L,Medium,F,III,8,
+ME08,Fixed-wing,1P/S,Light,I,I,1,
+ME09,Fixed-wing,1P/S,Light,I,I,,"HISPANO, HA-1112 Buchon MESSERSCHMITT, Bf-109"
+ME62,Fixed-wing,2J/S+,Light,I,III,,"LEGEND FLYERS, Me-262 MESSERSCHMITT, Me-262 Replica"
+MEAD,Fixed-wing,1P/S,Light,I,I,,"MEAD, Adventure"
+MEL2,Fixed-wing,1P/S,Light,I,I,,"GARRISON, Melmoth 2"
+MERK,Fixed-wing,2P/S,Light,I,II,,"AVIATON, Merkury"
+MESS,Fixed-wing,1P/S,Light,I,I,,"MILES, M-38 Messenger"
+METR,Fixed-wing,2J/S+,Medium,H,III,,"ARMSTRONG WHITWORTH, Meteor GLOSTER, Meteor"
+MEXP,Fixed-wing,1P/S,Light,I,I,,"MERLIN, Explorer"
+MF10,Fixed-wing,1P/S,Light,I,I,,"MALMO, MFI-10 Vipan"
+MF17,Fixed-wing,1P/S,Light,I,I,,
+MG15,Fixed-wing,1J/S+,Light,I,III,,
+MG17,Fixed-wing,1J/S+,Light,I,III,,
+MG19,Fixed-wing,2J/S+,Medium,H,III,,
+MG21,Fixed-wing,1J/S+,Medium,H,III,,
+MG23,Fixed-wing,1J/S+,Medium,H,III,,
+MG25,Fixed-wing,2J/L,Medium,G,III,,"MIKOYAN, MiG-25"
+MG29,Fixed-wing,2J/L,Medium,G,III,,
+MG31,Fixed-wing,2J/L,Medium,G,III,,"MAPO, MiG-31 MIKOYAN, MiG-31"
+MG44,Fixed-wing,2J/L,Medium,G,III,,"MIKOYAN, MiG 1-44"
+MGAT,Fixed-wing,1J/S+,Light,I,III,,"MAPO, MiG-AT MIKOYAN, MiG-AT"
+MGIC,Fixed-wing,1P/S,Light,I,I,,"KAISER, Magic WZL 3, DEKO-9"
+MGNM,Fixed-wing,1P/S,Light,I,I,,"AVIATION ENTERPRISES, Magnum"
+MH20,Helicopter,2T/S,Light,I,I,,"MITSUBISHI, MH-2000"
+MH46,Fixed-wing,1P/S,Light,I,I,,"AEROSETTE, MH-46 Eclipse"
+MI10,Helicopter,2T/L,Medium,F,I,,"MIL, Mi-10"
+MI14,Helicopter,2T/S+,Medium,H,I,,"MIL, Mi-14"
+MI2,Helicopter,2T/S,Light,I,I,,
+MI24,Helicopter,2T/S+,Medium,H,I,,
+MI26,Helicopter,2T/L,Medium,F,I,,"MIL, Mi-26"
+MI28,Helicopter,2T/S+,Medium,H,I,,"MIL, Mi-28"
+MI34,Helicopter,1P/S,Light,I,I,,"MIL, Mi-34"
+MI38,Helicopter,2T/S+,Medium,H,I,,"MIL, Mi-38"
+MI4,Helicopter,1P/S+,Light,I,I,,
+MI6,Helicopter,2T/L,Medium,F,I,,"MIL, Mi-22 MIL, Mi-6"
+MI8,Helicopter,2T/S+,Medium,H,I,,
+MIDR,Fixed-wing,1P/S,Light,I,I,,"ACBA, ACBA-8 Midour 2"
+MIMP,Fixed-wing,1P/S,Light,I,I,,
+MIMU,Fixed-wing,1P/S,Light,I,I,,
+MIR2,Fixed-wing,1J/S+,Medium,H,III,,"DASSAULT, Mirage 2000 DASSAULT, Vajra"
+MIRA,Fixed-wing,1J/S+,Medium,H,III,,
+MITE,Fixed-wing,1P/S,Light,I,I,1,"MOONEY, M-18 Mite MOONEY, M-18 Wee Scotsman"
+MJ10,Fixed-wing,1P/S,Light,I,I,,"JURCA, MJ-10 Spit"
+MJ12,Fixed-wing,1P/S,Light,I,I,,"JURCA, MJ-12 P-40"
+MJ1H,Fixed-wing,1P/S,Light,I,I,,"JURCA, MJ-100 Spitfire Replica"
+MJ2,Fixed-wing,1P/S,Light,I,I,,
+MJ4,Fixed-wing,1P/S,Light,I,I,,"JURCA, MJ-4 Shadow"
+MJ5,Fixed-wing,1P/S,Light,I,I,,"JURCA, MJ-5 Sirocco"
+MJ51,Fixed-wing,1P/S,Light,I,I,,"JURCA, MJ-51 Spérocco"
+MJ53,Fixed-wing,1P/S,Light,I,I,,"JURCA, MJ-53 Autan"
+MJ7,Fixed-wing,1P/S,Light,I,I,,"BOEVE, P-51 Mustang JURCA, MJ-7 Gnatsum"
+MJ77,Fixed-wing,1P/S,Light,I,I,,"JURCA, MJ-77 Gnatsum"
+MJ8,Fixed-wing,1P/S,Light,I,I,,"JURCA, MJ-8 1-Nine-0"
+MJ80,Fixed-wing,1P/S,Light,I,I,,"JURCA, MJ-80 Focke-Wulf Fw-190 Replica"
+MJ9,Fixed-wing,1P/S,Light,I,I,,"JURCA, MJ-9"
+MJ90,Fixed-wing,1P/S,Light,I,I,,"JURCA, MJ-90 Messerschmitt Bf-109 Replica"
+MLER,Fixed-wing,1P/S,Light,I,I,,"ALANNE, Moottori-Lerche"
+MM14,Gyroplane,1P/S,Light,I,I,,"MAGNI, M-14 Scout"
+MM16,Gyroplane,1P/S,Light,I,I,,"MAGNI, M-16 Tandem Trainer"
+MM19,Gyroplane,1P/S,Light,I,I,,"MAGNI, M-19 Shark"
+MM21,Gyroplane,1P/S,Light,I,I,,"MAGNI, M-21"
+MM22,Gyroplane,1P/S,Light,I,I,,"MAGNI, M-22 Voyager"
+MM24,Gyroplane,1P/S,Light,I,I,,"MAGNI, M-24 Orion"
+MMAX,Gyroplane,1P/S,Light,I,I,,"MAD MAX AERO, Mad Max"
+MMUT,Fixed-wing,1P/S,Light,I,I,,"MARA WING, 1-L Malamut MARA WING, L-1 Malamut"
+MNEX,Fixed-wing,1P/S,Light,I,I,,"NORMAN, Nordic 8 Mini Explorer"
+MOCU,Fixed-wing,1P/S,Light,I,I,,"CULP, MonoCulp"
+MOGO,Fixed-wing,1P/S,Light,I,I,,"KINETIC, Mountain Goat MONTAGNE, Mountain Goat"
+MOL1,Fixed-wing,1P/S,Light,I,I,,"MOLNIYA, 1"
+MON2,Fixed-wing,1P/S,Light,I,I,,"MONTANAIR, 2180 Spirit"
+MONA,Fixed-wing,1P/S,Light,I,I,,"MILES, M-17 Monarch"
+MONI,Fixed-wing,1P/S,Light,I,I,,"MONNETT, Moni"
+MOR2,Fixed-wing,1P/S,Light,I,I,,
+MOSP,Fixed-wing,1P/S,Light,I,I,,"MONG, Sport"
+MOSQ,Fixed-wing,2P/S+,Medium,H,III,,"DE HAVILLAND, DH-98 Mosquito"
+MOTO,Fixed-wing,1P/S,Light,I,I,,"HUMBERT , Moto Du Ciel"
+MP02,Fixed-wing,1P/S,Light,I,I,,"AERO-KROS, MP-02 Czajka"
+MP20,Fixed-wing,1P/S,Light,I,I,,"PLAN, MP-205 Busard PLAN, MP-207 Busard"
+MR25,Fixed-wing,1P/S,Light,I,I,,"MURPHY, SR-2500 Super Rebel"
+MR35,Fixed-wing,1P/S,Light,I,I,,
+MR3T,Fixed-wing,1T/S,Light,I,I,,"MURPHY, SR-3500 T-Moose"
+MRAI,Fixed-wing,1P/S,Light,I,I,,"MONNETT, Monerai P"
+MRF1,Fixed-wing,1J/S+,Medium,H,III,,"DASSAULT, Mirage F1"
+MRTN,Fixed-wing,1P/S,Light,I,I,,"MIRAGE, Marathon"
+MS1,Fixed-wing,1P/S,Light,I,I,,"MYSKY, MS-1"
+MS23,Fixed-wing,1P/S,Light,I,I,,"MORANE-SAULNIER, MS-230"
+MS31,Fixed-wing,1P/S,Light,I,I,,"MORANE-SAULNIER, MS-315 MORANE-SAULNIER, MS-317"
+MS73,Fixed-wing,1P/S,Light,I,I,,"MORANE-SAULNIER, MS-733 Alcyon"
+MS76,Fixed-wing,2J/S,Light,I,III,,"DINFIA, MS-760 Paris MORANE-SAULNIER, MS-760 Paris"
+MSAI,Fixed-wing,1P/S,Light,I,I,,
+MSQ2,Fixed-wing,1P/S,Light,I,I,,"BACKCOUNTRY, Mackey SQ-2 MACKEY, SQ-2"
+MT,Gyroplane,1P/S,Light,I,I,,
+MT2,Fixed-wing,2J/S+,Medium,H,III,,"MITSUBISHI, T-2"
+MU2,Fixed-wing,2T/S,Light,I,II,6,
+MU23,Fixed-wing,1P/S,Light,I,I,,"AKAFLIEG MUNCHEN, Mü-23 Saurier"
+MU30,Fixed-wing,2J/S+,Medium,H,III,7,"MITSUBISHI, MU-300 Diamond"
+MUS2,Fixed-wing,1P/S,Light,I,I,,"BUSHBY, M-2 Mustang 2 MUSTANG, M-2 Mustang 2"
+MVN1,Fixed-wing,1P/S,Light,I,I,,
+MVRK,Fixed-wing,1P/S,Light,I,I,,"PHOENIX (2), Maverick"
+MX10,Fixed-wing,1P/S,Light,I,I,,
+MX1T,Fixed-wing,1P/S,Light,I,I,,
+MX2,Fixed-wing,1P/S,Light,I,I,,"MX AIRCRAFT, MX-2 MXR, MX-2"
+MX58,Fixed-wing,1P/S,Light,I,I,,"AEROANDINA, MXP-158 Embera AERO-EAST-EUROPE, MXP-158 Embera"
+MX65,Fixed-wing,1P/S,Light,I,I,,"AEROTEC (2), MXP-650 Amigo AGRO-COPTEROS, MXP-650 Amigo"
+MX80,Fixed-wing,1P/S,Light,I,I,,"AEROANDINA, MXP-800 Fantasy AEROTEC (2), MXP-800 Fantasy"
+MXS,Fixed-wing,1P/S,Light,I,I,,"MX AIRCRAFT, MXS MXR, MXS"
+MY12,Fixed-wing,1P/S,Light,I,I,,"MYLIUS, MY-102 Tornado"
+MY13,Fixed-wing,1P/S,Light,I,I,,"MYLIUS, MY-103 Mistral"
+MYA4,Fixed-wing,4J/H,Heavy,D,III,,"MYASISHCHEV, 3M MYASISHCHEV, M-4"
+MYS4,Fixed-wing,1J/S+,Medium,H,III,,"DASSAULT, MD-454A Mystère 4A"
+N110,Fixed-wing,1P/S,Light,I,I,,
+N120,Fixed-wing,1P/S,Light,I,I,,
+N250,Fixed-wing,2T/L,Medium,F,III,,"NUSANTARA, N-250"
+N260,Fixed-wing,2T/S+,Medium,H,III,,"MAX HOLSTE, MH-260 Super Broussard NORD, 260 Super Broussard"
+N262,Fixed-wing,2T/S+,Medium,H,III,,
+N3,Fixed-wing,1P/S,Light,I,I,,"NOSTALGAIR, N-3 Citabriette NOSTALGAIR, N-3 Super Pup"
+N320,Fixed-wing,1P/S,Light,I,I,,"NORD, 3202"
+N340,Fixed-wing,1P/S,Light,I,I,,"NORD, 3400"
+N3N,Fixed-wing,1P/S,Light,I,I,,"NAVAL AIRCRAFT FACTORY, N3N"
+N5,Fixed-wing,1P/S,Light,I,I,,"HONGDU, N-5 NANCHANG, N-5"
+NA40,Helicopter,2T/S,Light,I,I,,"UNIS, NA-40 Bongo"
+NAL2,Fixed-wing,1P/S,Light,I,I,,"NAL, NALLA-2 Hansa TANEJA, NALLA-2 Hansa"
+NARN,Fixed-wing,1P/S,Light,I,I,,"KOREA AEROSPACE, KC-100 Naraon KOREA AEROSPACE, KT-100 Naraon"
+NAVI,Fixed-wing,1P/S,Light,I,I,2,
+NC85,Fixed-wing,1P/S,Light,I,I,,"NORD, NC-854 NORD, NC-858"
+ND1T,Fixed-wing,1T/S,Light,I,I,,"NDN, NDN-1T Turbo Firecracker"
+NDAC,Fixed-wing,1P/S,Light,I,I,,"NORMAND DUBE, Aerocruiser"
+NDAT,Fixed-wing,1P/S,Light,I,I,,"NORMAND DUBE, Aerocruiser Turbo 450"
+NDIC,Fixed-wing,1P/S,Light,I,I,,
+NFEX,Fixed-wing,1T/S,Light,I,I,,"NF-AIRCRAFT, Explorer"
+NG4,Fixed-wing,1P/S,Light,I,I,,
+NG5,Fixed-wing,1P/S,Light,I,I,,
+NH90,Helicopter,2T/S+,Medium,H,I,,
+NI28,Fixed-wing,1P/S,Light,I,I,,"NIEUPORT, 28 Replica"
+NIBB,Fixed-wing,1P/S,Light,I,I,,"AVIAMILANO, F-14 Nibbio"
+NIMB,Fixed-wing,1P/S,Light,I,I,,
+NIPR,Fixed-wing,1P/S,Light,I,I,,
+NM5,Fixed-wing,1P/S,Light,I,I,,"NAL, NM-5"
+NMCU,Fixed-wing,1P/S,Light,I,I,,"ENAER, ECH-02 Namcu EURO-ENAER, EE-10 Eaglet"
+NNJA,Fixed-wing,1P/S,Light,I,I,,"BEST OFF, Nynja"
+NOMA,Fixed-wing,2T/S,Light,I,II,2,
+NORA,Fixed-wing,2P/L,Medium,F,III,,"NORD, 2501 Noratlas NORDFLUG, 2501 Noratlas"
+NORS,Fixed-wing,1P/S,Light,I,I,2,
+NPOR,Fixed-wing,1P/S,Light,I,I,,"REDFERN, Nieuport 17 REDFERN, Nieuport 24"
+NST6,Fixed-wing,1P/S,Light,I,I,,"CUSTOM FLIGHT, North Star 6 Galaxie"
+NSTR,Fixed-wing,1P/S,Light,I,I,,"CUSTOM FLIGHT, North Star"
+NT10,Fixed-wing,1P/S,Light,I,I,,"NUWACO, T-10"
+NXT,Fixed-wing,1P/S,Light,I,I,,"NEMESIS, NXT"
+O1,Fixed-wing,1P/S,Light,I,I,,
+O3,Fixed-wing,1P/S,Light,I,I,,"LOCKHEED, YO-3"
+OCNR,Fixed-wing,1P/S,Light,I,I,,
+OH1,Helicopter,2T/S,Light,I,I,,"KAWASAKI, OH-1"
+OKHO,Gyroplane,1P/S,Light,I,I,,"AERO-ASTRA, Okhotnik"
+OM1,Fixed-wing,1P/S,Light,I,I,,"MORRISEY, OM-1 Bravo"
+OMAG,Fixed-wing,1P/S,Light,I,I,,"O'NEILL, Magnum"
+OMGA,Fixed-wing,1P/S,Light,I,I,,"ISAE, Omega"
+OMLA,Fixed-wing,1T/S,Light,I,I,,"OMAC, Laser 300"
+ONE,Fixed-wing,1P/S,Light,I,I,,
+ONEX,Fixed-wing,1P/S,Light,I,I,,"SONEX, Onex"
+OPCA,Fixed-wing,1P/S,Light,I,I,,
+OSCR,Fixed-wing,1P/S,Light,I,I,2,
+OVOD,Fixed-wing,1P/S,Light,I,I,,"VITEK, Ovod"
+OZZI,Fixed-wing,1P/S,Light,I,I,,"BUCHANAN, BAC-204 Ozzie Mozzie"
+P06T,Fixed-wing,2P/S,Light,I,II,,"TECNAM, P-2006T"
+P1,Fixed-wing,4J/L,Medium,F,III,,"KAWASAKI, P-1  KAWASAKI, UP-1"
+P100,Fixed-wing,1P/S,Light,I,I,,"POTTIER, P-100"
+P130,Fixed-wing,1P/S,Light,I,I,,"POTTIER, P-130 Bleu Citron"
+P148,Fixed-wing,1P/S,Light,I,I,,"PIAGGIO, P-148"
+P149,Fixed-wing,1P/S,Light,I,I,,"FOCKE-WULF, FWP-149 PIAGGIO, P-149"
+P180,Fixed-wing,2T/S,Light,I,II,1,"PIAGGIO, P-180 Avanti"
+P18T,Fixed-wing,1T/S,Light,I,I,,"SMITH AVIATION, PA-18T Super Cub"
+P19,Fixed-wing,1P/S,Light,I,I,,"AVIAMILANO, P-19 Scricciolo"
+P2,Fixed-wing,2P/L,Medium,F,III,,
+P208,Fixed-wing,1P/S,Light,I,I,,"TECNAM, P-2008"
+P210,Fixed-wing,1P/S,Light,I,I,2,
+P212,Fixed-wing,2P/S,Light,I,II,3,"TECNAM, P-2012 Traveller"
+P220,Fixed-wing,1P/S,Light,I,I,,
+P230,Fixed-wing,1P/S,Light,I,I,,"POTTIER, P-230 Panda"
+P27,Fixed-wing,1P/S,Light,I,I,,"GRYF, P-27 Skyster"
+P270,Fixed-wing,1P/S,Light,I,I,,"POTTIER, P-270 Amster"
+P28A,Fixed-wing,1P/S,Light,I,I,1,
+P28B,Fixed-wing,1P/S,Light,I,I,3,
+P28R,Fixed-wing,1P/S,Light,I,I,3,
+P28S,Fixed-wing,1P/S,Light,I,I,2,
+P28T,Fixed-wing,1P/S,Light,I,I,2,
+P28U,Fixed-wing,1P/S,Light,I,I,2,
+P3,Fixed-wing,4T/L,Medium,F,III,,
+P32R,Fixed-wing,1P/S,Light,I,I,3,
+P32T,Fixed-wing,1P/S,Light,I,I,2,
+P337,Fixed-wing,2P/S,Light,I,II,3,
+P38,Fixed-wing,2P/S+,Medium,H,III,,
+P39,Fixed-wing,1P/S,Light,I,I,,"BELL, P-39 Airacobra"
+P40,Fixed-wing,1P/S,Light,I,I,,
+P46T,Fixed-wing,1T/S,Light,I,I,4,
+P47,Fixed-wing,1P/S+,Medium,H,III,,"REPUBLIC, F-47 Thunderbolt REPUBLIC, P-47 Thunderbolt"
+P4Y,Fixed-wing,4P/L,Medium,F,III,,"CONVAIR, P4Y Privateer CONVAIR, PB4Y Privateer"
+P50,Fixed-wing,1P/S,Light,I,I,,"POTTIER, P-50 Bouvreuil"
+P51,Fixed-wing,1P/S,Light,I,I,,
+P57,Fixed-wing,1P/S,Light,I,I,,"PARTENAVIA, P-57 Fachiro 2"
+P60,Fixed-wing,1P/S,Light,I,I,,"POTTIER, P-60 Minacro"
+P61,Fixed-wing,2P/S+,Medium,H,III,,"NORTHROP, P-61 Black Widow"
+P63,Fixed-wing,1P/S,Light,I,I,,"BELL, P-63 Kingcobra"
+P66P,Fixed-wing,2P/S,Light,I,II,3,
+P66T,Fixed-wing,2T/S,Light,I,II,,"PIAGGIO, P-166DL3 PIAGGIO, P-166DP1"
+P68,Fixed-wing,2P/S,Light,I,II,3,
+P68T,Fixed-wing,2T/S,Light,I,II,3,"PARTENAVIA, AP-68TP-300 Spartacus"
+P70,Fixed-wing,1P/S,Light,I,I,,"POTTIER, P-70"
+P750,Fixed-wing,1T/S,Light,I,I,,"PACIFIC AEROSPACE, 750XL PACIFIC AEROSPACE, P-750 XStol"
+P8,Fixed-wing,2J/L,Medium,F,III,,"BOEING, 737-800 Poseidon BOEING, P-8 Poseidon"
+P80,Fixed-wing,1P/S,Light,I,I,,"POTTIER, P-80"
+P82,Fixed-wing,2P/S+,Medium,H,III,,"NORTH AMERICAN, F-82 Twin Mustang NORTH AMERICAN, P-82 Twin Mustang"
+PA11,Fixed-wing,1P/S,Light,I,I,1,
+PA12,Fixed-wing,1P/S,Light,I,I,1,"BACKCOUNTRY, PA-12 Super Cruiser PIPER, PA-12 Super Cruiser"
+PA14,Fixed-wing,1P/S,Light,I,I,1,"PIPER, PA-14 Family Cruiser WAGAERO, 2+2 Sportsman"
+PA15,Fixed-wing,1P/S,Light,I,I,1,"PIPER, PA-15 Vagabond WAGAERO, Wag-a-Bond"
+PA16,Fixed-wing,1P/S,Light,I,I,1,"PIPER, PA-16 Clipper"
+PA17,Fixed-wing,1P/S,Light,I,I,1,"PIPER, PA-17 Vagabond PIPER, PA-17 Vagabond Trainer"
+PA18,Fixed-wing,1P/S,Light,I,I,1,
+PA20,Fixed-wing,1P/S,Light,I,I,1,"PIPER, PA-20 Pacer"
+PA22,Fixed-wing,1P/S,Light,I,I,2,
+PA23,Fixed-wing,2P/S,Light,I,II,2,
+PA24,Fixed-wing,1P/S,Light,I,I,4,"PIPER, PA-24 Comanche"
+PA25,Fixed-wing,1P/S,Light,I,I,1,
+PA27,Fixed-wing,2P/S,Light,I,II,3,
+PA30,Fixed-wing,2P/S,Light,I,II,1,
+PA31,Fixed-wing,2P/S,Light,I,II,2,
+PA32,Fixed-wing,1P/S,Light,I,I,3,
+PA34,Fixed-wing,2P/S,Light,I,II,7,
+PA36,Fixed-wing,1P/S,Light,I,I,2,
+PA38,Fixed-wing,1P/S,Light,I,I,3,
+PA44,Fixed-wing,2P/S,Light,I,II,2,
+PA46,Fixed-wing,1P/S,Light,I,I,4,
+PACE,Fixed-wing,1P/S,Light,I,I,,
+PAGO,Fixed-wing,1P/S,Light,I,I,,"ALMS, ADV-01 Papango SAUPER, ADV-01 Papango"
+PANT,Fixed-wing,1P/S,Light,I,I,,
+PAR1,Fixed-wing,1P/S,Light,I,I,,"PARADISE, P-1 PARADISE, P-2"
+PAR4,Fixed-wing,1P/S,Light,I,I,,"PARADISE, P-4"
+PARL,Fixed-wing,1P/S,Light,I,I,,"PIETENPOL, Aerial ST. CROIX, Pietenpol Aerial"
+PAT2,Fixed-wing,1P/S,Light,I,I,,"ATAC, Patriot 2"
+PAT4,Fixed-wing,2T/S,Light,I,II,,
+PAUL,Fixed-wing,1P/S,Light,I,I,,
+PAV4,Gyroplane,1P/S,Light,I,I,,"CARTER, PAV-4"
+PAY1,Fixed-wing,2T/S,Light,I,II,5,"CHINCUL, PA-A-31T1-500 Cheyenne 1 PIPER, PA-31T1-500 Cheyenne 1"
+PAY2,Fixed-wing,2T/S,Light,I,II,2,
+PAY3,Fixed-wing,2T/S,Light,I,II,8,"AICSA, PA-42-720 Cheyenne 3 PIPER, PA-42-720 Cheyenne 3"
+PAY4,Fixed-wing,2T/S,Light,I,II,4,"PIPER, PA-42-1000 Cheyenne 400"
+PC12,Fixed-wing,1T/S,Light,I,I,4,
+PC21,Fixed-wing,1T/S,Light,I,I,,"PILATUS, PC-21"
+PC24,Fixed-wing,2J/S+,Medium,H,III,5,"PILATUS, PC-24"
+PC6P,Fixed-wing,1P/S,Light,I,I,,"PILATUS, PC-6 Porter"
+PC6T,Fixed-wing,1T/S,Light,I,I,,
+PC7,Fixed-wing,1T/S,Light,I,I,1,
+PC9,Fixed-wing,1T/S,Light,I,I,,
+PCA2,Gyroplane,1P/S,Light,I,I,,"PITCAIRN-CIERVA, PCA-2"
+PDIG,Fixed-wing,2P/S,Light,I,II,,"VSTOL, SST-2000 Pairadigm"
+PECR,Fixed-wing,1P/S,Light,I,I,,"PRO-COMPOSITES, Personal Cruiser"
+PEGA,Fixed-wing,2P/S,Light,I,II,,"GENERAL AVIA, F-20 Pegaso"
+PEGZ,Fixed-wing,1P/S,Light,I,I,,"PEGASE AERO, Pegazair TAPANEE, Pegazair"
+PELI,Fixed-wing,1P/S,Light,I,I,,
+PEMB,Fixed-wing,2P/S+,Light,I,III,,
+PETL,Fixed-wing,1P/S,Light,I,I,,"AERO ITBA, Petrel"
+PGEE,Fixed-wing,1P/S,Light,I,I,,"HOLCOMB, Perigee"
+PGK1,Fixed-wing,1P/S,Light,I,I,,"WESTERN, PGK-1 Hirondelle"
+PHIL,Helicopter,1P/S,Light,I,I,,"VTOL AIRCRAFT, Phillicopter"
+PHIX,Gyroplane,1P/S,Light,I,I,,"PHENIX, Phenix"
+PHNX,Fixed-wing,1P/S,Light,I,I,,"FREEDOM, Phoenix"
+PIAE,Fixed-wing,1E/S,Light,I,I,,"PIPISTREL, Alpha Electro  PIPISTREL, WattsUp"
+PIAT,Fixed-wing,1P/S,Light,I,I,,"PIPISTREL, Alpha Trainer"
+PICO,Fixed-wing,1P/S,Light,I,I,,
+PILL,Fixed-wing,1P/S,Light,I,I,,
+PINO,Fixed-wing,1P/S,Light,I,I,,"GENERAL AVIA, F-22 Pinguino GENERAL AVIA, F-22 Pinguino Sprint"
+PIPA,Fixed-wing,1P/S,Light,I,I,,"PIPISTREL, Panthera"
+PISI,Fixed-wing,1P/S,Light,I,I,,"PIPISTREL, Sinus"
+PIT4,Fixed-wing,1E/S,Light,I,I,,"PIPISTREL, Taurus Electro G4"
+PITA,Fixed-wing,1P/S,Light,I,I,,"PIPISTREL, Taurus 503"
+PITE,Fixed-wing,1E/S,Light,I,I,,"PIPISTREL, Taurus Electro  PIPISTREL, Taurus Electro G2"
+PIVE,Fixed-wing,1E/S,Light,I,I,,"PIPISTREL, Velis Electro PIPISTREL, Virus (electric)"
+PIVI,Fixed-wing,1P/S,Light,I,I,,
+PK11,Fixed-wing,1P/S,Light,I,I,,"PIK, PIK-11 Tumppu"
+PK15,Fixed-wing,1P/S,Light,I,I,,"PIK, PIK-15 Hinu"
+PK18,Fixed-wing,1P/S,Light,I,I,,"PIK, PIK-18 Sytky"
+PK20,Fixed-wing,1P/S,Light,I,I,,
+PK21,Fixed-wing,1P/S,Light,I,I,,"PIK, PIK-21 Super Sytky"
+PK23,Fixed-wing,1P/S,Light,I,I,,
+PK25,Fixed-wing,1P/S,Light,I,I,,"PIK, PIK-25 Varttimarkka"
+PKAN,Fixed-wing,1P/S,Light,I,I,,"UETZ, U-3M Pelikan UETZ, U-4M Pelikan"
+PL1,Fixed-wing,1P/S,Light,I,I,,"PAZMANY, PL-1 Laminar"
+PL12,Fixed-wing,1P/S,Light,I,I,,
+PL2,Fixed-wing,1P/S,Light,I,I,,"PAZMANY, PL-2"
+PL4,Fixed-wing,1P/S,Light,I,I,,"PAZMANY, PL-4"
+PL9,Fixed-wing,1P/S,Light,I,I,,"PAZMANY, PL-9 Stork"
+PLUS,Fixed-wing,1P/S,Light,I,I,,
+PNR2,Fixed-wing,1P/S,Light,I,I,,"ALPI, Pioneer 200 ALPI, Pioneer 230"
+PNR3,Fixed-wing,1P/S,Light,I,I,,"ALPI, Pioneer 300 ALPI, Pioneer 330"
+PNR4,Fixed-wing,1P/S,Light,I,I,,"ALPI, Pioneer 400"
+PNTH,Fixed-wing,1P/S,Light,I,I,,"SPORT PERFORMANCE, Panther"
+PO2,Fixed-wing,1P/S,Light,I,I,,
+PO60,Fixed-wing,1P/S,Light,I,I,,"POTEZ, 60 Sauterelle POTEZ, 600 Sauterelle"
+POLI,Fixed-wing,1P/S,Light,I,I,,"ALVAREZ, Polliwagen"
+PP2,Fixed-wing,1P/S,Light,I,I,,"PILATUS, P-2"
+PP3,Fixed-wing,1P/S,Light,I,I,,"PILATUS, P-3"
+PPRO,Fixed-wing,1P/S,Light,I,I,,
+PRBP,Fixed-wing,1P/S,Light,I,I,,"HOWARD HUGHES, Pocket Rocket PR-Bipe"
+PRBR,Fixed-wing,1P/S,Light,I,I,,"HOWARD HUGHES, Pocket Rocket PR-Breeze"
+PRCE,Fixed-wing,2P/S,Light,I,II,,"PERCIVAL, P-57 Sea Prince"
+PREN,Fixed-wing,1P/S,Light,I,I,,"PERCIVAL, P-40 Prentice"
+PRET,Fixed-wing,1P/S,Light,I,I,,GM&T Pretty Flight
+PREX,Fixed-wing,1P/S,Light,I,I,,"PRIVATE EXPLORER, Private Explorer"
+PRIM,Fixed-wing,1P/S,Light,I,I,,"BLACKSHAPE, Bk-100 Prime"
+PRM1,Fixed-wing,2J/S,Light,I,III,7,
+PROC,Fixed-wing,1P/S,Light,I,I,,
+PROT,Fixed-wing,1P/S,Light,I,I,,"CSA, Parrot CZAW, Parrot"
+PROW,Fixed-wing,1P/S,Light,I,I,,
+PRPR,Fixed-wing,1P/S,Light,I,I,,"HOWARD HUGHES, Pocket Rocket PR-582 HOWARD HUGHES, Pocket Rocket PR-XP"
+PRTS,Fixed-wing,2J/S,Light,I,III,,"RUTAN, 281 Proteus SCALED, 281 Proteus"
+PRXT,Fixed-wing,1T/S,Light,I,I,,"PRIVATE EXPLORER, T-Explorer"
+PSTM,Fixed-wing,1P/S,Light,I,I,,"PODESVA, Stearman"
+PSW4,Helicopter,1T/S,Light,I,I,,
+PT21,Fixed-wing,1P/S,Light,I,I,,"POTTIER, P-210 Coati"
+PT22,Fixed-wing,1P/S,Light,I,I,,"RYAN, PT-22 Recruit RYAN, ST-3KR Recruit"
+PT70,Fixed-wing,1P/S,Light,I,I,,"POTTIER, P-170"
+PT80,Fixed-wing,1P/S,Light,I,I,,"POTTIER, P-180"
+PTMS,Fixed-wing,1P/S,Light,I,I,,
+PTRL,Fixed-wing,1P/S,Light,I,I,,"NASH, Petrel"
+PTS1,Fixed-wing,1P/S,Light,I,I,,
+PTS2,Fixed-wing,1P/S,Light,I,I,,
+PTSS,Fixed-wing,1P/S,Light,I,I,,"AVIAT, S-1-11 Super Stinker PITTS, S-1-11 Super Stinker"
+PUL6,Fixed-wing,1P/S,Light,I,I,,"PULSAR, Super Pulsar 600"
+PULR,Fixed-wing,1P/S,Light,I,I,,"P&M AVIATION, PulsR"
+PULS,Fixed-wing,1P/S,Light,I,I,,
+PUMA,Helicopter,2T/S+,Light,I,I,,
+PUP,Fixed-wing,1P/S,Light,I,I,2,"BEAGLE, B-121 Pup"
+PURS,Fixed-wing,1P/S,Light,I,I,,"RANS, S-11 Pursuit"
+PUSH,Fixed-wing,1P/S,Light,I,I,,"PRESCOTT, Pusher"
+PZ01,Fixed-wing,1P/S,Light,I,I,,"LIPNUR, PZL-101 Gawron PZL-OKECIE, PZL-101 Gawron"
+PZ02,Fixed-wing,1P/S,Light,I,I,,"PZL-OKECIE, PZL-102 Kos"
+PZ04,Fixed-wing,1P/S,Light,I,I,,
+PZ05,Fixed-wing,1P/S,Light,I,I,,"PZL-OKECIE, PZL-105 Flaming"
+PZ06,Fixed-wing,1P/S,Light,I,I,,
+PZ12,Fixed-wing,1P/S,Light,I,I,,"PZL-OKECIE, PZL-112 Junior PZL-OKECIE, PZL-112 Koliber Junior"
+PZ26,Fixed-wing,1P/S,Light,I,I,,"AGROLOT, PZL-126 Mrówka PZL-OKECIE, PZL-126 Mrówka"
+PZ3T,Fixed-wing,1T/S,Light,I,I,,"PZL-OKECIE, PZL-130 Orlik"
+PZ4M,Fixed-wing,1P/S,Light,I,I,,"PZL-OKECIE, PZL-104M Wilga 2000"
+PZ6T,Fixed-wing,1T/S,Light,I,I,,
+Q01,Fixed-wing,1P/S,Light,I,I,,"REINER STEMME, Q-01"
+Q5,Fixed-wing,2J/S+,Medium,H,III,,
+Q9,Fixed-wing,1T/S,Light,I,I,,
+QAIL,Fixed-wing,1P/S,Light,I,I,,"AEROSPORT, Quail"
+QALT,Fixed-wing,1P/S,Light,I,I,,"FMP, Qualt"
+QIC2,Fixed-wing,1P/S,Light,I,I,,"QUICKIE, Quickie Q2 QUICKIE, Quickie Q200"
+QINT,Fixed-wing,1P/S,Light,I,I,,"SCHEMPP-HIRTH, Quintus"
+QR01,Fixed-wing,1P/S,Light,I,I,,"QUERCY, CQR-01"
+QUAS,Fixed-wing,1P/S,Light,I,I,,"AEROALCOOL, Quasar Lite QUASAR, Quasar Lite"
+QUIC,Fixed-wing,1P/S,Light,I,I,,"QUICKIE, Quickie"
+R100,Fixed-wing,1P/S,Light,I,I,,"ROBIN, R-1180 Aiglon"
+R109,Fixed-wing,1P/S,Light,I,I,,
+R11,Fixed-wing,1P/S,Light,I,I,,"RUPERT, R-11"
+R12,Fixed-wing,1P/S,Light,I,I,,"RUPERT, R-12 Vimana"
+R135,Fixed-wing,4J/H,Heavy,D,III,,
+R185,Fixed-wing,1P/S,Light,I,I,,
+R200,Fixed-wing,1P/S,Light,I,I,,
+R22,Helicopter,1P/S,Light,I,I,,
+R300,Fixed-wing,1P/S,Light,I,I,,
+R4,Helicopter,1P/S,Light,I,I,,"SIKORSKY, H-4 Hoverfly SIKORSKY, R-4 Hoverfly"
+R44,Helicopter,1P/S,Light,I,I,,
+R66,Helicopter,1T/S,Light,I,I,,"ROBINSON, R-66"
+R721,Fixed-wing,3J/L,Medium,F,III,,"BOEING, 727-100RE Super 27"
+R722,Fixed-wing,3J/L,Medium,F,III,,"BOEING, 727-200RE Super 27"
+R90F,Fixed-wing,1P/S,Light,I,I,,"RUSCHMEYER, R-90-230FG"
+R90R,Fixed-wing,1P/S,Light,I,I,,"RUSCHMEYER, MF-85 RUSCHMEYER, R-90-230RG"
+R90T,Fixed-wing,1T/S,Light,I,I,,"RUSCHMEYER, R-90-420AT"
+RA14,Fixed-wing,1P/S,Light,I,I,,
+RA17,Fixed-wing,1P/S,Light,I,I,,"ADAM (1), RA-17 MARANDA, BM-3"
+RAF2,Gyroplane,1P/S,Light,I,I,,"ROTARY AIR FORCE, RAF-2000"
+RAID,Fixed-wing,1P/S,Light,I,I,,"SKY RAIDER, Super Sky Raider"
+RAIL,Fixed-wing,1P/S,Light,I,I,,"AEROSPORT, Rail"
+RALL,Fixed-wing,1P/S,Light,I,I,3,
+RANG,Fixed-wing,1P/S,Light,I,I,1,"NAVION, Rangemaster"
+RARO,Fixed-wing,1P/S,Light,I,I,,
+RAV3,Fixed-wing,1P/S,Light,I,I,,"RAVIN, Ravin 300"
+RAV5,Fixed-wing,1P/S,Light,I,I,,"RAVIN, Ravin 500"
+RAZM,Fixed-wing,1P/S,Light,I,I,,"SAINT GERMAIN, Raz-Mut"
+RBEL,Fixed-wing,1P/S,Light,I,I,,
+RC70,Fixed-wing,2P/S,Light,I,II,,
+RCAL,Fixed-wing,1P/S,Light,I,I,,"MURPHY,Radical"
+RD03,Fixed-wing,1P/S,Light,I,I,,"DURUBLE, RD-03 Edelweiss"
+RD20,Fixed-wing,1P/S,Light,I,I,,"DENIZE, RD-20 Raid Driver DENIZE, RD-205 Raid Driver"
+RDH2,Fixed-wing,1P/S,Light,I,I,,"REDFERN, DH-2"
+RELI,Fixed-wing,1P/S,Light,I,I,3,
+RENE,Fixed-wing,1P/S,Light,I,I,,"MURPHY, Renegade"
+REV6,Gyroplane,1T/S,Light,I,I,,"GROEN, Revcon 6G"
+RF10,Fixed-wing,1P/S,Light,I,I,,
+RF3,Fixed-wing,1P/S,Light,I,I,,"ALPAVIA, RF-3 FOURNIER, RF-3"
+RF4,Fixed-wing,1P/S,Light,I,I,,
+RF47,Fixed-wing,1P/S,Light,I,I,,"ARC ATLANTIQUE, RF-47 FOURNIER, RF-47"
+RF5,Fixed-wing,1P/S,Light,I,I,,
+RF6,Fixed-wing,1P/S,Light,I,I,,
+RF9,Fixed-wing,1P/S,Light,I,I,,
+RFAL,Fixed-wing,2J/L,Medium,G,III,,"DASSAULT, Rafale"
+RGNT,Fixed-wing,1P/S,Light,I,I,,
+RISN,Fixed-wing,1P/S,Light,I,I,,
+RJ03,Fixed-wing,1P/S,Light,I,I,,"JUNQUA, RJ-03 Ibis"
+RJ1H,Fixed-wing,4J/L,Medium,G,III,7,
+RJ70,Fixed-wing,4J/L,Medium,G,III,7,
+RJ85,Fixed-wing,4J/L,Medium,G,III,7,
+RK5,Fixed-wing,1P/S,Light,I,I,,"KALINAUSKAS, RK-5"
+RLU1,Fixed-wing,1P/S,Light,I,I,,"RLU, RLU-1 Breezy YAKIMA AEROSPORT, Super Breezy"
+RMOU,Helicopter,1T/S,Light,I,I,,"HILLBERG, EH1-01 Rotormouse"
+RNGR,Fixed-wing,1P/S,Light,I,I,,"DAC, RangeR"
+RODS,Fixed-wing,1P/S,Light,I,I,,"AIRCRAFT SPRUCE, DR-107 One Design RIHN, DR-107 One Design"
+ROND,Fixed-wing,1P/S,Light,I,I,,
+ROSE,Fixed-wing,1P/S,Light,I,I,,"MAUPIN, Windrose"
+RP1,Helicopter,2T/S,Light,I,I,,"MITSUBISHI, RP-1"
+RPUP,Gyroplane,1P/S,Light,I,I,,"LITTLE WING, LW-4 Roto-Pup LITTLE WING, LW-5 Roto-Pup"
+RS12,Fixed-wing,1P/S,Light,I,I,,"RANS, S-12 Airaile RANS, S-12 Super Airaile"
+RS18,Fixed-wing,1P/S,Light,I,I,,"SPORTAVIA-PÜTZER, RS-180 Sportsman"
+RS20,Fixed-wing,1P/S,Light,I,I,,"RANS, S-20 Raven"
+RS21,Fixed-wing,1P/S,Light,I,I,,"RANS, S-21 Outbound"
+RTA4,Fixed-wing,1P/S,Light,I,I,,"RTAF, RTAF-4 Chandra"
+RUBI,Fixed-wing,1P/S,Light,I,I,,"SCINTEX, ML-250 Rubis"
+RV10,Fixed-wing,1P/S,Light,I,I,,"VAN'S, RV-10"
+RV12,Fixed-wing,1P/S,Light,I,I,,"VAN'S, RV-12"
+RV14,Fixed-wing,1P/S,Light,I,I,,"VAN'S, RV-14"
+RV15,Fixed-wing,1P/S,Light,I,I,,"VAN'S, RV-15"
+RV3,Fixed-wing,1P/S,Light,I,I,,"VAN'S, RV-3"
+RV4,Fixed-wing,1P/S,Light,I,I,,"VAN'S, RV-4"
+RV4T,Fixed-wing,1T/S,Light,I,I,,"VAN'S, RV-4T"
+RV6,Fixed-wing,1P/S,Light,I,I,,
+RV7,Fixed-wing,1P/S,Light,I,I,,"VAN'S, RV-7"
+RV8,Fixed-wing,1P/S,Light,I,I,,"VAN'S, RV-8"
+RV9,Fixed-wing,1P/S,Light,I,I,,"VAN'S, RV-9"
+RVAL,Helicopter,2T/S+,Medium,H,I,,
+RVST,Fixed-wing,1P/S,Light,I,I,,"RUPERT, VimanaSteel"
+RW19,Fixed-wing,1P/S,Light,I,I,,"RAGWING, RW-19 Stork"
+RW20,Fixed-wing,1P/S,Light,I,I,,"RAGWING, RW-20 Stork"
+RW22,Fixed-wing,1P/S,Light,I,I,,"RAGWING, RW-22 Tiger Moth"
+RW26,Fixed-wing,1P/S,Light,I,I,,"RAGWING, RW-26 Special 2"
+RW3,Fixed-wing,1P/S,Light,I,I,,
+RYSA,Fixed-wing,2T/S+,Light,I,III,,"PROGRESS, Rysachok TECHNOAVIA, Rysachok"
+RYST,Fixed-wing,1P/S,Light,I,I,,
+S05F,Fixed-wing,1P/S,Light,I,I,,"SIAI-MARCHETTI, S-205-18F SIAI-MARCHETTI, S-205-20F"
+S05R,Fixed-wing,1P/S,Light,I,I,,
+S1,Fixed-wing,1P/S,Light,I,I,,
+S10,Fixed-wing,1P/S,Light,I,I,,
+S108,Fixed-wing,1P/S,Light,I,I,2,
+S10S,Fixed-wing,1P/S,Light,I,I,,"STEMME, S-10 STEMME, S-10 Chrysalis"
+S11,Fixed-wing,1P/S,Light,I,I,,"FOKKER, S-11 Instructor"
+S122,Fixed-wing,2P/S,Light,I,II,,"SKYLINE, Pchelka SKYLINE, SL-122 Pchelka"
+S12S,Fixed-wing,1P/S,Light,I,I,,"STEMME, S-12 Twin Voyager"
+S15S,Fixed-wing,1P/S,Light,I,I,,"STEMME, S-15"
+S160,Fixed-wing,1P/S,Light,I,I,,"SUNWARD, SA160"
+S200,Fixed-wing,1J/S,Light,I,III,,"SIPA, S-200 Minijet"
+S208,Fixed-wing,1P/S,Light,I,I,,"SIAI-MARCHETTI, S-208"
+S21,Fixed-wing,1P/S,Light,I,I,,"MACDONALD, S-21"
+S211,Fixed-wing,1J/S,Light,I,III,,
+S223,Fixed-wing,1P/S,Light,I,I,,
+S22T,Fixed-wing,1P/S,Light,I,I,5,"CIRRUS, SR-22 Turbo CIRRUS, SR-22T"
+S274,Helicopter,1T/S,Light,I,I,,"IRGC, Shahed 274"
+S278,Helicopter,1T/S,Light,I,I,,"HESA, Shahed 278 HESA, Shahed OH-78"
+S285,Helicopter,1T/S,Light,I,I,,"HESA, Shahed 285 HESA, Shahed AH-85"
+S2P,Fixed-wing,2P/S+,Medium,H,III,,
+S2T,Fixed-wing,2T/S+,Medium,H,III,,
+S3,Fixed-wing,2J/L,Medium,G,III,,"LOCKHEED, L-394 Viking LOCKHEED, S-3 Viking"
+S330,Helicopter,1T/S,Light,I,I,,
+S360,Helicopter,1T/S,Light,I,I,,"AEROSPATIALE, SA-360 Dauphin AEROSPATIALE, SA-361 Dauphin"
+S37,Fixed-wing,2J/L,Medium,G,III,,"SUKHOI, S-37 Berkut SUKHOI, Su-47 Berkut"
+S4,Fixed-wing,1P/S,Light,I,I,,"ARCTIC, S-4 Privateer"
+S401,Fixed-wing,1J/S,Light,I,III,,"SCALED, 401 Sierra"
+S434,Helicopter,1T/S,Light,I,I,,"SIKORSKY, S-434"
+S45,Fixed-wing,1P/S,Light,I,I,,"PARTENAIR, S-45 Mystere"
+S450,Fixed-wing,1P/S,Light,I,I,,"AERO-EAST-EUROPE, SILA-450"
+S51,Helicopter,1P/S,Light,I,I,,
+S51D,Fixed-wing,1P/S,Light,I,I,,"STEWART (1), S-51D"
+S52,Helicopter,1P/S,Light,I,I,,
+S55P,Helicopter,1P/S,Light,I,I,,
+S55T,Helicopter,1T/S,Light,I,I,,
+S58P,Helicopter,1P/S+,Light,I,I,,
+S58T,Helicopter,1T/S+,Light,I,I,,
+S6,Fixed-wing,1P/S,Light,I,I,,"STEMME, S-6"
+S601,Fixed-wing,2J/S+,Light,I,III,5,"AEROSPATIALE, SN-601 Corvette"
+S61,Helicopter,2T/S+,Medium,H,I,,
+S61R,Helicopter,2T/S+,Medium,H,I,,
+S62,Helicopter,1T/S,Light,I,I,,"SIKORSKY, HH-52 Seaguard SIKORSKY, S-62"
+S64,Helicopter,2T/L,Medium,G,I,,"SIKORSKY, CH-54 Tarhe SIKORSKY, S-64 Skycrane"
+S65C,Helicopter,2T/S,Light,I,I,,"AEROSPATIALE, SA-365C Dauphin 2"
+S716,Fixed-wing,1J/S,Light,I,III,,"STRATOS, 714 STRATOS, 716"
+S76,Helicopter,2T/S,Light,I,I,,
+S900,Fixed-wing,1P/S,Light,I,I,,
+S92,Helicopter,2T/S+,Medium,H,I,,
+S97,Helicopter,1T/S,Light,I,I,,"SIKORSKY, S-97 Raider"
+SA02,Fixed-wing,1P/S,Light,I,I,,"K & S, SA-102.5 Cavalier"
+SA03,Fixed-wing,1P/S,Light,I,I,,"K & S, SA-103 Cavalier"
+SA04,Fixed-wing,1P/S,Light,I,I,,"K & S, SA-104 Cavalier"
+SA05,Fixed-wing,1P/S,Light,I,I,,"K & S, SA-105 Super Cavalier"
+SA10,Fixed-wing,1P/S,Light,I,I,,"STOLP, SA-100 Starduster"
+SA11,Fixed-wing,1P/S,Light,I,I,,"STITS, SA-11 Playmate"
+SA2,Fixed-wing,1P/S,Light,I,I,,"ICP, SA-2 Rampage ICP, SA-2 Vimana"
+SA3,Fixed-wing,1P/S,Light,I,I,,"STITS, SA-3 Playboy"
+SA30,Fixed-wing,1P/S,Light,I,I,,"STOLP, SA-300 Starduster Too"
+SA37,Fixed-wing,1P/S,Light,I,I,,"SCHWEIZER, RG-8 Condor SCHWEIZER, SA-2-37 Condor"
+SA38,Fixed-wing,2P/S,Light,I,II,,"SCHWEIZER, RU-38A Twin Condor SCHWEIZER, SA-2-38A Twin Condor"
+SA50,Fixed-wing,1P/S,Light,I,I,,"STOLP, SA-500 Starlet"
+SA6,Fixed-wing,1P/S,Light,I,I,,"STITS, SA-6 Flut-R-Bug"
+SA6E,Fixed-wing,1T/S,Light,I,I,,"SREYA, SA-6 Envoy"
+SA7,Fixed-wing,1P/S,Light,I,I,,"STITS, SA-7 Sky-Coupe"
+SA70,Fixed-wing,1P/S,Light,I,I,,"STOLP, SA-700 Acroduster"
+SA75,Fixed-wing,1P/S,Light,I,I,,"STOLP, SA-750 Acroduster Too"
+SA8T,Fixed-wing,2T/S,Light,I,II,,"SCHWEIZER, RU-38B Twin Condor SCHWEIZER, SA-2-38B Twin Condor"
+SAB2,Fixed-wing,1P/S,Light,I,I,,"ARNET PEREYRA, Sabre 2 KEUTHAN, Sabre 2"
+SABA,Fixed-wing,1P/S,Light,I,I,,"PARAVAR PARS, Saba"
+SABW,Fixed-wing,1P/S,Light,I,I,,"AZALEA, Saberwing"
+SACE,Fixed-wing,1P/S,Light,I,I,,
+SACR,Fixed-wing,1P/S,Light,I,I,,"SMITH (3), Acro Advanced"
+SAFF,Fixed-wing,1P/S,Light,I,I,,"HALSTED, Saffire"
+SAH1,Fixed-wing,1P/S,Light,I,I,,"FLS, Sprint TRAGO MILLS, SAH-1"
+SAKO,Fixed-wing,1P/S,Light,I,I,,"RANS, S-10 Sakota"
+SALB,Fixed-wing,1P/S,Light,I,I,,"SKYGEAR, Albatross"
+SAM,Fixed-wing,1P/S,Light,I,I,,"SAM AIRCRAFT, Sam"
+SAPH,Fixed-wing,1P/S,Light,I,I,,"PIEL, CP-1320 Saphir"
+SASH,Fixed-wing,2P/S,Light,I,II,,"SHARK AIRCRAFT, Shark"
+SASP,Fixed-wing,1P/S,Light,I,I,,"SUPERMARINE AIRCRAFT, Spitfire Mk25 SUPERMARINE AIRCRAFT, Spitfire Mk26"
+SASY,Fixed-wing,1P/S,Light,I,I,,"PROTECH, PT-2 ProStar PROTECH, PT-2 Sassy"
+SATA,Fixed-wing,2J/S,Light,I,III,,
+SAVA,Fixed-wing,1P/S,Light,I,I,,"SADLER, Vampire"
+SAVG,Fixed-wing,1P/S,Light,I,I,,
+SB05,Fixed-wing,2J/S,Light,I,III,,"SAAB, 105 SAAB, Sk60"
+SB20,Fixed-wing,2T/L,Medium,G,III,,"SAAB, 2000"
+SB29,Fixed-wing,1J/S+,Medium,H,III,,"SAAB, 29 SAAB, J29"
+SB32,Fixed-wing,1J/S+,Medium,H,III,,"SAAB, 32 Lansen SAAB, J32 Lansen"
+SB35,Fixed-wing,1J/S+,Medium,H,III,,
+SB37,Fixed-wing,1J/L,Medium,G,III,,
+SB39,Fixed-wing,1J/S+,Medium,H,III,,"SAAB, 39 Gripen SAAB, JAS39 Gripen"
+SB7,Fixed-wing,1P/S,Light,I,I,,"SEABIRD, SB-7 Seeker"
+SB91,Fixed-wing,1P/S,Light,I,I,,
+SBD,Fixed-wing,1P/S,Light,I,I,,"DOUGLAS, A-24 Dauntless DOUGLAS, SBD Dauntless"
+SBLS,Fixed-wing,2P/S,Light,I,II,,"SLIPSTREAM, SkyBlaster"
+SBM3,Fixed-wing,1P/S,Light,I,I,,"E & K, SBM-03 Kos"
+SBOY,Fixed-wing,1P/S,Light,I,I,,"INTERPLANE, Skyboy"
+SBR1,Fixed-wing,2J/S+,Medium,H,III,,
+SBR2,Fixed-wing,2J/S+,Medium,H,III,,
+SC01,Fixed-wing,1P/S,Light,I,I,,"FFT, SC-01 Speed Canard GYROFLUG, SC-01 Speed Canard"
+SC7,Fixed-wing,2T/S,Light,I,III,2,"SHORT, SC-7 Skyliner SHORT, SC-7 Skyvan"
+SCAM,Fixed-wing,1P/S,Light,I,I,,"AEROSPORT, Scamp AGRO-COPTEROS, Scamp"
+SCEP,Fixed-wing,1P/S,Light,I,I,,"SLIPSTREAM, Scepter"
+SCII,Gyroplane,1P/S,Light,I,I,,"SPORT COPTER, SportCopter 2"
+SCOM,Fixed-wing,1P/S,Light,I,I,,"AIRDALE, Comet SKYGEAR, Comet"
+SCOR,Helicopter,1P/S,Light,I,I,,"ROTORWAY, Scorpion"
+SCOU,Helicopter,1T/S,Light,I,I,,"WESTLAND, Scout"
+SCRO,Fixed-wing,1P/S,Light,I,I,,"AKAFLIEG MUNCHEN, Mü-30 Schlacro"
+SCTR,Fixed-wing,1P/S,Light,I,I,,"FLAGLOR, Scooter"
+SCUB,Fixed-wing,1P/S,Light,I,I,,"AERO KUHLMANN, Scub"
+SCW1,Fixed-wing,1P/S,Light,I,I,,"SCWAL, 101"
+SD2,Fixed-wing,1P/S,Light,I,I,,"SPACEK, SD-2 SportMaster"
+SD26,Fixed-wing,1P/S,Light,I,I,,"SKYDANCER, SD-260"
+SD4,Fixed-wing,1P/S,Light,I,I,,"TOMARK, SD-4 Viper"
+SDUS,Fixed-wing,1P/S,Light,I,I,,"STOLP, Super Starduster"
+SE5A,Fixed-wing,1P/S,Light,I,I,,"RAF, SE-5A RAF, SE-5A Replica"
+SE5R,Fixed-wing,1P/S,Light,I,I,,"REPLICA PLANS, SE-5A Replica"
+SERA,Fixed-wing,1P/S,Light,I,I,,"SERVOPLANT, Aerocraft"
+SF2,Fixed-wing,1P/S,Light,I,I,,
+SF23,Fixed-wing,1P/S,Light,I,I,,"SCHEIBE, SF-23 Sperling"
+SF24,Fixed-wing,1P/S,Light,I,I,,"SCHEIBE, SF-24 Motorspatz"
+SF25,Fixed-wing,1P/S,Light,I,I,,
+SF27,Fixed-wing,1P/S,Light,I,I,,"SCHEIBE, SF-27M"
+SF28,Fixed-wing,1P/S,Light,I,I,,"SCHEIBE, SF-28 Tandem Falke"
+SF31,Fixed-wing,1P/S,Light,I,I,,"SPORTAVIA-PÜTZER, SFS-31 Milan"
+SF32,Fixed-wing,1P/S,Light,I,I,,"SCHEIBE, SF-32"
+SF34,Fixed-wing,2T/L,Medium,G,III,5,
+SF35,Fixed-wing,1P/S,Light,I,I,,"SCHEIBE, SF-35"
+SF36,Fixed-wing,1P/S,Light,I,I,,"SCHEIBE, SF-36"
+SF50,Fixed-wing,1J/S,Light,I,III,5,"CIRRUS, SF-50 Vision CIRRUS, SJ-X Vision"
+SG37,Fixed-wing,1P/S,Light,I,I,,"SCHWEIZER, SGM-2-37 SCHWEIZER, TG-7"
+SG70,Fixed-wing,1P/S,Light,I,I,,"GLASS, SG-70 STOLGlass"
+SG92,Fixed-wing,1T/S,Light,I,I,,"TECHNOAVIA, SM-92T Turbo Finist TECHNOAVIA, SMG-92 Turbo Finist"
+SGRA,Fixed-wing,1P/S,Light,I,I,,
+SGUP,Fixed-wing,4T/L,Medium,F,III,10,"AERO SPACELINES, 377SGT Super Guppy"
+SH09,Helicopter,1T/S,Light,I,I,,"KOPTER, SH-09"
+SH33,Fixed-wing,2T/S+,Medium,H,III,6,
+SH36,Fixed-wing,2T/S+,Medium,H,III,6,"SHORT, 360 SHORT, SD3-60"
+SH4,Helicopter,1P/S,Light,I,I,,"SILVERCRAFT, SH-4"
+SHAC,Fixed-wing,4P/L,Medium,F,III,,"AVRO, 696 Shackleton"
+SHAW,Fixed-wing,1J/S+,Medium,H,III,,"ARMSTRONG WHITWORTH, Sea Hawk HAWKER, Sea Hawk"
+SHEK,Fixed-wing,1P/S,Light,I,I,,"RANS, S-16 Shekari"
+SHER,Fixed-wing,1P/S,Light,I,I,,"SHERPA, Sherpa SHERPA, Sherpa C-400"
+SHOE,Fixed-wing,1P/S,Light,I,I,,"MERCURY, Shoestring"
+SHOP,Fixed-wing,1P/S,Light,I,I,,"SALVAY-STARK, Skyhopper"
+SHOR,Fixed-wing,1P/S,Light,I,I,,"HIGHER CLASS, Super Hornet"
+SHRK,Fixed-wing,1P/S,Light,I,I,,"SHARK AERO, Shark"
+SHRT,Fixed-wing,1T/S,Light,I,I,,"SHERPA, Sherpa K-650T"
+SIDE,Fixed-wing,1P/S,Light,I,I,,"SMYTH, S Sidewinder"
+SIGM,Fixed-wing,1P/S,Light,I,I,,"ELITAR, Sigma"
+SILH,Fixed-wing,1P/S,Light,I,I,,"LUNDS TEKNISKE, SA-60 Silhouette SILHOUETTE, SA-60 Silhouette"
+SIR2,Fixed-wing,1P/S,Light,I,I,,"RHEIN, Sirius 2"
+SIRA,Fixed-wing,1P/S,Light,I,I,,
+SJ30,Fixed-wing,2J/S+,Light,I,III,,
+SK10,Fixed-wing,1P/S,Light,I,I,,"SKYETON, K-10 Swift"
+SK70,Fixed-wing,2P/S,Light,I,II,,"STARKRAFT, SK-700"
+SKAR,Fixed-wing,1P/S,Light,I,I,,"III, Sky Arrow"
+SKRA,Fixed-wing,1P/S,Light,I,I,,"BEST OFF, Sky Ranger SYNAIRGIE , Sky Ranger"
+SKYC,Fixed-wing,2P/S,Light,I,II,,"OMA SUD, Skycar"
+SKYO,Fixed-wing,1P/S,Light,I,I,,"SKYOTE AEROMARINE, Skyote"
+SKYR,Fixed-wing,1P/S,Light,I,I,,
+SL1,Fixed-wing,1P/S,Light,I,I,,"STAR-LITE, SL-1 Star-Lite"
+SL39,Fixed-wing,1P/S,Light,I,I,,"MAPO, SL-39"
+SL90,Fixed-wing,1P/S,Light,I,I,,
+SLG2,Fixed-wing,1P/S,Light,I,I,1,
+SLG4,Fixed-wing,1P/S,Light,I,I,1,
+SLH4,Fixed-wing,1P/S,Light,I,I,,"SLING AIRCRAFT, Sling 4 High Wing"
+SLK3,Fixed-wing,1P/S,Light,I,I,,"SLICK, 360"
+SLK5,Fixed-wing,1P/S,Light,I,I,,"SLICK, 540"
+SM01,Fixed-wing,1P/S,Light,I,I,,"STERN-MALLICK, SM-01 Vega"
+SM19,Fixed-wing,1T/S,Light,I,I,,"SIAI-MARCHETTI, SM-1019"
+SM20,Fixed-wing,1T/S,Light,I,I,,"TECHNOAVIA, SM-2000"
+SM60,Fixed-wing,3P/S,Light,I,III,,"STINSON, SM-6000 Tri-Motor STINSON, T Tri-Motor"
+SM92,Fixed-wing,1P/S,Light,I,I,,
+SMB2,Fixed-wing,1J/S+,Medium,H,III,,"DASSAULT, Super Mystère B2"
+SNAD,Gyroplane,1P/S,Light,I,I,,"CALUMET, 636 Snobird Adventurer SNOBIRD, 636 Snobird Adventurer"
+SNAP,Fixed-wing,1P/S,Light,I,I,,
+SNGY,Fixed-wing,1P/S,Light,I,I,,
+SNOS,Fixed-wing,1P/S,Light,I,I,,"VSR, SR-1 Snoshoo"
+SNS2,Fixed-wing,1P/S,Light,I,I,,"SORRELL, SNS-2 Guppy"
+SNS7,Fixed-wing,1P/S,Light,I,I,,"SORRELL, SNS-7 Hiperbipe"
+SNS9,Fixed-wing,1P/S,Light,I,I,,"SORRELL, SNS-9 EXP-2"
+SNTA,Fixed-wing,1P/S,Light,I,I,,"AIRSPORT, Sonata"
+SOK2,Fixed-wing,1P/S,Light,I,I,,"SOKO, 2"
+SOKL,Fixed-wing,1P/S,Light,I,I,,"MRÁZ, M-1 Sokol"
+SOL1,Fixed-wing,4E/S,Light,I,III,,"SOLAR IMPULSE, 1"
+SOL2,Fixed-wing,4E/S,Light,I,III,,"SOLAR IMPULSE, 2"
+SOLI,Fixed-wing,1P/S,Light,I,I,,"RUTAN, 77 Solitaire"
+SONX,Fixed-wing,1P/S,Light,I,I,,"SONEX, Sonex"
+SORA,Fixed-wing,1P/S,Light,I,I,,"ACS (1), ACS-100 Sora"
+SP20,Fixed-wing,1P/S,Light,I,I,,
+SP33,Fixed-wing,2J/S,Light,I,III,,"SPECTRUM, S-33 Independence"
+SP55,Fixed-wing,1P/S,Light,I,I,,"TECHNOAVIA, SP-55"
+SP6E,Fixed-wing,1P/S,Light,I,I,,"SAUSER, P-6E Replica"
+SP7,Fixed-wing,1P/S,Light,I,I,,"SPARTAN, 7 Executive SPARTAN, UC-71 Executive"
+SP91,Fixed-wing,1P/S,Light,I,I,,"TECHNOAVIA, SP-91 Slava"
+SP95,Fixed-wing,1P/S,Light,I,I,,"TECHNOAVIA, SP-95"
+SPA2,Fixed-wing,1P/S,Light,I,I,,"STARK-TREFETHEN, Sport-Aire 2"
+SPAR,Fixed-wing,1P/S,Light,I,I,,"III, Speed Arrow"
+SPDR,Fixed-wing,1P/S,Light,I,I,,"REARWIN, 6000 Speedster"
+SPEL,Fixed-wing,1P/S,Light,I,I,,"LOEHLE, Spitfire Elite"
+SPGY,Gyroplane,1P/S,Light,I,I,,"AIRCRAFT DESIGNS, Sportster Gyro"
+SPHA,Gyroplane,1P/S,Light,I,I,,"AMERICAN AUTOGYRO, SparrowHawk AMERICAN AUTOGYRO, Spinus"
+SPIR,Fixed-wing,1P/S,Light,I,I,,"QUESTAIR, Spirit"
+SPIT,Fixed-wing,1P/S,Light,I,I,,"SUPERMARINE, Seafire SUPERMARINE, Spitfire"
+SPKR,Fixed-wing,1P/S,Light,I,I,,"TL ULTRALIGHT, Sparker"
+SPOR,Fixed-wing,1P/S,Light,I,I,,"AMAX, Sport 1700"
+SPR2,Fixed-wing,1P/S,Light,I,I,,"CARLSON, Sparrow 2 CARLSON, Sparrow-ette"
+SPRT,Fixed-wing,1P/S,Light,I,I,,"PRACTAVIA, Sprite"
+SPST,Fixed-wing,1P/S,Light,I,I,,
+SPUP,Fixed-wing,1P/S,Light,I,I,,
+SQ2T,Fixed-wing,1P/S,Light,I,I,,"GLASSIC, SQ-2000 KLS COMPOSITES, SQ-2000"
+SQES,Fixed-wing,2P/S,Light,I,II,,"INNOVATION, SkyQuest SLIPSTREAM, SkyQuest"
+SR01,Fixed-wing,1P/S,Light,I,I,,"EURODISPLAY, SR-01 Magic"
+SR20,Fixed-wing,1P/S,Light,I,I,1,
+SR22,Fixed-wing,1P/S,Light,I,I,1,"CIRRUS, SR-22"
+SRAC,Fixed-wing,1P/S,Light,I,I,,"SPORT RACER, Sport Racer"
+SRAI,Fixed-wing,1P/S,Light,I,I,,"GREAT LAKES, Sonerai MONNETT, Sonerai"
+SRAS,Fixed-wing,1P/S,Light,I,I,,
+SS2,Fixed-wing,1R/S+,Medium,H,III,,"RUTAN, 339 Space Ship Two SCALED, 339 Space Ship Two"
+SS2P,Fixed-wing,1P/S,Light,I,I,,
+SS2T,Fixed-wing,1T/S+,Light,I,I,,
+SSAB,Fixed-wing,1J/S+,Medium,H,III,,"NORTH AMERICAN, F-100 Super Sabre"
+SSC,Gyroplane,1P/S,Light,I,I,,"BUTTERFLY, Super Sky Cycle"
+SSTL,Fixed-wing,1P/S,Light,I,I,,"JUST, JA30 SuperSTOL JUST, JA35 SuperSTOL XL"
+ST1,Fixed-wing,2P/S,Light,I,II,,"PHILLIPS, ST-1 Speedtwin SPEEDTWIN, E2E Speedtwin"
+ST10,Fixed-wing,1P/S,Light,I,I,,
+ST3,Fixed-wing,1P/S,Light,I,I,,"STEARMAN, C-3"
+ST30,Fixed-wing,1P/S,Light,I,I,,
+ST4,Fixed-wing,1P/S,Light,I,I,,"STEARMAN, 4 Junior Speedmail STEARMAN, 4 Senior Speedmail"
+ST6,Fixed-wing,1P/S,Light,I,I,,"STEARMAN, 6 Cloudboy STEARMAN, YPT-9"
+ST60,Fixed-wing,1P/S,Light,I,I,,"STAUDACHER, S-600"
+ST75,Fixed-wing,1P/S,Light,I,I,,
+ST87,Fixed-wing,1P/S,Light,I,I,,"STERN, ST-87 Europlane"
+STAL,Fixed-wing,1P/S,Light,I,I,,"AIRCRAFT DESIGNS, Stallion AIRCRAFT DESIGNS, Super Stallion"
+STAR,Fixed-wing,2T/S+,Light,I,III,7,"BEECH, 2000 Starship RAYTHEON, 2000 Starship"
+STAT,Fixed-wing,1T/S,Light,I,I,,"AIRCRAFT DESIGNS, Turbine Stallion"
+STCH,Fixed-wing,1P/S,Light,I,I,,"FLY SYNTHESIS, Storch"
+STFF,Fixed-wing,1P/S,Light,I,I,,"STATLER, Firefly"
+STG2,Fixed-wing,1P/S,Light,I,I,,"RANS, S-18 Stinger 2"
+STIL,Fixed-wing,1P/S,Light,I,I,,"TERZI, T-9 Stiletto"
+STLN,Fixed-wing,1T/S,Light,I,I,1,"HELIO, AU-24 Stallion HELIO, HST-550 Stallion"
+STOR,Fixed-wing,1P/S,Light,I,I,,
+STR2,Fixed-wing,1P/S,Light,I,I,,"STROJNIK, S-2"
+STRA,Fixed-wing,1P/S,Light,I,I,,"STRIPLIN, Lone Ranger STRIPLIN, Sky Ranger"
+STRE,Fixed-wing,1P/S,Light,I,I,,"TL ULTRALIGHT, Stream"
+STRI,Fixed-wing,1P/S,Light,I,I,,"SOPWITH, Triplane Replica ST. CROIX, Sopwith Triplane"
+STRK,Fixed-wing,1J/S,Light,I,III,,"BAC, 167 Strikemaster BRITISH AEROSPACE, BAC-167 Strikemaster"
+STRM,Fixed-wing,1P/S,Light,I,I,,"SG AVIATION, Storm STORMAIRCRAFT, Storm"
+STST,Fixed-wing,1P/S,Light,I,I,,"CFM, SA-2 Star Streak"
+SU17,Fixed-wing,1J/L,Medium,G,III,,
+SU24,Fixed-wing,2J/L,Medium,G,III,,"SUKHOI, Su-24"
+SU25,Fixed-wing,2J/L,Medium,G,III,,
+SU26,Fixed-wing,1P/S,Light,I,I,,"SUKHOI, Su-26"
+SU27,Fixed-wing,2J/L,Medium,G,III,,
+SU29,Fixed-wing,1P/S,Light,I,I,,"SUKHOI, Su-29"
+SU31,Fixed-wing,1P/S,Light,I,I,,"SUKHOI, Su-31"
+SU38,Fixed-wing,1P/S,Light,I,I,,"SUKHOI, Su-38"
+SU7,Fixed-wing,1J/S+,Medium,H,III,,"SUKHOI, Su-7"
+SU80,Fixed-wing,2T/S+,Medium,H,III,,"SUKHOI, Su-80"
+SU95,Fixed-wing,2J/L,Medium,F,III,,"SUKHOI, Superjet 100-95"
+SUBA,Fixed-wing,1P/S,Light,I,I,,"FUJI, FA-200 Aero Subaru"
+SUCO,Helicopter,2T/S+,Medium,H,I,,
+SUNV,Fixed-wing,1P/S,Light,I,I,,"FOKKER, Super Universal"
+SURN,Helicopter,2T/S+,Medium,H,I,,"KOREA AEROSPACE, KUH-1 Surion KOREA AEROSPACE, MUH-1 Marineon"
+SURU,Fixed-wing,1P/S,Light,I,I,,"IPT, IPT-16 Surubim"
+SUSO,Fixed-wing,1P/S,Light,I,I,,"VSTOL, SS-2000 Super Solution"
+SV4,Fixed-wing,1P/S,Light,I,I,,
+SVNH,Fixed-wing,1P/S,Light,I,I,,
+SW18,Fixed-wing,1P/S,Light,I,I,,"SKYWOOD, SW-18 Teddy"
+SW2,Fixed-wing,2T/S,Light,I,II,6,"SWEARINGEN, SA-26 Merlin 2"
+SW3,Fixed-wing,2T/S+,Light,I,III,5,
+SWAK,Fixed-wing,1P/S,Light,I,I,,
+SWAT,Fixed-wing,1P/S,Light,I,I,,"BHARAT, LT-1 Swati BHARAT, LT-2 Swati"
+SWFT,Fixed-wing,1J/S+,Light,H,III,,"SCALED, 400 Swift"
+SWIN,Fixed-wing,1P/S,Light,I,I,,"S-WING, S-Wing"
+SWOR,Fixed-wing,1P/S,Light,I,I,,"BLACKBURN, Swordfish FAIREY, Swordfish"
+SX30,Fixed-wing,1P/S,Light,I,I,,"SWEARINGEN, SX-300"
+SYCA,Helicopter,1P/S,Light,I,I,,"BRISTOL, 171 Sycamore"
+SYMP,Fixed-wing,1P/S,Light,I,I,,"OMF, OMF-100 Symphony SYMPHONY, SA-160 Symphony"
+SYNC,Fixed-wing,1P/S,Light,I,I,,"FLY SYNTHESIS, Syncro"
+SZ45,Fixed-wing,1P/S,Light,I,I,,"SZD, SZD-45 Ogar"
+SZ9M,Fixed-wing,1P/S,Light,I,I,,"SZD, SZD-9bis Bocian M-2000 YALO, SZD-9bis Bocian M-2000"
+T1,Fixed-wing,1J/S,Light,I,III,,"FUJI, T-1 FUJI, T1F"
+T10,Fixed-wing,1P/S,Light,I,I,,"TMM-AVIA, T-10 Avia-Tor"
+T101,Fixed-wing,1T/S,Light,I,I,,"AEROPROGRESS, T-101 Grach"
+T134,Fixed-wing,2J/L,Medium,F,III,,"TUPOLEV, Tu-134"
+T154,Fixed-wing,3J/L,Medium,F,III,,"TUPOLEV, Tu-154"
+T160,Fixed-wing,4J/H,Heavy,D,III,,"TUPOLEV, Tu-160"
+T18,Fixed-wing,1P/S,Light,I,I,,
+T19,Fixed-wing,1P/S,Light,I,I,,"THK, T-19 Speedfire THK, T-19 Türkkuşu"
+T2,Fixed-wing,2J/S+,Light,I,III,,
+T204,Fixed-wing,2J/L,Medium,F,III,,
+T206,Fixed-wing,1P/S,Light,I,I,2,
+T210,Fixed-wing,1P/S,Light,I,I,2,"CESSNA, T210 Turbo Centurion"
+T211,Fixed-wing,1P/S,Light,I,I,,
+T22M,Fixed-wing,2J/L,Medium,F,III,,"TUPOLEV, Tu-22M"
+T250,Fixed-wing,1P/S,Light,I,I,,
+T28,Fixed-wing,1P/S,Light,I,I,,
+T30,Fixed-wing,1P/S,Light,I,I,,"TERZI, T-30 Katana"
+T33,Fixed-wing,1J/L,Medium,H,III,,
+T334,Fixed-wing,2J/L,Medium,F,III,,"TUPOLEV, Tu-334"
+T34P,Fixed-wing,1P/S,Light,I,I,1,
+T34T,Fixed-wing,1T/S,Light,I,I,,"BEECH, T-34C Turbo Mentor FUJI, T-3Kai"
+T35,Fixed-wing,1P/S,Light,I,I,,"TEMCO, T-35 Buckaroo TEMCO, TE-1 Buckaroo"
+T37,Fixed-wing,2J/S,Light,I,III,,
+T38,Fixed-wing,2J/S,Light,I,III,,
+T4,Fixed-wing,2J/S+,Medium,H,III,,"KAWASAKI, T-4"
+T40,Fixed-wing,1P/S,Light,I,I,,"TURNER, T-40"
+T411,Fixed-wing,1P/S,Light,I,I,,
+T415,Fixed-wing,1P/S,Light,I,I,,"KHRUNICHEV, T-415 Snegir"
+T419,Fixed-wing,1P/S,Light,I,I,,"KHRUNICHEV, AT-419 Strekoza"
+T5,Fixed-wing,1T/S,Light,I,I,,
+T50,Fixed-wing,2P/S,Light,I,II,,
+T51,Fixed-wing,1P/S,Light,I,I,,"TITAN, T-51 Mustang"
+T6,Fixed-wing,1P/S,Light,I,I,2,
+T7,Fixed-wing,1T/S,Light,I,I,,"FUJI, T-7"
+TA15,Fixed-wing,1P/S,Light,I,I,,"TAYLORCRAFT (1), 15 Foursome TAYLORCRAFT (1), 15 Tourist"
+TA20,Fixed-wing,1P/S,Light,I,I,4,
+TAA1,Fixed-wing,1P/S,Light,I,I,,"SCALED, TAA-1 TOYOTA, TAA-1"
+TAGO,Fixed-wing,1P/S,Light,I,I,,
+TAIL,Fixed-wing,1P/S,Light,I,I,,
+TAMP,Fixed-wing,1P/S,Light,I,I,2,"SOCATA, TB-9 Tampico"
+TARO,Fixed-wing,1P/S,Light,I,I,,"ANAHUAC, Tauro"
+TARR,Fixed-wing,1P/S,Light,I,I,,"PELEGRIN, Tarragon"
+TAYA,Fixed-wing,1P/S,Light,I,I,,"TAYLORCRAFT (1), A TAYLOR-YOUNG, A"
+TAYB,Fixed-wing,1P/S,Light,I,I,,
+TAYD,Fixed-wing,1P/S,Light,I,I,,
+TB05,Fixed-wing,1P/S,Light,I,I,,"AMC, Texas Bullet 205"
+TB20,Fixed-wing,1P/S,Light,I,I,,
+TB21,Fixed-wing,1P/S,Light,I,I,,"SOCATA, TB-21 Trinidad TC"
+TB30,Fixed-wing,1P/S,Light,I,I,,
+TB31,Fixed-wing,1T/S,Light,I,I,,"SOCATA, TB-31 Omega"
+TBM,Fixed-wing,1P/S+,Medium,H,III,,
+TBM7,Fixed-wing,1T/S,Light,I,I,5,
+TBM8,Fixed-wing,1T/S,Light,I,I,5,"SOCATA, TBM-700N (TBM-850) SOCATA, TBM-850"
+TBM9,Fixed-wing,1T/S,Light,I,I,5,
+TBR3,Fixed-wing,1P/S,Light,I,I,,"GOLDEN CIRCLE, T-Bird 2 Cargo GOLDEN CIRCLE, T-Bird 3"
+TC2,Fixed-wing,1P/S,Light,I,I,,"AERO MIRAGE, TC-2"
+TCAT,Fixed-wing,2P/S+,Medium,H,III,,"GRUMMAN, F7F Tigercat GRUMMAN, G-51 Tigercat"
+TCOU,Fixed-wing,2P/S,Light,I,II,1,"HELIO, H-500 Twin Courier HELIO, U-5 Twin Courier"
+TD1,Fixed-wing,1P/S,Light,I,I,,"TAIWAN DANCER, TD-1"
+TD2,Fixed-wing,1T/S,Light,I,I,,"TURBINE DESIGN, TD-2 Tempest"
+TD3,Fixed-wing,1P/S,Light,I,I,,"TAIWAN DANCER, TD-3 Alluvion Legend"
+TERM,Fixed-wing,1P/S,Light,I,I,,"SMITH (2), Termite"
+TERR,Fixed-wing,1P/S,Light,I,I,,"FOXCON, Terrier"
+TEX2,Fixed-wing,1T/S,Light,I,I,,
+TEXA,Fixed-wing,1P/S,Light,I,I,,"FLY SYNTHESIS, Texan"
+TF19,Fixed-wing,1P/S,Light,I,I,1,"TAYLORCRAFT (1), 19 Sportsman TAYLORCRAFT (1), F-19 Sportsman"
+TF21,Fixed-wing,1P/S,Light,I,I,4,"TAYLOR KITS, T-Kraft TAYLORCRAFT (1), F-21"
+TF22,Fixed-wing,1P/S,Light,I,I,,
+TFK2,Fixed-wing,1P/S,Light,I,I,,"AMS-FLIGHT, Carat TECHNOFLUG, TFK-2 Carat"
+TFOC,Fixed-wing,1P/S,Light,I,I,,"THUNDER WINGS, Focke-Wulf Fw-190"
+TFUN,Fixed-wing,1P/S,Light,I,I,,"TWI, Taifun VALENTIN, Taifun"
+TIAD,Fixed-wing,1P/S,Light,I,I,,"TRIKE ICAROS, Adventure"
+TIGR,Helicopter,2T/S+,Light,I,I,,
+TIJU,Fixed-wing,1P/S,Light,I,I,,"AVIONS FAIREY, Tipsy Junior TIPSY, Junior"
+TIPB,Fixed-wing,1P/S,Light,I,I,,
+TJET,Fixed-wing,2J/S,Light,I,III,,
+TL20,Fixed-wing,1P/S,Light,I,I,,
+TL30,Fixed-wing,1P/S,Light,I,I,,"TL ULTRALIGHT, TL-3000 Sirius"
+TLEG,Fixed-wing,1T/S,Light,I,I,,"LEGEND, Turbine Legend PERFORMANCE, Turbine Legend"
+TM5,Fixed-wing,1P/S,Light,I,I,,"TM AIRCRAFT, TM-5"
+TMOT,Fixed-wing,1P/S,Light,I,I,,"FISHER, R-80 Tiger Moth FISHER, RS-80 Tiger Moth"
+TMUS,Fixed-wing,1P/S,Light,I,I,,"PAPA 51, Thunder Mustang"
+TNAV,Fixed-wing,2P/S,Light,I,II,,
+TNDR,Fixed-wing,1P/S,Light,I,I,,"DREAM, Tundra"
+TOBA,Fixed-wing,1P/S,Light,I,I,2,"SOCATA, TB-10 Tobago SOCATA, TB-200 Tobago"
+TOOT,Fixed-wing,1P/S,Light,I,I,,"MEYER, Little Toot"
+TOR,Fixed-wing,2J/L,Medium,G,III,,
+TOUR,Fixed-wing,1P/S,Light,I,I,,
+TOXO,Fixed-wing,1P/S,Light,I,I,,"CAG (1), Toxo"
+TP40,Fixed-wing,1P/S,Light,I,I,,"THUNDER WINGS, Curtiss P-40"
+TPIL,Fixed-wing,1T/S,Light,I,I,,"ENAER, T-35DT Turbo Pillán ENAER, T-35TX Aucán"
+TPIN,Fixed-wing,2P/S+,Light,I,III,,"SCOTTISH AVIATION, Twin Pioneer"
+TR20,Fixed-wing,1P/S,Light,I,I,,"FEUGRAY, TR-200 TECH'AERO, TR-200"
+TR26,Fixed-wing,1P/S,Light,I,I,,"FEUGRAY, TR-260 Sirius"
+TR55,Fixed-wing,1P/S,Light,I,I,,
+TRAL,Fixed-wing,1P/S,Light,I,I,,"GROPPO, Trial"
+TRAP,Fixed-wing,1P/S,Light,I,I,,"CAPELLA, T-Raptor"
+TRBA,Fixed-wing,1P/S,Light,I,I,,"PODESVA, Trener Baby"
+TRDO,Fixed-wing,1P/S,Light,I,I,,"TITAN, Tornado S TITAN, Tornado SS"
+TRF1,Fixed-wing,1P/S,Light,I,I,,"TEAM ROCKET, F-1"
+TRIM,Fixed-wing,3P/S+,Light,I,III,,"FORD, 4-AT Tri-Motor FORD, 5-AT Tri-Motor"
+TRIS,Fixed-wing,3P/S,Light,I,III,2,
+TRMA,Fixed-wing,3P/S,Light,I,III,,"STINSON, A Tri-Motor"
+TRWN,Fixed-wing,2P/S,Light,I,II,,"PACIFIC AIRMOTIVE, Tradewind"
+TS11,Fixed-wing,1J/S,Light,I,III,,"PZL-MIELEC, TS-11 Iskra"
+TS14,Fixed-wing,1P/S,Light,I,I,,"TEST, TST-14 Bonus"
+TS8,Fixed-wing,1P/S,Light,I,I,,"PZL-MIELEC, TS-8 Bies"
+TSPT,Fixed-wing,1P/S,Light,I,I,,"THUNDER WINGS, Supermarine Spitfire"
+TSTN,Fixed-wing,1P/S,Light,I,I,,"TERRAFUGIA, Transition"
+TSTR,Gyroplane,1P/S,Light,I,I,,"AIR & SPACE, Twinstar FARRINGTON, Twinstar"
+TTRS,Fixed-wing,1P/S,Light,I,I,,"HUMBERT, Tetras"
+TTWO,Fixed-wing,1P/S,Light,I,I,,"PARKER, Teenie Two"
+TU16,Fixed-wing,2J/L,Medium,F,III,,"TUPOLEV, Tu-16 XIAN, H-6"
+TU22,Fixed-wing,2J/L,Medium,F,III,,"TUPOLEV, Tu-22"
+TU95,Fixed-wing,4T/H,Heavy,D,III,,
+TUCA,Fixed-wing,1T/S,Light,I,I,,
+TUCR,Fixed-wing,1P/S,Light,I,I,,"FLYING LEGEND, Tucano Replica"
+TUCT,Fixed-wing,1T/S,Light,I,I,,"FLYING LEGEND, Turbine Tucano Replica"
+TUL3,Fixed-wing,1P/S,Light,I,I,,"PODESVA, TUL-03 Amigo"
+TUTR,Fixed-wing,1P/S,Light,I,I,,"AVRO, 621 Tutor"
+TVL4,Fixed-wing,1P/S,Light,I,I,,"TRAVEL AIR, 4 TRAVEL AIR, 4000"
+TVLB,Fixed-wing,1P/S,Light,I,I,,
+TWEN,Fixed-wing,1P/S,Light,I,I,,"TECNAM, P-2010 Gran Lusso TECNAM, P-2010 Twenty-Ten"
+TWIR,Fixed-wing,2P/S,Light,I,II,,"DYN'AERO, Twin-R"
+TWSP,Fixed-wing,1P/S,Light,I,I,,"TIME WARP, Spitfire"
+TWST,Fixed-wing,1P/S,Light,I,I,,"SILENCE, Twister"
+TZRV,Fixed-wing,1J/S,Light,I,III,,"IRIAF, JT-2-2 Tazarve"
+U15,Fixed-wing,1P/S,Light,I,I,,"PHOENIX AIR, U-15 Phoenix"
+U2,Fixed-wing,1J/S+,Medium,H,III,,"LOCKHEED, ER-2 LOCKHEED, U-2"
+U21,Fixed-wing,2T/S,Light,I,II,,
+U22,Fixed-wing,1P/S,Light,I,I,,
+UBAT,Fixed-wing,1P/S,Light,I,I,,"AUSTRALITE, Ultrabat"
+UF10,Fixed-wing,1P/S,Light,I,I,,
+UF13,Fixed-wing,1P/S,Light,I,I,,
+UFHT,Gyroplane,1P/S,Light,I,I,,"UFO, HeliThruster"
+UH1,Helicopter,1T/S,Light,I,I,,
+UH12,Helicopter,1P/S,Light,I,I,,
+UH1Y,Helicopter,2T/S+,Medium,H,I,,"BELL, UH-1Y"
+UL10,Fixed-wing,1P/S,Light,I,I,,
+UL20,Fixed-wing,1P/S,Light,I,I,,"STREAMLINE WELDING, 20 Ultimate Companion ULTIMATE, 20"
+UL2F,Fixed-wing,1P/S,Light,I,I,,"AEROS, UL-2000 Flamingo"
+UL39,Fixed-wing,1P/S,Light,I,I,,"CVUT, UL-39 Albi"
+UL45,Fixed-wing,1P/S,Light,I,I,3,"XTRIM, 3X-47 Ultra 3XTRIM, 450 Ultra"
+ULPA,Fixed-wing,1P/S,Light,I,I,,"ULLMANN, Panther"
+ULTS,Helicopter,1P/S,Light,I,I,,"AMERICAN SPORTSCOPTER, Ultrasport 496"
+UM18,Gyroplane,1P/S,Light,I,I,,
+UNIV,Fixed-wing,1P/S,Light,I,I,,
+URRA,Fixed-wing,1P/S,Light,I,I,,"IBIS (2), Arrow IBIS (2), Urraco"
+UT60,Fixed-wing,1P/S,Light,I,I,,"UTVA, 60"
+UT65,Fixed-wing,1P/S,Light,I,I,,"UTVA, 65 Privrednik"
+UT66,Fixed-wing,1P/S,Light,I,I,,"UTVA, 66"
+UT75,Fixed-wing,1P/S,Light,I,I,,
+UU12,Fixed-wing,1P/S,Light,I,I,,"UDET, U-12 Flamingo Replica"
+V1,Fixed-wing,2T/S+,Medium,H,III,,
+V10,Fixed-wing,2T/S+,Light,I,III,,
+V22,Powered-lift,2T/L,Medium,G,II,,
+V221,Fixed-wing,1P/S,Light,I,I,,"MSW, Votec 221"
+V252,Fixed-wing,1P/S,Light,I,I,,"MSW, Votec 252"
+V280,Powered-lift,2T/L,Medium,G,III,,"BELL, V-280 Valor"
+V322,Fixed-wing,1P/S,Light,I,I,,"MSW, Votec 322"
+V351,Fixed-wing,1P/S,Light,I,I,,"MSW, Votec 351"
+V452,Fixed-wing,1T/S,Light,I,I,,"MSW, Votec 452"
+V500,Helicopter,1P/S,Light,I,I,,"REVOLUTION (1), Voyager-500"
+VALI,Fixed-wing,1P/S,Light,I,I,,
+VAMP,Fixed-wing,1J/S,Light,I,III,,
+VANT,Fixed-wing,1J/S,Light,I,III,,"VISIONAIRE, VA-10 Vantage"
+VAUT,Fixed-wing,2J/L,Medium,G,III,,"SUD, SO-4050 Vautour"
+VELO,Fixed-wing,1P/S,Light,I,I,,
+VELT,Fixed-wing,2P/S,Light,I,II,,"VELOCITY, Velocity V-Twin"
+VENT,Fixed-wing,1P/S,Light,I,I,,
+VEZE,Fixed-wing,1P/S,Light,I,I,,"RUTAN, 33 VariEze"
+VF2,Fixed-wing,1P/S,Light,I,I,,"FRY, VF-2 Esprit"
+VF35,Fixed-wing,1J/L,Medium,G,III,,"LOCKHEED MARTIN, F-35B Lightning 2"
+VF60,Fixed-wing,1T/S,Light,I,I,,"VULCANAIR, VF-600 Mission"
+VG3T,Fixed-wing,1P/S,Light,I,I,,"AVIAKIT, Vega 3000"
+VGUL,Fixed-wing,1P/S,Light,I,I,,"PERCIVAL, K-1 Vega Gull PERCIVAL, P-10 Vega Gull"
+VIMA,Fixed-wing,1P/S,Light,I,I,,"VALMET, Viima"
+VIPJ,Fixed-wing,1J/S,Light,I,III,,"VIPER, ViperJet"
+VIPR,Fixed-wing,1P/S,Light,I,I,,"PAXMAN'S, Viper"
+VISI,Fixed-wing,1P/S,Light,I,I,,"PRO-COMPOSITES, Vision"
+VIVA,Fixed-wing,1P/S,Light,I,I,,"COMPOSIT AIRPLANES, Viva"
+VIX,Fixed-wing,1P/S,Light,I,I,,"SKYSTAR, Kitfox Vixen SKYSTAR, Kitfox Voyager"
+VIXN,Fixed-wing,1P/S,Light,I,I,,"AMAX, Vixen"
+VK3P,Fixed-wing,1P/S,Light,I,I,,"CIRRUS, VK-30 Cirrus (piston)"
+VK3T,Fixed-wing,1T/S,Light,I,I,,"CIRRUS, VK-30 Cirrus (turbine)"
+VL3,Fixed-wing,1P/S,Light,I,I,,
+VL3T,Fixed-wing,1T/S,Light,I,I,,"JMB AIRCRAFT, VL-3 Evolution Turbine"
+VLOT,Fixed-wing,1T/S,Light,I,I,,"VELOCITY, Velocity XL (turbine)"
+VLTT,Fixed-wing,2T/S,Light,I,II,,"VELOCITY, Velocity V-Twin (turbine)"
+VM1,Fixed-wing,1P/S,Light,I,I,,"VOL MEDITERRANI, VM-1 Esqual"
+VNOM,Fixed-wing,1J/S+,Medium,H,III,,"DE HAVILLAND, DH-112 Venom F+W EMMEN, DH-112 Venom"
+VNTE,Fixed-wing,1E/S,Light,I,I,,"SCHEMPP-HIRTH, Ventus 3F"
+VNTR,Fixed-wing,1P/S,Light,I,I,,"ICP, Ventura"
+VO10,Fixed-wing,1P/S,Light,I,I,1,
+VOL2,Fixed-wing,1P/S,Light,I,I,,"VOLANTE, Volante Two"
+VP2,Fixed-wing,1P/S,Light,I,I,,"EVANS, VP-2 Volksplane"
+VR20,Fixed-wing,1P/S,Light,I,I,,"EGVOYAGER, VR-202 EGVOYAGER, VR-203"
+VR7,Fixed-wing,1P/S,Light,I,I,,"VASHON, Ranger R7"
+VSON,Fixed-wing,1P/S,Light,I,I,,"AMERICAN AFFORDABLE, Vision"
+VTOR,Fixed-wing,2T/S,Light,I,II,8,
+VTRA,Fixed-wing,1P/S,Light,I,I,,"RANS, S-19 Venterra"
+VTUR,Fixed-wing,1P/S,Light,I,I,,"NUVENTURE, Venture QUESTAIR, M-20 Venture"
+VUT1,Fixed-wing,1P/S,Light,I,I,,"EVEKTOR, VUT-100 Cobra"
+VVIG,Fixed-wing,1P/S,Light,I,I,,"RUTAN, 27 VariViggen RUTAN, 32 VariViggen"
+VW10,Fixed-wing,1P/S,Light,I,I,,"AIRCONCEPT, VoWi-10 Airbuggy WILDEN, VoWi-10"
+VWIT,Fixed-wing,1P/S,Light,I,I,,"AIRCRAFT SPRUCE, V-Witt WITTMAN, V-Witt"
+W11,Fixed-wing,1P/S,Light,I,I,,"WOLF, W-11 Boredom Fighter"
+W135,Fixed-wing,4J/H,Heavy,C,III,,"BOEING, WC-135R"
+W201,Fixed-wing,1P/S,Light,I,I,,
+W3,Helicopter,2T/S+,Light,I,I,,
+W5BC,Fixed-wing,1P/S,Light,I,I,,
+W62T,Fixed-wing,1T/S,Light,I,I,,"WEATHERLY, 620BTG WEATHERLY, 620TP"
+WA40,Fixed-wing,1P/S,Light,I,I,,"WASSMER, WA-40 Super 4"
+WA41,Fixed-wing,1P/S,Light,I,I,,"WASSMER, WA-41 Baladou"
+WA42,Fixed-wing,1P/S,Light,I,I,,"WASSMER, Prestige WASSMER, WA-421 Prestige"
+WA50,Fixed-wing,1P/S,Light,I,I,,
+WA80,Fixed-wing,1P/S,Light,I,I,,"WASSMER, WA-80 Piranha WASSMER, WA-81 Piranha"
+WAC9,Fixed-wing,1P/S,Light,I,I,,"WACO, 9"
+WACA,Fixed-wing,1P/S,Light,I,I,,
+WACC,Fixed-wing,1P/S,Light,I,I,,
+WACD,Fixed-wing,1P/S,Light,I,I,,"WACO, D WACO, S3HD"
+WACE,Fixed-wing,1P/S,Light,I,I,,
+WACF,Fixed-wing,1P/S,Light,I,I,,
+WACG,Fixed-wing,1P/S,Light,I,I,,"WACO, CRG WACO, G"
+WACM,Fixed-wing,1P/S,Light,I,I,,"WACO, JWM WACO, JYM"
+WACN,Fixed-wing,1P/S,Light,I,I,,"WACO, AVN WACO, ZVN"
+WACO,Fixed-wing,1P/S,Light,I,I,,
+WACT,Fixed-wing,1P/S,Light,I,I,,"WACO, RPT"
+WAIX,Fixed-wing,1P/S,Light,I,I,,"SONEX, Waiex"
+WASP,Helicopter,1T/S,Light,I,I,,"WESTLAND, Wasp"
+WB57,Fixed-wing,2J/L,Medium,G,III,,"MARTIN, 272 MARTIN, WB-57"
+WBOO,Fixed-wing,1P/S,Light,I,I,,"DEAN-WILSON, DW-200 Whitney Boomerang"
+WCAT,Fixed-wing,1P/S,Light,I,I,,
+WDEX,Fixed-wing,1P/S,Light,I,I,,"RADAB, Windex WINDEXAIR, Windex"
+WESX,Helicopter,2T/S+,Light,I,I,,"WESTLAND, WS-58 Wessex"
+WF4U,Fixed-wing,1P/S,Light,I,I,,"WAR, Vought F4U Corsair"
+WFOC,Fixed-wing,1P/S,Light,I,I,,"WAR, Focke-Wulf 190"
+WFUR,Fixed-wing,1P/S,Light,I,I,,"WAR, Hawker Sea Fury"
+WH1,Fixed-wing,1P/S,Light,I,I,,"WENDT, WH-1 Traveler"
+WH4,Fixed-wing,1T/S,Light,I,I,,
+WHAT,Fixed-wing,1P/S,Light,I,I,,"WHATLEY, Special"
+WHIL,Fixed-wing,1P/S,Light,I,I,,"REFLEX, WLAC-1 White Lightning WHITE LIGHTNING, WLAC-1 White Lightning"
+WHIS,Fixed-wing,1P/S,Light,I,I,,"GROVE, GR-2 Whisper"
+WHIT,Fixed-wing,1P/S,Light,I,I,,"MILES, M-11 Whitney Straight PHILLIPS & POWIS, M-11 Whitney Straight"
+WHK2,Fixed-wing,4J/L,Medium,F,III,,"RUTAN, 348 White Knight Two SCALED, 348 White Knight Two"
+WICH,Fixed-wing,1P/S,Light,I,I,,"JAVELIN, Wichawk"
+WILT,Fixed-wing,1P/S,Light,I,I,,
+WIND,Fixed-wing,1P/S,Light,I,I,,"WATSON, GW-1 Windwagon"
+WINE,Fixed-wing,1P/S,Light,I,I,,"WINDECKER, Eagle"
+WIRR,Fixed-wing,1P/S,Light,I,I,,"COMMONWEALTH (1), CA-16 Wirraway"
+WISP,Fixed-wing,1P/S,Light,I,I,,"WHISPER, Whisper"
+WLBY,Fixed-wing,1P/S,Light,I,I,,"FLY SYNTHESIS, Wallaby"
+WM2,Fixed-wing,1P/S,Light,I,I,,"MILLER (1), WM-2"
+WOPU,Fixed-wing,1P/S,Light,I,I,,"AEROSPORT, Woody Pusher WOODS, Woody Pusher"
+WP40,Fixed-wing,1P/S,Light,I,I,,"WAR, Curtiss P-40 Kittyhawk"
+WP47,Fixed-wing,1P/S,Light,I,I,,"WAR, Republic P-47 Thunderbolt"
+WS22,Fixed-wing,1P/S,Light,I,I,,"SPRING, WS-202 Sprint"
+WSP,Fixed-wing,1P/S,Light,I,I,,"AAK, Wasp"
+WT10,Fixed-wing,1P/S,Light,I,I,,"AEROSPOOL, WT-10 Advantic"
+WT9,Fixed-wing,1P/S,Light,I,I,,"AEROSPOOL, WT-9 Dynamic"
+WW1,Fixed-wing,1P/S,Light,I,I,,"WHITE, WW-1 Der Jäger D-9"
+WW23,Fixed-wing,2J/S+,Medium,H,III,7,"IAI, 1123 Westwind"
+WW24,Fixed-wing,2J/S+,Medium,H,III,7,
+WZ10,Helicopter,2T/S+,Light,I,I,,"CHANGHE, WZ-10"
+WZER,Fixed-wing,1P/S,Light,I,I,,"WAR, Mitsubishi Zero"
+X2,Helicopter,1T/S,Light,I,I,,"SIKORSKY, X-2"
+X3,Helicopter,2T/S,Light,I,I,,"EUROCOPTER, X-3"
+X49,Helicopter,2T/S+,Medium,H,I,,"PIASECKI, X-49 SpeedHawk SIKORSKY, X-49 SpeedHawk"
+XA41,Fixed-wing,1P/S,Light,I,I,,
+XA42,Fixed-wing,1P/S,Light,I,I,,
+XA85,Fixed-wing,1P/S,Light,I,I,,
+XAIR,Fixed-wing,1P/S,Light,I,I,,
+XL2,Fixed-wing,1P/S,Light,I,I,,"DISCOVERY, XL-2 LIBERTY (2), XL-2"
+XNON,Gyroplane,1P/S,Light,I,I,,"ABS AEROLIGHT, Xenon CELIER, Xenon"
+XNOS,Fixed-wing,1P/S,Light,I,I,,"SONEX, Xenos"
+Y11,Fixed-wing,2P/S,Light,I,II,,"HARBIN, Y-11"
+Y112,Fixed-wing,1P/S,Light,I,I,,"YAKOVLEV, Yak-112"
+Y12,Fixed-wing,2T/S,Light,I,II,,
+Y12F,Fixed-wing,2T/S+,Medium,H,III,,"HARBIN, Y-12F Aircar"
+Y130,Fixed-wing,2J/S+,Medium,H,III,,"YAKOVLEV, Yak-130"
+Y18T,Fixed-wing,1P/S,Light,I,I,,
+YA1,Fixed-wing,1P/S,Light,I,I,,"YEOMAN, YA-1 Cropmaster"
+YAK3,Fixed-wing,1P/S,Light,I,I,,"YAKOVLEV, Yak-3"
+YAK9,Fixed-wing,1P/S,Light,I,I,,"YAKOVLEV, Yak-9"
+YALE,Fixed-wing,1P/S,Light,I,I,,
+YARR,Fixed-wing,1P/S,Light,I,I,,"ARROW (2), Yarrow Arrow"
+YAST,Fixed-wing,1P/S,Light,I,I,,"SGAU, Yastreb"
+YC12,Fixed-wing,1P/S,Light,I,I,,
+YK11,Fixed-wing,1P/S,Light,I,I,,"LET, C-11 YAKOVLEV, Yak-11"
+YK12,Fixed-wing,1P/S,Light,I,I,,"PZL-OKECIE, Yak-12 YAKOVLEV, Yak-12"
+YK18,Fixed-wing,1P/S,Light,I,I,,
+YK28,Fixed-wing,2J/L,Medium,G,III,,"YAKOVLEV, Yak-28"
+YK30,Fixed-wing,1J/S,Light,I,III,,"YAKOVLEV, Yak-30 YAKOVLEV, Yak-32"
+YK40,Fixed-wing,3J/S+,Medium,H,III,8,"YAKOVLEV, Yak-40"
+YK42,Fixed-wing,3J/L,Medium,F,III,,"YAKOVLEV, Yak-142 YAKOVLEV, Yak-42"
+YK50,Fixed-wing,1P/S,Light,I,I,,"YAKOVLEV, Yak-50"
+YK52,Fixed-wing,1P/S,Light,I,I,,
+YK53,Fixed-wing,1P/S,Light,I,I,,"YAKOVLEV, Yak-53"
+YK54,Fixed-wing,1P/S,Light,I,I,,"YAKOVLEV, Yak-54"
+YK55,Fixed-wing,1P/S,Light,I,I,,"YAKOVLEV, Yak-55"
+YK58,Fixed-wing,1P/S,Light,I,I,,"YAKOVLEV, Yak-58"
+YL15,Fixed-wing,1P/S,Light,I,I,,"BOEING, 451 Scout BOEING, YL-15 Scout"
+YNHL,Helicopter,2P/S,Light,I,I,,"AVIAIMPEX, KT-112 Yanhol"
+YS11,Fixed-wing,2T/L,Medium,F,III,6,"MITSUBISHI, YS-11 NAMC, YS-11"
+YUKN,Fixed-wing,1P/S,Light,I,I,,"MURPHY, Yukon"
+YUNO,Fixed-wing,1P/S,Light,I,I,,"SHUYA, Yunona"
+YURO,Fixed-wing,2J/S+,Medium,H,III,,"SOKO-CNIAR, J-22 Orao SOKO-CNIAR, NJ-22 Orao"
+Z22,Fixed-wing,1P/S,Light,I,I,,"MORAVAN, Zlin Z-22 Junak ZLIN, Z-22 Junak"
+Z26,Fixed-wing,1P/S,Light,I,I,,
+Z37P,Fixed-wing,1P/S,Light,I,I,,
+Z37T,Fixed-wing,1T/S,Light,I,I,,"MORAVAN, Z-137 Agro Turbo MORAVAN, Z-37T Agro Turbo"
+Z42,Fixed-wing,1P/S,Light,I,I,,
+Z43,Fixed-wing,1P/S,Light,I,I,,
+Z50,Fixed-wing,1P/S,Light,I,I,,"MORAVAN, Zlin Z-50 ZLIN, Z-50"
+ZA6,Helicopter,1P/S,Light,I,I,,
+ZEP2,Fixed-wing,1P/S,Light,I,I,,
+ZEPH,Fixed-wing,1P/S,Light,I,I,,"ATEC, 122 Zephyr"
+ZERO,Fixed-wing,1P/S,Light,I,I,,"MITSUBISHI, A6M Zero"
+ZIU,Fixed-wing,1P/S,Light,I,I,,"TAI, ZIU"
+ZULU,Fixed-wing,1P/S,Light,I,I,,"BUL, Zùlù"

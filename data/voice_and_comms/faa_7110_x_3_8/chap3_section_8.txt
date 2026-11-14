@@ -1,0 +1,249 @@
+
+Chapter 3. Airport Traffic Control - Terminal
+7110.65BB
+7110.65 by Chapter Number
+Chapter 0. General Information
+Chapter 1. General
+Chapter 2. General Control
+Chapter 3. Airport Traffic Control - Terminal
+Chapter 4. IFR
+Chapter 5. Radar
+Chapter 6. Nonradar
+Chapter 7. Visual
+Chapter 8. Offshore/Oceanic Procedures
+Chapter 9. Special Flights
+Chapter 10. Emergencies
+Chapter 11. Traffic Management Procedures
+Chapter 12. Canadian Airspace Procedures
+Chapter 13. Decision Support Tools
+Chapter 14. Data Link Communications
+Appendix A
+Appendix B
+ATPUBS
+JO 7110.65BB by Topic
+General Information
+Explanation of Changes
+General
+Introduction
+Terms of Reference
+General Control
+General
+Flight Plans and Control Information
+Flight Progress Strips
+Radio and Interphone Communications
+Route and NAVAID Description
+Weather Information
+Altimeter Settings
+Runway Visibility Reporting- Terminal
+Automatic Terminal Information Service Procedures
+Team Position Responsibilities
+Airport Traffic Control - Terminal
+General
+Visual Signals
+Airport Conditions
+Airport Lighting
+Runway Selection
+Airport Surface Detection Procedures
+Taxi and Ground Movement Procedures
+Spacing and Sequencing
+Departure Procedures and Separation
+Arrival Procedures and Separation
+Helicopter Operations
+Sea Lane Operations
+IFR
+NAVAID Use Limitations
+Clearances
+Departure Procedures
+Route Assignment
+Altitude Assignment and Verification
+Holding Aircraft
+Arrival Procedures
+Approach Clearance Procedures
+Radar
+General
+Beacon/ADS-B Systems
+Radar Identification
+Transfer of Radar Identification
+Radar Separation
+Vectoring
+Speed Adjustment
+Radar Departures
+Radar Arrivals
+Radar Approaches- Terminal
+Surveillance Approaches- Terminal
+PAR Approaches- Terminal
+Automation- En Route
+Standard Terminal Automation Replacement System (STARS)-Terminal
+Nonradar
+General
+Initial Separation of Successive Departing Aircraft
+Initial Separation of Departing and Arriving Aircraft
+Longitudinal Separation
+Lateral Separation
+Vertical Separation
+Timed Approaches
+Visual
+General
+Visual Separation
+VFR‐On‐Top
+Approaches
+Special VFR (SVFR)
+Basic Radar Service to VFR Aircraft- Terminal
+Terminal Radar Service Area (TRSA)-Terminal
+Class C Service- Terminal
+Class B Service Area- Terminal
+Offshore/Oceanic Procedures
+General
+Coordination
+Longitudinal Separation
+Lateral Separation
+Offshore/Oceanic Transition Procedures
+Separation from Airspace Reservations
+North Atlantic ICAO Region
+Caribbean ICAO Region
+Pacific ICAO Region
+North American ICAO Region
+Special Flights
+General
+Special Operations
+Special Use, ATC-Assigned Airspace, and Stationary ALTRVs
+Fuel Dumping
+Jettisoning of External Stores
+Unmanned Free Balloons
+Parachute Operations
+Unidentified Anomalous Phenomena (UAP) Reports
+Emergencies
+General
+Emergency Assistance
+Overdue Aircraft
+Control Actions
+Miscellaneous Operations
+Oceanic Emergency Procedures
+Ground Missile Emergencies
+Traffic Management Procedures
+General
+Canadian Airspace Procedures
+General Control
+Decision Support Tools
+ERAM - En Route
+ATOP - Oceanic
+Data Link Communications
+Terminal Procedures for Issuing Automated Clearances
+En Route Controller Pilot Data Link Communications (CPDLC) - Domestic
+Advanced Technologies and Oceanic Procedures (ATOP) - Oceanic Controller Pilot Data Link Communications (CPDLC)
+Appendix A
+Appendix B
+Airport Traffic Control - Terminal
+Spacing and Sequencing
+Chapter 3. Airport Traffic Control - Terminal
+Section 8. Spacing and Sequencing
+3-8-1. SEQUENCE/SPACING APPLICATION
+Establish the sequence of arriving and departing aircraft by requiring them to adjust flight or ground operation, as necessary, to achieve proper spacing.
+PHRASEOLOGY-
+CLEARED FOR TAKEOFF.
+CLEARED FOR TAKEOFF OR HOLD SHORT/HOLD IN POSITION/TAXI OFF THE RUNWAY (traffic).
+EXTEND DOWNWIND.
+MAKE SHORT APPROACH.
+NUMBER (landing sequence number),
+FOLLOW (description and location of traffic),
+ or if traffic is utilizing another runway,
+TRAFFIC (description and location) LANDING RUNWAY (number of runway being used).
+TRAFFIC (description and location) LANDING THE PARALLEL RUNWAY 
+CIRCLE THE AIRPORT.
+MAKE LEFT/RIGHT THREE-SIXTY/TWO SEVENTY.
+GO AROUND(additional instructions as necessary). 
+CLEARED TO LAND.
+CLEARED:
+  TOUCH-AND-GO,
+ or
+  STOP-AND-GO,
+ or
+  LOW APPROACH.
+CLEARED FOR THE OPTION,
+ or
+OPTION APPROVED,
+ or
+UNABLE OPTION, (alternate instructions).
+ or
+UNABLE (type of option), OTHER OPTIONS APPROVED.
+NOTE-
+The “Cleared for the Option” procedure will permit an instructor pilot/flight examiner/pilot the option to make a touch‐and‐go, low approach, missed approach, stop‐ and‐go, or full stop landing. This procedure will only be used at those locations with an operational control tower and will be subject to ATC approval.After ATC approval of the option, the pilot should inform ATC as soon as possible of any delay on the runway during their stop-and-go or full stop landing.
+For proper helicopter spacing, speed adjustments may be more practical than course changes.
+Read back of hold short instructions apply when hold instructions are issued to a pilot in lieu of a takeoff clearance.
+REFERENCE-
+FAA Order JO 7110.65, Para 
+3-7-2
+, Taxi and Ground Movement Operations.
+AIM, Para 4-3-22, Option Approach.
+3-8-2. TOUCH‐AND‐GO OR STOP‐AND‐GO OR LOW APPROACH
+Consider an aircraft cleared for touch‐and‐go, stop‐and‐go, or low approach as an arriving aircraft until it touches down (for touch‐and‐go), or makes a complete stop (for stop‐and‐go), or crosses the landing threshold (for low approach), and thereafter as a departing aircraft.
+REFERENCE-
+FAA Order JO 7110.65, Para 
+3-1-5
+, Vehicles/Equipment/Personnel on Runways.
+FAA Order JO 7110.65, Para 
+3-9-7
+, Wake Turbulence Separation for Intersection Departures.
+3-8-3. SIMULTANEOUS SAME DIRECTION OPERATION
+Authorize simultaneous, same direction operations on parallel runways, on parallel landing strips, or on a runway and a parallel landing strip only when the following conditions are met:
+Operations are conducted in VFR conditions unless visual separation is applied.
+Two‐way radio communication is maintained with the aircraft involved and pertinent traffic information is issued.
+The distance between the parallel runways or landing strips is in accordance with those specified in 
+TBL 3-8-1
+.
+TBL 3-8-1
+Same Direction Distance Minima
+Aircraft category
+Minimum distance (feet) 
+between parallel
+Runway centerlines
+Edges of adjacent strips or runway and strip
+Category I or Category II
+300
+200
+If either aircraft is a Category III
+500
+400
+If either aircraft is a Heavy
+700
+600
+NOTE-
+Aircraft Categories specified in 
+TBL 3-8-1
+ are Same Runway Separation (SRS) categories as indicated in paragraph 
+3-9-6
+, Same Runway Separation.
+When conducting Simultaneous Same Direction Operations (SSDO), applicable Wake Turbulence provisions apply.
+3-8-4. SIMULTANEOUS OPPOSITE DIRECTION OPERATION
+Authorize simultaneous opposite direction operations on parallel runways, on parallel landing strips, or on a runway and a parallel landing strip only when the following conditions are met:
+Operations are conducted in VFR conditions.
+Two‐way radio communication is maintained with the aircraft involved and pertinent traffic information is issued.
+PHRASEOLOGY-
+TRAFFIC (description) ARRIVING/DEPARTING/LOW APPROACH, OPPOSITE DIRECTION ON PARALLEL RUNWAY/LANDING STRIP.
+The distance between the runways or landing strips is in accordance with the minima in 
+TBL 3-8-2
+.
+TBL 3-8-2
+Opposite Direction Distance Minima
+Type of Operation
+Minimum distance (feet) between parallel
+Runway centerlines
+Edges of adjacent strips or runway and strip
+Between sunrise and sunset
+1,400
+1,400
+Between sunset and sunrise
+2,800
+Not authorized
+Previous
+ | 
+Top
+ | 
+Next
+7110.65
+ | 
+ATPUBS
+ | 
+FAA
+ | 
+              Send your comments regarding this website.
