@@ -1,0 +1,14 @@
+{
+  "placeholder": true,
+  "name": "PLACEHOLDER Airport (not a real airport)",
+  "icao": "KPHX",
+  "icao_note": "KPHX is used only as the live weather (METAR) station; this placeholder airport is not KPHX.",
+  "map": {
+    "center": [
+      -112.75,
+      33.2990984
+    ],
+    "zoom": 14.5,
+    "bearing": 0
+  }
+}

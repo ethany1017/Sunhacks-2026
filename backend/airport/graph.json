@@ -1,0 +1,280 @@
+{
+  "placeholder": true,
+  "nodes": {
+    "RW_W": {
+      "lon": -112.7661055,
+      "lat": 33.3,
+      "kind": "runway"
+    },
+    "RW_A1": {
+      "lon": -112.7639581,
+      "lat": 33.3,
+      "kind": "runway"
+    },
+    "RW_A2": {
+      "lon": -112.7446315,
+      "lat": 33.3,
+      "kind": "runway"
+    },
+    "RW_A3": {
+      "lon": -112.7360419,
+      "lat": 33.3,
+      "kind": "runway"
+    },
+    "RW_E": {
+      "lon": -112.7338945,
+      "lat": 33.3,
+      "kind": "runway"
+    },
+    "HS_A1": {
+      "lon": -112.7639581,
+      "lat": 33.2993238,
+      "kind": "hold_short"
+    },
+    "HS_A2": {
+      "lon": -112.7446315,
+      "lat": 33.2993238,
+      "kind": "hold_short"
+    },
+    "HS_A3": {
+      "lon": -112.7360419,
+      "lat": 33.2993238,
+      "kind": "hold_short"
+    },
+    "TW_A1": {
+      "lon": -112.7639581,
+      "lat": 33.2981967,
+      "kind": "taxiway"
+    },
+    "TW_A2": {
+      "lon": -112.7446315,
+      "lat": 33.2981967,
+      "kind": "taxiway"
+    },
+    "TW_AP": {
+      "lon": -112.7403367,
+      "lat": 33.2981967,
+      "kind": "taxiway"
+    },
+    "TW_A3": {
+      "lon": -112.7360419,
+      "lat": 33.2981967,
+      "kind": "taxiway"
+    },
+    "AP": {
+      "lon": -112.7403367,
+      "lat": 33.2974754,
+      "kind": "taxiway"
+    },
+    "P1": {
+      "lon": -112.741303,
+      "lat": 33.2969344,
+      "kind": "parking"
+    },
+    "P2": {
+      "lon": -112.7406588,
+      "lat": 33.2969344,
+      "kind": "parking"
+    },
+    "P3": {
+      "lon": -112.7400146,
+      "lat": 33.2969344,
+      "kind": "parking"
+    },
+    "P4": {
+      "lon": -112.7393704,
+      "lat": 33.2969344,
+      "kind": "parking"
+    }
+  },
+  "edges": [
+    {
+      "from": "RW_W",
+      "to": "RW_A1",
+      "kind": "runway",
+      "name": "09/27",
+      "length_m": 200.0
+    },
+    {
+      "from": "RW_A1",
+      "to": "RW_A2",
+      "kind": "runway",
+      "name": "09/27",
+      "length_m": 1800.0
+    },
+    {
+      "from": "RW_A2",
+      "to": "RW_A3",
+      "kind": "runway",
+      "name": "09/27",
+      "length_m": 800.0
+    },
+    {
+      "from": "RW_A3",
+      "to": "RW_E",
+      "kind": "runway",
+      "name": "09/27",
+      "length_m": 200.0
+    },
+    {
+      "from": "TW_A1",
+      "to": "TW_A2",
+      "kind": "taxiway",
+      "name": "A",
+      "length_m": 1800.0
+    },
+    {
+      "from": "TW_A2",
+      "to": "TW_AP",
+      "kind": "taxiway",
+      "name": "A",
+      "length_m": 400.0
+    },
+    {
+      "from": "TW_AP",
+      "to": "TW_A3",
+      "kind": "taxiway",
+      "name": "A",
+      "length_m": 400.0
+    },
+    {
+      "from": "TW_A1",
+      "to": "HS_A1",
+      "kind": "taxiway",
+      "name": "A1",
+      "length_m": 125.0
+    },
+    {
+      "from": "HS_A1",
+      "to": "RW_A1",
+      "kind": "taxiway",
+      "name": "A1",
+      "length_m": 75.0
+    },
+    {
+      "from": "TW_A2",
+      "to": "HS_A2",
+      "kind": "taxiway",
+      "name": "A2",
+      "length_m": 125.0
+    },
+    {
+      "from": "HS_A2",
+      "to": "RW_A2",
+      "kind": "taxiway",
+      "name": "A2",
+      "length_m": 75.0
+    },
+    {
+      "from": "TW_A3",
+      "to": "HS_A3",
+      "kind": "taxiway",
+      "name": "A3",
+      "length_m": 125.0
+    },
+    {
+      "from": "HS_A3",
+      "to": "RW_A3",
+      "kind": "taxiway",
+      "name": "A3",
+      "length_m": 75.0
+    },
+    {
+      "from": "TW_AP",
+      "to": "AP",
+      "kind": "taxiway",
+      "name": "APRON",
+      "length_m": 80.0
+    },
+    {
+      "from": "AP",
+      "to": "P1",
+      "kind": "taxiway",
+      "name": "APRON",
+      "length_m": 108.2
+    },
+    {
+      "from": "AP",
+      "to": "P2",
+      "kind": "taxiway",
+      "name": "APRON",
+      "length_m": 67.1
+    },
+    {
+      "from": "AP",
+      "to": "P3",
+      "kind": "taxiway",
+      "name": "APRON",
+      "length_m": 67.1
+    },
+    {
+      "from": "AP",
+      "to": "P4",
+      "kind": "taxiway",
+      "name": "APRON",
+      "length_m": 108.2
+    }
+  ],
+  "approaches": {
+    "09": {
+      "runway": "09/27",
+      "threshold_node": "RW_W",
+      "path": [
+        [
+          -112.9251852,
+          33.3
+        ],
+        [
+          -112.8854152,
+          33.3
+        ],
+        [
+          -112.8456453,
+          33.3
+        ],
+        [
+          -112.8058754,
+          33.3
+        ],
+        [
+          -112.7859905,
+          33.3
+        ],
+        [
+          -112.7661055,
+          33.3
+        ]
+      ]
+    },
+    "27": {
+      "runway": "09/27",
+      "threshold_node": "RW_E",
+      "path": [
+        [
+          -112.5748148,
+          33.3
+        ],
+        [
+          -112.6145848,
+          33.3
+        ],
+        [
+          -112.6543547,
+          33.3
+        ],
+        [
+          -112.6941246,
+          33.3
+        ],
+        [
+          -112.7140095,
+          33.3
+        ],
+        [
+          -112.7338945,
+          33.3
+        ]
+      ]
+    }
+  }
+}

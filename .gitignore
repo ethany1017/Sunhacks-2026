@@ -3,6 +3,16 @@
 .env
 *.key
 
+# Build outputs and local state
+.venv/
+__pycache__/
+.pytest_cache/
+node_modules/
+dist/
+*.db
+*.db-wal
+*.db-shm
+
 # Large raw downloads (rebuild with scripts/)
 data/**/On_Time_Reporting_Carrier_*.csv
 data/**/*.zip

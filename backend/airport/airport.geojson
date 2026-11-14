@@ -1,0 +1,276 @@
+{
+  "type": "FeatureCollection",
+  "properties": {
+    "placeholder": true,
+    "name": "PLACEHOLDER Airport (not a real airport)"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -112.7661055,
+            33.3
+          ],
+          [
+            -112.7338945,
+            33.3
+          ]
+        ]
+      },
+      "properties": {
+        "kind": "runway",
+        "id": "09/27",
+        "width_m": 45,
+        "ends": [
+          {
+            "designator": "09",
+            "heading": 90,
+            "threshold": [
+              -112.7661055,
+              33.3
+            ]
+          },
+          {
+            "designator": "27",
+            "heading": 270,
+            "threshold": [
+              -112.7338945,
+              33.3
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -112.7639581,
+            33.2981967
+          ],
+          [
+            -112.7446315,
+            33.2981967
+          ],
+          [
+            -112.7403367,
+            33.2981967
+          ],
+          [
+            -112.7360419,
+            33.2981967
+          ]
+        ]
+      },
+      "properties": {
+        "kind": "taxiway",
+        "name": "A"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -112.7639581,
+            33.2981967
+          ],
+          [
+            -112.7639581,
+            33.2993238
+          ],
+          [
+            -112.7639581,
+            33.3
+          ]
+        ]
+      },
+      "properties": {
+        "kind": "taxiway",
+        "name": "A1"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -112.7446315,
+            33.2981967
+          ],
+          [
+            -112.7446315,
+            33.2993238
+          ],
+          [
+            -112.7446315,
+            33.3
+          ]
+        ]
+      },
+      "properties": {
+        "kind": "taxiway",
+        "name": "A2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -112.7360419,
+            33.2981967
+          ],
+          [
+            -112.7360419,
+            33.2993238
+          ],
+          [
+            -112.7360419,
+            33.3
+          ]
+        ]
+      },
+      "properties": {
+        "kind": "taxiway",
+        "name": "A3"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -112.7403367,
+            33.2981967
+          ],
+          [
+            -112.7403367,
+            33.2974754
+          ]
+        ]
+      },
+      "properties": {
+        "kind": "taxiway",
+        "name": "APRON"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -112.7639581,
+          33.2993238
+        ]
+      },
+      "properties": {
+        "kind": "hold_short",
+        "id": "HS_A1",
+        "runway": "09/27",
+        "taxiway": "A1"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -112.7446315,
+          33.2993238
+        ]
+      },
+      "properties": {
+        "kind": "hold_short",
+        "id": "HS_A2",
+        "runway": "09/27",
+        "taxiway": "A2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -112.7360419,
+          33.2993238
+        ]
+      },
+      "properties": {
+        "kind": "hold_short",
+        "id": "HS_A3",
+        "runway": "09/27",
+        "taxiway": "A3"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -112.741303,
+          33.2969344
+        ]
+      },
+      "properties": {
+        "kind": "parking",
+        "id": "P1",
+        "name": "P1"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -112.7406588,
+          33.2969344
+        ]
+      },
+      "properties": {
+        "kind": "parking",
+        "id": "P2",
+        "name": "P2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -112.7400146,
+          33.2969344
+        ]
+      },
+      "properties": {
+        "kind": "parking",
+        "id": "P3",
+        "name": "P3"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -112.7393704,
+          33.2969344
+        ]
+      },
+      "properties": {
+        "kind": "parking",
+        "id": "P4",
+        "name": "P4"
+      }
+    }
+  ]
+}
