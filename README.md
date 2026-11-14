@@ -4,7 +4,7 @@ SunHacks 2026 hackathon project by Gus and Ethan.
 
 An autonomous airport traffic management agent that runs in simulation. It sequences arrivals and departures, routes aircraft on the ground, talks to pilots in a synthetic voice, and shows every decision and the reason for it on a live traffic map.
 
-> **Simulation only.** This project controls simulated aircraft. It does not transmit instructions to real aircraft and is not a certified air traffic control system.
+> **Simulation only.** The agent runs the airport on its own, but everything it controls is simulated.
 
 ## What it does
 
@@ -26,31 +26,27 @@ Traffic / airport / weather feeds
               |
      Shared airport state
               |
-        Traffic planner
+     Autonomous AI agent
+   (decides, issues clearances)
               |
-   Independent safety checks
-              |
-      Clearance manager
-              |
-   Voice communications
+      Voice communications
               |
       Simulated pilots
               |
   Feedback into airport state
 
-Airport state + checks + clearances → Dashboard
+Airport state + decisions + clearances → Dashboard
 ```
 
 | Component | Responsibility |
 | --- | --- |
 | Shared airport state | Positions, intent, clearances, runway occupancy, and restrictions. |
-| Traffic planner | Proposes arrival order, departure order, and taxi routes. |
-| Safety checker | Evaluates every proposal against modeled rules before it is issued. |
-| Clearance manager | Tracks each instruction from proposed through acknowledged and completed. |
-| Voice service | Speaks approved instructions and interprets pilot replies. |
+| Autonomous agent | Runs the airport: sequences arrivals and departures, routes aircraft, manages runways and crossings, replans for weather, and issues every clearance itself. |
+| Clearance manager | Tracks each instruction the agent issues from issued through acknowledged and completed. |
+| Voice service | Speaks the agent's instructions and turns pilot replies into text for the agent. |
 | Event recorder | Stores inputs, decisions, and communications for the dashboard. |
 
-A language model can help with dialogue and planning, but its free-form output never authorizes an aircraft movement directly. Every instruction goes through structured clearance handling and the independent safety checks first.
+There is no second checker and no human approving instructions. The agent decides and acts on its own, and the dashboard shows what it did and why.
 
 ## Dashboard
 
@@ -73,14 +69,13 @@ Weather comes from the NOAA Aviation Weather Center API (METAR observations and 
 
 - **Airport:** Phoenix Sky Harbor International (KPHX)
 - **Mode:** autonomous simulation with simulated pilots
-- **Scenario (draft, to confirm):** a scripted haboob (dust storm) disruption at KPHX with 10-12 simulated aircraft, opening with a hold-short and readback exchange and a refused unsafe clearance, then a weather change that forces a replan. The weather replay uses real observations from the August 25, 2025 haboob.
+- **Scenario (draft, to confirm):** a scripted haboob (dust storm) disruption at KPHX with 10-12 simulated aircraft, opening with a hold-short and readback exchange and the agent declining a conflicting crossing request, then a weather change that forces it to replan. The weather replay uses real observations from the August 25, 2025 haboob.
 
 Not in the hackathon demo: live traffic observation, historical replay, and gate/ramp integration.
 
 ## Research and data
 
 - [`data-catalog.md`](data-catalog.md): every data source for the build, with verified or unverified status, file paths, limits, conflicts, gaps and what must be synthetic. Part 2 merges Ethan's research (including the Deer Valley material, kept as a fallback).
-- [`research-atc.md`](research-atc.md): the earlier research report on the problem, existing systems, safety constraints and demo scope.
 - `data/`: downloaded samples (KPHX geometry, procedures, weather, traffic, aircraft and rules). Large raw files are not committed; the fetch scripts in `scripts/` rebuild them.
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md): proposed simulator architecture and build order.
 
@@ -95,8 +90,7 @@ Proposed, not yet agreed (see [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)): a
 ## Limitations
 
 - Aircraft, pilots, and neighboring facilities are simulated.
-- The safety checks cover the rules modeled for the demo, not the full set of real-world procedures.
-- A passing simulation is evidence for the scenarios tested, not proof of real-world safety.
+- The agent follows the rules written into its rulebook for the demo, not the full set of real-world procedures.
 - Public weather reports do not include every runway-local condition a real tower uses.
 
 ## Team

@@ -1,6 +1,8 @@
 # Sort Phoenix build data into three bins
 
-**Merged file.** Parts 1 to 9 are Gus's KPHX catalog; Part 2 (at the end, from "Part 2. Merged from Ethan's research") adds everything in Ethan's "Hackathon Data" file that this catalog lacked. **Open decision:** Ethan's research and the earlier recommendation use Deer Valley (KDVT), while this catalog was built for Sky Harbor (KPHX); see P2.0 before building. A pre-merge copy is at `data/ethan_research/data-catalog.pre-merge.md`.
+**Design stance.** This project is a competition demo of a fully autonomous AI agent that runs the airport in simulation. There is no independent safety checker and no human approval step, and nothing here is meant for real-world use. Wherever this catalog mentions rules, procedures or separation minima, they are the agent's rulebook and the knowledge it is given, not a gate in front of it. Earlier wording about advisory tools, second checkers and human confirmation has been removed.
+
+**Merged file.** Parts 1 to 9 are Gus's KPHX catalog; Part 2 (at the end, from "Part 2. Merged from Ethan's research") adds everything in Ethan's "Hackathon Data" file that this catalog lacked. **Open decision:** Ethan's research and the earlier recommendation use Deer Valley (KDVT), while this catalog was built for Sky Harbor (KPHX); see P2.0 before building.
 
 Gus and Ethan can start building the KPHX simulation now, because the data for geometry, procedures, aircraft characteristics, weather and the rule engine is already downloaded and verified. What cannot be had from public sources is the state of the airport itself: gate and ramp occupancy, ground vehicles, flight plans, traffic-management restrictions, NOTAMs, the ZAB/P50 agreements and any KPHX-specific taxi or runway-occupancy baselines. All of that has to be synthetic, and the demo should say so. Of 19 catalog items, 7 are **ready**, 8 are **partial** and 4 are **synthetic-only** (table below). The current FAA order is **JO 7110.65BB with Changes 1-3** (Change 3 dated 7-9-26), SunHacks 9.0 runs **Nov 14-15, 2026** with Devpost submissions due **Sunday 11 AM**, and the OpenAI voice shutdowns are confirmed for **Jan 6, Jan 20 and Feb 26, 2027**. airplanes.live returned HTTP 403 and ADS-B Exchange HTTP 402, so adsb.lol and adsb.fi are the live traffic sources. Several facts that look settled are not: the clearance delivery frequency (118.1 versus 133.7), the north-south order of the runways in one note, and every haboob impact count. Section 4 lists each conflict and section 5 each gap with a stand-in. The notes were written about 14:55-15:06 local on Nov 14, which leaves roughly 20 hours to the Sunday deadline.
 
@@ -156,7 +158,7 @@ KPHX has three parallel east-west runways: 08/26 at 11,489 x 150 ft, 07L/25R at 
 
 **Limits.** The table numbering mismatch in 5-5 is unresolved (section 4). JO 7210.3 (facility administration) and JO 7110.118 (LAHSO) were not downloaded, so rules that delegate to them are cited by pointer only. Military carve-outs in 3-9-4 were omitted. No source covers the tower safety-logic alert thresholds. The only agreement text found is an unofficial ZAB document hosted by a VATSIM ARTCC (ZAB handles point-outs to P50; 20 degree turns; 5 nm radar separation), unverified and possibly dated ([LA ARTCC ZAB doc](https://laartcc.org/document/albuquerque-artcc-zab)). P50 is the TRACON for PHX, FFZ and DVT per an aggregator ([123atc](https://123atc.com/facility/P50)), unverified.
 
-**Synthetic.** P50/ZAB letters of agreement, KPHX standard taxi routes, local LUAW and runway-use practice, and tower safety-logic behavior.
+**Synthetic.** P50/ZAB letters of agreement, KPHX standard taxi routes, local LUAW and runway-use practice, and tower decision logic (the agent's own rulebook stands in for it).
 
 ### 3.13 Scenario data (partial)
 
@@ -180,7 +182,7 @@ KPHX has three parallel east-west runways: 08/26 at 11,489 x 150 ft, 07L/25R at 
 
 ### 3.15 Explainability and decision-record schema (partial)
 
-**Source and verification.** A draft JSON Schema (2020-12) for an immutable decision record is in the build-logistics note: decision id, sequence number, simulation and wall time, agent kind (rule engine, solver, LLM, human), trigger, state snapshot with per-source timestamps, age and quality (live, stale, recorded, synthetic), rules fired with versions, binding constraints and slack, chosen action, rejected alternatives with reasons, clearance state machine (proposed through executed, amended, cancelled), voice fields (ASR confidence, readback match) and explanation text. The W3C PROV overview supports the entity, activity and agent framing ([W3C PROV](https://www.w3.org/TR/prov-overview/)); the specific relation mapping is the author's, from memory.
+**Source and verification.** A draft JSON Schema (2020-12) for an immutable decision record is in the build-logistics note: decision id, sequence number, simulation and wall time, agent kind (rule engine, solver, LLM), trigger, state snapshot with per-source timestamps, age and quality (live, stale, recorded, synthetic), rules fired with versions, binding constraints and slack, chosen action, rejected alternatives with reasons, clearance state machine (proposed through executed, amended, cancelled), voice fields (ASR confidence, readback match) and explanation text. The W3C PROV overview supports the entity, activity and agent framing ([W3C PROV](https://www.w3.org/TR/prov-overview/)); the specific relation mapping is the author's, from memory.
 
 **On disk.** No `.schema.json` file exists. Copy it from `research_notes/Phoenix airport build data catalog/build_logistics.md` into `schemas/` in the repo.
 
@@ -392,7 +394,7 @@ Static GeoJSON, versioned scenario JSON and append-only JSONL events. WGS84 as [
 | Aircraft | type_icao, variant, length_m, wingspan_m, performance source/revision, wake category/scheme, mass_kg, profile limits, taxi constraints |
 | Gate, occupancy, restrictions | stand id, responsible ramp, compatibility, assigned flight, occupant, ready, permission; resource id, reservation window, observed occupancy, evidence; restriction id/revision, geometry/resource ids, schedule, affected operations, cancellation, authority |
 | Weather | product, station, raw report, observation/issue/valid times, forecast group, wind true degrees/kt/gust, variable direction, visibility and units, ceiling ft AGL, pressure units, runway-end id, RVR |
-| Clearance and decision | clearance_id, version, idempotency_key, issuer, flight_id, action, route edges, hold limit, crossing pavement, expires_at, status, supersedes_id, required readback fields; decision id, snapshot id, proposal, rule/evidence ids, checker output, next review trigger |
+| Clearance and decision | clearance_id, version, idempotency_key, issuer, flight_id, action, route edges, hold limit, crossing pavement, expires_at, status, supersedes_id, required readback fields; decision id, snapshot id, action, rule/evidence ids, constraints considered, next review trigger |
 | Communication and rule | message_id, clearance and version, role, channel, audio reference, transcript, parsed values, confidence, result; rule_id, revision, source URL/section, applicability, constraint, input requirements, unknown behavior, effective interval, reviewer, scenario_only |
 
 Example closure fixture (synthetic, KDVT; both ends of the runway share the pavement id):
@@ -413,7 +415,7 @@ Example closure fixture (synthetic, KDVT; both ends of the runway share the pave
 }
 ```
 
-Processing rules: normalize out-of-order updates by source id, record id and revision; keep authorization separate from occupancy; clearance states proposed, validated, issued, acknowledged, observed complete, plus rejected, canceled, superseded, expired and unresolved; restore reservations after restart and reconcile issued-but-unresolved commands before expiry; revalidate each queued instruction before it is spoken or sent; instrument source-to-receipt, receipt-to-decision and voice-loop latency at p50, p95 and p99 separately.
+Processing rules: normalize out-of-order updates by source id, record id and revision; keep authorization separate from occupancy; clearance states proposed, validated, issued, acknowledged, observed complete, plus rejected, canceled, superseded, expired and unresolved; restore reservations after restart and reconcile issued-but-unresolved commands before expiry; re-read current state for each queued instruction right before it is spoken or sent, so a stale instruction is never issued; instrument source-to-receipt, receipt-to-decision and voice-loop latency at p50, p95 and p99 separately.
 
 ## P2.5 Surveillance, flight-data, status and restriction sources not in this catalog
 
@@ -450,21 +452,21 @@ Readback tests (simulated controller instruction, pilot response, expected resul
 | OPS1, hold short of Runway Seven Right | Holding short Seven Right, OPS1 | Confirm hold; crossing stays blocked |
 | same | Holding short Seven Left, OPS1 | Request corrected readback; hold stays in effect |
 | same | Roger, OPS1 | Request runway hold-short readback |
-| OPS1, cross Runway Seven Right at Bravo Five | Crossing Seven Right at Bravo Five, OPS1 | Accept the version-matched acknowledgment; entry still needs a valid crossing authorization and a clear conflict check |
+| OPS1, cross Runway Seven Right at Bravo Five | Crossing Seven Right at Bravo Five, OPS1 | Agent accepts the readback because it matches the crossing clearance it issued |
 
 Match callsign, action and runway designator; normalize the spoken runway end to a physical pavement id only after checking the suffix (`7L` and `7R` are different pavements). Record clearance version, timestamped audio, speaker, callsign, channel, transcript, parsed critical fields, confidence and result; log wrong-side readback, dropped token, wrong channel and blocked channel as separate tests. Metrics: critical-field error rate and wrong-readback acceptance rate alongside word error rate. Offline candidates: whisper.cpp (MIT) and Piper (GPL; check voice-model terms). Practice audio: team-recorded fixtures; TU Graz ATCOSIM (recorded simulation speech); ATCO2 one-hour English ASR subset with verified callsign/command/value tags under research terms (not downloaded by Ethan). My notes add that every ATCO2 file is over 20 MB and the ATCOSIM license is unconfirmed.
 
 ## P2.8 Build order, pass criteria and open dependencies (Ethan's plan)
 
-1. **P0 geometry and end-to-end traffic.** One reviewed graph and synthetic stands. At t=0 arrival SUN101 is handed to the simulated tower, SUN202 waits at stand S2, OPS1 requests the B5 crossing at 7R/25L. While the arrival holds the runway reservation the vehicle is told to hold; after landing and observed clear, authorize the crossing and observe exit; taxi the arrival to S1 after ramp acceptance; taxi SUN202 after modeled readiness; departure clearance after a current synthetic release and pavement checks.
-2. **P0 explanation and disruptions.** Show the rejected crossing proposal, protected resource, owner, weather and restriction freshness and event/rule ids. Inject a wrong runway-side readback and missing runway-clear evidence (movement stays blocked), a closure or weather revision before takeoff (deferred movement, replan after valid recovery), and a missing handoff acknowledgment plus backend restart (ownership held, no repeated command). Reconnect the dashboard and show it caught up.
+1. **P0 geometry and end-to-end traffic.** One reviewed graph and synthetic stands. At t=0 arrival SUN101 is handed to the simulated tower, SUN202 waits at stand S2, OPS1 requests the B5 crossing at 7R/25L. While the arrival holds the runway reservation the vehicle is told to hold; after landing and observed clear, authorize the crossing and observe exit; taxi the arrival to S1 after ramp acceptance; taxi SUN202 after modeled readiness; departure clearance after a current synthetic release, once the agent sees the pavement clear.
+2. **P0 explanation and disruptions.** Show the crossing request the agent declined, the resource it protected, who held it, weather and restriction freshness and event/rule ids. Inject a wrong runway-side readback and missing runway-clear evidence (the agent withholds clearance and asks again), a closure or weather revision before takeoff (the agent defers the movement and replans), and a missing handoff acknowledgment plus backend restart (ownership held, no repeated command). Reconnect the dashboard and show it caught up.
 3. **P1 two-way voice and weather.** One simulated audio request and readback with local fixtures as fallback; a timed weather change showing the evidence that invalidated the plan.
 4. **P2 authorized observation and replay.** One traffic provider; confirm coverage, display rights, retention and quota; measure feed position age and gaps in a busy window; benchmark surface coverage separately from airborne coverage; use a dated permitted snapshot or a synthetic run if live data fail.
-5. **Pass criteria.** Same seed and asset revisions give the same decisions (excluding receipt times); zero overlapping runway reservations; zero conflicting pavement occupancy in simulator truth; zero unauthorized hold-line crossings; zero wrong required readbacks accepted; zero commands from live or replay mode; zero repeated issue after restart. Report delay per actor, recovery time, stale events, checker rejections and voice latency, measured against simulation truth with any unsafe baseline in a separate run.
+5. **Pass criteria.** Same seed and asset revisions give the same decisions (excluding receipt times); zero overlapping runway reservations; zero conflicting pavement occupancy in simulator truth; zero unauthorized hold-line crossings; zero wrong required readbacks accepted; zero commands from live or replay mode; zero repeated issue after restart. Report delay per actor, recovery time, stale events, how often the agent declined or replanned, and voice latency, measured against simulation truth.
 
 **Simulators.** Deterministic surface simulator first, BlueSky second (isolate its built-in conflict resolution; add surface and ramp logic separately), **BluebirdATC** (AGPL-3.0 en-route research environment with REST, HMI and Gymnasium; deployment obligations to confirm) as a research alternative, and NASA Ames MACS as a reference only. A headless BlueSky smoke test was proposed and not run.
 
-**Open dependencies (Ethan):** airport and ramp graph confirmation, qualified review of local rules, wake separation and degraded-state handling, provider entitlements and fees, voice quality on the demo hardware. All outside parties are simulated.
+**Open dependencies (Ethan):** airport and ramp graph confirmation, confirming local rules, wake separation and degraded-state handling against the FAA text, provider entitlements and fees, voice quality on the demo hardware. All outside parties are simulated.
 
 ## P2.9 Incident-based test fixtures
 
@@ -479,7 +481,7 @@ Match callsign, action and runway designator; normalize the spoken runway end to
 | Footprint exceeds holding area | Center point legal but tail blocks a parallel taxiway | Swept-footprint check rejects the route |
 | Wrong frequency | Correct words on an unrelated simulated channel | Readback unresolved until actor, instruction and channel agree |
 | Austin-style fog | Planner predicts motion but observations show an unresolved occupant | Response driven by evidence, not prediction |
-| JFK-style route deviation | Actual path differs from planned path | Deviation detected independently; pending departure stays protected |
+| JFK-style route deviation | Actual path differs from planned path | Agent notices the deviation from observed positions and holds the pending departure |
 | Unreported vehicle | Exists in truth, absent from the observation feed | Detection and conservative behavior scored separately |
 
 Each test record should hold source reference, synthetic changes, seed, input timing, expected invariant and actual result; reserve separate cases for development and evaluation; report failures with test counts and coverage. The ASRS mappings are Ethan's proposed tests, not exact replays.
@@ -502,7 +504,7 @@ Proposed Phoenix box 33.3 to 34.0 N, -112.4 to -111.7 E (0.49 square degrees, on
 
 | Mode | Inputs | Output authority |
 |---|---|---|
-| Autonomous simulation | Versioned airport subset, synthetic traffic and airport operations, simulated pilot audio, frozen weather | Structured commands only to simulated pilots, after independent checks; backend runs without the dashboard |
+| Autonomous simulation | Versioned airport subset, synthetic traffic and airport operations, simulated pilot audio, frozen weather | The agent issues clearances to simulated pilots on its own; backend runs without the dashboard |
 | Historical replay | Immutable event logs or licensed samples, original event times, replay clock | Display and hypothetical evaluation; a counterfactual run gets a separate run id |
 | Live observation | Authorized track vendor and official contextual feeds | Read-only display with hypothetical proposals; the process has no publisher for movement commands |
 
@@ -510,4 +512,4 @@ The core demo should work with no internet or provider credentials: pin graph, r
 
 ## P2.12 Repo README (read from `ethany1017/Sunhacks-2026`)
 
-The README describes the same headless architecture as the Notion plan, with the explicit banner "Simulation only", a component table (shared state, planner, safety checker, clearance manager, voice service, event recorder), a dashboard section, AWC METAR/TAF weather, and limitations ("a passing simulation is evidence for the scenarios tested, not proof of real-world safety"). Open placeholders: project name `[Project Name]`, airport `[airport]`, demo scenario `[demo scenario]`, setup instructions and tech stack. It already scopes out live observation, historical replay and gate/ramp integration, which matches this catalog's recommendation. Filling the airport and scenario placeholders depends on the decision in P2.0. The repo currently holds only the README.
+The README describes the same headless architecture as the Notion plan, with a "Simulation only" banner, a component table (shared state, autonomous agent, clearance manager, voice service, event recorder), a dashboard section, AWC METAR/TAF weather, and a short limitations list. It has since been updated to describe a fully autonomous agent with no second checker (see the repo README). Open placeholders: project name `[Project Name]`, airport `[airport]`, demo scenario `[demo scenario]`, setup instructions and tech stack. It already scopes out live observation, historical replay and gate/ramp integration, which matches this catalog's recommendation. Filling the airport and scenario placeholders depends on the decision in P2.0. The repo originally held only the README.
