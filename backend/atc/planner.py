@@ -30,6 +30,8 @@ CONFLICT_MARGIN_M = 20.0        # two route points closer than the half wingspan
 CONVERGE_WINDOW_S = 20.0        # two aircraft reaching one junction closer in time than this: one holds
 CONVERGE_MIN_STOP_M = 80.0      # ...if it is still this far from the junction (readback + braking distance)
 CONVERGE_CLEAR_M = 70.0
+START_DELAY_S = 5.0             # readback plus spool-up before a stopped aircraft moves
+TAXI_AVG_MPS = 5.0              # average speed from a standing start over the first few hundred metres
 HOLD_MAX_S = 60.0               # a hold for an aircraft that has itself stopped ends after this         # resume once the other aircraft is this far past the junction and from the holder
 DEPARTURE_RUNWAYS = {"west": ["25R"], "east": ["07L"]}  # departures on the runway arrivals do not use
 FREQ = {"tower": "120.9", "ground": "132.55"}
@@ -132,7 +134,10 @@ class Planner:
             if not past and o is not None and o["speed_mps"] < 0.3 and self.t - h["t"] > HOLD_MAX_S:
                 past = True   # the other aircraft is stopped too (waiting itself): do not wait for it forever
             if past and not self._pending(cs, "hold_position"):
-                if self._propose(a, "resume_taxi", {}, f"{h['by']} is past the junction: {cs} resumes taxi."):
+                r = self._remaining(cs, a)
+                path = self._path(r[r.index(a["next_node"]):], (a["x"], a["y"]), 0.0) if a.get("next_node") in r else []
+                if self._propose(a, "resume_taxi", {}, f"{h['by']} is past the junction: {cs} resumes taxi.",
+                                 route=r, extra={"path": path}):
                     self._m(cs).pop("held")
         movers = {cs: a for cs, a in self.ac.items() if a["phase"] in ("taxi_in", "taxi_out") and a["speed_mps"] > 1.0
                   and not self._m(cs).get("held")}
@@ -278,6 +283,17 @@ class Planner:
                 routes[cs] = r
             elif a["phase"] in ("taxi_out", "taxi_in", "hold_short") and a["speed_mps"] < 0.3 and a.get("next_node"):
                 parked[cs] = a["next_node"]
+        paths = {}
+        for cs, a in self.ac.items():   # where every moving (or just-cleared) ground aircraft will be, and when
+            if a["phase"] not in ("taxi_in", "taxi_out", "hold_short", "runway_exit"):
+                continue
+            just = any(c["callsign"] == cs and c["action"] in ("taxi_via", "resume_taxi") and self.t - c["issued_t"] < 10
+                       for c in self.live.values())
+            if a["speed_mps"] < 0.3 and not just:
+                continue
+            r = self._remaining(cs, a)
+            if a.get("next_node") in r:
+                paths[cs] = self._path(r[r.index(a["next_node"]):], (a["x"], a["y"]), a["speed_mps"])
         wx = self.obs["weather"]
         lvl = self.obs.get("level") or {}
         eff = lvl.get("effects") or {}
@@ -286,10 +302,25 @@ class Planner:
         for c in self.live.values():
             live_actions.setdefault(c["callsign"], set()).add(c["action"])
         return {"t": self.t, "aircraft": self.ac, "live_actions": live_actions, "occupants": occupants, "clear_at": clear_at, "runway_clearances": rc,
-                "last_roll": self.last_roll, "routes": routes, "parked_on": parked,
+                "last_roll": self.last_roll, "routes": routes, "parked_on": parked, "paths": paths,
                 "pushbacks": self.pushbacks, "hot_nodes": self._hot_nodes(), "tailwind": {e: self._tailwind(e) for e in self.ends},
                 "tailwind_limit": lvl.get("tailwind_limit_kt") or safety.TAILWIND_LIMIT_KT, "rain": rain,
                 "rollout_s": ROLLOUT_S * eff.get("occupancy_mult", 1.0)}
+
+    def _path(self, nodes, xy, speed):
+        """[{n, xy, eta, hdg}] along a node route ahead (CONVERGE_LOOK_M): eta at the speed held, or from rest."""
+        out, d, prev = [], 0.0, xy
+        for n in nodes:
+            p = self.xy[n]
+            seg = self._dist(prev, p)
+            d += seg
+            if d > CONVERGE_LOOK_M:
+                break
+            hdg = math.degrees(math.atan2(p[0] - prev[0], p[1] - prev[1])) % 360 if seg > 0.5 else (out[-1]["hdg"] if out else 0.0)
+            eta = d / speed if speed > 3.0 else START_DELAY_S + d / TAXI_AVG_MPS
+            out.append({"n": n, "xy": p, "eta": eta, "hdg": hdg})
+            prev = p
+        return out
 
     def _hot_nodes(self):
         """Lane nodes a pushback may be moving into now: from its earliest likely push movement until it completes
@@ -436,10 +467,15 @@ class Planner:
         if ph == "final":
             self._final(a, m)
         elif ph == "taxi_in" and self._at_line(a):
-            self._cross(a)
+            if a["hold"]["runway"] != a.get("runway") or not (self._pending(cs, "taxi_via") or m.get("pend")
+                                                               or self._reroute_off(a, m)):
+                self._cross(a)
         elif ph in ("landing_roll", "runway_exit") and a["speed_mps"] < 0.3 and \
                 str(a.get("blocked_by") or "").startswith("runway:"):
-            self._cross(a, a["runway"])   # its exit route runs onto the same runway's pavement again: clear it across
+            # its exit route runs onto the same runway's pavement again (the sim would end a crossing clearance at once):
+            # re-route it off that pavement if possible, else clear it across
+            if not self._pending(cs, "taxi_via") and not m.get("pend") and not self._reroute_off(a, m):
+                self._cross(a, a["runway"])
         elif ph in ("taxi_in", "landing_roll", "runway_exit") and not m.get("taxied") and a["speed_mps"] < 0.3 \
                 and not a.get("blocked_by") and ((a.get("stopped_s") or 0) > 1.0 or ph != "taxi_in") and a.get("next_node") \
                 and a.get("gate"):
@@ -450,16 +486,39 @@ class Planner:
         if self._pending(cs, "taxi_via"):
             return
         stand = self.si.stand_nodes(a["gate"])["node"]
-        route = self._route(cs, a["next_node"], stand)
+        route = self._route(cs, a["next_node"], stand, avoid_pav=a.get("runway")) or \
+            self._route(cs, a["next_node"], stand)
         if not route:
             self._no_route(cs)
             return
         length = sum(self.g[u][v]["length"] for u, v in zip(route, route[1:]))
         res = self._propose(a, "taxi_via", {"route": route, "to": a["gate"]},
                             f"{cs} vacated the runway: taxi to gate {a['gate']} ({length:.0f} m), clear of "
-                            f"opposite-direction traffic.", route=route)
+                            f"opposite-direction traffic.", route=route,
+                            extra={"path": self._path(route, (a["x"], a["y"]), a["speed_mps"])})
         if res:
             m["pend"] = {"cid": res["clearance_id"], "set": {"route": route, "ri": 0, "taxied": True}}
+
+    def _reroute_off(self, a, m):
+        """Arrival stopped at a hold point of its own landing runway: a taxi route to the gate that stays off it."""
+        cs, pav = a["callsign"], a["runway"]
+        if m.get("reroute_tried") == a.get("next_node") or not a.get("gate"):
+            return False
+        m["reroute_tried"] = a.get("next_node")
+        stand = self.si.stand_nodes(a["gate"])["node"]
+        for start, turn in ((a.get("next_node"), False), (a.get("prev_node"), True)):
+            if not start:
+                continue
+            route = self._route(cs, start, stand, avoid_pav=pav)
+            if route and pav not in self._runs(route):
+                res = self._propose(a, "taxi_via", {"route": route, "to": a["gate"]},
+                                    f"{cs}'s exit route runs back onto runway {pav}: taxi to gate {a['gate']} on a route "
+                                    f"that stays off it.", route=route,
+                                    extra={"turn_round": turn, "path": self._path(route, (a["x"], a["y"]), 0.0)})
+                if res:
+                    m["pend"] = {"cid": res["clearance_id"], "set": {"route": route, "ri": 0, "taxied": True}}
+                    return True
+        return False
 
     def _no_route(self, cs):
         key = (cs, "taxi_via")
@@ -494,8 +553,8 @@ class Planner:
             return
         if eta > LAND_CLEAR_ETA_S:
             return
-        if not m.get("exit"):
-            m["exit"] = self.si.choose_exit(end, a["type"], a["gate"]) if a.get("gate") else None
+        if not m.get("exit") or m.get("exit_end") != end:
+            m["exit"], m["exit_end"] = self._exit(end, a), end
         res = self._propose(a, "cleared_to_land", {"runway": end, **({"exit": m["exit"]} if m.get("exit") else {})},
                             f"{cs} is {eta:.0f} s from runway {end}; clearing it to land so it never has to go around.",
                             end=end, pavement=a["runway"], extra={"eta": eta})
@@ -506,6 +565,19 @@ class Planner:
             m["ga"] = True
             self._propose(a, "go_around", {}, f"{cs} cannot be cleared to land on {end} in time: the runway will not be "
                                               f"clear; a go-around is safer than landing on an occupied runway.")
+
+    def _exit(self, end, a):
+        """The pilots' preferred exit unless its taxi route to the gate runs back onto the landing runway's pavement
+        (the simulator then ends a crossing clearance at once, see README): the best exit that stays off it."""
+        if not a.get("gate"):
+            return None
+        pav, stand = self.ends[end]["runway"], self.si.stand_nodes(a["gate"])["node"]
+        opts = self.si.exit_options(end, a["type"], a["gate"])
+        for n in opts:
+            runs = self._runs(self.si.taxi_route(n, stand) or [])
+            if pav not in runs[1 if runs[:1] == [pav] else 0:]:   # the exit connector itself is on that pavement
+                return n
+        return opts[0] if opts else self.si.choose_exit(end, a["type"], a["gate"])
 
     def _cross(self, a, pav=None):
         cs = a["callsign"]
@@ -520,9 +592,11 @@ class Planner:
     def _departure(self, a):
         cs, m, ph = a["callsign"], self._m(a["callsign"]), a["phase"]
         if ph == "at_gate" and a.get("ready") and not m.get("push"):
-            lane = self.si.stand_nodes(a["gate"])["lane_node"]
+            sn = self.si.stand_nodes(a["gate"])
+            lane = sn["lane_node"]
             res = self._propose(a, "pushback_approved", {}, f"{cs} is ready at gate {a['gate']}: pushback approved.",
-                                extra={"lane_xy": self.xy[lane]})
+                                extra={"lane_xy": self.xy[lane], "push_from": self.xy[sn["node"]],
+                                       "push_to": self.xy[lane]})
             if res:
                 m["push"] = True
                 stand = self.si.stand_nodes(a["gate"])["node"]
@@ -618,7 +692,8 @@ class Planner:
         _, end, entry, route, length = best
         res = self._propose(a, "taxi_via", {"route": route, "to": end},
                             f"{why}Taxi {cs} to runway {end} ({length:.0f} m), clear of opposite-direction traffic.",
-                            end=end, route=route, extra={"turn_round": turn})
+                            end=end, route=route,
+                            extra={"turn_round": turn, "path": self._path(route, (a["x"], a["y"]), a["speed_mps"])})
         if res:
             m["pend"] = {"cid": res["clearance_id"], "set": {"end": end, "entry": entry, "route": route, "ri": 0}}
         return bool(res)

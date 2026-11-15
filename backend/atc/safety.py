@@ -22,7 +22,10 @@ WAKE_DEPARTURE_S = {"A": 180.0, "B": 120.0, "C": 120.0, "D": 120.0}  # leader CW
 WAKE_LIGHT_BEHIND_LARGE_S = 90.0         # assumption (the built-in tower's value): a light behind any jet
 # -- taxi -------------------------------------------------------------------------------------------------------------
 PUSHBACK_LANE_M = 70.0       # two pushbacks into lanes this close are serialised...
-PUSHBACK_STAGGER_S = 90.0    # ...this far apart, so their push movements (at the end of ~280 s) do not overlap
+PUSHBACK_STAGGER_S = 90.0
+PUSH_CLEAR_M = 5.0           # margin between a pushback's swept area and any other aircraft    # ...this far apart, so their push movements (at the end of ~280 s) do not overlap
+CONVERGE_WINDOW_S = 20.0     # two aircraft predicted at one junction closer in time than this: the later one waits
+CONFLICT_MARGIN_M = 20.0     # route points closer than the two half wingspans + this are one junction
 TURN_CLEAR_M = 30.0          # turning round in place needs this much room beyond the two aircraft's half sizes
 GROUND_PHASES = ("taxi_in", "taxi_out", "pushback", "hold_short", "line_up", "runway_exit", "landing_roll")
 # -- tailwind (pilot limit, typical transport AFM; the level exposes it as tailwind_limit_kt) --------------------------
@@ -197,6 +200,19 @@ def taxi_conflict(pic, prop):
             if d < PUSHBACK_LANE_M and pic["t"] - p["t"] < PUSHBACK_STAGGER_S:
                 return _no("taxi_conflict", f"{o} is pushing back {d:.0f} m away; pushbacks are staggered "
                                             f"{PUSHBACK_STAGGER_S:.0f} s.")
+        a0, b0 = prop["push_from"], prop["push_to"]
+        me = pic["aircraft"][cs]
+        ux, uy = b0[0] - a0[0], b0[1] - a0[1]
+        L = max((ux * ux + uy * uy) ** 0.5, 1e-6)
+        ux, uy = ux / L, uy / L
+        for o, a in pic["aircraft"].items():   # the push sweeps from the stand to the lane, tail first
+            if o == cs or a.get("phase") not in GROUND_PHASES + ("at_gate", "parked"):
+                continue
+            px, py = a["x"] - a0[0], a["y"] - a0[1]
+            along = max(0.0, min(L + me["length_m"] / 2, px * ux + py * uy))
+            d = ((px - along * ux) ** 2 + (py - along * uy) ** 2) ** 0.5
+            if d < me["wingspan_m"] / 2 + a["length_m"] / 2 + PUSH_CLEAR_M:
+                return _no("taxi_conflict", f"{o} is in {cs}'s pushback path ({d:.0f} m from it).")
         return _ok("taxi_conflict")
     route = prop.get("route") or []
     if prop.get("turn_round"):
@@ -216,7 +232,32 @@ def taxi_conflict(pic, prop):
     for o, n in pic.get("parked_on", {}).items():  # aircraft stopped with no route yet (e.g. pushed back, waiting)
         if o != cs and n in route[1:]:
             return _no("taxi_conflict", f"{o} is stopped on the route at node {n}.")
-    return _ok("taxi_conflict", "No head-on or blocked segment on the route.")
+    mine = prop.get("path") or []
+    me = pic["aircraft"].get(cs, {})
+    for o, theirs in pic.get("paths", {}).items():
+        if o == cs:
+            continue
+        hit = converging(mine, theirs, (me.get("wingspan_m", 36.0) + pic["aircraft"][o]["wingspan_m"]) / 2)
+        if hit:
+            return _no("taxi_conflict", f"{cs} and {o} would reach the same junction {hit[0]:.0f} s / {hit[1]:.0f} s from "
+                                        f"now (closer than {CONVERGE_WINDOW_S:.0f} s apart).")
+    return _ok("taxi_conflict", "No head-on, blocked or converging segment on the route.")
+
+
+def converging(mine, theirs, half_spans):
+    """(my eta, their eta) at the first pair of route points closer than the half wingspans + margin that both reach
+    within CONVERGE_WINDOW_S of each other, unless one simply follows the other there (same heading in). Path points:
+    {xy, eta, hdg} (hdg = direction of the edge into the point)."""
+    r = half_spans + CONFLICT_MARGIN_M
+    for p in mine:
+        for q in theirs:
+            if (p["xy"][0] - q["xy"][0]) ** 2 + (p["xy"][1] - q["xy"][1]) ** 2 > r * r:
+                continue
+            if abs((p["hdg"] - q["hdg"] + 180) % 360 - 180) < 40:
+                continue   # in trail on the same line: the pilots keep their distance
+            if abs(p["eta"] - q["eta"]) < CONVERGE_WINDOW_S:
+                return p["eta"], q["eta"]
+    return None
 
 
 RULES = {
@@ -227,7 +268,7 @@ RULES = {
     "taxi_via": (taxi_conflict, hold_short),
     "pushback_approved": (taxi_conflict,),
     "hold_position": (hold_short,),
-    "resume_taxi": (hold_short,),
+    "resume_taxi": (hold_short, taxi_conflict),
     "set_runway_config": (tailwind,),
 }
 

@@ -10,7 +10,7 @@ if str(ROOT) not in sys.path:
 
 from sim.core.aircraft_types import get_type  # noqa: E402
 from sim.core.engine import Simulation  # noqa: E402
-from sim.core.physics import FINAL_START_M, unit  # noqa: E402
+from sim.core.physics import EXIT_SPEED, FINAL_START_M, unit  # noqa: E402
 from sim.graph.model import AirportGraph  # noqa: E402
 
 from sim.levels import HELD_OUT_SEEDS, TRAINING_SEEDS  # noqa: E402
@@ -262,6 +262,20 @@ class RealSimulator:
     def choose_exit(self, end, icao, gate):
         """The runway exit node a landing of this type on `end` would use for its gate (the pilots' default)."""
         return self.sim.choose_exit(end, get_type(icao), self.graph.stands[gate].node)
+
+    def exit_options(self, end, icao, gate):
+        """Runway exits a landing of this type on `end` can make (enough distance to slow to the exit speed), best first
+        by the pilots' own score (roll distance and taxi distance to the gate); the first is choose_exit()'s pick."""
+        g, ty, dest = self.graph, get_type(icao), self.graph.stands[gate].node
+        rw, _, _ = g.end_info(end)
+        need = 1.25 * (ty.vref_mps ** 2 - EXIT_SPEED ** 2) * 0.94 / (2 * ty.landing_decel)
+        out = []
+        for node, dist in g.entries(end):
+            if need <= dist < rw.length_m - 200:
+                r = g.route(node, dest)
+                if r is not None:
+                    out.append((dist * 0.6 + g.route_length(r) * 0.4, node))
+        return [n for _, n in sorted(out)]
 
     def taxi_route(self, src, dst):
         """The shortest taxi route the pilots fly when not given an explicit one (an arrival from its exit to the gate)."""
