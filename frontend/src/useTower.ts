@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { onAudio } from '@/Voice'
 import type { Aircraft, Airport, Comparison, Metrics, RefereeFail, RunInfo, RunwayConfig, SimEvent, WeatherData } from '@/types'
 
 const FEED_CAP = 300
@@ -44,6 +45,7 @@ export function applyEvents(prev: TowerState, events: SimEvent[]): TowerState {
       fresh.length = 0
       prev = INITIAL
     }
+    if (e.type === 'audio') continue // played by Voice (onAudio); not a feed item, and its t lags the clock
     if (e.type === 'metrics' && 'comparison' in e.data) {
       s.comparison = e.data.comparison // not part of the live run: no clock, no feed item
       continue
@@ -127,11 +129,14 @@ export function useTower() {
         setConnected(true)
       }
       sock.onmessage = (m) => {
+        let e: SimEvent
         try {
-          buffer.push(JSON.parse(m.data))
+          e = JSON.parse(m.data)
         } catch {
           return // ignore a malformed message rather than break the dashboard
         }
+        buffer.push(e)
+        if (e.type === 'audio') onAudio(e)
         if (!frame) frame = requestAnimationFrame(flush)
       }
       sock.onclose = () => {

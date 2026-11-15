@@ -76,7 +76,7 @@ export type SimEvent =
   | Ev<'ai_decision', Decision & { choice: string; explanation: string; source: 'claude' | 'fallback' }>
   | Ev<'safety_check', { approved: boolean; rule: string; action: string }>
   | Ev<'clearance', { text: string; action: string; params?: Record<string, unknown> }>
-  | Ev<'audio', { url: string; speaker: 'tower' | 'pilot'; text: string }>
+  | Ev<'audio', { url: string; speaker: 'tower' | 'pilot'; text: string; wall: number; source: string; clearance_id?: number | string | null }>
   | Ev<'readback', { transcript: string; matched: boolean }>
   | Ev<'readback_correction', { transcript: string }>
   | Ev<'sequence', { runway: string; order: string[] }>

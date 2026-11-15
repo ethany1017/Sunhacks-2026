@@ -4,9 +4,10 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from atc import weather_live
+from atc import voice_out, weather_live
 
 from . import db
 from .runner import Runner
@@ -21,7 +22,8 @@ async def lifespan(app):
     global runner
     tasks = []
     if os.environ.get("AUTOSTART", "1") != "0":  # default: start the first level with the Agent, no dashboard needed
-        runner = Runner()
+        voice = voice_out.Voice() if os.environ.get("VOICE", "1") != "0" else None  # speech: live server only
+        runner = Runner(voice=voice)
         runner.start(runner.sim.get_levels()[0]["id"], "agent")
         tasks.append(asyncio.create_task(runner.loop()))
         tasks.append(asyncio.create_task(weather_live.refresh_forever(runner.sim.get_airport()["config"]["icao"], live_wx)))
@@ -38,6 +40,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(ws_router)
+voice_out.CACHE_DIR.mkdir(parents=True, exist_ok=True)
+app.mount("/api/audio", StaticFiles(directory=voice_out.CACHE_DIR), name="audio")  # under /api: the dev proxy forwards it
 
 
 class RunRequest(BaseModel):

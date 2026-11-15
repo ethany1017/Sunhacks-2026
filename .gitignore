@@ -36,6 +36,7 @@ node_modules/
 dist/
 runs/
 backend/weather_cache/
+backend/audio_cache/
 .env.local
 web/.env.local
 __pycache__/

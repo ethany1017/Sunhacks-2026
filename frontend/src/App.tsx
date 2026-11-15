@@ -4,6 +4,7 @@ import { Banner, Comparison, Controls, Scoreboard } from '@/RunPanel'
 import { TopBar } from '@/TopBar'
 import type { Aircraft } from '@/types'
 import { useTower } from '@/useTower'
+import { VoicePanel } from '@/Voice'
 
 // Arrivals on final, lowest (closest to landing) first: most of the 11 km finals lie off the default map view.
 function OnFinal({ aircraft }: { aircraft: Record<string, Aircraft> }) {
@@ -33,6 +34,7 @@ export default function App() {
       <TopBar config={airport?.config ?? null} weather={tower.weather} runway={tower.runway} t={tower.t} connected={tower.connected} />
       <div className="flex items-center gap-4 border-b border-slate-800 bg-slate-950 px-6 py-2">
         <Controls run={tower.run} ended={tower.ended} />
+        <VoicePanel />
       </div>
       <Banner verdict={tower.verdict} fails={tower.fails} run={tower.run} ended={tower.ended} />
       <main className="flex min-h-0 flex-1">

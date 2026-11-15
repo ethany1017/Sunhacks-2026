@@ -27,8 +27,9 @@ SCORE_KEYS = ("fails", "completed", "avg_delay_s", "total_delay_s", "go_arounds"
 
 
 class Runner:
-    def __init__(self, sim=None):
+    def __init__(self, sim=None, voice=None):
         self.sim = sim or simif.connect()
+        self.voice = voice  # atc.voice_out.Voice, live server only (None in run_headless, tests and the harness)
         self.run_id = None
         self.ended = True
         self._buf = []
@@ -58,6 +59,8 @@ class Runner:
             self._add(t_old, "sim_end", data={"why": "reset"}, reason="Run reset from the dashboard.")
             self.flush()
         self._plug(controller)
+        if self.voice:
+            self.voice.clear()  # don't speak the old run's queued lines
         lv, labels = self.sim.get_level(), self.sim.get_controllers()
         self.run_id, self.ended = db.start_run(), False
         self._next_pos = self._next_metrics = 0.0
@@ -130,6 +133,29 @@ class Runner:
             db.emit_many(self.run_id, self._buf)  # ponytail: synchronous write on the loop thread, a few ms per pass
         self._buf = []
 
+    def _speak(self, events):
+        """Queue every clearance (tower) and readback (pilot) for speech, in order. Called after they are written, so
+        each audio event lands after its line in the store."""
+        for e in events:
+            d = e["data"]
+            if e["type"] == "clearance" and d.get("text"):
+                line = {"speaker": "tower", "text": d["text"], "clearance_id": d.get("clearance_id")}
+            elif e["type"] == "readback" and d.get("transcript"):
+                line = {"speaker": "pilot", "text": d["transcript"], "readback_id": d.get("readback_id"),
+                        "clearance_id": d.get("clearance_id")}
+            else:
+                continue
+            self.voice.speak(dict(line, run_id=self.run_id, t=e["t"], callsign=e["callsign"]), self._audio_ready)
+
+    def _audio_ready(self, line, name, source, voice):
+        # Worker thread: its own short-lived DB connection; a line of a run that has since been reset is dropped.
+        if line["run_id"] != self.run_id:
+            return
+        data = {k: v for k, v in line.items() if k not in ("run_id", "t", "callsign")}
+        db.emit(line["run_id"], "audio", line["t"], line["callsign"],
+                dict(data, url=f"/api/audio/{name}", source=source, voice=voice, wall=round(time.time(), 3)),
+                f"{line['speaker'].capitalize()} audio ({source}).")
+
     async def loop(self):
         speed = float(os.environ.get("SIM_SPEED", "1"))
         run, wall0, sim0 = None, 0.0, 0.0
@@ -145,7 +171,10 @@ class Runner:
                         n += 1
                     if n == MAX_TICKS_PER_PASS:  # fell behind: drop the backlog instead of racing to catch up
                         wall0, sim0 = time.monotonic(), self.sim.t
+                    lines = self._buf
                     self.flush()
+                    if self.voice:
+                        self._speak(lines)
             except Exception:
                 log.exception("run loop error; the run is stopped")
                 self._add(self.sim.t, "sim_end", data={"why": "error"}, reason="The run stopped on a backend error.")
