@@ -139,10 +139,6 @@ function toast(msg: string): void {
   window.clearTimeout(toastTimer);
   toastTimer = window.setTimeout(() => el!.classList.remove("show"), 4000);
 }
-async function toggleController(): Promise<void> {
-  const err = await store.control("set_controller", store.agent.controller === "claude" ? "baseline" : "claude");
-  if (err) toast(err);
-}
 
 window.addEventListener("keydown", (e) => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
@@ -154,10 +150,9 @@ window.addEventListener("keydown", (e) => {
       if (store.paused) void store.control("resume");
       break;
     }
-    case "h": case "H": void store.control("trigger_haboob"); break;
+    case "h": case "H": void store.control("trigger_haboob").then((err) => { if (err) toast(err); }); break;
     case "r": case "R": void store.control("reset"); break;
     case "m": case "M": toggleMute(); break;
-    case "c": case "C": void toggleController(); break;
     case "o": case "O": select(null, true); break;
     case "Escape":
       if (document.fullscreenElement) void document.exitFullscreen();

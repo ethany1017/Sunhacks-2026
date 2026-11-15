@@ -20,9 +20,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Deque, Dict, List, Optional
 
-from sim.agent.baseline import BaselineController
-from sim.agent.handover import prime_baseline
-from sim.agent.tools import TOOL_DEFS, ToolBox, compact_state, err
+from sim.tower.controller import TowerController
+from sim.tower.handover import prime_tower
+from agent.tools import TOOL_DEFS, ToolBox, compact_state, err
 from sim.core.engine import Simulation
 
 log = logging.getLogger("kphx.claude_agent")
@@ -108,7 +108,7 @@ class ClaudeAgent:
         self._sim: Optional[Simulation] = None
         self._epoch: Any = None
         self._toolbox: Optional[ToolBox] = None
-        self._fallback: Optional[BaselineController] = None
+        self._fallback: Optional[TowerController] = None
         self._fails = 0
         self._backoff_until = 0.0
         self._reset_state()
@@ -209,7 +209,7 @@ class ClaudeAgent:
 
     def _fallback_tick(self, sim: Simulation, events: List[Dict[str, Any]]) -> None:
         if self._fallback is None:
-            self._fallback = prime_baseline(BaselineController(), sim)
+            self._fallback = prime_tower(TowerController(), sim)
         self.stats["fallback_ticks"] += 1
         self._fallback.on_tick(sim, events)
 
@@ -320,7 +320,7 @@ class ClaudeAgent:
             wait = min(self.cfg.backoff_base_s * (2 ** (self._fails - 1)), self.cfg.backoff_max_s)
             self._backoff_until = self._now() + wait
             log.warning("claude wake failed (%s); baseline covers for %.0f s", outcome["error"], wait)
-            self._fallback = prime_baseline(BaselineController(), sim)
+            self._fallback = prime_tower(TowerController(), sim)
         else:
             self._fails = 0
             if outcome.get("exhausted"):

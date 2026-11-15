@@ -41,13 +41,7 @@ def make_simulation() -> Simulation:
     load_dotenv()
     scenario = Path(os.environ.get("SCENARIO", str(DEFAULT_SCENARIO)))
     run_dir = Path(os.environ.get("RUNS_DIR", str(ROOT / "runs"))) / ("%s-%s" % (scenario.stem, time.strftime("%Y%m%d-%H%M%S")))
-    sim = Simulation(scenario, run_dir=run_dir, controller="baseline")
-    wanted = os.environ.get("CONTROLLER", "baseline")
-    if wanted != "baseline":
-        res = sim.set_controller(wanted)
-        if not res["ok"]:
-            print("CONTROLLER=%s not available (%s); staying on baseline" % (wanted, res["error"]))
-    return sim
+    return Simulation(scenario, run_dir=run_dir, controller="tower")
 
 
 @asynccontextmanager
@@ -62,7 +56,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     await app.state.runner.stop()
 
 
-app = FastAPI(title="KPHX autonomous control simulator", lifespan=lifespan)
+app = FastAPI(title="KPHX airport simulator", lifespan=lifespan)
 app.add_middleware(CORSMiddleware, allow_origins=CORS_ORIGINS, allow_methods=["*"], allow_headers=["*"])
 
 
@@ -83,7 +77,7 @@ def state() -> Dict[str, Any]:
 
 @app.post("/control", response_model=ControlResponse)
 async def control(req: ControlRequest) -> Dict[str, Any]:
-    # async on purpose: runs on the event loop, the same thread that steps the simulation, so a controller swap
+    # async on purpose: runs on the event loop, the same thread that steps the simulation, so a control action
     # can never land in the middle of a tick.
     res = app.state.sim.control(req.action, req.value)
     if req.action == "reset" and res["ok"]:

@@ -26,7 +26,7 @@ export class Store {
   voice: VoiceLine[] = [];
   weather: Weather | null = null;
   score: Score | null = null;
-  agent: AgentInfo = { status: "idle", controller: "baseline" };
+  agent: AgentInfo = { status: "idle", controller: "tower" };
   scenario: ScenarioInfo | null = null;
   speed = 1;
   paused = false;

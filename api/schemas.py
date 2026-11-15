@@ -7,7 +7,7 @@ from pydantic import BaseModel
 
 
 class ControlRequest(BaseModel):
-    action: Literal["pause", "resume", "speed", "trigger_haboob", "reset", "set_controller"]
+    action: Literal["pause", "resume", "speed", "trigger_haboob", "reset"]
     value: Any = None
 
 

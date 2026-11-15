@@ -8,7 +8,7 @@ Conventions: `lon`/`lat` in degrees (WGS84), `heading_deg` 0 = north, clockwise,
 
 - `GET /graph` -> GeoJSON FeatureCollection. Top-level extra key `meta`: `{"center":[lon,lat],"bounds":[west,south,east,north]}`. Feature `properties.kind` is one of `taxiway`, `taxilane`, `runway`, `runway_pavement` (Polygon), `apron` (Polygon), `taxiway_pavement` (Polygon, FAA taxiway surfaces, render under the lines; optional to draw), `stand` (Point, `name`), `hold` (Point, `runway`), `crossing` (Point). Taxiway/taxilane/runway are LineStrings with `ref` (letter or "08/26") and `id`.
 - `GET /state` -> a snapshot (below).
-- `POST /control` body `{"action": "pause"|"resume"|"speed"|"trigger_haboob"|"reset"|"set_controller", "value": ...}` -> `{"ok":true,"state":{paused,speed,controller}}`. `speed` value is 1, 2, 5, 10 or 20. `set_controller` value is `"baseline"` or `"claude"` (claude requires `ANTHROPIC_API_KEY`; otherwise return `{"ok":false,"error":"..."}`).
+- `POST /control` body `{"action": "pause"|"resume"|"speed"|"trigger_haboob"|"reset", "value": ...}` -> `{"ok":true,"state":{paused,speed,controller}}`. `speed` value is 1, 2, 5, 10 or 20.
 - `GET /decisions/{id}` -> a Decision.
 - `GET /health` -> `{"ok":true}`.
 
@@ -19,7 +19,7 @@ On connect the server sends one `snapshot`, then a `delta` about every 100 ms (1
 ### snapshot
 ```json
 {"type":"snapshot","t":123.4,"speed":1,"paused":false,
- "agent":{"status":"idle","controller":"baseline"},   (status: idle | thinking | fallback = baseline covering after a Claude API error)
+ "agent":{"status":"idle","controller":"tower"},   (the active controller; always the built-in tower in the simulator)
  "scenario":{"name":"kphx_haboob","duration_s":480,"haboob_triggered":false},
  "weather":{...Weather},
  "aircraft":[...Aircraft], "runways":[...Runway], "clearances":[...Clearance],
@@ -63,12 +63,12 @@ Same keys, all optional except `type` and `t`; lists contain only changed or new
 ```python
 # sim/core/engine.py
 class Simulation:
-    def __init__(self, scenario_path, graph_path, seed=None, controller="baseline", run_dir=None): ...
+    def __init__(self, scenario_path, graph_path, seed=None, controller="tower", run_dir=None): ...
     def step(self) -> list: ...            # advance one 100 ms tick, return events
     def snapshot(self) -> dict: ...        # contract snapshot
     def delta(self) -> dict: ...           # changes since last delta()/snapshot()
     def control(self, action, value=None) -> dict: ...
-    # used by controllers (baseline and Claude) as tools:
+    # used by controllers (the built-in tower, or any plugged-in controller) as tools:
     def observe(self) -> dict: ...         # observation view (delayed/noisy) + weather + runway status
     def issue_clearance(self, callsign, action, params=None) -> dict: ...
     def speak(self, callsign, text, speaker="agent") -> dict: ...
@@ -76,7 +76,7 @@ class Simulation:
     def record_decision(self, **fields) -> dict: ...
     def resolve_readback(self, readback_id, accept) -> dict: ...   # accept a pilot readback or say again (see observe()['pending_readbacks'])
 
-# controllers: sim/agent/baseline.py and sim/agent/claude_agent.py
+# built-in controller: sim/tower/controller.py (an optional Claude controller lives outside the simulator in agent/)
 class Controller:
     name: str
     def on_tick(self, sim, events) -> None: ...   # may call sim tools; must return quickly

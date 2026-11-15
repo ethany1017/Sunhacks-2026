@@ -85,7 +85,7 @@ class Runner:
         while True:
             sim = self.sim
             service = getattr(sim.controller, "service", None)
-            if service is not None:      # lets the Claude agent run queued tool calls even while the clock is paused
+            if service is not None:      # optional controller hook that runs even while the clock is paused
                 service(sim)
             if not sim.clock.paused and not sim.finished:
                 for _ in range(sim.clock.speed):

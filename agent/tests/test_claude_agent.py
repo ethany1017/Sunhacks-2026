@@ -9,10 +9,10 @@ from typing import Any, List
 
 import pytest
 
-from sim.agent.claude_agent import ClaudeAgent, ClaudeConfig, _Call
+from agent.claude_agent import ClaudeAgent, ClaudeConfig, _Call
 from sim.core.engine import Simulation
 from tests.conftest import HABOOB, SMOKE
-from tests.fakes import FakeAnthropic, ScriptedPolicy
+from agent.tests.fakes import FakeAnthropic, ScriptedPolicy
 
 SECRET = "fake-test-key-must-never-appear-in-logs"
 
@@ -208,28 +208,15 @@ def test_tool_calls_from_before_a_reset_are_discarded(tmp_path: Path, graph: Any
     sim.close()
 
 
-def test_set_controller_requires_a_key(tmp_path: Path, graph: Any, monkeypatch: Any) -> None:
-    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
-    sim = Simulation(SMOKE, run_dir=tmp_path / "nokey", graph=graph)
-    res = sim.control("set_controller", "claude")
-    assert res["ok"] is False and "ANTHROPIC_API_KEY" in res["error"]
-    assert sim.controller_name == "baseline"
-    assert sim.control("set_controller", "nonsense")["ok"] is False
-    sim.close()
-
-
 def test_switching_controllers_mid_run_is_safe(tmp_path: Path, graph: Any, monkeypatch: Any) -> None:
-    import sim.agent.claude_agent as ca
-    monkeypatch.setenv("ANTHROPIC_API_KEY", SECRET)
-    monkeypatch.setattr(ca, "make_client", lambda: FakeAnthropic(latency_s=0.01))
     sim = Simulation(SMOKE, run_dir=tmp_path / "switch", graph=graph)
-    assert sim.controller_name == "baseline"
+    assert sim.controller_name == "tower"
     while sim.t < 100:
         sim.step()
-    assert sim.control("set_controller", "claude")["ok"] and sim.controller_name == "claude"
-    agent = sim.controller
+    agent = ClaudeAgent(client=FakeAnthropic(latency_s=0.01))
+    assert sim.set_controller(agent)["ok"] and sim.controller_name == "claude"
     run_threaded(sim, agent, until_t=330)
-    assert sim.control("set_controller", "baseline")["ok"] and sim.controller_name == "baseline"
+    assert sim.set_controller("tower")["ok"] and sim.controller_name == "tower"
     agent.join(5)
     assert agent.status == "idle"
     sim.run_to_completion()
@@ -243,44 +230,3 @@ def test_switching_controllers_mid_run_is_safe(tmp_path: Path, graph: Any, monke
     assert max(seen.values()) == 1, [k for k, v in seen.items() if v > 1]          # no duplicate clearances across handovers
     assert sim.score()["separation_losses"] == 0 and sim.score()["runway_conflicts"] == 0
     sim.close()
-
-
-def test_api_switch_to_claude_and_back(tmp_path: Path, monkeypatch: Any) -> None:
-    from fastapi.testclient import TestClient
-
-    import sim.agent.claude_agent as ca
-    from api.main import app
-    monkeypatch.setenv("RUNS_DIR", str(tmp_path))
-    with TestClient(app) as client:
-        monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
-        res = client.post("/control", json={"action": "set_controller", "value": "claude"}).json()
-        assert res["ok"] is False and "ANTHROPIC_API_KEY" in res["error"]
-        assert client.get("/state").json()["agent"] == {"status": "idle", "controller": "baseline"}
-        monkeypatch.setenv("ANTHROPIC_API_KEY", SECRET)
-        monkeypatch.setattr(ca, "make_client", lambda: FakeAnthropic(latency_s=0.2))
-        client.post("/control", json={"action": "speed", "value": 5})
-        res = client.post("/control", json={"action": "set_controller", "value": "claude"}).json()
-        assert res["ok"] is True and res["state"]["controller"] == "claude"
-        seen = set()
-        t0 = time.time()
-        while "thinking" not in seen and time.time() - t0 < 5:
-            agent = client.get("/state").json()["agent"]
-            assert agent["controller"] == "claude"
-            seen.add(agent["status"])
-            time.sleep(0.05)
-        assert "thinking" in seen
-        res = client.post("/control", json={"action": "set_controller", "value": "baseline"}).json()
-        assert res["ok"] is True and client.get("/state").json()["agent"]["controller"] == "baseline"
-
-
-def test_dotenv_loader_sets_missing_keys_only(tmp_path: Path, monkeypatch: Any) -> None:
-    from api.main import load_dotenv
-    env = tmp_path / ".env"
-    env.write_text("# comment\nANTHROPIC_API_KEY=%s\nKPHX_AGENT_MODEL='x-model'\nEMPTY=\n" % SECRET)
-    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
-    monkeypatch.setenv("KPHX_AGENT_MODEL", "already-set")
-    load_dotenv(env)
-    import os
-    assert os.environ["ANTHROPIC_API_KEY"] == SECRET and os.environ["KPHX_AGENT_MODEL"] == "already-set" and "EMPTY" not in os.environ
-    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
-    load_dotenv(tmp_path / "missing.env")        # no file: no error

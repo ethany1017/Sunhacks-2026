@@ -1,4 +1,4 @@
-"""Baseline first-come-first-served controller (no LLM). Uses the same Simulation tools a Claude agent will use."""
+"""The airport's built-in rule-based tower: first-come-first-served sequencing through the Simulation tools."""
 from __future__ import annotations
 
 import math
@@ -40,8 +40,8 @@ def departure_gap_s(leader_wtc: str, follower_wtc: str) -> float:
     return 60.0
 
 
-class BaselineController:
-    name = "baseline"
+class TowerController:
+    name = "tower"
     status = "idle"
 
     def __init__(self) -> None:

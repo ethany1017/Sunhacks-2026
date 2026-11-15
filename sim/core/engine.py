@@ -1,5 +1,8 @@
 """The simulation: owns the clock, the true state and the tool surface used by controllers.
 
+The airport runs itself with its built-in rule-based tower (sim/tower). Any other controller is an object with
+`name`, `status` and `on_tick(sim, events)` passed to `set_controller`; the simulator never imports one.
+
 Tools (issue_clearance, speak, set_runway_config, record_decision, observe) only validate the SHAPE of a call:
 known callsign, known runway, route nodes that exist in the graph. They never refuse a clearance as unsafe.
 """
@@ -12,7 +15,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 
 import numpy as np
 
-from sim.agent.decisions import make_decision, snapshot_summary
+from sim.core.decisions import make_decision, snapshot_summary
 from sim.core import views
 from sim.core.aircraft_types import AircraftType, get_type
 from sim.core.clock import SimClock, SPEEDS
@@ -46,7 +49,7 @@ def _err(msg: str) -> Dict[str, Any]:
 
 
 class Simulation:
-    def __init__(self, scenario_path: Any, graph_path: Any = None, seed: Optional[int] = None, controller: Any = "baseline",
+    def __init__(self, scenario_path: Any, graph_path: Any = None, seed: Optional[int] = None, controller: Any = "tower",
                  run_dir: Any = None, graph: Optional[AirportGraph] = None) -> None:
         self.scenario_path = Path(scenario_path)
         self.graph = graph or AirportGraph.load(Path(graph_path) if graph_path else None)
@@ -103,33 +106,20 @@ class Simulation:
             self._spawn_vehicle(v)
 
     def set_controller(self, controller: Any) -> Dict[str, Any]:
-        """Swap the controller. Must run on the simulation thread (the API handler is async for this reason).
+        """Swap the controller: "tower" (the built-in rule-based tower) or a controller object.
 
-        The outgoing controller is shut down (the Claude agent stops its worker and releases a pause); a baseline built
-        mid-run is primed with the current clearances so it does not repeat them.
+        Must run on the simulation thread. The outgoing controller is shut down if it has a `shutdown` method; a tower
+        built mid-run is primed with the current clearances so it does not repeat them.
         """
         old = getattr(self, "controller", None)
         if isinstance(controller, str):
-            if controller == "baseline":
-                from sim.agent.baseline import BaselineController
-                new: Any = BaselineController()
-                if getattr(self, "aircraft", None):
-                    from sim.agent.handover import prime_baseline
-                    prime_baseline(new, self)
-            elif controller == "claude":
-                try:
-                    from sim.agent.claude_agent import ClaudeAgent
-                except ImportError as e:
-                    return _err("claude controller unavailable: %s" % e)
-                import os
-                if not os.environ.get("ANTHROPIC_API_KEY"):
-                    return _err("claude controller requires ANTHROPIC_API_KEY")
-                try:
-                    new = ClaudeAgent()
-                except Exception as e:
-                    return _err("claude controller could not start: %s" % type(e).__name__)
-            else:
+            if controller != "tower":
                 return _err("unknown controller %r" % controller)
+            from sim.tower.controller import TowerController
+            new: Any = TowerController()
+            if getattr(self, "aircraft", None):
+                from sim.tower.handover import prime_tower
+                prime_tower(new, self)
         else:
             new = controller
         if old is not None and old is not new and hasattr(old, "shutdown"):
@@ -1019,10 +1009,6 @@ class Simulation:
             self._resets += 1
             self._init_state()
             self.clock.speed, self.clock.paused = speed, paused
-        elif action == "set_controller":
-            res = self.set_controller(value)
-            if not res["ok"]:
-                return res
         else:
             return _err("unknown control action %r" % action)
         return {"ok": True, "state": {"paused": self.clock.paused, "speed": self.clock.speed, "controller": self.controller_name}}
