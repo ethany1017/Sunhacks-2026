@@ -1,100 +1,106 @@
 {
- "generated": "2026-11-15T06:42:28+00:00",
- "human_impl": "tower",
+ "generated": "2026-11-15T14:46:47+00:00",
+ "human_impl": "human",
  "sections": {
   "training": {
    "human": {
     "runs": 10,
-    "passed": 0,
-    "pass_rate": 0.0,
-    "fails": 108,
+    "passed": 6,
+    "pass_rate": 0.6,
+    "fails": 11,
     "fails_by_rule": {
-     "diversion": 14,
-     "stuck": 75,
-     "unhandled_at_end": 10,
-     "collision": 8,
-     "loss_of_separation": 1
+     "unhandled_at_end": 3,
+     "collision": 4,
+     "stuck": 4
     },
-    "avg_delay_s": 144.9,
-    "go_arounds": 42,
-    "diversions": 14,
+    "avg_delay_s": 142.9,
+    "go_arounds": 2,
+    "diversions": 0,
     "readback_errors_caught": 7,
-    "readback_errors_missed": 0,
-    "completed": 150
+    "readback_errors_missed": 1,
+    "completed": 239
    },
    "agent": {
     "runs": 10,
-    "passed": 0,
-    "pass_rate": 0.0,
-    "fails": 216,
+    "passed": 6,
+    "pass_rate": 0.6,
+    "fails": 6,
     "fails_by_rule": {
-     "diversion": 58,
-     "stuck": 143,
-     "unhandled_at_end": 10,
-     "loss_of_separation": 5
+     "stuck": 2,
+     "unhandled_at_end": 4
     },
-    "avg_delay_s": 0.0,
-    "go_arounds": 131,
-    "diversions": 58,
-    "readback_errors_caught": 0,
+    "avg_delay_s": 123.1,
+    "go_arounds": 2,
+    "diversions": 0,
+    "readback_errors_caught": 8,
     "readback_errors_missed": 0,
-    "completed": 0
+    "completed": 240
    }
   },
   "practice": {
    "human": {
     "runs": 8,
-    "passed": 4,
-    "pass_rate": 0.5,
-    "fails": 11,
+    "passed": 6,
+    "pass_rate": 0.75,
+    "fails": 9,
     "fails_by_rule": {
-     "collision": 4,
-     "unhandled_at_end": 3,
-     "stuck": 4
+     "collision": 1,
+     "stuck": 6,
+     "unhandled_at_end": 2
     },
-    "avg_delay_s": 112.7,
-    "go_arounds": 3,
+    "avg_delay_s": 127.5,
+    "go_arounds": 0,
     "diversions": 0,
-    "readback_errors_caught": 13,
-    "readback_errors_missed": 0,
-    "completed": 76
+    "readback_errors_caught": 11,
+    "readback_errors_missed": 1,
+    "completed": 77
    },
    "agent": {
     "runs": 8,
-    "passed": 0,
-    "pass_rate": 0.0,
-    "fails": 69,
-    "fails_by_rule": {
-     "diversion": 23,
-     "stuck": 38,
-     "unhandled_at_end": 8
-    },
-    "avg_delay_s": 0.0,
-    "go_arounds": 56,
-    "diversions": 23,
-    "readback_errors_caught": 0,
+    "passed": 8,
+    "pass_rate": 1.0,
+    "fails": 0,
+    "fails_by_rule": {},
+    "avg_delay_s": 137.8,
+    "go_arounds": 0,
+    "diversions": 0,
+    "readback_errors_caught": 14,
     "readback_errors_missed": 0,
-    "completed": 0
+    "completed": 83
    }
   },
   "heldout": {
    "human": {
     "runs": 6,
-    "passed": 0,
-    "pass_rate": 0.0,
-    "fails": 69,
+    "passed": 3,
+    "pass_rate": 0.5,
+    "fails": 4,
     "fails_by_rule": {
-     "collision": 5,
-     "diversion": 6,
-     "stuck": 52,
-     "unhandled_at_end": 6
+     "collision": 2,
+     "stuck": 1,
+     "unhandled_at_end": 1
     },
-    "avg_delay_s": 103.9,
-    "go_arounds": 18,
-    "diversions": 6,
-    "readback_errors_caught": 1,
+    "avg_delay_s": 162.6,
+    "go_arounds": 3,
+    "diversions": 0,
+    "readback_errors_caught": 3,
     "readback_errors_missed": 0,
-    "completed": 78
+    "completed": 148
+   },
+   "agent": {
+    "runs": 6,
+    "passed": 5,
+    "pass_rate": 0.833,
+    "fails": 1,
+    "fails_by_rule": {
+     "collision": 1
+    },
+    "avg_delay_s": 140.6,
+    "go_arounds": 3,
+    "diversions": 0,
+    "readback_errors_caught": 4,
+    "readback_errors_missed": 0,
+    "completed": 149
    }
   }
  }

@@ -20,9 +20,10 @@ all cores), where 10x came out at about 7.7x for the Agent run; on an idle lapto
 1. Stop stale servers on the demo ports. See what holds them:
    `lsof -nP -iTCP:8100 -iTCP:5180 -sTCP:LISTEN`. Stop them with `kill $(lsof -ti :8100 -ti :5180)`. Or leave them and
    use other ports: `BACKEND_PORT=8111 FRONTEND_PORT=5191 ./run_demo.sh`.
-2. Check the **Agent vs Human** panel data: it shows `backend/eval_results/summary.json`, a local file written by
-   `python -m app.evaluate --publish`. An old file shows old numbers on stage. Republish it after final grading, or move
-   it aside (`mv backend/eval_results/summary.json /tmp/`), which hides the panel.
+2. Check the **Agent vs Human** panel: it shows `backend/eval_results/summary.json`, which is committed with the
+   final grading (training seeds: Agent 6/10, Human 6/10; held-out: Agent 5/6, Human 3/6). If the panel shows anything
+   else, `git status` will show that file as modified: `git checkout backend/eval_results/summary.json` is not needed
+   on a clean checkout. Do not run `python -m app.evaluate --publish` before the demo: it overwrites these numbers.
 3. `./run_demo.sh`. It opens the browser at `http://localhost:5180`. The backend starts a Normal Day Agent run by
    itself. Full screen the browser (projector: 1920x1080 or 1280x720 both fit).
 4. Check: the amber **SIMULATION ONLY** badge top left, **ONLINE** next to the sim time, the map with runways.
@@ -83,7 +84,18 @@ Same verdicts as the headless harness in all three (Human FAIL at sim 12:49, Age
 Point at the scoreboard (this run) and the **Agent vs Human** panel (all seeds, from the evaluation harness, judged only
 by the Referee).
 
-<!-- RESULTS: filled in by the coordinator after final grading -->
+Final grading on held-out seeds the Agent was never tuned on (three days per level, Referee scores, commit `639b0ac`):
+
+| Level | Human | Agent |
+|---|---|---|
+| Light Rain | 1/3 days passed, 2 fails, avg delay 224 s | **3/3 days passed, 0 fails**, avg delay 191 s |
+| Normal Day | 2/3 days passed, 2 fails, avg delay 102 s | 2/3 days passed, 1 fail, avg delay 90 s |
+
+Say it straight: "On Light Rain the Agent passed every held-out day and the Human passed one. On Normal Day it has
+fewer fails and less delay than the Human but it is not perfect: one day ends in a ground collision at a gate, on a
+day where the Human collides with the same aircraft." The panel on screen shows the training seeds (Agent 6/10,
+Human 6/10, Agent with fewer fails and less delay) and the held-out row (Agent 5/6, Human 3/6). The 30-day
+validation table is in the README.
 
 ## Optional: Normal Day, wrong readback, hand-over
 
@@ -127,5 +139,5 @@ with the honest score.
 - **Dashboard frozen**: reload the page. The full history of the current run replays; the run kept going in the backend.
 - **A run goes differently from rehearsal**: say what the Referee shows, as it shows it. Do not explain it away.
 - **Backend crash**: Ctrl-C (stops both), then `./run_demo.sh` again and start the run again.
-- **Last resort**: rehearsal screenshots (1920x1080) are not committed: they show an outdated Agent vs Human panel (see
-  "Before going on stage", step 2). Retake them after the panel data is republished.
+- **Last resort**: no screenshots are committed. Take two before going on stage (the FAIL banner of step 1 and the
+  PASS banner of step 2) from a rehearsal run and keep them open in another tab.
