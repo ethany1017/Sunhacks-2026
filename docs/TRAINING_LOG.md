@@ -196,3 +196,23 @@ route); arrivals stuck holding short of 07L after the turn-round (LR36, LR37); o
 normal_day: agent pass 13/20, safety fails 1, stuck 14; tower pass 14/20, safety fails 1, stuck 39
 
 light_rain: agent pass 5/20, safety fails 5, stuck 16; tower pass 8/20, safety fails 6, stuck 29
+
+### Analyst fixes 1-4 on the port (measured, NOT adopted)
+
+The analyst's four fixes (measured on the tower: ND 14 -> 18, LR 8 -> 9) were re-implemented in the ported planner and
+measured on the same 40 development seeds. Gate for adoption: stuck must not go up, and the Referee safety-fail total
+(collision + loss_of_separation + runway_incursion + runway_occupied) must not exceed the port's on either level.
+
+| variant | ND pass | ND safety | ND stuck | LR pass | LR safety | LR stuck |
+|---|---|---|---|---|---|---|
+| port (committed) | 13/20 | 1 | 14 | 5/20 | 5 | 16 |
+| fixes 1-4 + crossing re-issue guard | 13/20 | 2 (collision 1, runway_incursion 1) | 6 | 6/20 | 3 | 27 |
+| fixes 1-3 + guard (no fix 4) | 13/20 | 1 (runway_incursion 1) | 6 | 6/20 | 3 | 27 |
+| fixes 2-4 + guard, the port's own reroute retry instead of fix 1 | 14/20 | 2 (collision 2) | 4 | 6/20 | 5 | 10 |
+
+Fix 2 (no line-up on a mismatched or over-tailwind end) held 0 aircraft over the 40 runs with fixes 1-4. No variant
+meets the gate (fix 1's re-issue raises LR stuck 16 -> 27, LR24 alone 12; the best variant has one more ND collision
+than the port), so none is committed; the code is kept outside the repo for the next round. Single-seed ablation
+(LR24, LR21, ND20) shows fix 1 swings outcomes both ways (LR24 PASS without it, 12 stuck with it). LR35 (pass ->
+taxi-in/taxi-out collision in the analyst's tower prototype) is a known regression of the collision class; in the port
+LR35 already fails on one collision before any fix.
