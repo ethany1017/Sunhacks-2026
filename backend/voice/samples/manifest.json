@@ -1,0 +1,149 @@
+{
+  "model_id": "eleven_flash_v2_5",
+  "source": "builtin",
+  "clips": [
+    {
+      "kind": "tower",
+      "name": "Alexander Kensington",
+      "position": "Phoenix Tower (north, runway 8/26)",
+      "voice": "Daniel",
+      "voice_id": "onwK4e9ZLuTAKqWW03F9",
+      "source": "builtin",
+      "model": "eleven_flash_v2_5",
+      "text": "Southwest twenty-four thirteen, Phoenix Tower, wind two six zero at eight, runway two six, cleared for takeoff.",
+      "file": "tower-alexander-kensington.mp3"
+    },
+    {
+      "kind": "tower",
+      "name": "Donovan",
+      "position": "Phoenix Tower (south, runways 7L/25R and 7R/25L)",
+      "voice": "Eric",
+      "voice_id": "cjVigY5qzO86Huf0OWal",
+      "source": "builtin",
+      "model": "eleven_flash_v2_5",
+      "text": "American nineteen eighty-two, Phoenix Tower, runway two five left, cleared to land. Traffic holding short of two five left.",
+      "file": "tower-donovan.mp3"
+    },
+    {
+      "kind": "tower",
+      "name": "Jessica S",
+      "position": "Phoenix Ground",
+      "voice": "Laura",
+      "voice_id": "FGY2WhTYpPnrIDTdsKH5",
+      "source": "builtin",
+      "model": "eleven_flash_v2_5",
+      "text": "SkyWest fifty-one forty, Phoenix Ground, runway two five right, taxi via Tango, Echo, hold short of runway two five left.",
+      "file": "tower-jessica-s.mp3"
+    },
+    {
+      "kind": "pilot",
+      "name": "Amrut Deshmukh",
+      "position": "Pilot [strong Indian accent]",
+      "voice": "Callum",
+      "voice_id": "N2lVS1w4EtoT3dr4eOWO",
+      "source": "builtin",
+      "model": "eleven_v3",
+      "text": "Runway two five left, cleared to land, Air India one two one.",
+      "file": "pilot-amrut-deshmukh.mp3"
+    },
+    {
+      "kind": "pilot",
+      "name": "Rob",
+      "position": "Pilot [relaxed Southern drawl]",
+      "voice": "Roger",
+      "voice_id": "CwhRBWXzGAHq8TQ4Fs17",
+      "source": "builtin",
+      "model": "eleven_v3",
+      "text": "Runway two six, cleared for takeoff, Southwest twenty-four thirteen.",
+      "file": "pilot-rob.mp3"
+    },
+    {
+      "kind": "pilot",
+      "name": "Jack John",
+      "position": "Pilot [energetic, Midwestern accent]",
+      "voice": "Chris",
+      "voice_id": "iP95p4xoKVk53GoZ742B",
+      "source": "builtin",
+      "model": "eleven_v3",
+      "text": "Hold short of two five left, SkyWest fifty-one forty.",
+      "file": "pilot-jack-john.mp3"
+    },
+    {
+      "kind": "pilot",
+      "name": "W. L. Oxley",
+      "position": "Pilot [dry, refined British accent]",
+      "voice": "George",
+      "voice_id": "JBFqnCBsd6RMkjVDRZzb",
+      "source": "builtin",
+      "model": "eleven_v3",
+      "text": "Phoenix Tower, Delta eleven twenty-two, ten miles out on the I-L-S two five left.",
+      "file": "pilot-w-l-oxley.mp3"
+    },
+    {
+      "kind": "pilot",
+      "name": "Adam",
+      "position": "Pilot [tired, matter-of-fact]",
+      "voice": "Adam",
+      "voice_id": "pNInz6obpgDQGcFmaJgB",
+      "source": "builtin",
+      "model": "eleven_v3",
+      "text": "Line up and wait, runway two five right, United three oh seven.",
+      "file": "pilot-adam.mp3"
+    },
+    {
+      "kind": "pilot",
+      "name": "Brian",
+      "position": "Pilot [deep, slow and gravelly]",
+      "voice": "Brian",
+      "voice_id": "nPczCjzI2devNBz1zQrb",
+      "source": "builtin",
+      "model": "eleven_v3",
+      "text": "Taxi to two five right via Tango, Echo, Frontier nineteen sixty-five.",
+      "file": "pilot-brian.mp3"
+    },
+    {
+      "kind": "pilot",
+      "name": "Archer",
+      "position": "Pilot [cheerful, broad Australian accent]",
+      "voice": "Charlie",
+      "voice_id": "IKne3meq5aSn9XLyUdCD",
+      "source": "builtin",
+      "model": "eleven_v3",
+      "text": "Going around, American nineteen eighty-two.",
+      "file": "pilot-archer.mp3"
+    },
+    {
+      "kind": "pilot",
+      "name": "James",
+      "position": "Pilot [smooth and confident]",
+      "voice": "Liam",
+      "voice_id": "TX3LPaxmHKxFdv7VOQHJ",
+      "source": "builtin",
+      "model": "eleven_v3",
+      "text": "Cross runway two five left at Delta, Alaska six forty-four.",
+      "file": "pilot-james.mp3"
+    },
+    {
+      "kind": "pilot",
+      "name": "Hope",
+      "position": "Pilot [confident and upbeat]",
+      "voice": "Matilda",
+      "voice_id": "XrExE9yKIg1WjnnlVkGX",
+      "source": "builtin",
+      "model": "eleven_v3",
+      "text": "Contact ground point niner, good day, Envoy thirty-four ten.",
+      "file": "pilot-hope.mp3"
+    },
+    {
+      "kind": "pilot",
+      "name": "Jessica Anne Bogart",
+      "position": "Pilot [calm, slight Texan accent]",
+      "voice": "Jessica",
+      "voice_id": "cgSgspJ2msm6clMCkdW9",
+      "source": "builtin",
+      "model": "eleven_v3",
+      "text": "Phoenix Ground, Southwest eight twelve, ready to push, gate C six.",
+      "file": "pilot-jessica-anne-bogart.mp3"
+    }
+  ]
+}
