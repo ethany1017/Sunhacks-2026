@@ -126,17 +126,19 @@ class Simulation:
             self._spawn_vehicle(v)
 
     def set_controller(self, controller: Any) -> Dict[str, Any]:
-        """Swap the controller: "tower" (the built-in rule-based tower) or a controller object.
+        """Swap the controller: "tower" (the built-in rule-based tower), "human" (that tower's rules worked with human
+        reaction time, a transmission budget, extra spacing and missed readbacks: sim/human) or a controller object.
 
         Must run on the simulation thread. The outgoing controller is shut down if it has a `shutdown` method; a tower
         built mid-run is primed with the current clearances so it does not repeat them.
         """
         old = getattr(self, "controller", None)
         if isinstance(controller, str):
-            if controller != "tower":
+            if controller not in ("tower", "human"):
                 return _err("unknown controller %r" % controller)
             from sim.tower.controller import TowerController
-            new: Any = TowerController()
+            from sim.human.controller import HumanController
+            new: Any = TowerController() if controller == "tower" else HumanController()
             if getattr(self, "aircraft", None):
                 from sim.tower.handover import prime_tower
                 prime_tower(new, self)

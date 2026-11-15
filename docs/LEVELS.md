@@ -3,8 +3,7 @@
 Two seeded KPHX days, built into the simulator: **Normal Day** (`normal_day`) and **Light Rain** (`light_rain`). A level
 is `(level_id, seed, duration_s)` -> a `Scenario` (the traffic) plus a `LevelWeather` (scheduled METAR reports and the
 physical effect multipliers). Everything lives in `sim/levels.py`; every tunable value there is a plain named constant
-with its source. Not yet calibrated or frozen: S5 tunes these values against the Human controller and records a version
-tag here.
+with its source. **FROZEN: version `levels-v1`, approved by Ethan on 2026-11-15** (levels, Referee and fail limits; see "S5 calibration" below).
 
 Run one: `python -m sim.core.run --level normal_day --seed 1 [--duration 1500]`, or in code
 `Simulation(level="light_rain", seed=21, duration_s=None, controller="tower")`. Scenario files (`kphx_smoke.json`,
@@ -27,8 +26,8 @@ day in both levels (Light Rain seed N = Normal Day seed N plus rain). A level wi
 | `DEFAULT_DURATION_S` | 1500 s (25 min) of scheduled traffic; the Referee's day ends 900 s later | assumption (spec: 20-30 min) |
 | `HOURLY_CSV` | scheduled arrivals and departures per local hour | BTS On-Time Performance, PHX, Aug 2026 (`data/kphx_traffic/bts_otp_2026_8/derived/phx_hourly_summary.csv`) |
 | `DAY_HOURS` | local 06-17 (12 hours, each shown as `duration/12` = 125 s at that hour's real rate) | assumption; keeps the real banks (arrivals 09h 45/h, departures 08h 57/h) and lulls (11h, 13h) |
-| `DEMAND_SCALE` | 1.0 (= the real BTS rate) | S5 tunes |
-| counts | Poisson per hour slice: about 11-14 arrivals and 13-20 departures per default day | follows from the above |
+| `DEMAND_SCALE` | 1.0 (= the real BTS rate) | S5: kept (0.9, 1.1 and 1.2 all made the Human fail more Normal Day seeds) |
+| counts | expected count per hour slice, rounded with a carried random remainder (systematic sampling), not Poisson: 11-12 arrivals and 13 departures per default day (24-25 flights) | S5. BTS Aug 2026, PHX 06-17 local: 373 +- 9 departures and 340 +- 7 arrivals per day (sd 2-3%); a Poisson draw gave the compressed day 21-35 flights (sd about 20%), which is not "an average day" |
 | `ARRIVAL_LEAD_S` | 150 s from the hour slot to touchdown (an arrival enters the 11 km final at its slot) | assumption |
 | `AIRLINES` | weights WN 9955, AA 8219, OO 3947, MQ 2200, DL 1672, UA 1438, F9 1079, AS 916; fleets from the KPHX aircraft CSV | BTS Aug 2026 carrier counts (`phx_summary.txt`) |
 | `HEAVY_SHARE`, `HEAVIES` | 4%: Hawaiian A332, FedEx B763 | assumption (BTS HA about 2 flights/day; cargo is not in BTS) |
@@ -54,7 +53,7 @@ the diversion clock. The 25L and 26 finals are 4,373 ft apart, independent under
 | Name | Value | Source |
 |---|---|---|
 | `WIND_START` | 270 at 8 kt (headwind for west flow) | assumption |
-| `WIND_SHIFT_FRAC` | the shift lands at 55% of the scheduled day (825 s by default, about 12:36 local, the mid-day lull) | assumption |
+| `WIND_SHIFT_FRAC` | the shift lands at 45% of the scheduled day (675 s by default, about 11:24 local); the tower turns the airport round at the -180 s step (about 495 s, 10:00 local, after the 09h arrival bank) | assumption; S5 moved it from 0.55 (see below) |
 | `WIND_STEPS` | shift -300 s: 180/06 (crosswind); -180 s: 130/07 (5.4 kt tailwind on west flow); 0 s: 090/14 (14 kt tailwind) | assumption (an easterly wind shift; the 2025 haboob replay data shows KPHX in east flow) |
 | `TAILWIND_LIMIT_KT` | 10 kt | typical transport-category AFM tailwind limit (pilot behaviour, not a Referee rule) |
 | METAR | built from the fields; the clock runs 06:00-18:00 local (13:00-01:00Z) over the day | |
@@ -92,7 +91,9 @@ the traffic, stays the same for one seed in both levels. Because the gap is conv
 2 + 3 NM comes to about 11.9 km for a jet pair (more for a light follower or a heavy leader), longer than the 11 km final:
 in rain approach control hands over one arrival per final at a time; dry, a second jet can enter about 9.5 km behind.
 
-## Measured: Light Rain vs Normal Day, same traffic
+## Measured: Light Rain vs Normal Day, same traffic (before S5)
+
+Measured before S5 (Poisson counts, `WIND_SHIFT_FRAC` 0.55), kept for the record; the traffic per seed has changed since.
 
 Built-in tower, default day (1500 s, Referee day end 2400 s), same seed number in both levels, after the rain spacing
 margin. "Held" = arrivals approach control held back (`arrival.held`) and the total time from their first spawn attempt
@@ -121,6 +122,85 @@ peak demand does not exceed the rain capacity (one arrival per final at a time, 
 `DEMAND_SCALE` (S5) is what would make the peaks exceed it. All eight runs end `REFEREE: FAIL` (stuck departure queues
 at the hold-short points after the flow change, a diversion and unhandled traffic, plus ground collisions on some),
 in both levels (Normal Day is unchanged by the rain margin; Light Rain seeds 1 and 21 also failed before it), so the totals above mix the rain effect with the built-in tower's failures.
+
+## S5 calibration (FROZEN as `levels-v1` on 2026-11-15)
+
+Ethan approved freezing the levels (`sim/levels.py`), the Referee (`sim/referee/`) and the fail limits
+(`sim/referee/limits.py`) as they stand in this section, accepting the partly met Light Rain target described below.
+Any later change to them needs Ethan's explicit OK and a written reason that is not "so the agent passes".
+
+Calibrated against the Human controller only (`--controller human`), on training seeds only. Nothing about the Human,
+the tower, the Referee or its limits, or the physics changed.
+
+**Choice: the two levels share the traffic per seed and differ only in the rain effects** (as S3 built them). The brief
+says Light Rain is the same day shape; sharing the traffic keeps the comparison clean (rain is the only difference).
+
+What was tuned and why:
+
+| Parameter | Old | New | Why | Source |
+|---|---|---|---|---|
+| hourly counts (`build_scenario`) | Poisson per hour slice | expected count, carried random remainder | a Poisson draw made "an average day" anything from 21 to 35 flights (Normal Day seed 3 had 22 arrivals against an expected 12 and diverted one); real scheduled traffic barely varies day to day | BTS Aug 2026 PHX, 06-17 local: sd 2-3% of the daily count |
+| `WIND_SHIFT_FRAC` | 0.55 | 0.45 | with the new counts the Human passed Normal Day on 4/5 seeds at 0.55; the failures were gridlocks and stuck departures at the 07L hold point after the flow change. Human Normal Day passes by shift time: 0.35: 3/5, 0.40: 5/5, 0.45: 5/5, 0.50: 3/5, 0.55: 4/5, 0.70: 3/5, 0.85: 4/5. 0.45 is the middle of the 5/5 range. This sweep ran on the same five training seeds the results table below reports, and the pass count moves without a trend (it looks like seed noise), so the Normal Day 5/5 is partly fitted to these seeds | assumption (when an easterly shift comes is a choice; one shift per day as S3 asked) |
+
+Tried and not adopted (Human, training seeds, new counts): `DEMAND_SCALE` 0.9 (Normal Day 2/5 pass), 1.1 (1/5),
+1.2 (1/5), all at the old shift time 0.55; at shift 0.45, Light Rain `spacing_margin_nm` 2.5 (Light Rain 5/5 fail, but 3.0 gives 4/5
+again: seed 24 flips by chance, not by capacity), `go_around_rate` 0.03, `taxi_mult` 0.75, `approach_mult` 0.4 (each
+still 4/5 fail, seed 24 passes). The rain values stay as S3 set them.
+
+Measured, Human, default day (1500 s, Referee day end 2400 s). Delay = the score's delay: departures from ready at the
+gate to airborne, arrivals from touchdown to the gate, each minus the unimpeded time. Readback errors = caught / missed
+wrong readbacks.
+
+| level | seed | verdict | fails by rule | completed / flights | avg / total delay (s) | dep / arr avg delay (s) | go-arounds | diversions | readback errors caught / missed |
+|---|---|---|---|---|---|---|---|---|---|
+| normal_day | 1 | PASS | - | 25 / 25 | 74 / 1848 | 88 / 58 | 0 | 0 | 0 / 0 |
+| normal_day | 2 | PASS | - | 24 / 24 | 84 / 2005 | 83 / 85 | 0 | 0 | 0 / 0 |
+| normal_day | 3 | PASS | - | 25 / 25 | 83 / 2075 | 109 / 55 | 1 | 0 | 0 / 1 |
+| normal_day | 4 | PASS | - | 25 / 25 | 96 / 2405 | 109 / 83 | 0 | 0 | 1 / 0 |
+| normal_day | 5 | PASS | - | 25 / 25 | 82 / 2050 | 110 / 52 | 0 | 0 | 3 / 0 |
+| light_rain | 21 | FAIL | unhandled_at_end 1 | 24 / 25 | 182 / 4369 | 201 / 163 | 0 | 0 | 1 / 0 |
+| light_rain | 22 | FAIL | collision 1, stuck 4, unhandled_at_end 1 | 19 / 25 | 179 / 3398 | 188 / 168 | 0 | 0 | 0 / 0 |
+| light_rain | 23 | FAIL | collision 1 | 25 / 25 | 182 / 4542 | 187 / 176 | 0 | 0 | 0 / 0 |
+| light_rain | 24 | PASS | - | 24 / 24 | 192 / 4605 | 209 / 171 | 1 | 0 | 0 / 0 |
+| light_rain | 25 | FAIL | collision 2, unhandled_at_end 1 | 23 / 25 | 276 / 6336 | 378 / 182 | 0 | 0 | 2 / 0 |
+
+For reference, the built-in tower on the same seeds: Normal Day PASS on 1-5 (avg delay 58-88 s); Light Rain FAIL on 21
+(collision 2), 22 (unhandled 1), 23 (collision 1), PASS on 24 and 25 (avg delay 163-225 s).
+
+What this shows:
+- Normal Day: the Human passes all five training seeds, but `WIND_SHIFT_FRAC` 0.45 was chosen by sweeping these same
+  five seeds. Across the sweep the pass count moved without a trend (0.35: 3/5, 0.40: 5/5, 0.45: 5/5, 0.50: 3/5,
+  0.55: 4/5, 0.70: 3/5, 0.85: 4/5), which looks like seed noise, so the 5/5 is partly fitted to these seeds. Across
+  all 35 sweep runs the Human passed 27 (about 77%), so on unseen seeds expect an occasional Human fail; the failures
+  are its own ground gridlocks after the flow change.
+- The S5 Light Rain target is only partly met: the spec wants the Human to fail Light Rain on traffic not handled
+  (diversions / backlog), but only 3 of 5 training seeds fail on traffic not handled (21, 22, 25; 22 and 25 also
+  include collisions), 1 of 5 fails on a collision only (23), and 1 of 5 passes (24).
+- Light Rain: the Human fails four of five. Delays roughly double (average 179-276 s against 74-96 s dry). The fail
+  mix is honest, not all traffic handling: seed 21 is backlog only (unhandled at the day end); 22 and 25 mix ground
+  collisions with stuck / unhandled traffic; 23 is a ground collision only (AAL1585 and a GA aircraft at t=443, before
+  the flow change; the same collision also happens at shift 0.55, and seed 23 has a collision at every shift time tried). Seed 24 passes with its last flight done 69 s
+  before the day end. No diversions: the rain bottleneck is the ground (slower taxi, longer occupancy), not the finals.
+- Rain capacity on final (one arrival per final at a time with the 2 NM margin, about 24 an hour per final) is only
+  just below the 09h bank (50 arrivals an hour over two finals) at `DEMAND_SCALE` 1.0, so the rain failures come from
+  taxi and runway time piling up through the day, not from arrival holding.
+
+Options for Ethan on Light Rain:
+- Accept the levels as they are (3 of 5 fail on traffic not handled, 1 on a collision only, 1 passes).
+- Use `spacing_margin_nm` 2.5, which gave 5/5 fails in the sweep, but it is knife-edge: 3.0 gave 4/5 again (seed 24
+  flips by chance).
+- Calibrate on more training seeds before freezing.
+- Change the target (for example, count a ground collision as an acceptable Light Rain fail).
+
+**Compared with real PHX** (BTS Aug 2026, scheduled 06-17 local). The FAA's unimpeded taxi times are not in the repo,
+so the 10th percentile stands in for unimpeded (assumption): taxi-out mean 16.9 min vs p10 10 min, about 7 min (415 s)
+excess; taxi-in mean 7.2 vs p10 4 min, about 3 min (190 s) excess. The Human's Normal Day delays (departures 83-110 s,
+arrivals 52-85 s) are about a quarter of the average excess out and a third in: a taxi-out of about 11.7 min, between
+the real p10 (10) and p25 (12), and a taxi-in of about 5 min (p25). That is a good real day, below the average. In
+Light Rain (departures 187-378 s, arrivals 163-182 s) the delays reach the real average. Two reasons the sim runs
+lighter than the real airport: it has no ramp or gate congestion, and it carries the BTS airline traffic only (about
+952 of Sky Harbor's 1,335 operations a day). `DEMAND_SCALE` 0.9, 1.1 and 1.2 all gave more Human Normal Day fails
+than 1.0 (2/5, 1/5 and 1/5 pass against 4/5, all at shift 0.55), so the extra fails cannot be put down to demand alone.
 
 ## What a controller sees
 

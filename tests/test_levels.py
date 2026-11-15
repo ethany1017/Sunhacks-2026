@@ -118,7 +118,7 @@ def pair(tmp_path_factory, graph) -> Dict[str, Any]:
                     seen["taxi"] = max(seen["taxi"], a.speed)
                 elif a.phase == "final" and a.wp is None and 5000.0 < sim.physics.approach_distance(a) < 6000.0:
                     seen["final"].append(a.speed - a.type.vref_mps)
-        sim = run_level(level, 3, 900.0, tmp_path_factory.mktemp(level), graph, probe=probe)
+        sim = run_level(level, 5, 900.0, tmp_path_factory.mktemp(level), graph, probe=probe)   # S5: a seed whose dry day has a close spawn
         out[level] = (sim, seen)
     return out
 
@@ -167,8 +167,9 @@ def test_tower_turns_the_airport_round_before_the_tailwind_limit(pair) -> None:
         wx = [(e["sim_time_ms"], e["data"]) for e in ev if e["kind"] == "weather.update"]
         cfg = [(e["sim_time_ms"], e["data"]) for e in ev if e["kind"] == "runway.config"]
         assert len(wx) == len(levels.WIND_STEPS) and wx[-1][1]["wind_dir"] == 90
-        assert cfg and cfg[0][1] == {"arrival_runways": ["07R", "08"], "departure_runways": ["07L", "08"]}
-        assert cfg[0][0] < wx[-1][0]                       # switched while the tailwind was still within the limit
+        east = [c for c in cfg if c[1]["arrival_runways"] == ["07R", "08"]]
+        assert east and east[0][1]["departure_runways"] == ["07L"]   # departures keep off the arrival runway
+        assert east[0][0] < wx[-1][0]                       # switched while the tailwind was still within the limit
         assert any(e["kind"] == "referee_result" for e in ev)
 
 

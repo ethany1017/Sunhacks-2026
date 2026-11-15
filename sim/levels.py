@@ -28,7 +28,8 @@ HELD_OUT_SEEDS: Dict[str, List[int]] = {"normal_day": [9001, 9002, 9003], "light
 DEFAULT_DURATION_S = 1500.0     # assumption: the 12-hour day below compressed to 25 min of scheduled traffic
 HOURLY_CSV = ROOT / "data/kphx_traffic/bts_otp_2026_8/derived/phx_hourly_summary.csv"   # BTS on-time, PHX, Aug 2026
 DAY_HOURS = list(range(6, 18))  # local hours 06-17 (assumption: the daytime part of the BTS profile, banks at 08-10 and 15-16)
-DEMAND_SCALE = 1.0              # 1.0 = the real BTS scheduled rate of each hour; S5 tunes this
+DEMAND_SCALE = 1.0              # 1.0 = the real BTS scheduled rate of each hour. S5: kept; 0.9 and 1.1 both made the Human
+                                # fail more Normal Day seeds, 1.2 failed 4/5 (BTS airlines only, see LEVELS.md)
 ARRIVAL_LEAD_S = 150.0          # assumption: an arrival's slot time is when it enters the 11 km final; it lands this much later
 # carrier mix: BTS Aug 2026 PHX flights by carrier (WN 9955, AA 8219, OO 3947, MQ 2200, DL 1672, UA 1438, F9 1079, AS 916);
 # fleets per carrier are the KPHX aircraft CSV types each airline flies (as in sim/scenarios/generate.py).
@@ -57,7 +58,9 @@ SPAWN_MARGIN_NM = 1.0           # assumption: the schedule puts arrivals at the 
 # -- weather (both levels): one scheduled wind shift that turns the airport around ------------------------------------------
 # PHX normally runs west flow; a shift to an easterly wind forces east flow. Wind is (direction deg, speed kt).
 WIND_START = (270, 8)           # assumption: westerly 8 kt, a headwind for west flow (25L/25R/26)
-WIND_SHIFT_FRAC = 0.55          # assumption: the shift lands at 55% of the day (~12:36 local, the mid-day lull in the BTS rates)
+WIND_SHIFT_FRAC = 0.45          # assumption: the shift lands at 45% of the day (~11:24 local); the airport turns round about
+                                # 180 s earlier (~10:00 local, after the 09h arrival bank). S5: was 0.55; the Human passed
+                                # Normal Day on 5/5 training seeds at 0.40 and 0.45, 3-4/5 at 0.35, 0.50, 0.55 (see LEVELS.md)
 WIND_STEPS = [(-300.0, 180, 6), (-180.0, 130, 7), (0.0, 90, 14)]   # (s relative to the shift, dir, kt): the wind backs
 # through south over 5 minutes; from -180 s west flow has a 5.4 kt tailwind, at 0 a 14 kt tailwind (beyond the limit)
 TAILWIND_LIMIT_KT = 10.0        # pilot behaviour: typical transport-category AFM tailwind limit for takeoff and landing.
@@ -201,9 +204,16 @@ def build_scenario(level: str, seed: int, duration_s: Optional[float] = None, gr
     seg = dur / len(DAY_HOURS)
     arr_t: List[float] = []
     dep_t: List[float] = []
-    for i, h in enumerate(DAY_HOURS):           # each real hour becomes `seg` sim seconds at that hour's real rate
-        for rate, out in ((rates[h][0], arr_t), (rates[h][1], dep_t)):
-            n = int(rng.poisson(rate * DEMAND_SCALE * seg / 3600.0))
+    # Each real hour becomes `seg` sim seconds at that hour's real rate. The count per hour is the expected count rounded
+    # with a carried random remainder (systematic sampling), not a Poisson draw: an airline schedule barely changes from
+    # day to day (BTS Aug 2026, PHX 06-17 local: 373 +- 9 departures, 340 +- 7 arrivals per day, sd 2-3%), while a
+    # Poisson draw gave the compressed day 21-35 flights. Times within the hour stay random.
+    carry = {"arr": rng.random(), "dep": rng.random()}
+    for i, h in enumerate(DAY_HOURS):
+        for key, rate, out in (("arr", rates[h][0], arr_t), ("dep", rates[h][1], dep_t)):
+            carry[key] += rate * DEMAND_SCALE * seg / 3600.0
+            n = int(carry[key])
+            carry[key] -= n
             out.extend(float(x) for x in i * seg + rng.uniform(0.0, seg, n))
     arr_t.sort()
     dep_t.sort()
