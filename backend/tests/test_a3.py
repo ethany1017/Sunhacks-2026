@@ -288,3 +288,47 @@ def test_short_practice_day_has_no_safety_fails(level, tmp_path, monkeypatch):
     ev = db.events_for_run(r.run_id)
     assert all(e["reason"] for e in ev if e["type"] in ("proposal", "safety_check", "clearance", "readback"))
     assert sum(e["type"] == "proposal" for e in ev) == sum(e["type"] == "safety_check" for e in ev)
+
+
+def test_agent_adopts_a_departure_the_human_lined_up(tmp_path, monkeypatch):
+    """Hand-over Human -> Agent with a departure lined up and no takeoff clearance: the fresh agent adopts it from the
+    observation, the takeoff is still refused by the safety engine while the runway is occupied, and once clear it is
+    proposed, safety-checked and issued (QA: such an aircraft used to sit on the runway for the rest of the day)."""
+    monkeypatch.setenv("EVENTS_DB", str(tmp_path / "events.db"))
+    import simif
+    from app import db
+    from app.runner import Runner
+
+    r = Runner(simif.connect())
+    r.start("smoke", "human")
+    cs = None
+    while cs is None and not r.ended:
+        r.tick()
+        if round(r.sim.t * 10) % 5 == 0:
+            cs = next((a["callsign"] for a in r.sim.get_state()["aircraft"]
+                       if a["phase"] == "line_up" and not a["takeoff_cleared"]), None)
+    assert cs, "the Human never left a departure lined up"
+    t_switch = r.sim.t
+    r.switch("agent")
+    pl = None
+    while pl is None or not pl.order:
+        r.tick()
+        pl = r.agent.planner
+    st = pl.assigned[cs]
+    assert st.get("luaw") and st.get("end") and st.get("push") and st.get("taxi")
+    # the adopted aircraft's takeoff goes through the safety engine like any other: refused onto an occupied runway
+    a = dict(pl.ac[cs])
+    pav = pl.g.end_runway[st["end"]]
+    pl.pic["occupants"][pav] = sorted(set(pl.pic["occupants"].get(pav, [])) | {"BLOCKER"})
+    n_before = len(r._buf)
+    assert pl._propose(a, "cleared_for_takeoff", {"runway": st["end"]}, "test") is None
+    chk = [e for e in r._buf[n_before:] if e["type"] == "safety_check"]
+    assert chk and chk[0]["data"]["approved"] is False and chk[0]["data"]["rule"] == "runway_occupancy"
+    while not r.ended and r.sim.t < t_switch + 240:
+        r.tick()
+    r.flush()
+    ev = [e for e in db.events_for_run(r.run_id) if e["t"] >= t_switch and e["callsign"] == cs]
+    kinds = [(e["type"], e["data"].get("action"), e["data"].get("approved")) for e in ev]
+    assert ("proposal", "cleared_for_takeoff", None) in kinds
+    assert ("safety_check", "cleared_for_takeoff", True) in kinds
+    assert ("clearance", "cleared_for_takeoff", None) in kinds

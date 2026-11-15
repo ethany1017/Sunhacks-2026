@@ -145,6 +145,7 @@ class Planner:
         for a in by_cs.values():
             a["x"], a["y"] = (float(v) for v in self.g.frame.to_xy(a["lon"], a["lat"]))
         self.ac = by_cs
+        self._adopt(obs, by_cs)
         self._track(by_cs, live)
         self.claims = {k: cid for k, cid in self.claims.items() if cid in live}
         self.pic = self._picture(by_cs)
@@ -168,6 +169,75 @@ class Planner:
         self._unjam(obs, by_cs, busy)
         self._issued_now = set()
         self._sequence()
+
+    def _adopt(self, obs, by_cs):
+        """Hand-over: take over traffic another controller (the Human) already moved along. Runs on this planner's first
+        pass that sees traffic; the runner builds a fresh planner on every switch to the Agent, so no flag from an
+        earlier stint survives. Reads only the observation and sets only this planner's own bookkeeping (its progress
+        flags, runway claims of live clearances, the last takeoff per runway): every instruction it then sends still
+        goes through _propose and the safety engine."""
+        if self.order or not by_cs:
+            return
+        for c in obs["clearances"]:       # live runway clearances someone else issued still hold their runway
+            end = next((e for e in self.ends if re.search(rf"runway {self.si.spoken_runway(e)}(?! (left|right|center))",
+                                                          c["text"])), None)
+            if c["action"] in CLAIMS and end and c["callsign"] in by_cs:
+                pav = self.g.end_runway[end]
+                self.claims[(pav, c["callsign"])] = c["id"]
+                self.claim_action[c["id"]] = c["action"]
+                if c["action"] == "cross_runway":
+                    self.cross_ids.add(c["id"])
+        t_seen = obs["t"] - float(obs.get("data_age_s") or 0.0)
+        for cs, a in by_cs.items():
+            st, ph, cl = self.assigned.setdefault(cs, {}), a["phase"], a.get("clearance") or {}
+            act = cl.get("action") if cl.get("state") in ("issued", "acknowledged") else None   # its live clearance
+            # its taxi route is not observed: assume the shortest one from where it is to where it is going (what the
+            # pilots fly by default), so this planner's routing and conflict probe see it
+            dst = (self.g.stands[a["gate"]].node if a["kind"] == "arrival" and a.get("gate") in self.g.stands
+                   else a.get("entry_node"))
+            if ph in ("taxi_in", "taxi_out", "hold_short") and a.get("next_node") and dst:
+                r = self.si.taxi_route(a["next_node"], dst)
+                if r and len(r) > 1:
+                    self.routes[cs] = list(r)
+            if (act == "hold_position" or a.get("status_text") == "Holding position") and ph in (
+                    "taxi_in", "taxi_out", "hold_short"):                                # held by the previous controller:
+                self.ground_hold[cs] = "the traffic it was held for"                   # released by the probe as its own
+                self.hold_since[cs] = obs["t"] - float(a.get("stopped_s") or 0.0)
+            if a["kind"] == "arrival":
+                end = a.get("arrival_end")
+                landing = a.get("landing_cleared") or act == "cleared_to_land"
+                if end in self.ends and (landing or (ph == "final" and act == "contact_tower_or_ground")):
+                    st["end"] = end
+                    st["exit"] = self._exit(end, a, self.g.stands[a["gate"]].node)
+                    if landing:
+                        st["landing"] = True
+                        if act == "cleared_to_land":
+                            self.watch[cl["id"]] = (cs, "landing")
+                if ph == "taxi_in" and a.get("frequency") == "ground":
+                    st["ground"] = True
+                    if act in ("taxi_via", "hold_short", "cross_runway", "resume_taxi"):
+                        st["taxi"] = True
+                continue
+            if ph == "pushback" or (ph == "at_gate" and act == "pushback_approved") or ph in (
+                    "taxi_out", "hold_short", "line_up", "takeoff_roll", "airborne"):
+                st["push"] = True
+            if ph in ("at_gate", "pushback") and st.get("push"):
+                sn = self.g.stands[a["gate"]]
+                self.pushbacks[cs] = {"xy": tuple(self.g.node_xy[sn.lane_node]), "t": self.t, "lane": sn.lane_node,
+                                      "stand_xy": tuple(self.g.node_xy[sn.node])}
+            if a.get("dep_end") in self.ends and ph in ("taxi_out", "hold_short", "line_up", "takeoff_roll", "airborne"):
+                st.update(end=a["dep_end"], entry=a.get("entry_node"), taxi=True)
+            if "end" in st and (ph in ("line_up", "takeoff_roll", "airborne")
+                                or act in ("line_up_and_wait", "cleared_for_takeoff")):  # incl. one not yet moving
+                st["luaw"] = True
+                if act == "line_up_and_wait":
+                    self.watch[cl["id"]] = (cs, "luaw")
+                if a.get("takeoff_cleared") or act == "cleared_for_takeoff":
+                    st["to"] = True
+                    if act == "cleared_for_takeoff":
+                        self.watch[cl["id"]] = (cs, "to")
+            if ph == "airborne" and a.get("runway"):    # just departed: count its takeoff as now (conservative spacing)
+                self.last_airborne.setdefault(a["runway"], (t_seen, self.wtc.get(cs) or a.get("wtc") or "M", cs, a.get("wake")))
 
     def _track(self, by_cs, live):
         """What the tower read off raw simulator events, taken from the observation instead: takeoff roll (departure spacing counts
