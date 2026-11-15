@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import type { Aircraft, Airport, Metrics, RefereeFail, RunInfo, SimEvent, WeatherData } from '@/types'
+import type { Aircraft, Airport, Comparison, Metrics, RefereeFail, RunInfo, SimEvent, WeatherData } from '@/types'
 
 const FEED_CAP = 300
 
@@ -19,12 +19,13 @@ export type TowerState = {
   verdict: 'RUNNING' | 'PASS' | 'FAIL'
   fails: RefereeFail[]
   metrics: Metrics | null
+  comparison: Comparison | null // latest Agent vs Human evaluation (a `metrics` event with `comparison`)
   ended: boolean
 }
 
 export const INITIAL: TowerState = {
   airport: null, feed: [], aircraft: {}, weather: null, runway: null, t: 0,
-  run: null, verdict: 'RUNNING', fails: [], metrics: null, ended: false,
+  run: null, verdict: 'RUNNING', fails: [], metrics: null, comparison: null, ended: false,
 }
 
 // Applies a batch of events to a copy of `prev`. Mutates only the copy, so a replay of thousands of
@@ -41,6 +42,10 @@ export function applyEvents(prev: TowerState, events: SimEvent[]): TowerState {
       s = { ...INITIAL, aircraft: {}, fails: [], airport: s.airport } // keep the map until the run's airport event
       fresh.length = 0
       prev = INITIAL
+    }
+    if (e.type === 'metrics' && 'comparison' in e.data) {
+      s.comparison = e.data.comparison // not part of the live run: no clock, no feed item
+      continue
     }
     s.t = e.t
     const cs = e.callsign
@@ -69,8 +74,8 @@ export function applyEvents(prev: TowerState, events: SimEvent[]): TowerState {
         if (s.run) s.run = { ...s.run, controller: e.data.to, controller_label: e.data.label }
         break
       case 'metrics':
-        s.metrics = e.data
-        if (s.verdict === 'RUNNING') s.verdict = e.data.verdict
+        s.metrics = e.data as Metrics // comparison metrics were handled above
+        if (s.verdict === 'RUNNING') s.verdict = s.metrics.verdict
         break
       case 'referee_fail':
         s.fails.push(e.data)

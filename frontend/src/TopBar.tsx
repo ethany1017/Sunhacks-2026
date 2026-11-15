@@ -17,7 +17,7 @@ type Props = { config: AirportConfig | null; weather: WeatherData | null; runway
 
 export function TopBar({ config, weather, runway, t, connected }: Props) {
   const wind = weather
-    ? `${String(weather.wind_dir).padStart(3, '0')}° ${weather.wind_speed}${weather.wind_gust ? `G${weather.wind_gust}` : ''} kt`
+    ? `${String(weather.wind_dir).padStart(3, '0')}° ${weather.wind_kt}${weather.gust_kt ? `G${weather.gust_kt}` : ''} kt`
     : '--'
   return (
     <header className="flex items-center gap-8 border-b border-slate-800 bg-slate-950 px-6 py-3">
@@ -28,7 +28,7 @@ export function TopBar({ config, weather, runway, t, connected }: Props) {
           {config?.placeholder && <Badge className="bg-amber-500/90 text-xs font-bold text-black">PLACEHOLDER AIRPORT</Badge>}
         </span>
       </div>
-      <Field label="METAR" value={weather?.raw ?? '--'} grow />
+      <Field label="METAR" value={weather?.metar ?? '--'} grow />
       <Field label="WIND" value={wind} />
       <Field label="RWY" value={runway ?? '--'} />
       <Field label="SIM" value={clock(t)} />

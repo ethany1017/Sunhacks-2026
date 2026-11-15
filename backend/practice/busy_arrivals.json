@@ -1,0 +1,118 @@
+{
+ "name": "busy_arrivals",
+ "seed": 101,
+ "duration_s": 600.0,
+ "start_sim_s": 0.0,
+ "pushback_mean_s": 60.0,
+ "readback_error_rate": 0.01,
+ "flights": [
+  {
+   "callsign": "SWA1100",
+   "airline": "SWA",
+   "type": "B738",
+   "kind": "arrival",
+   "scheduled_sim_s": 160.0,
+   "gate": "A1",
+   "runway_preference": "26"
+  },
+  {
+   "callsign": "AAL1137",
+   "airline": "AAL",
+   "type": "A321",
+   "kind": "arrival",
+   "scheduled_sim_s": 270.0,
+   "gate": "A17",
+   "runway_preference": "26"
+  },
+  {
+   "callsign": "SKW1174",
+   "airline": "SKW",
+   "type": "E75L",
+   "kind": "arrival",
+   "scheduled_sim_s": 380.0,
+   "gate": "A21",
+   "runway_preference": "26"
+  },
+  {
+   "callsign": "SWA1211",
+   "airline": "SWA",
+   "type": "B38M",
+   "kind": "arrival",
+   "scheduled_sim_s": 490.0,
+   "gate": "A26",
+   "runway_preference": "26"
+  },
+  {
+   "callsign": "DAL1248",
+   "airline": "DAL",
+   "type": "B752",
+   "kind": "arrival",
+   "scheduled_sim_s": 600.0,
+   "gate": "B10",
+   "runway_preference": "26"
+  },
+  {
+   "callsign": "UAL1285",
+   "airline": "UAL",
+   "type": "A320",
+   "kind": "arrival",
+   "scheduled_sim_s": 215.0,
+   "gate": "B16",
+   "runway_preference": "25L"
+  },
+  {
+   "callsign": "AAL1322",
+   "airline": "AAL",
+   "type": "B738",
+   "kind": "arrival",
+   "scheduled_sim_s": 325.0,
+   "gate": "B22",
+   "runway_preference": "25L"
+  },
+  {
+   "callsign": "FFT1359",
+   "airline": "FFT",
+   "type": "A21N",
+   "kind": "arrival",
+   "scheduled_sim_s": 435.0,
+   "gate": "C1",
+   "runway_preference": "25L"
+  },
+  {
+   "callsign": "ENY1396",
+   "airline": "ENY",
+   "type": "E75S",
+   "kind": "arrival",
+   "scheduled_sim_s": 545.0,
+   "gate": "C15",
+   "runway_preference": "25L"
+  },
+  {
+   "callsign": "ASA1433",
+   "airline": "ASA",
+   "type": "B39M",
+   "kind": "arrival",
+   "scheduled_sim_s": 655.0,
+   "gate": "C7",
+   "runway_preference": "25L"
+  },
+  {
+   "callsign": "SWA1470",
+   "airline": "SWA",
+   "type": "B737",
+   "kind": "departure",
+   "scheduled_sim_s": 60.0,
+   "gate": "D11",
+   "runway_preference": null
+  },
+  {
+   "callsign": "SKW1507",
+   "airline": "SKW",
+   "type": "CRJ9",
+   "kind": "departure",
+   "scheduled_sim_s": 240.0,
+   "gate": "D5",
+   "runway_preference": null
+  }
+ ]
+}

@@ -1,5 +1,6 @@
 """Adapter for the in-process KPHX simulator (sim/ at the repo root). The only backend module that imports `sim`."""
 import copy
+import json
 import sys
 from pathlib import Path
 
@@ -12,12 +13,46 @@ from sim.core.engine import Simulation  # noqa: E402
 from sim.core.physics import FINAL_START_M, unit  # noqa: E402
 from sim.graph.model import AirportGraph  # noqa: E402
 
-# The one table of levels. Repoint scenario_path here when the real levels (Normal Day, Light Rain) land.
+from sim.levels import HELD_OUT_SEEDS, TRAINING_SEEDS  # noqa: E402
+
+PRACTICE = ROOT / "backend/practice"
+# The one table of levels: the two real levels first (dashboard default = the first, on its first training seed), then
+# practice scenarios for training the agent (scenario files under backend/practice/, or a level run at a chosen length),
+# then the original smoke/busy scenario files. `level`: a sim level id; `scenario_path`: a scenario file.
 LEVELS = [
-    {"id": "smoke", "name": "Smoke test (6 aircraft)", "scenario_path": str(ROOT / "sim/scenarios/kphx_smoke.json")},
-    {"id": "busy", "name": "Busy (12 aircraft)", "scenario_path": str(ROOT / "sim/scenarios/kphx_busy.json")},
+    {"id": "normal_day", "name": "Normal Day", "level": "normal_day"},
+    {"id": "light_rain", "name": "Light Rain", "level": "light_rain"},
+    {"id": "busy_arrivals", "name": "Practice: busy arrival bank", "practice": True,
+     "scenario_path": str(PRACTICE / "busy_arrivals.json"),
+     "description": "10 arrivals about 110 s apart on both finals (25L, 26): sequencing, landing clearances, taxi-in."},
+    {"id": "departure_push", "name": "Practice: departure push", "practice": True,
+     "scenario_path": str(PRACTICE / "departure_push.json"),
+     "description": "10 departures ready inside 90 s plus 2 arrivals: pushback order, taxi conflicts, departure spacing."},
+    {"id": "runway_crossing", "name": "Practice: runway crossing conflict", "practice": True,
+     "scenario_path": str(PRACTICE / "runway_crossing.json"),
+     "description": "5 arrivals on 25L must cross 25R while 5 departures use it: hold short, crossing vs takeoff timing."},
+    {"id": "wrong_readback", "name": "Practice: wrong readbacks", "practice": True,
+     "scenario_path": str(PRACTICE / "wrong_readback.json"),
+     "description": "8 flights, half of the runway readbacks wrong (Roger or wrong runway): catch and reject them."},
+    {"id": "runway_config_change", "name": "Practice: runway config change", "practice": True, "level": "normal_day",
+     "duration_s": 600.0, "seed": 1,
+     "description": "A 10 min Normal Day (training seed 1): the wind shift at 330 s forces west to east flow."},
+    {"id": "rain_peak", "name": "Practice: rain peak", "practice": True, "level": "light_rain", "duration_s": 750.0,
+     "seed": 21,
+     "description": "A 12.5 min Light Rain day (training seed 21): rain spacing, slow taxi, go-arounds, plus the wind shift."},
+    {"id": "smoke", "name": "Smoke test (6 aircraft)", "practice": True, "scenario_path": str(ROOT / "sim/scenarios/kphx_smoke.json"),
+     "description": "The original 6-aircraft smoke scenario."},
+    {"id": "busy", "name": "Busy (12 aircraft)", "practice": True, "scenario_path": str(ROOT / "sim/scenarios/kphx_busy.json"),
+     "description": "The original 12-aircraft busy scenario."},
 ]
-CONTROLLERS = {"human": "Human (built-in tower for now)", "agent": "Agent"}
+HUMAN = "human"  # the sim's Human controller (sim branch, S4); until it lands the adapter falls back to "tower"
+CONTROLLERS = {"human": "Human (built-in tower for now)", "agent": "Agent"}  # "Human" once the sim accepts HUMAN
+# sim event kind -> (alert level, message template); data is passed through
+ALERTS = {
+    "pilot.unable": ("warning", "{cs} unable {action} runway {runway}: tailwind {tailwind_kt} kt above the {limit_kt} kt limit."),
+    "arrival.held": ("info", "Approach control is holding {cs} for spacing to runway {runway}."),
+    "aircraft.diverted": ("critical", "{cs} diverted after holding {holding_s} s (limit {limit_s} s)."),
+}
 RUNWAY_WIDTH_M = 45  # all three KPHX runways are 150 ft wide
 FINAL_POINTS = 12    # vertices on each straight final
 
@@ -35,36 +70,75 @@ class RealSimulator:
         self._airport = None
         self._seen_readbacks = set()
         self._obs = None  # this tick's observe(), enriched; see _observe()
+        self._human_real = False  # True once the sim accepted set_controller(HUMAN)
 
     # -- lifecycle --------------------------------------------------------------------------------
     def get_levels(self):
         return [dict(lv) for lv in LEVELS]
 
     def get_controllers(self):
-        return dict(CONTROLLERS)
+        return dict(CONTROLLERS, **({"human": "Human"} if self._human_real else {}))
 
     def get_level(self):
-        return dict(self.level, seed=self.sim.seed) if self.level else None
+        """The current run's table entry plus its seed and, for a sim level, duration_s, tailwind_limit_kt, effects."""
+        if not self.level:
+            return None
+        info = self.sim.level_view() or {}
+        return dict(self.level, seed=self.sim.seed, **{k: info[k] for k in ("duration_s", "tailwind_limit_kt", "effects") if k in info})
 
-    def reset(self, level, seed=None):
-        """Fresh run of a level (by id). The previous controller is not carried over: call set_controller next."""
+    def get_seeds(self, level):
+        """{training, heldout} seed lists for a level id. Held-out seeds are for final grading only."""
+        lv = self._entry(level)
+        if "seed" in lv:
+            return {"training": [lv["seed"]], "heldout": []}
+        if "level" in lv:
+            return {"training": list(TRAINING_SEEDS[lv["level"]]), "heldout": list(HELD_OUT_SEEDS[lv["level"]])}
+        return {"training": [json.loads(Path(lv["scenario_path"]).read_text())["seed"]], "heldout": []}
+
+    @staticmethod
+    def _entry(level):
         lv = next((x for x in LEVELS if x["id"] == level), None)
         if lv is None:
             raise ValueError(f"unknown level {level!r}")
-        new = Simulation(lv["scenario_path"], graph=self.graph, seed=seed)  # raises on a bad seed: nothing changed yet
+        return lv
+
+    def reset(self, level, seed=None):
+        """Fresh run of a level (by id) with the Human plugged in; seed None = the entry's default seed."""
+        lv = self._entry(level)
+        if "level" in lv:  # raises on a bad seed: nothing changed yet
+            new = Simulation(level=lv["level"], seed=lv.get("seed") if seed is None else seed,
+                             duration_s=lv.get("duration_s"), graph=self.graph)
+        else:
+            new = Simulation(lv["scenario_path"], graph=self.graph, seed=seed)
         if self.sim is not None:
             self.sim.close()
         self.sim, self._obs = new, None
-        self.level, self.controller, self._seen_readbacks = lv, "human", set()  # Simulation starts with the tower
+        self.level, self._seen_readbacks = lv, set()
+        self.set_controller("human")
 
     def set_controller(self, kind, obj=None):
-        """kind "human" plugs in the sim's built-in tower; kind "agent" plugs in `obj` (name, status, on_tick)."""
+        """kind "human" plugs in the sim's Human (built-in "tower" until the sim has one); "agent" plugs in `obj`."""
         if kind not in CONTROLLERS:
             raise ValueError(f"unknown controller {kind!r}")
-        res = self.sim.set_controller("tower" if kind == "human" else obj)
+        if kind == "human":
+            res = self.sim.set_controller(HUMAN)
+            self._human_real = bool(res.get("ok"))
+            if not self._human_real:
+                res = self.sim.set_controller("tower")
+        else:
+            res = self.sim.set_controller(obj)
         if not res.get("ok"):
             raise ValueError(res.get("error"))
         self.controller, self._obs = kind, None
+
+    @property
+    def human_impl(self):
+        """Which sim controller plays the Human: "human" once the sim has it, else the stand-in "tower"."""
+        return self.sim.controller_name if self.controller == "human" else None
+
+    def get_runway_config(self):
+        """{arrival_runways, departure_runways, runway}: the active runway ends, plus a one-line label."""
+        return _runway_data({k: list(v) for k, v in self.sim.runway_cfg.items()})
 
     @property
     def t(self):
@@ -97,6 +171,15 @@ class RealSimulator:
                 out.append(_ev(t, "referee_fail", cs, dict(d), d["reason"]))
             elif k == "referee_result":
                 out.append(_ev(t, "referee_result", None, dict(d), f"Referee verdict: {d['verdict']}."))
+            elif k == "weather.update":
+                out.append(_ev(t, "weather", None, dict(d), f"New weather report: {d['metar']}."))
+            elif k == "runway.config":
+                out.append(_ev(t, "runway_change", None, _runway_data(d),
+                               f"Runway configuration: {_runway_data(d)['runway']}."))
+            elif k in ALERTS:
+                level, msg = ALERTS[k]
+                msg = msg.format(cs=cs, **d)
+                out.append(_ev(t, "alert", cs, dict(d, level=level, message=msg, source=k), msg))
             elif k in ("scenario.complete", "scenario.day_end"):
                 why = "Every flight was handled." if k == "scenario.complete" else "The day ended."
                 out.append(_ev(t, "sim_end", None, {"why": k.split(".")[1]}, why))
@@ -157,6 +240,10 @@ class RealSimulator:
         """{t, aircraft: true positions (snapshot views), referee: full report with score}. Backend loop/dashboard only."""
         snap = self.sim.snapshot(mark_sent=False)
         return {"t": snap["t"], "aircraft": snap["aircraft"], "referee": snap["referee"]}
+
+
+def _runway_data(cfg):
+    return dict(cfg, runway=f"ARR {' '.join(cfg['arrival_runways'])} / DEP {' '.join(cfg['departure_runways'])}")
 
 
 def _airport(g):

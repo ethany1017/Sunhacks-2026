@@ -1,6 +1,6 @@
 import { AirportMap } from '@/AirportMap'
 import { Feed } from '@/Feed'
-import { Banner, Controls, Scoreboard } from '@/RunPanel'
+import { Banner, Comparison, Controls, Scoreboard } from '@/RunPanel'
 import { TopBar } from '@/TopBar'
 import { useTower } from '@/useTower'
 
@@ -25,6 +25,7 @@ export default function App() {
         </section>
         <aside className="flex w-[600px] shrink-0 flex-col border-l border-slate-800 bg-slate-950/60">
           <Scoreboard m={tower.metrics} />
+          <Comparison c={tower.comparison} />
           <div className="min-h-0 flex-1">
             <Feed events={tower.feed} />
           </div>

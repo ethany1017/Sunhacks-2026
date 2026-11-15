@@ -20,9 +20,9 @@ function look(e: SimEvent): Look {
     case 'referee_fail': return { label: `REFEREE FAIL · ${e.data.rule.replaceAll('_', ' ')}`, text: e.data.reason, tone: BAD }
     case 'referee_result':
       return { label: `REFEREE ${e.data.verdict}`, text: `${e.data.fails.length} fail(s)`, tone: e.data.verdict === 'PASS' ? GOOD : BAD }
-    case 'weather': return { label: 'WEATHER', text: e.data.raw, tone: NEUTRAL }
+    case 'weather': return { label: 'WEATHER', text: e.data.metar, tone: NEUTRAL }
     case 'runway_change':
-      return { label: 'RUNWAY', text: `Active runway ${e.data.runway}${e.data.previous ? ` (was ${e.data.previous})` : ''}`, tone: 'border-emerald-600' }
+      return { label: 'RUNWAY', text: e.data.runway, tone: 'border-emerald-600' }
     case 'aircraft_spawn': return { label: e.data.kind.toUpperCase(), text: `${e.data.aircraft_type}, ${e.data.phase.replaceAll('_', ' ')}`, tone: NEUTRAL }
     case 'proposal':
       return { label: 'PROPOSAL', text: `${e.data.action.replaceAll('_', ' ')}${e.data.runway ? ` runway ${e.data.runway}` : ''}`, tone: NEUTRAL }

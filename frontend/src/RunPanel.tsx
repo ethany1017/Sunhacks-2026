@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import type { Metrics, RefereeFail, RunInfo } from '@/types'
+import type { Comparison as Cmp, EvalTotals, Metrics, RefereeFail, RunInfo } from '@/types'
 
 // The dashboard's only actions: pick a level and a controller, start/reset a run, switch controller mid-run.
 
@@ -103,6 +103,28 @@ export function Scoreboard({ m }: { m: Metrics | null }) {
         <div key={k} className="flex justify-between text-lg">
           <span className="text-slate-400">{k}</span>
           <span className={`font-mono font-semibold ${k === 'Fails' && Number(v) > 0 ? 'text-red-400' : 'text-slate-100'}`}>{v}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+const SECTION_NAMES = { training: 'Training seeds', heldout: 'Held-out seeds', practice: 'Practice' } as const
+
+// Latest Agent vs Human evaluation (python -m app.evaluate --publish), judged only by the simulator's Referee.
+export function Comparison({ c }: { c: Cmp | null }) {
+  if (!c) return null
+  const cell = (t: EvalTotals | undefined) =>
+    t ? `${t.passed}/${t.runs} · ${t.fails} · ${Math.round(t.avg_delay_s)} s · ${t.diversions}` : '--'
+  return (
+    <div className="border-b border-slate-800 p-4">
+      <div className="text-sm font-semibold tracking-widest text-slate-500">AGENT VS HUMAN</div>
+      <div className="mb-1 text-xs text-slate-500">pass · fails · avg delay · diversions{c.human_impl === 'tower' ? ' · Human = built-in tower for now' : ''}</div>
+      {(['training', 'heldout', 'practice'] as const).filter((k) => c.sections[k]).map((k) => (
+        <div key={k} className="grid grid-cols-[9rem_1fr_1fr] gap-x-3 text-lg">
+          <span className="text-slate-400">{SECTION_NAMES[k]}</span>
+          <span className="font-mono">H {cell(c.sections[k]?.human)}</span>
+          <span className="font-mono">A {cell(c.sections[k]?.agent)}</span>
         </div>
       ))}
     </div>

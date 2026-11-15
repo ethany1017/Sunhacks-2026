@@ -1,0 +1,100 @@
+{
+ "name": "runway_crossing",
+ "seed": 103,
+ "duration_s": 480.0,
+ "start_sim_s": 0.0,
+ "pushback_mean_s": 60.0,
+ "readback_error_rate": 0.01,
+ "flights": [
+  {
+   "callsign": "SWA1300",
+   "airline": "SWA",
+   "type": "B738",
+   "kind": "arrival",
+   "scheduled_sim_s": 160.0,
+   "gate": "A11",
+   "runway_preference": "25L"
+  },
+  {
+   "callsign": "AAL1337",
+   "airline": "AAL",
+   "type": "A321",
+   "kind": "arrival",
+   "scheduled_sim_s": 260.0,
+   "gate": "A2",
+   "runway_preference": "25L"
+  },
+  {
+   "callsign": "SKW1374",
+   "airline": "SKW",
+   "type": "E75L",
+   "kind": "arrival",
+   "scheduled_sim_s": 360.0,
+   "gate": "A25",
+   "runway_preference": "25L"
+  },
+  {
+   "callsign": "SWA1411",
+   "airline": "SWA",
+   "type": "B38M",
+   "kind": "arrival",
+   "scheduled_sim_s": 460.0,
+   "gate": "B1",
+   "runway_preference": "25L"
+  },
+  {
+   "callsign": "DAL1448",
+   "airline": "DAL",
+   "type": "B752",
+   "kind": "arrival",
+   "scheduled_sim_s": 560.0,
+   "gate": "B15A",
+   "runway_preference": "25L"
+  },
+  {
+   "callsign": "UAL1485",
+   "airline": "UAL",
+   "type": "A320",
+   "kind": "departure",
+   "scheduled_sim_s": 20.0,
+   "gate": "B21",
+   "runway_preference": null
+  },
+  {
+   "callsign": "AAL1522",
+   "airline": "AAL",
+   "type": "B738",
+   "kind": "departure",
+   "scheduled_sim_s": 80.0,
+   "gate": "B6",
+   "runway_preference": null
+  },
+  {
+   "callsign": "FFT1559",
+   "airline": "FFT",
+   "type": "A21N",
+   "kind": "departure",
+   "scheduled_sim_s": 140.0,
+   "gate": "C12",
+   "runway_preference": null
+  },
+  {
+   "callsign": "ENY1596",
+   "airline": "ENY",
+   "type": "E75S",
+   "kind": "departure",
+   "scheduled_sim_s": 200.0,
+   "gate": "C2",
+   "runway_preference": null
+  },
+  {
+   "callsign": "ASA1633",
+   "airline": "ASA",
+   "type": "B39M",
+   "kind": "departure",
+   "scheduled_sim_s": 260.0,
+   "gate": "D1",
+   "runway_preference": null
+  }
+ ]
+}

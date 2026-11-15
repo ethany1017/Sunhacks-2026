@@ -1,0 +1,4 @@
+# full results are local; only the small dashboard summary is committed
+*
+!.gitignore
+!summary.json

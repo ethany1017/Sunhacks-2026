@@ -5,9 +5,11 @@ thread-safe: it is only touched from the event-loop thread (the loop task and th
 between ticks because the loop only yields between ticks).
 """
 import asyncio
+import json
 import logging
 import os
 import time
+from pathlib import Path
 
 import simif
 from atc.controller import Controller
@@ -19,6 +21,7 @@ METRICS_EVERY_S = 5.0
 TICK_S = 0.1
 MAX_TICKS_PER_PASS = 200  # keeps the loop responsive if it falls behind (fast SIM_SPEED)
 log = logging.getLogger(__name__)
+SUMMARY = Path(__file__).resolve().parents[1] / "eval_results/summary.json"  # written by `python -m app.evaluate --publish`
 SCORE_KEYS = ("fails", "completed", "avg_delay_s", "total_delay_s", "go_arounds", "diversions",
               "readback_errors_caught", "readback_errors_accepted", "runway_operations")
 
@@ -62,6 +65,12 @@ class Runner:
                                         "controller_label": labels[controller], "seed": lv["seed"]},
                   reason=f"{lv['name']} started with the {labels[controller]} controller, seed {lv['seed']}.")
         self._add(0, "airport", data=self.sim.get_airport(), reason="Airport layout from the simulator.")
+        wx, rwy = self.sim.get_weather(), self.sim.get_runway_config()
+        self._add(0, "weather", data=wx, reason=f"Weather: {wx['metar']}.")
+        self._add(0, "runway_change", data=rwy, reason=f"Runway configuration: {rwy['runway']}.")
+        if SUMMARY.exists():
+            self._add(0, "metrics", data={"comparison": json.loads(SUMMARY.read_text())},
+                      reason="Latest Agent vs Human evaluation.")
         self.flush()
 
     def switch(self, controller):
