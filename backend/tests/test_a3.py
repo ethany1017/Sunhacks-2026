@@ -226,6 +226,17 @@ def test_readback_for_a_clearance_issued_before_the_switch_is_checked_not_waved_
     assert si.resolved == [("r1", False), ("r2", False), ("r3", True), ("r4", False)]
 
 
+def test_arrival_near_its_holding_limit_goes_first():
+    pl = bare_planner(FakeSI(), pic())
+    arr = ac("A1", kind="arrival", phase="final", runway="P", eta_s=120.0, holding_s=100.0, holding_limit_s=600.0)
+    pl.ac = {"A1": arr}
+    assert pl._low_fuel("P") is None                      # plenty of holding left
+    arr["holding_s"] = 320.0
+    assert pl._low_fuel("P") == "A1" and pl._low_fuel("Q") is None
+    arr["eta_s"] = 400.0
+    assert pl._low_fuel("P") is None                      # still far out
+
+
 # -- end to end ----------------------------------------------------------------------------------------------------
 @pytest.mark.parametrize("level", ["smoke", "busy_arrivals"])
 def test_short_practice_day_has_no_safety_fails(level, tmp_path, monkeypatch):

@@ -48,6 +48,8 @@ TAXI_AVG_MPS = 5.0              # average speed from a standing start over the f
 HOLD_MAX_S = 60.0               # a hold for an aircraft that has itself stopped ends after this         # resume once the other aircraft is this far past the junction and from the holder
 PUSH_ROUTE_CLEAR_M = 90.0       # no pushback into a lane another aircraft's taxi route still passes within this...
 PUSH_HOLD_MAX_S = 200.0         # ...unless it has waited this long since ready (the Referee: stuck at 300 s)
+LOW_FUEL_FRAC = 0.5             # an arrival past this share of its holding limit (diversion at 600 s)...
+LOW_FUEL_ETA_S = 240.0          # ...and this close to the runway goes before any crossing or line-up on it
 MUTUAL_RELEASE_S = 5.0         # the aircraft a hold waits for is stopped for the holder this long: release the hold
 FREQ = {"tower": "120.9", "ground": "132.55"}
 
@@ -830,11 +832,20 @@ class Planner:
                 return n
         return opts[0] if opts else self.si.choose_exit(end, a["type"], a["gate"])
 
+    def _low_fuel(self, pav):
+        """An arrival due on this runway that has used much of its holding allowance (holding_s / holding_limit_s): it
+        must not be sent round again, so no crossing or departure goes in front of it."""
+        return next((x["callsign"] for x in self.ac.values() if x["kind"] == "arrival" and x["phase"] == "final"
+                     and x.get("runway") == pav and (x.get("eta_s") or 1e9) < LOW_FUEL_ETA_S
+                     and (x.get("holding_s") or 0) >= LOW_FUEL_FRAC * (x.get("holding_limit_s") or 600.0)), None)
+
     def _cross(self, a, pav=None):
         cs = a["callsign"]
         pav = pav or a["hold"]["runway"]
         if self._pending(cs, "cross_runway") or self._m(cs).get("held"):
             return   # a held aircraft resumes first: a later resume would replace the crossing clearance
+        if self._low_fuel(pav):
+            return
         self._propose(a, "cross_runway", {"runway": self.si.runway_label(pav)},
                       f"{cs} is holding short of {pav}; crossing when the runway is clear and nothing is due on it.",
                       end=None, pavement=pav)
@@ -1016,6 +1027,8 @@ class Planner:
             decision["choice"] = self.choose(decision)
             if decision["choice"] != cs:
                 return
+        if self._low_fuel(pav):
+            return   # an arrival close to its holding limit lands first
         last = self.last_roll.get(pav)
         lead = self.ac.get(last["callsign"]) if last else None
         if lead is not None and lead["phase"] in ("takeoff_roll", "line_up"):
