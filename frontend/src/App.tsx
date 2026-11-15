@@ -48,7 +48,7 @@ export default function App() {
             <p className="p-8 text-2xl text-slate-500">Waiting for airport layout…</p>
           )}
         </section>
-        <aside className="flex w-[600px] shrink-0 flex-col border-l border-slate-800 bg-slate-950/60">
+        <aside className="flex w-[440px] shrink-0 min-[1600px]:w-[600px] flex-col border-l border-slate-800 bg-slate-950/60">
           <Scoreboard m={tower.metrics} />
           <Comparison c={tower.comparison} />
           <div className="min-h-0 flex-1">

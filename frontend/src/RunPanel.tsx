@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from 'react'
-import type { Comparison as Cmp, Metrics, RefereeFail, RunInfo } from '@/types'
+import type { Comparison as Cmp, EvalTotals, Metrics, RefereeFail, RunInfo } from '@/types'
 
 // The dashboard's only actions: pick a level and a controller, start/reset a run, switch controller mid-run.
 
@@ -11,7 +11,7 @@ async function post(path: string, body: object) {
 }
 
 const SELECT = 'rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-lg text-slate-100'
-const BUTTON = 'rounded-md px-4 py-2 text-lg font-semibold disabled:opacity-40'
+const BUTTON = 'shrink-0 whitespace-nowrap rounded-md px-4 py-2 text-lg font-semibold disabled:opacity-40'
 
 export function Controls({ run, ended }: { run: RunInfo | null; ended: boolean }) {
   const [opts, setOpts] = useState<Options | null>(null)
@@ -35,8 +35,8 @@ export function Controls({ run, ended }: { run: RunInfo | null; ended: boolean }
   const other = opts?.controllers.find((c) => c.id !== run?.controller)
 
   return (
-    <div className="flex items-center gap-3">
-      <select className={SELECT} value={level} onChange={(e) => setLevel(e.target.value)} aria-label="Level">
+    <div className="flex shrink-0 items-center gap-3">
+      <select className={`${SELECT} max-w-64 min-[1600px]:max-w-none`} value={level} onChange={(e) => setLevel(e.target.value)} aria-label="Level">
         {opts?.levels.map((l) => <option key={l.id} value={l.id}>{l.name}</option>)}
       </select>
       <select className={SELECT} value={controller} onChange={(e) => setController(e.target.value)} aria-label="Controller">
@@ -97,12 +97,12 @@ export function Scoreboard({ m }: { m: Metrics | null }) {
     ['Readback errors missed', m?.readback_errors_accepted ?? '--'],
   ]
   return (
-    <div className="grid grid-cols-2 gap-x-6 gap-y-1 border-b border-slate-800 p-4">
+    <div className="grid grid-cols-2 gap-x-6 gap-y-1 border-b border-slate-800 p-3 min-[1600px]:p-4">
       <div className="col-span-2 text-sm font-semibold tracking-widest text-slate-500">SCOREBOARD</div>
       {rows.map(([k, v]) => (
-        <div key={k} className="flex justify-between text-xl">
+        <div key={k} className="flex justify-between gap-2 text-base min-[1600px]:text-xl">
           <span className="text-slate-400">{k}</span>
-          <span className={`font-mono text-2xl font-bold ${k === 'Fails' && Number(v) > 0 ? 'text-red-400' : 'text-slate-100'}`}>{v}</span>
+          <span className={`font-mono text-xl font-bold min-[1600px]:text-2xl ${k === 'Fails' && Number(v) > 0 ? 'text-red-400' : 'text-slate-100'}`}>{v}</span>
         </div>
       ))}
     </div>
@@ -116,8 +116,18 @@ export function Comparison({ c }: { c: Cmp | null }) {
   if (!c) return null
   const rows = (['training', 'heldout', 'practice'] as const).flatMap((k) =>
     (['human', 'agent'] as const).map((who) => ({ key: `${k}-${who}`, name: `${SECTION_NAMES[k]} · ${who === 'human' ? 'Human' : 'Agent'}`, t: c.sections[k]?.[who] })))
+  const tr = c.sections.training
+  const line = (t: EvalTotals | undefined) => (t ? `${t.passed}/${t.runs} pass · ${t.fails} fails` : '--')
   return (
-    <div className="border-b border-slate-800 p-4">
+    <>
+    <div className="border-b border-slate-800 px-3 py-2 text-base min-[1600px]:hidden">
+      <span className="font-semibold tracking-widest text-slate-500">AGENT VS HUMAN</span>{' '}
+      <span className="text-slate-400">training seeds: </span>
+      <span className="font-mono text-emerald-300">Agent {line(tr?.agent)}</span>
+      <span className="text-slate-500"> | </span>
+      <span className="font-mono text-slate-300">Human {line(tr?.human)}</span>
+    </div>
+    <div className="hidden border-b border-slate-800 p-4 min-[1600px]:block">
       <div className="text-sm font-semibold tracking-widest text-slate-500">
         AGENT VS HUMAN{c.human_impl === 'tower' ? ' · Human = built-in tower (stand-in)' : ' · Human = simulated average controller'}
       </div>
@@ -134,5 +144,6 @@ export function Comparison({ c }: { c: Cmp | null }) {
         ))}
       </div>
     </div>
+    </>
   )
 }
