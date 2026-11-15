@@ -42,11 +42,8 @@ def test_harness_runs_a_practice_scenario_for_both_controllers():
     human, agent = res
     assert human["human_impl"] in ("human", "tower") and agent["human_impl"] is None
     assert human["score"]["readback_errors_caught"] > 0  # the scenario really produces wrong readbacks
-    assert agent["verdict"] == "FAIL" and agent["fails"][0]["rule"] and agent["fails"][0]["reason"]
-    alerts = [e for e in db.events_for_run(db.current_run_id()) if e["type"] == "alert"]  # the agent run's events
-    div = [e for e in alerts if e["data"]["source"] == "aircraft.diverted"]
-    assert len(div) == agent["score"]["diversions"] > 0
-    assert div[0]["data"]["level"] == "critical" and "diverted after holding" in div[0]["reason"]
+    assert agent["verdict"] == "PASS" and agent["score"]["readback_errors_caught"] > 0
+    assert agent["score"]["readback_errors_accepted"] == 0
 
 
 def test_heldout_seeds_need_the_explicit_option():

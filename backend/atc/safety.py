@@ -10,7 +10,8 @@ these margins sit above its limits (sim/referee/limits.py) so a clearance that p
 
 # -- runway occupancy (7110.65 3-9-6 same-runway separation, 3-10-3 / 3-10-5 landing clearance) --------------------
 LANDING_BUFFER_S = 8.0       # a landing needs every other aircraft off the runway this long before touchdown
-# -- arrival / departure spacing on one runway (7110.65 3-9-? takeoff with an arrival on final; 3-7-2 crossings) ------
+# -- arrival / departure spacing on one runway (7110.65 3-9-6 / 3-10-3 same-runway separation, 3-7-2 crossings; the
+#    guard times below are this agent's assumptions, not figures from the Order) -------------------------------------
 TAKEOFF_ARRIVAL_GUARD_S = 60.0   # no takeoff roll with an arrival inside about 2 NM (2 NM at 65 m/s = 57 s)
 LINEUP_ARRIVAL_GUARD_S = 90.0    # 3-9-4 line up and wait: not with a landing due before the departure can roll
 CROSS_ARRIVAL_GUARD_S = 55.0     # a crossing takes 30-40 s from the clearance; never with a landing inside that + margin
@@ -22,8 +23,8 @@ WAKE_DEPARTURE_S = {"A": 180.0, "B": 120.0, "C": 120.0, "D": 120.0}  # leader CW
 WAKE_LIGHT_BEHIND_LARGE_S = 90.0         # assumption (the built-in tower's value): a light behind any jet
 # -- taxi -------------------------------------------------------------------------------------------------------------
 PUSHBACK_LANE_M = 70.0       # two pushbacks into lanes this close are serialised...
-PUSHBACK_STAGGER_S = 90.0
-PUSH_CLEAR_M = 5.0           # margin between a pushback's swept area and any other aircraft    # ...this far apart, so their push movements (at the end of ~280 s) do not overlap
+PUSHBACK_STAGGER_S = 90.0    # ...this far apart, so their push movements (at the end of ~280 s) do not overlap
+PUSH_CLEAR_M = 5.0           # margin between a pushback's swept area and any other aircraft
 CONVERGE_WINDOW_S = 20.0     # two aircraft predicted at one junction closer in time than this: the later one waits
 CONFLICT_MARGIN_M = 20.0     # route points closer than the two half wingspans + this are one junction
 SHARP_TURN_DEG = 90.0        # a turn sharper than this near the start of a route sweeps its corner (planner geometry)

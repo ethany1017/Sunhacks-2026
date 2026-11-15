@@ -76,7 +76,15 @@ events raised inside `step()` are returned, so call the tools (`issue`, `set_run
 - `resolve_readback(readback_id, accept)` → accept, or say again. Unresolved readbacks are accepted after 5 s of silence.
 - `set_runway_config(arrival_runways, departure_runways)` → `{ok}`; runway ends like "26", "25L" (east flow `["07R","08"]`, `["07L","08"]`). Traffic already moving keeps its runway until re-cleared (docs/API_CONTRACT.md "Runway direction").
 - `get_runway_config()` → `{arrival_runways, departure_runways, runway}`: the active ends and a label.
-- `get_weather()` → `{metar, wind_dir, wind_kt, gust_kt, vis_sm, wx, temp_f, t}`. Scenario files: calm and static. Levels: the level's reports (Light Rain 4 SM `-RA BR`) and one wind shift to 090/14 at 55% of the day, a tailwind above the 10 kt pilot limit for west flow. Future reports are not shown. Pilots answer `cleared_to_land` / `line_up_and_wait` / `cleared_for_takeoff` above the limit with "Unable" (`alert` from `pilot.unable`; the clearance is cancelled).
+- `get_weather()` → `{metar, wind_dir, wind_kt, gust_kt, vis_sm, wx, temp_f, t}`. Scenario files: calm and static. Levels: the level's reports (Light Rain 4 SM `-RA BR`) and the wind backing to 090/14 (WIND_SHIFT_FRAC 0.45 of the day, earlier intermediate reports as it turns), a tailwind above the 10 kt pilot limit for west flow. Future reports are not shown. Pilots answer `cleared_to_land` / `line_up_and_wait` / `cleared_for_takeoff` above the limit with "Unable" (`alert` from `pilot.unable`; the clearance is cancelled).
+- Static layout helpers for the planner (built from the airport graph and the sim's public type / exit tables, never from live truth):
+  - `type_info(icao)` → `{length_m, wingspan_m, cwt, wtc, ...}` for an aircraft type.
+  - `runway_ends()` → `{end: {runway (pavement id), heading, threshold_node, chain (centreline nodes)}}`.
+  - `stand_nodes(gate)` → `{node, lane_node}`: the stand and the taxilane node it pushes back onto.
+  - `choose_entry(end, origin, icao)` → the runway entry (hold point node) the sim's pilots would use.
+  - `choose_exit(end, icao, gate)` / `exit_options(end, icao, gate)` → the preferred exit node / feasible exits ranked by the same formula as the sim's pilots.
+  - `taxi_route(src, dst)` → shortest node route on the taxi graph (no traffic considered).
+  - `runway_label(pavement)` → "07L/25R"-style label used in clearances and readbacks.
 - `get_referee()` → `{verdict: RUNNING/PASS/FAIL, fails: [{rule, callsigns, reason, t}], day_end_s}`. No score (it would leak readback truth).
 
 ## Metrics only (true state; the backend loop and dashboard, never controller decisions)
@@ -88,7 +96,7 @@ events raised inside `step()` are returned, so call the tools (`issue`, `set_run
 - `observe()` aircraft `route` / `planned_route` are always empty (`with_routes=False`); the controller has to remember the routes it issued.
 - No final-approach geometry is exported: the adapter rebuilds the straight 11 km final (`FINAL_START_M`) per runway end.
 - No "readbacks since last call" query: the adapter remembers which pending readbacks it already returned.
-- No Human controller yet (sim branch, S4): `set_controller("human")` falls back to the built-in tower; the swap is the one `HUMAN` constant / try-then-fall-back in `real.py`.
+- (Resolved with levels-v1) The Human controller exists: `set_controller("human")` runs it; the tower fallback in `real.py` only applies to an older sim.
 - No public accessor for the active runway config outside `observe()` (which draws observation noise): `get_runway_config()` reads `Simulation.runway_cfg`.
 - Events raised by tool calls made between ticks are not in any `step()` result (the sim returns only the events of that step).
 - The sim's levels import `shapely` (`sim/scenarios/generate.py`, gate list); it is in `backend/requirements.txt` and must be installed in `backend/.venv` for Normal Day / Light Rain to run there.
