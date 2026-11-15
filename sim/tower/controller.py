@@ -6,6 +6,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from sim.core.aircraft_types import get_type
 from sim.core.engine import Simulation
+from sim.levels import TAILWIND_LIMIT_KT, tailwind_kt
 
 DECIDE_EVERY_TICKS = 5          # 2 Hz decision pass
 LAND_CLEAR_ETA_S = 70.0         # clear to land inside this ETA when the runway is free
@@ -16,6 +17,10 @@ TAKEOFF_GUARD_S = 55.0          # no takeoff roll if a landing is due within thi
 CROSS_GUARD_S = 90.0            # no crossing if a landing on that runway is due within this
 CROSS_WINDOW_S = 45.0
 PUSHBACK_CLEAR_M = 90.0
+FLOW_SWITCH_TAILWIND_KT = 5.0   # turn the airport around once the active direction has more tailwind than this
+OPPOSING_PENALTY_M = 2000.0     # taxi routing: an edge another cleared route uses the other way counts this much longer
+CROSSING_PENALTY_M = 2500.0     # taxi routing: per runway-pavement edge, so a route never trades a crossing for a detour
+FLOW_FINISH_ETA_S = 150.0       # on a flow change, arrivals closer than this finish on the old direction (if still legal)
 RULES = {
     "taxi": "JO 7110.65BB 3-7-2 Taxi and ground movement operations: issue the route up to the runway hold short point",
     "cross": "JO 7110.65BB 3-7-2: a runway crossing needs its own clearance; hold short until the runway is clear",
@@ -48,6 +53,7 @@ class TowerController:
         self.last_arrival_slot: Dict[str, float] = {}     # runway pavement -> last landing slot time
         self.last_airborne: Dict[str, Tuple[float, str]] = {}   # pavement -> (t, wake class)
         self.claims: Dict[Tuple[str, str], str] = {}      # (pavement, callsign) -> clearance id that holds the runway
+        self.routes: Dict[str, List[str]] = {}            # callsign -> taxi route nodes this tower cleared (until done)
 
     # -- entry point -----------------------------------------------------------------------------------
     def on_tick(self, sim: Simulation, events: List[Dict[str, Any]]) -> None:
@@ -56,6 +62,13 @@ class TowerController:
                 cs = ev["entity_id"]
                 self.last_airborne[ev["data"]["runway"]] = (ev["sim_time_ms"] / 1000.0, get_type(self._type_of(sim, cs)).wtc)
                 self.assigned.setdefault(cs, {})["airborne"] = True
+            if ev["kind"] in ("aircraft.airborne", "aircraft.parked"):
+                self.routes.pop(ev["entity_id"], None)
+            if ev["kind"] == "pilot.unable":       # refused for tailwind: forget the clearance so it is planned again
+                st = self.assigned.setdefault(ev["entity_id"], {})
+                for k in {"cleared_to_land": ("landing",), "line_up_and_wait": ("luaw",),
+                          "cleared_for_takeoff": ("to",)}.get(ev["data"]["action"], ()):
+                    st.pop(k, None)
         obs: Optional[Dict[str, Any]] = None
         if any(e["kind"] == "readback" for e in events) or sim.clock.tick % DECIDE_EVERY_TICKS == 0:
             obs = sim.observe()
@@ -65,6 +78,7 @@ class TowerController:
         self.claims = {k: cid for k, cid in self.claims.items() if cid in live}
         self._readbacks(sim, obs)
         if sim.clock.tick % DECIDE_EVERY_TICKS == 0:
+            self._flow(sim, obs)
             by_cs = {a["callsign"]: a for a in obs["aircraft"] if a["kind"] != "vehicle"}
             for cs in sorted((c for c in by_cs if c not in self.order), key=lambda c: (by_cs[c]["eta_s"] or 0.0, c)):
                 self.order[cs] = len(self.order)
@@ -89,12 +103,35 @@ class TowerController:
             return None
         clr = sim.clearances[res["clearance_id"]]
         self.expected[clr.id] = clr.runway
+        if action == "taxi_via":
+            self.routes[a["callsign"]] = list(params.get("route") or [])
         pav = sim.runway_pavement(clr.runway) if action in ("cleared_to_land", "cross_runway", "line_up_and_wait", "cleared_for_takeoff") else None
         if pav:
             self.claims[(pav, a["callsign"])] = clr.id
         sim.record_decision(callsign=a["callsign"], action=action, summary=summary, facts=facts, rules=rules,
                             alternatives=alternatives, next_review_s=review_s, voice_id=res["voice_id"])
         return res
+
+    def _taxi_params(self, sim: Simulation, a: Dict[str, Any], to: str, dst: Optional[str],
+                     origin: Optional[str] = None) -> Dict[str, Any]:
+        """An explicit route that avoids taxiing head-on into a route already cleared the other way (ground control's
+        one-way flows), or the simulator's shortest route if there is no usable node to start from."""
+        import networkx as nx
+        origin = origin or a.get("next_node")
+        if not origin or not dst:
+            return {"to": to}
+        g = sim.graph
+        against = {(v, u) for cs, nodes in self.routes.items() if cs != a["callsign"] for u, v in zip(nodes, nodes[1:])}
+
+        def weight(u: str, v: str, d: Dict[str, Any]) -> Optional[float]:
+            e = g.edges[d["eid"]]
+            if e.kind == "runway":
+                return None
+            return e.length + (CROSSING_PENALTY_M if e.pavement else 0.0) + (OPPOSING_PENALTY_M if (u, v) in against else 0.0)
+        try:
+            return {"route": nx.dijkstra_path(g.g, origin, dst, weight=weight), "to": to}   # one-way search: (u, v) is the direction
+        except (nx.NetworkXNoPath, nx.NodeNotFound):
+            return {"to": to}
 
     @staticmethod
     def _runway(obs: Dict[str, Any], pav: str) -> Dict[str, Any]:
@@ -118,6 +155,32 @@ class TowerController:
                     and o["runway"] == pav and (o["eta_s"] or 999) <= within_s):
                 return o
         return None
+
+    # -- runway flow (wind) -----------------------------------------------------------------------------------
+    @staticmethod
+    def _tailwind(sim: Simulation, obs: Dict[str, Any], end: str) -> float:
+        return tailwind_kt(obs["weather"], sim.graph.end_info(end)[1]["heading_deg"])
+
+    def _flow(self, sim: Simulation, obs: Dict[str, Any]) -> None:
+        """Turn the airport around (every runway to its other end) when the wind gives the active direction a tailwind."""
+        cfg = obs["runway_config"]
+        ends = cfg["arrival_runways"] + cfg["departure_runways"]
+        worst = max(self._tailwind(sim, obs, e) for e in ends)
+        if worst <= FLOW_SWITCH_TAILWIND_KT:
+            return
+        new = {k: [sim.graph.other_end(e) for e in v] for k, v in cfg.items()}
+        after = max(self._tailwind(sim, obs, e) for e in new["arrival_runways"] + new["departure_runways"])
+        if after >= worst:
+            return
+        sim.set_runway_config(new["arrival_runways"], new["departure_runways"])
+        w = obs["weather"]
+        sim.record_decision(
+            callsign="", action="runway_config",
+            summary="Runway flow change: arrivals %s, departures %s" % (", ".join(new["arrival_runways"]), ", ".join(new["departure_runways"])),
+            facts=["Wind %03d at %d kt (%s)" % (w["wind_dir"] or 0, w["wind_kt"] or 0, w["metar"]),
+                   "Tailwind %.1f kt on the active runways, %.1f kt after the change" % (worst, after)],
+            rules=["Runway selection by headwind; pilots refuse more than %.0f kt tailwind" % TAILWIND_LIMIT_KT],
+            alternatives=[{"option": "keep the current flow", "reason": "tailwind %.1f kt and rising" % worst}], next_review_s=60)
 
     # -- readbacks --------------------------------------------------------------------------------------------
     def _readbacks(self, sim: Simulation, obs: Dict[str, Any]) -> None:
@@ -145,6 +208,10 @@ class TowerController:
             st.pop("go_around", None)
             return
         if a["phase"] == "final":
+            if "end" in st and st["end"] not in obs["runway_config"]["arrival_runways"] and not a["landing_cleared"] and (
+                    (a["eta_s"] or 999.0) > FLOW_FINISH_ETA_S or self._tailwind(sim, obs, st["end"]) > TAILWIND_LIMIT_KT):
+                for k in ("end", "landing", "go_around", "exit"):     # flow changed: send it to the new direction
+                    st.pop(k, None)
             if "end" not in st:
                 self._assign_arrival_runway(sim, obs, a, st)
             elif not a["landing_cleared"] and "landing" not in st:
@@ -156,7 +223,7 @@ class TowerController:
                         "Handed %s to ground" % cs, ["%s is clear of the runway" % cs], ["JO 7110.65BB 3-10-9 Runway exiting"], [], 20)
         if a["phase"] == "taxi_in" and "ground" in st and "taxi" not in st and a["speed_mps"] < 0.3 and a.get("stopped_s", 0) >= 0.0:
             st["taxi"] = True
-            self._issue(sim, a, "taxi_via", {"to": a["gate"]},
+            self._issue(sim, a, "taxi_via", self._taxi_params(sim, a, a["gate"], sim.graph.stands[a["gate"]].node),
                         "Taxi %s to gate %s by the shortest route" % (cs, a["gate"]),
                         ["%s vacated the runway" % cs, "Gate %s assigned in the schedule" % a["gate"]], [RULES["taxi"]],
                         [{"option": "longer route avoiding crossings", "reason": "shortest route with a crossing penalty already chosen"}], 20)
@@ -165,6 +232,9 @@ class TowerController:
 
     def _assign_arrival_runway(self, sim: Simulation, obs: Dict[str, Any], a: Dict[str, Any], st: Dict[str, Any]) -> None:
         cfg = obs["runway_config"]["arrival_runways"]
+        cur = a.get("arrival_end")
+        if cur:     # approach control sequenced it onto this final: keep it (or its other end after a flow change)
+            cfg = [e for e in (cur, sim.graph.other_end(cur)) if e in cfg] or cfg
         eta = a["eta_s"] or 120.0
         t = obs["t"]
         stand = sim.graph.stands[a["gate"]]
@@ -251,6 +321,8 @@ class TowerController:
     def _departure(self, sim: Simulation, obs: Dict[str, Any], a: Dict[str, Any]) -> None:
         cs, st = a["callsign"], self.assigned.setdefault(a["callsign"], {})
         ph = a["phase"]
+        if st.get("end") and st["end"] not in obs["runway_config"]["departure_runways"] and "luaw" not in st:
+            self._reroute_departure(sim, a, st)
         if ph == "at_gate" and a["ready"]:
             if "end" not in st:
                 self._assign_departure(sim, obs, a, st)
@@ -266,20 +338,44 @@ class TowerController:
                 if "end" not in st:
                     return
             st["taxi"] = True
-            self._issue(sim, a, "taxi_via", {"to": st["end"], "entry": st["entry"]},
+            self._issue(sim, a, "taxi_via", self._taxi_params(sim, a, st["end"], st["entry"]),
                         "Taxi %s to runway %s via %s" % (cs, st["end"], ", ".join(st["via"]) or "shortest route"),
                         ["%s pushed back from gate %s" % (cs, a["gate"]), "Runway %s chosen: %s" % (st["end"], st["why"])],
                         [RULES["taxi"]], st["alts"], 20)
             return
         if ph == "hold_short" and a.get("hold") and "taxi" in st:
             pav = a["hold"]["runway"]
-            if pav != sim.graph.end_runway[st["end"]]:
+            if pav != sim.graph.end_runway[st["end"]] or not self._at_entry(sim, a):   # a crossing of its own runway
                 self._maybe_cross(sim, obs, a)
             else:
                 self._line_up(sim, obs, a, st)
             return
         if ph == "line_up" and "luaw" in st and not a["takeoff_cleared"] and "to" not in st:
             self._takeoff(sim, obs, a, st)
+
+    def _reroute_departure(self, sim: Simulation, a: Dict[str, Any], st: Dict[str, Any]) -> None:
+        """Flow changed: a departure still taxiing goes to the other end of its runway. A stopped one (in a queue or at
+        the old end's hold point) turns round where it stands; a moving one near the runway first comes to a stop."""
+        if "taxi" not in st:
+            for k in ("end", "entry"):
+                st.pop(k, None)             # not taxiing yet: planned again from the new configuration
+            return
+        pav = sim.graph.end_runway[st["end"]]
+        if a["phase"] not in ("taxi_out", "hold_short"):
+            return
+        start = a.get("prev_node") if a["speed_mps"] < 0.2 else None
+        if start is None and (a.get("hold") or a.get("next_node") in sim.graph.runways[pav].chain):
+            return
+        start = start or a.get("next_node")
+        new = sim.graph.other_end(st["end"])
+        entry = sim.choose_entry(new, start, get_type(a["type"])) if start else None
+        res = self._issue(sim, a, "taxi_via", self._taxi_params(sim, a, new, entry, start),
+                          "Runway flow change: taxi %s to runway %s instead of %s" % (a["callsign"], new, st["end"]),
+                          ["Departure runways are now %s" % new], [RULES["taxi"]],
+                          [{"option": "keep runway %s" % st["end"], "reason": "tailwind on that direction"}], 20)
+        if res:
+            st["end"] = new
+            st.pop("entry", None)
 
     def _assign_departure(self, sim: Simulation, obs: Dict[str, Any], a: Dict[str, Any], st: Dict[str, Any]) -> None:
         stand = sim.graph.stands[a["gate"]]
@@ -313,6 +409,15 @@ class TowerController:
                             facts=["%s ready at gate %s" % (a["callsign"], a["gate"])] + list(notes.values()),
                             rules=["First come, first served; shortest taxi route with a penalty per runway crossing and per aircraft queued"],
                             alternatives=st["alts"], next_review_s=20)
+
+    @staticmethod
+    def _at_entry(sim: Simulation, a: Dict[str, Any]) -> bool:
+        """Holding at its departure entry (not at a crossing of the same runway earlier on the route)."""
+        if not a.get("entry_node"):
+            return True
+        x, y = sim.graph.frame.to_xy(a["lon"], a["lat"])
+        ex, ey = sim.graph.node_xy[a["entry_node"]]
+        return math.hypot(x - ex, y - ey) < 150.0
 
     def _lane_clear(self, sim: Simulation, obs: Dict[str, Any], a: Dict[str, Any]) -> bool:
         lane = sim.graph.node_xy[sim.graph.stands[a["gate"]].lane_node]

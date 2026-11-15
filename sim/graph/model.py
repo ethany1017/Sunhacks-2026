@@ -95,18 +95,22 @@ class Track:
         steps = np.hypot(*np.diff(self.pts, axis=0).T) if len(self.pts) > 1 else np.zeros(0)
         self.cum = np.concatenate([[0.0], np.cumsum(steps)])
         self.length = float(self.cum[-1])
+        self._px, self._py = np.ascontiguousarray(self.pts[:, 0]), np.ascontiguousarray(self.pts[:, 1])
         self.node_s: Dict[str, float] = {}
         self.runs = self._runs()
         self._vlim = self._limits()
 
     # -- geometry ----------------------------------------------------------------
     def xy_at(self, s: Any) -> np.ndarray:
+        if isinstance(s, (float, int)):      # scalar fast path (the hot one): same numbers as the array path
+            s = min(max(float(s), 0.0), self.length)
+            return np.array([np.interp(s, self.cum, self._px), np.interp(s, self.cum, self._py)])
         s = np.clip(s, 0.0, self.length)
-        return np.stack([np.interp(s, self.cum, self.pts[:, 0]), np.interp(s, self.cum, self.pts[:, 1])], axis=-1)
+        return np.stack([np.interp(s, self.cum, self._px), np.interp(s, self.cum, self._py)], axis=-1)
 
     def heading_at(self, s: float, look: float = 4.0) -> float:
         a, b = self.xy_at(max(0.0, s - look)), self.xy_at(min(self.length, s + look))
-        if np.allclose(a, b):
+        if abs(a[0] - b[0]) <= 1e-8 + 1e-5 * abs(b[0]) and abs(a[1] - b[1]) <= 1e-8 + 1e-5 * abs(b[1]):   # np.allclose
             b = self.xy_at(min(self.length, s + 20.0))
         return bearing_deg((a[0], a[1]), (b[0], b[1]))
 
