@@ -56,7 +56,7 @@ export function Controls({ run, ended }: { run: RunInfo | null; ended: boolean }
 }
 
 export function Banner({ verdict, fails, run, ended }: { verdict: string; fails: RefereeFail[]; run: RunInfo | null; ended: boolean }) {
-  const who = run ? `${run.level_name} · ${run.controller_label}` : 'No run'
+  const who = run ? `${run.level_name} · seed ${run.seed} · ${run.controller_label}` : 'No run'
   if (verdict === 'FAIL') {
     const first = fails[0]
     return (

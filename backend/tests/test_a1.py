@@ -165,3 +165,29 @@ def test_observation_noise_independent_of_call_count():
             SIM.step()
         runs.append((peek.seen, SIM.metrics()["aircraft"]))
     assert any(runs[0][0]) and runs[0] == runs[1]
+
+
+@pytest.mark.parametrize("raw,want", [("5", 5), (" 7 ", 7), ("9001", None), ("abc", None), ("-3", None),
+                                      (str(2**31), None), ("", None)])
+def test_demo_seed_from_env(tmp_path, monkeypatch, raw, want):
+    """DEMO_SEED_<LEVEL> sets a level's default seed; held-out, garbage or out-of-range values fall back (None = the
+    level's first training seed) instead of crashing."""
+    monkeypatch.setenv("EVENTS_DB", str(tmp_path / "events.db"))
+    monkeypatch.setenv("DEMO_SEED_NORMAL_DAY", raw)
+    monkeypatch.setenv("DEMO_SEED_LIGHT_RAIN", "9021")
+    r = Runner(SIM)
+    assert r.demo_seeds == {"normal_day": want, "light_rain": None}
+    r.start("normal_day", "human")
+    assert r.current()["seed"] == (want if want is not None else SIM.get_seeds("normal_day")["training"][0])
+    r.start("normal_day", "human", 3)  # an explicit seed still wins
+    assert r.current()["seed"] == 3
+
+
+def test_run_api_rejects_absurd_seed(tmp_path, monkeypatch):
+    monkeypatch.setenv("EVENTS_DB", str(tmp_path / "events.db"))
+    monkeypatch.setenv("AUTOSTART", "0")
+    from fastapi.testclient import TestClient
+    from app.main import app
+    with TestClient(app) as client:
+        assert client.post("/api/run", json={"level": "normal_day", "controller": "agent", "seed": 2**31}).status_code == 422
+        assert client.post("/api/run", json={"level": "normal_day", "controller": "agent", "seed": 2**31 - 1}).status_code == 503

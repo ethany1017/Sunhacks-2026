@@ -22,6 +22,8 @@ TICK_S = 0.1
 MAX_TICKS_PER_PASS = 200  # keeps the loop responsive if it falls behind (fast SIM_SPEED)
 log = logging.getLogger(__name__)
 SUMMARY = Path(__file__).resolve().parents[1] / "eval_results/summary.json"  # written by `python -m app.evaluate --publish`
+DEMO_SEED_ENV = {"normal_day": "DEMO_SEED_NORMAL_DAY", "light_rain": "DEMO_SEED_LIGHT_RAIN"}  # dashboard default seed
+MAX_SEED = 2**31 - 1
 SCORE_KEYS = ("fails", "completed", "avg_delay_s", "total_delay_s", "go_arounds", "diversions",
               "readback_errors_caught", "readback_errors_accepted", "runway_operations")
 
@@ -35,6 +37,24 @@ class Runner:
         self.ended = True
         self._buf = []
         self._next_pos = self._next_metrics = 0.0
+        self.demo_seeds = {lv: self._env_seed(lv, var) for lv, var in DEMO_SEED_ENV.items()}
+
+    def _env_seed(self, level, var):
+        """The seed a run of `level` gets when none is given, from env `var`; None (the level's first training seed) if
+        unset or unusable. A held-out seed is never used here: those are for final grading only."""
+        raw = os.environ.get(var, "").strip()
+        if not raw:
+            return None
+        try:
+            seed = int(raw)
+        except ValueError:
+            seed = None
+        heldout = self.sim.get_seeds(level)["heldout"] if hasattr(self.sim, "get_seeds") else []
+        if seed is None or not 0 <= seed <= MAX_SEED or seed in heldout:
+            log.warning("%s=%r is not a usable demo seed (an integer 0..%d, not a held-out seed); using the first "
+                        "training seed", var, raw, MAX_SEED)
+            return None
+        return seed
 
     # -- the dashboard's only permitted actions ------------------------------------------------------
     def options(self):
@@ -53,6 +73,8 @@ class Runner:
         """Start (or restart) a run. ValueError for an unknown level or controller."""
         if controller not in self.sim.get_controllers():
             raise ValueError(f"unknown controller {controller!r}")
+        if seed is None:
+            seed = self.demo_seeds.get(level)
         active = self.run_id is not None and not self.ended
         t_old = self.sim.t if active else 0
         self.sim.reset(level, seed)  # raises on a bad level/seed with the old run untouched, so end it only after

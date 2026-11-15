@@ -47,7 +47,7 @@ app.mount("/api/audio", StaticFiles(directory=voice_out.CACHE_DIR), name="audio"
 class RunRequest(BaseModel):
     level: str
     controller: str
-    seed: int | None = Field(None, ge=0)
+    seed: int | None = Field(None, ge=0, le=2**31 - 1)
 
 
 class SwitchRequest(BaseModel):
