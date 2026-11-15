@@ -216,3 +216,41 @@ than the port), so none is committed; the code is kept outside the repo for the 
 (LR24, LR21, ND20) shows fix 1 swings outcomes both ways (LR24 PASS without it, 12 stuck with it). LR35 (pass ->
 taxi-in/taxi-out collision in the analyst's tower prototype) is a known regression of the collision class; in the port
 LR35 already fails on one collision before any fix.
+
+## Round G1: ground-probe collision fixes (plan approved by the council before the change)
+
+Failure reviews (development seeds, ported planner at 25a5691):
+- **LR35 t=790 (FDX4424 / SWA4675).** An aircraft stopped just past its runway crossing, frozen by its pilot, with its
+  footprint on the other's taxiway; the other kept taxiing into it and no hold was ever proposed. The "it is waiting
+  for this one, so this one goes first" exemption ignored that the mover would hit the waiting aircraft where it
+  stands, and each pair was only checked one way. A good controller tells the mover to hold position.
+- **ND95 t=1461 (AAL1022 / SWA2778), ND88.** An aircraft that had finished crossing a runway was still exempt from
+  holds (live crossing clearance) and pairs involving an already-held aircraft were skipped, so it ran into a held
+  aircraft.
+- **ND17 t=808 (HAL2785 / SWA2214).** Two aircraft held facing each other timed out in the same pass, were both
+  released and collided.
+
+Change (planner only, inside `_ground_probe` and its hold release; safety engine untouched, every hold/continue still
+goes through it): pairs are checked both ways; the waiting exemption applies only if the mover's 20 s track misses the
+waiting aircraft's footprint; a mover heading into a stationary aircraft is held even when no ideal hold point exists;
+a held aircraft stays an obstacle; the crossing exemption ends once the runway is behind the aircraft; a timed-out
+hold is released only if everything it would clash with is standing still.
+
+Measured by the analyst on 80 development runs (normal_day 1-20, 81-100; light_rain 21-40, 101-120):
+
+| | ND pass | ND collisions | ND stuck | ND avg delay | LR pass | LR collisions | LR stuck | LR avg delay |
+|---|---|---|---|---|---|---|---|---|
+| before (25a5691) | 21/40 | 6 | 47 | 86.9 s | 6/40 | 15 | 107 | 191.5 s |
+| after | 25/40 | 2 | 40 | 92.3 s | 8/40 | 7 | 67 | 195.4 s |
+
+Re-measured by the coordinator on development seeds 1-40 after applying the change to the real planner:
+
+| | ND pass | ND fails by rule | ND avg delay | LR pass | LR fails by rule | LR avg delay |
+|---|---|---|---|---|---|---|
+| before (25a5691, worker's run) | 13/20 | collision 1, stuck 14, unhandled 6 | 89 s | 5/20 | collision 5, stuck 16, unhandled 12 | 196 s |
+| after | 13/20 | diversion 2, stuck 16, unhandled 7 | 92 s | 7/20 | collision 3, stuck 28, unhandled 12 | 197 s |
+
+No loss_of_separation, runway_incursion or runway_occupied in any batch. Average delay rose slightly (more holds).
+Remaining collisions: a taxi-in to a stand sweeping a parked neighbour, and a head-on route near the 07L crossing.
+Tried and dropped by the analyst: an unjam extension for held pairs and a corner-aware speed profile (net negative).
+No unit test was added for the probe change (it needs a full multi-aircraft geometry fixture; covered by the harness).

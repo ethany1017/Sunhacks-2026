@@ -490,7 +490,17 @@ class Planner:
         ground = [a for a in by_cs.values() if a["phase"] in ("taxi_in", "taxi_out", "runway_exit", "pushback", "hold_short", "line_up")
                   and not a.get("done")]
         crossing = {cs for (p, cs) in self.claims}
-        holdable = lambda a: (a["phase"] in ("taxi_in", "taxi_out") and a["callsign"] not in crossing and not a.get("hold")
+        on_rwy = {c for occ in self.pic["occupants"].values() for c in occ}
+
+        def ahead_of_runway(a):     # a crossing clearance is live and the runway is still on the route ahead (or under it)
+            cs = a["callsign"]
+            if cs not in crossing:
+                return False
+            pavs, nodes, nn = {p for (p, c) in self.claims if c == cs}, self.routes.get(cs) or [], a.get("next_node")
+            rest = nodes[max(nodes.index(nn) - 1, 0):] if nn in nodes else nodes
+            return cs in on_rwy or not rest or any((e := self.g.edge_between(u, v)) is not None and e[0].pavement in pavs
+                                                   for u, v in zip(rest, rest[1:]))
+        holdable = lambda a: (a["phase"] in ("taxi_in", "taxi_out") and not ahead_of_runway(a) and not a.get("hold")
                               and a["callsign"] not in busy)
         starting = {cs for cs, t0 in self.released.items() if obs_t - t0 < RELEASE_GRACE_S}
         moving = lambda a: a["speed_mps"] > 0.3 or (a["callsign"] in starting and a["phase"] in ("taxi_in", "taxi_out", "hold_short"))
@@ -509,8 +519,8 @@ class Planner:
         def clash(a, b, fa, fb, now_ok=False):
             if not moving(a):
                 return False
-            if waits_for(b, a):
-                return False                                    # it is waiting for this one: this one must go first
+            if waits_for(b, a):     # it is waiting for this one: this one goes first, unless it would hit it where it stands
+                return bool(_boxes_meet(fa, a, fb[:1].repeat(len(fa), axis=0), b, 0.0).any())
             meet = _boxes_meet(fa, a, fb, b, PROBE_MARGIN_M + (RELEASE_EXTRA_M if now_ok else 0.0))
             return bool(meet.any() and (now_ok or not meet[0]))
 
@@ -527,7 +537,8 @@ class Planner:
             fa = self._future(a, RESUME_TAXI_SPEED, from_rest=True)
             going = dict(a, speed_mps=RESUME_TAXI_SPEED)
             held_long = obs_t - self.hold_since.get(cs, obs_t) > HOLD_MAX_S
-            if held_long or not any(clash(going, b, fa, fut[b["callsign"]], now_ok=True) for b in ground if b["callsign"] != cs):
+            hits = [b for b in ground if b["callsign"] != cs and clash(going, b, fa, fut[b["callsign"]], now_ok=True)]
+            if not hits or (held_long and not any(moving(b) for b in hits)):   # time-out: never into one moving (or just released)
                 if self._propose(a, "resume_taxi", {}, "%s resume taxi: %s has passed" % (cs, other),
                                  ["No traffic within %.0f m of %s's route in the next %.0f s" % (PROBE_MARGIN_M, cs, PROBE_S)],
                                  [RULES["taxi"]]):
@@ -536,11 +547,18 @@ class Planner:
                     starting.add(cs)
                     fut[cs] = fa
         ahead = {}
-        for i, a in enumerate(ground):
-            for b in ground[i + 1:]:
+        for i, a0 in enumerate(ground):
+            for b0 in ground[i + 1:]:
+                a, b = a0, b0
                 ca, cb = a["callsign"], b["callsign"]
-                if ca in self.ground_hold or cb in self.ground_hold or not clash(a, b, fut[ca], fut[cb]):
+                if (ca in self.ground_hold) + (cb in self.ground_hold) == 2:
                     continue
+                if ca in self.ground_hold:      # a held aircraft is still an obstacle: only the other one can be held
+                    a, b, ca, cb = b, a, cb, ca
+                if not clash(a, b, fut[ca], fut[cb]):
+                    if not clash(b, a, fut[cb], fut[ca]):        # symmetric: a standing aircraft first in the list
+                        continue
+                    a, b, ca, cb = b, a, cb, ca
 
                 def clear_of_all(x, y):
                     for z in ground:
@@ -553,6 +571,8 @@ class Planner:
                             return False
                     return True
                 cands = [x for x, y in ((a, b), (b, a)) if holdable(x) and x["speed_mps"] > 0.3 and clear_of_all(x, y)]
+                if not cands and not moving(b) and holdable(a) and a["speed_mps"] > 0.3:
+                    cands = [a]     # taxiing into a standing aircraft: stop it even if it stops in a route (released as any probe hold)
                 if not cands:
                     continue
                 who = sorted(cands, key=lambda x: (x["kind"] == "arrival", -self.order[x["callsign"]]))[0]
