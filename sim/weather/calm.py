@@ -1,4 +1,4 @@
-"""Static weather: one calm KPHX report for the whole run. Levels (S3) will supply their own weather."""
+"""Static weather: one calm KPHX report for the whole run of a scenario file. Levels bring their own (sim/levels.py)."""
 from __future__ import annotations
 
 from typing import Any, Dict
@@ -8,9 +8,15 @@ CALM_REPORT: Dict[str, Any] = {"metar": "KPHX 151800Z 27005KT 10SM CLR 24/02 A30
 
 
 class CalmWeather:
-    """Same report every tick. Physics reads the two multipliers (1.0 = no effect on taxi speed or runway occupancy)."""
+    """Same report every tick (scenario files). Levels use sim.levels.LevelWeather, which has the same attributes.
+    Physics reads the multipliers (1.0 = no effect on taxi speed, runway occupancy or approach speed)."""
     taxi_mult = 1.0
     occupancy_mult = 1.0
+    approach_mult = 1.0
+    go_around_rate = 0.0
 
     def __init__(self) -> None:
         self.current: Dict[str, Any] = dict(CALM_REPORT, t=0.0)
+
+    def tick(self, t: float) -> bool:
+        return False

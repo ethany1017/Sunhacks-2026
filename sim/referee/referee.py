@@ -114,7 +114,8 @@ class Referee:
             kind, d, cs = e["kind"], e["data"], e["entity_id"]
             if kind == "separation_loss" and d["kind"] == "air":
                 self._fail("loss_of_separation", [d["a"], d["b"]], "%s and %s were %.2f NM apart in the air; the minimum is %.2f NM (%s)"
-                           % (d["a"], d["b"], _nm(d["distance_m"]), _nm(d["minimum_m"]), d.get("standard", "")))
+                           % (d["a"], d["b"], math.floor(_nm(d["distance_m"]) * 100) / 100,   # truncated: 2.996 reads 2.99,
+                              _nm(d["minimum_m"]), d.get("standard", "")))                       # not "3.00 ... minimum 3.00"
             elif kind == "deadlock":
                 self._fail("stuck", list(d["aircraft"]), "%s are gridlocked on the taxiways, each waiting for the other (%.0f s)"
                            % (" and ".join(d["aircraft"]), d["waited_s"]))

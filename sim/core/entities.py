@@ -58,7 +58,9 @@ class Aircraft:
     # arrivals
     landing_cleared: bool = False
     exit_node: Optional[str] = None
-    wp: Optional[Any] = None          # re-entry waypoint after a go-around
+    wp: Optional[Any] = None          # re-entry waypoint after a go-around or a runway reversal
+    rejoin_alt_m: Optional[float] = None   # altitude held while flying round after a runway reversal
+    ga_checked: bool = False          # the pilot's go-around decision point on this approach is behind it
     climb_until: float = 0.0
     touchdown_t: Optional[float] = None
     holding_s: float = 0.0            # airborne past the scheduled landing time (diverts at the Referee's limit)

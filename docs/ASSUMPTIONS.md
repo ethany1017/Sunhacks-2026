@@ -28,13 +28,16 @@ Every number below is a placeholder chosen to make the simulation behave plausib
 | Taxi acceleration, planned braking, emergency braking | 0.9, 1.3, 3.0 m/s^2 | smooth motion with no instant stops |
 | Car-following gap | 60 m bumper to bumper, corridor 30 m either side of the path | spec |
 | Crossing right of way | lower scenario sequence wins; a stopped aircraft always blocks; head-on traffic blocks both | prevents symmetric stalls; head-on gridlock is left to be logged as a deadlock |
-| Hold line offset | nose 8 m short of the pavement | keeps the tail and wingtips clear |
+| Hold line offset | nose 30 m short of the pavement (was 8 m) | a wide-body's wingtip on the runway clears a holding aircraft; real hold lines are about 250 ft from the centreline for Cat C/D runways (AC 150/5300-13, not re-verified) |
+| See and avoid | a taxiing aircraft stops for any aircraft right ahead within half lengths + 15 m, on its path or not | aircraft drove through each other when one turned off a shared taxiway |
+| Turning round | a stopped aircraft may be given an explicit route from the node behind it | sending a queued departure to the other end after a flow change |
 | Pushback | mean 282 s (4.7 min, spec default), 10% sigma, 1.1 m/s over the lead; the demo scenarios override the mean (smoke 60 s, busy 75 s) so a run stays under about 15 minutes | demo pacing |
 | Heading rate | 25 deg/s on the ground, 3 deg/s in the air | smooth turns |
 | Final approach | starts 11 km out on a 3 degree glide, speed Vref + 20 m/s easing to Vref over the last 9 km; Vref from the CSV (`approach_speed_kt_acd_vref_proxy`); touchdown at the threshold | no flare model |
 | Landing roll | touchdown at 0.96 Vref, constant deceleration to a 10 m/s exit speed at the chosen exit (2.2 m/s^2 medium, 2.0 heavy, 1.4 light as the planning value); exit chosen at 1.25x the needed distance | measured landing runway occupancy is about 55 to 65 s (spec target 55 s) |
 | Takeoff roll | liftoff at 1.13 x Vref; mean acceleration 2.4 m/s^2 medium, 2.1 heavy, 1.5 light; climb 8 m/s; removed 40 s after liftoff | scales roll with type |
-| Go-around | triggered when no landing clearance by 1,800 m from the threshold (or on a go-around clearance); 35 s straight climb, then back to a point 8 km out | demo pacing |
+| Go-around | triggered when no landing clearance by 1,800 m from the threshold (or on a go-around clearance, or by the pilot: tailwind above 10 kt or the level's go-around rate); 35 s straight climb, then back to a point 8 km out holding the re-entry altitude (about 1,375 ft); `eta_s` counts the way round | demo pacing |
+| Runway reversal | an arrival given the opposite runway flies round to the new final's 8 km point at 3,000 ft | assumption |
 | Aircraft size | wingspan and length from the CSV (no-winglet span preferred); a ground vehicle is 3 x 6 m | icon size |
 | Observation | delay 1 s; position noise 3 m rms (2.1 m per axis) | spec defaults; per-scenario dropouts are not implemented |
 
@@ -49,20 +52,20 @@ Every number below is a placeholder chosen to make the simulation behave plausib
 | Ground aircraft vs reservations | entering pavement is blocked if someone is on it or holds an earlier crossing/line-up reservation, or a landing/takeoff reservation overlaps the next 25 s (physics, not a rule applied to the agent) |
 | Reservation windows | landing: ETA-8 s to ETA+65 s; takeoff: 70 s; line-up 60 s (extended while waiting); crossing: time to cross plus 8 s |
 
-## Weather (`sim/weather/calm.py`)
+## Weather (`sim/weather/calm.py`, `sim/levels.py`)
 
 | Item | Value | Why |
 |---|---|---|
-| Report | `KPHX 151800Z 27005KT 10SM CLR 24/02 A3002`, held constant for the whole run | placeholder until weather comes from a level (S3) |
-| Effect | taxi speed and runway occupancy multipliers both 1.0 (no effect) | calm weather |
+| Scenario files | `KPHX 151800Z 27005KT 10SM CLR 24/02 A3002`, held constant for the whole run; no effects | calm weather |
+| Levels | Normal Day and Light Rain: scheduled reports, one wind shift, rain effect multipliers | every number and source in docs/LEVELS.md |
 
 ## Traffic (`sim/scenarios/generate.py`)
 
-Seeded (smoke seed 11, busy seed 25). Airline weights SWA 40, AAL 24, SKW 10, DAL 7, UAL 6, ENY 5, FFT 4, ASA 4 (placeholders for the BTS carrier mix). Fleets per airline are drawn from the CSV types. Gates are spread over concourses by first letter and must have a route to the 25R and 26 entries. Smoke: 3 arrivals (threshold times 95, 205, 315 s) and 3 departures (ready 5, 70, 140 s), no weather, no readback errors. Busy: 6 arrivals (75 to 395 s) and 6 departures (ready 0 to 145 s) including one general aviation Cessna/Cirrus/PC-12 from the GA ramp, one ground vehicle patrolling 300 to 1,000 m of taxi route kept 70 m clear of the aircraft routes, readback error rate 10%. Pilot readback delay 1.5 to 3.0 s; every readback waits for the controller's verdict, and 5 s of silence counts as acceptance (assumption: a controller who does not object lets the readback stand). The scenario window (`duration_s` 480) is when flights are scheduled; a run continues until every flight is complete or the day ends at `duration_s` + 900 s (`END_OF_DAY_GRACE_S`, event `scenario.day_end`).
+Levels (`normal_day`, `light_rain`) generate their own traffic from BTS PHX hourly rates: see docs/LEVELS.md. The scenario files below are unchanged. Seeded (smoke seed 11, busy seed 25). Airline weights SWA 40, AAL 24, SKW 10, DAL 7, UAL 6, ENY 5, FFT 4, ASA 4 (placeholders for the BTS carrier mix). Fleets per airline are drawn from the CSV types. Gates are spread over concourses by first letter and must have a route to the 25R and 26 entries. Smoke: 3 arrivals (threshold times 95, 205, 315 s) and 3 departures (ready 5, 70, 140 s), no weather, no readback errors. Busy: 6 arrivals (75 to 395 s) and 6 departures (ready 0 to 145 s) including one general aviation Cessna/Cirrus/PC-12 from the GA ramp, one ground vehicle patrolling 300 to 1,000 m of taxi route kept 70 m clear of the aircraft routes, readback error rate 10%. Pilot readback delay 1.5 to 3.0 s; every readback waits for the controller's verdict, and 5 s of silence counts as acceptance (assumption: a controller who does not object lets the readback stand). The scenario window (`duration_s` 480) is when flights are scheduled; a run continues until every flight is complete or the day ends at `duration_s` + 900 s (`END_OF_DAY_GRACE_S`, event `scenario.day_end`).
 
 ## Built-in tower (`sim/tower/controller.py`)
 
-First come, first served, 2 Hz decision pass. Landing clearance inside 70 s ETA when the runway is free; go-around instruction at 22 s if still blocked; 100 s minimum slot between landings per runway; no line-up if a landing is due within 100 s; no takeoff roll if a landing is due within 55 s; no crossing if a landing is due within 90 s; crossing window 45 s. Departure spacing 60 s, 90 s for a light behind a medium, 120 s behind a heavy (a stand-in for the 7110.65 wake table, not the table). Runway choice weighs taxi distance, 40 s per crossing, 90 s per aircraft already queued, 60 s if the runway also takes arrivals. Default configuration: arrivals 25L and 26, departures 25R and 26.
+First come, first served, 2 Hz decision pass. Landing clearance inside 70 s ETA when the runway is free; go-around instruction at 22 s if still blocked; 100 s minimum slot between landings per runway; no line-up if a landing is due within 100 s; no takeoff roll if a landing is due within 55 s; no crossing if a landing is due within 90 s; crossing window 45 s. Departure spacing 60 s, 90 s for a light behind a medium, 120 s behind a heavy (a stand-in for the 7110.65 wake table, not the table). Runway choice weighs taxi distance, 40 s per crossing, 90 s per aircraft already queued, 60 s if the runway also takes arrivals. Default configuration: arrivals 25L and 26, departures 25R and 26. Keeps each arrival on the final approach control handed it to. Taxi routes are explicit and avoid edges another cleared route uses the other way (+2,000 m) and runway pavement (+2,500 m per edge). Flow change: when the active ends have more than 5 kt tailwind it switches every runway to its other end (east flow: arrivals 07R and 08, departures 07L and 08); arrivals not cleared to land and more than 150 s out (or facing more than 10 kt tailwind) go to the other end; stopped departures turn round, moving ones near the runway first stop; departures already at the old end's hold point depart in the old direction while the tailwind allows. Known limits (docs/LEVELS.md): no ground sequencing beyond the routing penalty, so head-on gridlocks and departure queues on a runway shared with arrivals still happen at real traffic volume.
 
 ## Scoring (`sim/metrics/score.py`)
 

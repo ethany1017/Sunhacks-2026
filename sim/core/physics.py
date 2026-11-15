@@ -22,7 +22,8 @@ A_BRAKE = 1.3          # m/s^2 planned braking
 A_HARD = 3.0           # m/s^2 emergency braking limit
 STANDOFF_M = 60.0      # car-following gap between aircraft
 CORRIDOR_M = 30.0      # lateral distance for "on my path"
-HOLD_OFFSET_M = 8.0    # nose clearance short of the runway pavement at a hold
+SEE_AVOID_M = 15.0     # pilots stop for any aircraft this close (beyond half lengths) ahead, on the path or not
+HOLD_OFFSET_M = 30.0   # nose clearance short of the runway pavement at a hold (see docs/ASSUMPTIONS.md)
 CROSS_EST_S = 25.0     # time a crossing is assumed to need when checking reservations
 PUSH_V = 1.1           # m/s pushback speed
 GROUND_TURN_RATE = 25.0  # deg/s
@@ -100,6 +101,15 @@ class Physics:
         best, who = 99.0, None
         for o in cands:
             op = np.array([o.x, o.y])
+            rel = op - pos
+            dist = float(np.hypot(*rel))
+            if dist < (ac.length_m + o.length_m) / 2 + SEE_AVOID_M and float(np.dot(rel, fwd)) > 0.5 * dist:
+                # see and avoid: an aircraft right ahead (turning off, cutting a corner) stops us until it is clear
+                away = o.speed > 0.3 and float(np.dot(unit(o.heading), rel)) > 0.5 * dist
+                allowed = 0.5 * o.speed if away else 0.0
+                if allowed < best:
+                    best, who = allowed, o.callsign
+                continue
             if o.path is None or float(np.dot(op - pos, fwd)) <= 0.0:
                 continue
             d = np.hypot(*(samples - op).T)
@@ -185,18 +195,20 @@ class Physics:
         if ac.wp is not None:
             target = np.array(ac.wp)
             if float(np.hypot(*(target - np.array([ac.x, ac.y])))) < 900.0:
-                ac.wp = None
+                ac.wp, ac.rejoin_alt_m = None, None
         else:
             lead = max(1500.0, 8 * abs(lat))
             target = thr - u * max(0.0, a - lead)
         want = math.degrees(math.atan2(target[0] - ac.x, target[1] - ac.y)) % 360.0
         ac.heading = turn_toward(ac.heading, want, AIR_TURN_RATE)
-        v_t = ac.type.vref_mps + min(max((a - 1500.0) / 9000.0, 0.0), 1.0) * 20.0
+        v_t = ac.type.vref_mps + min(max((a - 1500.0) / 9000.0, 0.0), 1.0) * 20.0 * sim.weather.approach_mult
         ac.speed = approach(ac.speed, v_t, 1.0, 1.0)
         step = unit(ac.heading) * ac.speed * TICK_S
         ac.x += float(step[0])
         ac.y += float(step[1])
-        ac.alt_m = approach(ac.alt_m, max(a, 0.0) * GLIDE, 6.0, 6.0)
+        # rejoining (go-around / reversal): hold the re-entry altitude, do not descend over the airport on the way round
+        glide_a = max(a, REENTRY_M) if ac.wp is not None else max(a, 0.0)
+        ac.alt_m = approach(ac.alt_m, ac.rejoin_alt_m or glide_a * GLIDE, 6.0, 6.0)
         return a <= 0.5 and ac.wp is None
 
     def approach_distance(self, ac: Aircraft) -> float:

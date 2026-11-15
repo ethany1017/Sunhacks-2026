@@ -25,11 +25,14 @@ from sim.core.physics import (CROSS_EST_S, EXIT_SPEED, FINAL_START_M, REENTRY_M,
                               A_BRAKE, Physics, unit)
 from sim.core.reservations import Reservations
 from sim.core.scenario import Flight, Scenario
+from sim import levels
+from sim.graph.geo import angle_diff
 from sim.graph.model import AirportGraph, Piece, Track
 from sim.metrics.score import compute_score
 from sim.referee import limits
-from sim.referee.referee import Referee, air_loss
+from sim.referee.referee import Referee, air_loss, runway_spacing
 from sim.voice import phraseology
+from sim.voice.phraseology import spoken_callsign, spoken_runway
 from sim.voice.pilots import make_readback
 from sim.weather.calm import CalmWeather
 
@@ -39,6 +42,8 @@ RUNWAY_PARAM_ACTIONS = ("hold_short", "cross_runway", "line_up_and_wait", "clear
 REVERSING = ("hold_short", "hold_position", "go_around")
 LINE_UP_M = 30.0           # distance past the runway centerline node where an aircraft lines up
 GROUND_SEP_MARGIN_M = 5.0   # wingtip clearance below which a ground pair counts as a separation loss
+REVERSAL_ALT_M = 3000 * 0.3048   # assumption: an arrival turned round for a flow change flies round at 3,000 ft, above
+                                 # the finals inside the re-entry point (<= 1,400 ft), so it crosses them 1,000 ft+ clear
 READBACK_SILENCE_S = 5.0    # no verdict from the controller this long after a readback: it stands (implicitly accepted)
 DEFAULT_CONFIG = {"arrival_runways": ["25L", "26"], "departure_runways": ["25R", "26"]}
 Resolved = Dict[str, Any]
@@ -49,9 +54,17 @@ def _err(msg: str) -> Dict[str, Any]:
 
 
 class Simulation:
-    def __init__(self, scenario_path: Any, graph_path: Any = None, seed: Optional[int] = None, controller: Any = "tower",
-                 run_dir: Any = None, graph: Optional[AirportGraph] = None) -> None:
-        self.scenario_path = Path(scenario_path)
+    def __init__(self, scenario_path: Any = None, graph_path: Any = None, seed: Optional[int] = None, controller: Any = "tower",
+                 run_dir: Any = None, graph: Optional[AirportGraph] = None, level: Optional[str] = None,
+                 duration_s: Optional[float] = None) -> None:
+        """A scenario JSON file, or a level (sim/levels.py: "normal_day" | "light_rain") with a seed and optional length."""
+        if (scenario_path is None) == (level is None):
+            raise ValueError("give either a scenario file or a level")
+        if level is not None and level not in levels.LEVELS:
+            raise ValueError("unknown level %r; expected one of %s" % (level, ", ".join(levels.LEVEL_IDS)))
+        self.scenario_path = Path(scenario_path) if scenario_path is not None else None
+        self.level = level
+        self._duration = duration_s
         self.graph = graph or AirportGraph.load(Path(graph_path) if graph_path else None)
         self._seed_override = seed
         self._run_dir = Path(run_dir) if run_dir else None
@@ -63,18 +76,23 @@ class Simulation:
 
     # -- lifecycle -----------------------------------------------------------------------------
     def _init_state(self) -> None:
-        sc = Scenario.load(self.scenario_path)
+        if self.level is not None:
+            seed = self._seed_override if self._seed_override is not None else levels.TRAINING_SEEDS[self.level][0]
+            sc = levels.build_scenario(self.level, seed, self._duration, self.graph)
+        else:
+            sc = Scenario.load(self.scenario_path)
         self.scenario = sc
         self.seed = self._seed_override if self._seed_override is not None else sc.seed
         self.rng = np.random.default_rng(self.seed)
         self.obs_rng = np.random.default_rng([self.seed, 1])   # observation noise only: observe() never touches self.rng
+        self.wx_rng = np.random.default_rng([self.seed, 2])    # weather-driven pilot go-arounds only
         self.clock = SimClock()
         run_dir = self._run_dir
         if run_dir is not None and self._resets:
             run_dir = run_dir.parent / ("%s-r%d" % (run_dir.name, self._resets))
         run_id = run_dir.name if run_dir else "%s-seed%d" % (sc.name, self.seed)
         self.log = EventLog(run_id, run_dir)
-        self.weather = CalmWeather()
+        self.weather: Any = levels.LevelWeather(self.level, sc.duration_s) if self.level else CalmWeather()
         self.res = Reservations(list(self.graph.runways))
         self.physics = Physics(self)
         self.obs = views.ObservationBuffer()
@@ -91,6 +109,7 @@ class Simulation:
              for i, f in enumerate(sc.flights)],
             key=lambda x: (max(x[0], sc.start_sim_s), x[1]))
         self._seq = 0
+        self._held: Set[str] = set()
         self._phase_prev: Dict[str, str] = {}
         self._ctl_cursor = 0
         self._open_pairs: Set[Tuple[str, ...]] = set()
@@ -102,7 +121,7 @@ class Simulation:
         self.referee = Referee(self)
         self._reset_sent()
         self.log.emit("scenario.start", None, 0, {"scenario": sc.name, "seed": self.seed, "flights": len(sc.flights),
-                                                  "duration_s": sc.duration_s})
+                                                  "duration_s": sc.duration_s, "level": self.level})
         for v in sc.vehicles:
             self._spawn_vehicle(v)
 
@@ -149,6 +168,8 @@ class Simulation:
         start = len(self.log.events)
         self.clock.advance()
         t = self.t
+        if self.weather.tick(t):
+            self.emit("weather.update", None, self.weather_view())
         self._spawn_tick(t)
         self._readback_tick(t)
         self._call_controller()
@@ -188,18 +209,48 @@ class Simulation:
     def weather_view(self) -> Dict[str, Any]:
         return dict(self.weather.current)
 
+    def level_view(self) -> Optional[Dict[str, Any]]:
+        """The level a controller is working (id, name, seed, effect multipliers, pilot tailwind limit); None for a file."""
+        return levels.level_info(self.level, self.seed, self.scenario.duration_s) if self.level else None
+
+    def tailwind_over(self, end: Optional[str]) -> Optional[float]:
+        """Tailwind (kt) on a runway end if it is above the pilots' limit, else None."""
+        if not end or end not in self.graph.end_runway:
+            return None
+        tw = levels.tailwind_kt(self.weather.current, self.graph.end_info(end)[1]["heading_deg"])
+        return round(tw, 1) if tw > levels.TAILWIND_LIMIT_KT else None
+
     # -- spawning ----------------------------------------------------------------------------------
     def _spawn_tick(self, t: float) -> None:
+        held = []
         while self.pending and max(self.pending[0][0], self.scenario.start_sim_s) <= t:
-            _, _, f = self.pending.pop(0)
-            self._spawn_flight(f, t)
+            item = self.pending.pop(0)
+            late = t - max(item[0], self.scenario.start_sim_s) > 1.5 * TICK_S
+            if not self._spawn_flight(item[2], t, late):
+                held.append(item)
+        self.pending[:0] = held
         for ac in self.aircraft.values():
             if ac.kind == "departure" and not ac.ready and ac.phase == "at_gate" and t >= ac.scheduled_s:
                 ac.ready = True
                 self.emit("departure.ready", ac.callsign, {"gate": ac.gate, "scheduled_s": ac.scheduled_s})
 
-    def _spawn_flight(self, f: Flight, t: float) -> None:
-        self._seq += 1
+    def _spawn_clear(self, ac: Aircraft) -> bool:
+        """Approach control only hands an arrival to the tower with legal spacing: no missed approach being resequenced
+        on that final (or a dependent one), and every arrival ahead at least the schedule's in-trail gap away."""
+        pav = self.runway_pavement(ac.runway)
+        for o in self.aircraft.values():
+            if o.removed or o.kind != "arrival" or o.phase not in ("final", "go_around"):
+                continue
+            if runway_spacing(self, pav, self.runway_pavement(o.runway)) >= limits.PARALLEL_INDEPENDENT_M:
+                continue
+            if o.phase == "go_around" or o.wp is not None:
+                return False
+            if math.hypot(o.x - ac.x, o.y - ac.y) < levels.arrival_gap_s(o.type, ac.type) * (ac.type.vref_mps + 20.0):
+                return False
+        return True
+
+    def _spawn_flight(self, f: Flight, t: float, late: bool = False) -> bool:
+        """Create the flight; False if approach control holds an arrival back this tick (it is tried again next tick)."""
         ty = get_type(f.type)
         ac = Aircraft(callsign=f.callsign, type=ty, kind=f.kind, airline=f.airline, seq=self._seq, gate=f.gate,
                       scheduled_s=f.scheduled_sim_s, spawn_t=t)
@@ -208,18 +259,29 @@ class Simulation:
             ac.x, ac.y = float(st.xy[0]), float(st.xy[1])
             ac.heading, ac.phase = st.heading_in, "at_gate"
         else:
-            end = f.runway_preference or self.runway_cfg["arrival_runways"][0]
+            cfg = self.runway_cfg["arrival_runways"]
+            end = f.runway_preference or cfg[0]
+            if end not in cfg:      # the preferred runway in the active flow direction (approach control delivers to it)
+                end = next((e for e in self.graph.runways[self.graph.end_runway[end]].ends if e in cfg), cfg[0])
             rw, info, _ = self.graph.end_info(end)
             u = unit(info["heading_deg"])
-            a0 = min(FINAL_START_M, max(1500.0, (f.scheduled_sim_s - t) * (ty.vref_mps + 10.0)))
+            a0 = FINAL_START_M if late else min(FINAL_START_M, max(1500.0, (f.scheduled_sim_s - t) * (ty.vref_mps + 10.0)))
             thr = self.graph.node_xy[info["node"]]
             pos = thr - u * a0
             ac.x, ac.y, ac.heading, ac.runway, ac.phase = float(pos[0]), float(pos[1]), info["heading_deg"], end, "final"
-            ac.speed = ty.vref_mps + min(max((a0 - 1500.0) / 9000.0, 0.0), 1.0) * 20.0
+            ac.speed = ty.vref_mps + min(max((a0 - 1500.0) / 9000.0, 0.0), 1.0) * 20.0 * self.weather.approach_mult
             ac.alt_m = a0 * math.tan(math.radians(3.0))
+            if not self._spawn_clear(ac):
+                if f.callsign not in self._held:
+                    self._held.add(f.callsign)
+                    self.emit("arrival.held", f.callsign, {"runway": end, "reason": "approach control holding for spacing"})
+                return False
+        self._seq += 1
+        ac.seq = self._seq
         self.aircraft[ac.callsign] = ac
         self.emit("aircraft.spawned", ac.callsign, {"type": ty.icao, "kind": f.kind, "airline": f.airline, "gate": f.gate,
                                                     "scheduled_s": f.scheduled_sim_s, "runway": ac.runway})
+        return True
 
     def _spawn_vehicle(self, v: Any) -> None:
         path = self.graph.build_path(v.route)
@@ -248,12 +310,41 @@ class Simulation:
             if c.state not in ("issued", "acknowledged"):
                 rb.resolved = True
                 continue
+            refusal = self._refusal(c)
+            if refusal:                 # the pilot answers "unable" instead of reading back; nothing to resolve
+                rb.resolved = True
+                self._unable(self.aircraft[c.callsign], c, *refusal)
+                continue
             text, parsed, error = make_readback(self.rng, self.scenario.readback_error_rate, c.action, c.callsign,
                                                 c.params, c.runway, rb.retry)
             voice = self._add_voice("pilot", c.callsign, text, "pending")
             rb.voice_id, rb.parsed, rb.error = voice.id, parsed, error
             self.emit("readback", c.callsign, {"id": rb.id, "clearance_id": c.id, "voice_id": voice.id, "text": text,
                                                "parsed": parsed, "status": voice.status})
+
+    def _refusal(self, c: Clearance) -> Optional[Tuple[str, str, float]]:
+        """(verb, runway end, tailwind kt) if the pilot refuses this clearance for a tailwind above the limit."""
+        ac = self.aircraft[c.callsign]
+        if c.action == "cleared_to_land":
+            end, verb = c.params.get("runway"), "to land"
+        elif c.action in ("line_up_and_wait", "cleared_for_takeoff"):
+            end, verb = ac.dep_end or c.params.get("runway"), "to line up" if c.action == "line_up_and_wait" else "for takeoff"
+        else:
+            return None
+        tw = self.tailwind_over(end)
+        return (verb, end, tw) if tw is not None else None
+
+    def _unable(self, ac: Aircraft, c: Optional[Clearance], verb: str, end: str, tw: float) -> None:
+        """Pilot refuses a runway clearance (tailwind above the limit): the clearance is cancelled, with a voice line."""
+        if c is not None and c.state not in ("complete", "amended", "cancelled"):
+            c.state, c.done_t = "cancelled", round(self.t, 1)
+            if c in self.active.get(c.callsign, []):
+                self.active[c.callsign].remove(c)
+        text = "Unable %s runway %s, tailwind %d knots, %s" % (verb, spoken_runway(end), int(round(tw)), spoken_callsign(ac.callsign))
+        voice = self._add_voice("pilot", ac.callsign, text)
+        self.emit("pilot.unable", ac.callsign, {"clearance_id": c.id if c else None, "action": c.action if c else None,
+                                                "runway": end, "tailwind_kt": tw, "limit_kt": levels.TAILWIND_LIMIT_KT,
+                                                "voice_id": voice.id})
 
     def _acknowledge(self, c: Clearance, apply: bool = True) -> None:
         if c.state == "issued":
@@ -391,6 +482,29 @@ class Simulation:
         self.emit("clearance.complete", c.callsign, {"clearance_id": c.id, "action": c.action})
 
     # -- taxi route resolution -----------------------------------------------------------------------
+    def _route_back(self, ac: Aircraft) -> Tuple[Optional[str], Optional[Piece]]:
+        """A stopped aircraft may turn round where it stands: the node behind it and the piece back to that node."""
+        p = ac.path
+        if p is None or ac.speed > 0.2 or ac.phase not in ("taxi_out", "hold_short", "taxi_in"):
+            return None, None
+        seg = p.seg_at(ac.s)
+        if seg is None or seg.edge is None or seg.to_node is None:
+            return None, None
+        e = self.graph.edges[seg.edge]
+        behind = e.u if seg.to_node == e.v else e.v
+        idx = np.nonzero((p.cum < ac.s) & (p.cum > seg.s0))[0][::-1]
+        pts = np.vstack([[ac.x, ac.y], p.pts[idx], p.xy_at(seg.s0)])
+        return behind, (seg.edge, pts, e.kind, e.pavement, e.ref)
+
+    def _taxi_start(self, ac: Aircraft, route: Optional[List[str]]) -> Tuple[Optional[str], Optional[Piece]]:
+        """Where a taxi clearance starts: the next node ahead, or (explicit route, stopped) the node behind it."""
+        origin, prefix = self._route_origin(ac)
+        if route is not None and origin not in route:
+            back, piece = self._route_back(ac)
+            if back in route:
+                return back, piece
+        return origin, prefix
+
     def _route_origin(self, ac: Aircraft) -> Tuple[Optional[str], Optional[Piece]]:
         p = ac.path
         if p is None:
@@ -443,7 +557,7 @@ class Simulation:
         return best[1] if best else None
 
     def _resolve_taxi(self, ac: Aircraft, p: Dict[str, Any]) -> Any:
-        origin, _ = self._route_origin(ac)
+        origin, _ = self._taxi_start(ac, [str(n) for n in p["route"]] if p.get("route") else None)
         if origin is None:
             return "aircraft %s has no ground position to taxi from" % ac.callsign
         via = p.get("via")
@@ -463,7 +577,8 @@ class Simulation:
             if gaps:
                 return "route nodes %s and %s are not connected by a graph edge" % gaps[0]
             if origin not in nodes:
-                return "route must include the aircraft's next node %s (it taxis from there)" % origin
+                return ("route must include the aircraft's next node %s (it taxis from there), or when stopped the node "
+                        "behind it %s (it turns round)" % (origin, self._route_back(ac)[0]))
             nodes = nodes[nodes.index(origin):]
             dst = nodes[-1]
             if to in self.graph.end_runway:
@@ -495,7 +610,7 @@ class Simulation:
 
     def _taxi_nodes(self, ac: Aircraft, res: Resolved) -> Optional[List[str]]:
         """The node list to taxi now: the explicit route from the aircraft's next node, else the shortest path."""
-        origin, _ = self._route_origin(ac)
+        origin, _ = self._taxi_start(ac, res["route"])
         if origin is None:
             return None
         if res["route"] is not None:
@@ -551,7 +666,7 @@ class Simulation:
         elif act == "cleared_to_land":
             if ac.phase == "final" or ac.phase == "go_around":
                 ac.landing_cleared = True
-                ac.runway = p["runway"]
+                self._set_arrival_runway(ac, p["runway"])
                 ac.exit_node = p.get("exit") if p.get("exit") in self.graph.node_xy else None
             else:
                 applied = False
@@ -567,8 +682,8 @@ class Simulation:
             self._complete(c)
         elif act == "contact_tower_or_ground":
             ac.frequency = p.get("facility", "ground")
-            if p.get("runway") and ac.phase == "final" and not ac.landing_cleared:
-                ac.runway = p["runway"]
+            if p.get("runway") and ac.phase in ("final", "go_around") and not ac.landing_cleared:
+                self._set_arrival_runway(ac, p["runway"])
             self._complete(c)
         if not applied:
             # it can never take effect in this phase: end it instead of leaving it acknowledged forever
@@ -603,7 +718,7 @@ class Simulation:
 
     def _apply_taxi(self, ac: Aircraft, c: Clearance) -> bool:
         res: Resolved = c.params["_resolved"]
-        _, prefix = self._route_origin(ac)
+        _, prefix = self._taxi_start(ac, res["route"])
         nodes = self._taxi_nodes(ac, res)
         if nodes is None:
             return False
@@ -676,8 +791,17 @@ class Simulation:
         ac.cleared_runs.add(len(ac.path.runs) - 1)
         return True
 
+    def _set_arrival_runway(self, ac: Aircraft, end: str) -> None:
+        """New landing runway. Reversing direction (a runway flow change) sends the arrival round to the new final's
+        re-entry point first, the same way a go-around rejoins."""
+        old, ac.runway = ac.runway, end
+        if old and old != end and ac.phase == "final" and abs(angle_diff(
+                self.graph.end_info(old)[1]["heading_deg"], self.graph.end_info(end)[1]["heading_deg"])) > 90.0:
+            ac.wp, ac.rejoin_alt_m = self._reentry_point(ac), REVERSAL_ALT_M
+            self.emit("arrival.reversed", ac.callsign, {"from": old, "to": end})
+
     def _go_around(self, ac: Aircraft, reason: str) -> bool:
-        ac.phase, ac.landing_cleared = "go_around", False
+        ac.phase, ac.landing_cleared, ac.ga_checked = "go_around", False, False
         ac.climb_until = self.t + GO_AROUND_CLIMB_S
         self.res.release(ac.callsign, "landing")
         self.emit("go_around", ac.callsign, {"reason": reason, "runway": ac.runway})
@@ -716,7 +840,8 @@ class Simulation:
             for r in self.readbacks.values() if r.delivered and not r.resolved]
         return {"t": self.t, "data_age_s": age, "aircraft": ac_list,
                 "runways": [self.res.view(r, self.t) for r in self.graph.runways],
-                "runway_config": dict(self.runway_cfg), "weather": self.weather_view(), "pending_readbacks": pending,
+                "runway_config": dict(self.runway_cfg), "weather": self.weather_view(), "level": self.level_view(),
+                "pending_readbacks": pending,
                 "clearances": [c.view() for c in self.clearances.values() if c.state in ("issued", "acknowledged")],
                 # no score: its readback counts would tell the controller whether a readback it just resolved was wrong
                 "referee": {k: v for k, v in self.referee_report().items() if k != "score"}}
@@ -801,8 +926,25 @@ class Simulation:
         if ac.wp is None and not ac.landing_cleared and a < GO_AROUND_A_M and ac.runway:
             self._go_around(ac, "no landing clearance")
             return
+        if ac.wp is None and ac.landing_cleared and a < GO_AROUND_A_M and not ac.ga_checked:
+            ac.ga_checked = True        # the pilot's own decision point, once per approach
+            why = self._pilot_go_around(ac)
+            if why:
+                self._add_voice("pilot", ac.callsign, "Going around, %s" % spoken_callsign(ac.callsign))
+                self._go_around(ac, why)
+                return
         if self.physics.step_final(ac):
             self._touchdown(ac, t)
+
+    def _pilot_go_around(self, ac: Aircraft) -> Optional[str]:
+        """Pilot-initiated missed approach at the decision point: tailwind above the limit, or the level's weather rate."""
+        draw = float(self.wx_rng.random())      # always drawn, so the stream does not depend on the wind
+        tw = self.tailwind_over(ac.runway)
+        if tw is not None:
+            return "pilot: tailwind %.0f kt above the %.0f kt limit" % (tw, levels.TAILWIND_LIMIT_KT)
+        if draw < self.weather.go_around_rate:
+            return "pilot: unstable approach%s" % (" in %s" % self.weather.current["wx"] if self.weather.current.get("wx") else "")
+        return None
 
     def _touchdown(self, ac: Aircraft, t: float) -> None:
         end = ac.runway or ""
@@ -890,6 +1032,12 @@ class Simulation:
             elif not at_end or ac.entry_node is None:
                 ac.phase = "taxi_out"
             if ac.phase == "line_up" and at_end:
+                tw = self.tailwind_over(ac.dep_end) if ac.takeoff_cleared else None
+                if tw is not None:          # the wind changed after the takeoff clearance: the pilot will not roll
+                    ac.takeoff_cleared = False
+                    self.res.release(ac.callsign, "takeoff")
+                    c = next((c for c in self.active.get(ac.callsign, []) if c.action == "cleared_for_takeoff"), None)
+                    self._unable(ac, c, "for takeoff", ac.dep_end or "", tw)
                 if ac.takeoff_cleared:
                     self._begin_takeoff(ac)
                 else:
@@ -1087,7 +1235,7 @@ class Simulation:
     def _meta(self) -> Dict[str, Any]:
         return {"speed": self.clock.speed, "paused": self.clock.paused,
                 "agent": {"status": getattr(self.controller, "status", "idle"), "controller": self.controller_name},
-                "scenario": {"name": self.scenario.name, "duration_s": self.scenario.duration_s}}
+                "scenario": {"name": self.scenario.name, "duration_s": self.scenario.duration_s}, "level": self.level_view()}
 
     def _runway_views(self) -> List[Dict[str, Any]]:
         return [self.res.view(r, self.t) for r in self.graph.runways]

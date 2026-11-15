@@ -14,7 +14,7 @@ PHONETIC = {c: w for c, w in zip("ABCDEFGHIJKLMNOPQRSTUVWXYZ", (
     "Alpha Bravo Charlie Delta Echo Foxtrot Golf Hotel India Juliet Kilo Lima Mike November Oscar Papa "
     "Quebec Romeo Sierra Tango Uniform Victor Whiskey X-ray Yankee Zulu").split())}
 TELEPHONY = {"SWA": "Southwest", "AAL": "American", "SKW": "Sky West", "ENY": "Envoy", "MQ": "Envoy", "DAL": "Delta",
-             "UAL": "United", "FFT": "Frontier", "ASA": "Alaska"}
+             "UAL": "United", "FFT": "Frontier", "ASA": "Alaska", "HAL": "Hawaiian", "FDX": "FedEx"}
 TENS = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"]
 TEENS = ["ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"]
 SIDES = {"L": "left", "R": "right", "C": "center"}
@@ -65,7 +65,7 @@ def spoken_runway(end: str) -> str:
 
 
 def spoken_taxiway(ref: str) -> str:
-    return " ".join(PHONETIC[c] if c.isalpha() else DIGIT_WORDS[c] for c in ref if c.isalnum())
+    return " ".join(PHONETIC.get(c.upper(), c) if c.isalpha() else DIGIT_WORDS.get(c, c) for c in ref if c.isalnum())
 
 
 def spoken_frequency(freq: str) -> str:

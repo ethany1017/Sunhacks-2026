@@ -9,6 +9,7 @@ import numpy as np
 
 from sim.core.clock import TICK_S
 from sim.core.entities import Aircraft
+from sim.core.physics import HOLD_OFFSET_M, REENTRY_M
 from sim.referee.limits import DIVERSION_HOLDING_S
 
 if TYPE_CHECKING:
@@ -42,7 +43,11 @@ def route_lines(sim: "Simulation", ac: Aircraft) -> Tuple[List[List[float]], Lis
 
 def eta_s(sim: "Simulation", ac: Aircraft) -> Optional[float]:
     if ac.phase == "final":
-        return round(sim.physics.approach_distance(ac) / max(ac.speed, 30.0), 1)
+        if ac.wp is not None:     # still flying round to the re-entry point (after a go-around or a runway reversal)
+            dist = math.hypot(ac.wp[0] - ac.x, ac.wp[1] - ac.y) + REENTRY_M
+        else:
+            dist = sim.physics.approach_distance(ac)
+        return round(dist / max(ac.speed, 30.0), 1)
     if ac.path is not None and ac.phase in ("taxi_in", "taxi_out", "runway_exit", "hold_short", "line_up"):
         return round(max(ac.path.length - ac.s, 0.0) / 4.5, 1)
     return None
@@ -64,7 +69,7 @@ def status_text(sim: "Simulation", ac: Aircraft) -> str:
     if ph in ("taxi_in", "hold_short", "taxi_out") and ac.speed < 0.2 and ac.stop_why in ("run", "busy", "hold") and ac.path:
         if ac.stop_why == "hold":
             return "Holding position"
-        run = next((r for r in ac.path.runs if r.s0 - ac.length_m / 2 - 8 >= ac.s - 3.0), None)
+        run = next((r for r in ac.path.runs if r.s0 - ac.length_m / 2 - HOLD_OFFSET_M >= ac.s - 3.0), None)
         label = sim.runway_label(run.runway) if run else ""
         return "Holding short runway %s%s" % (label, " (runway busy)" if ac.stop_why == "busy" else "")
     if ph == "taxi_in":
@@ -91,7 +96,7 @@ def aircraft_view(sim: "Simulation", ac: Aircraft, with_routes: bool = True) -> 
     cleared, planned = route_lines(sim, ac) if with_routes else ([], [])
     hold = None
     if ac.path is not None and ac.speed < 0.2 and ac.stop_why in ("run", "busy") and ac.phase in ("taxi_in", "taxi_out", "hold_short"):
-        run = next((r for r in ac.path.runs if r.s0 - ac.length_m / 2 - 8 >= ac.s - 3.0), None)
+        run = next((r for r in ac.path.runs if r.s0 - ac.length_m / 2 - HOLD_OFFSET_M >= ac.s - 3.0), None)
         if run:
             hlon, hlat = sim.graph.lonlat(ac.path.xy_at(run.s0))
             hold = {"runway": run.runway, "lon": round(hlon, 6), "lat": round(hlat, 6)}
@@ -120,7 +125,8 @@ class ObservationBuffer:
                      dep_end=ac.dep_end, arrival_end=ac.runway if ac.kind == "arrival" else None,
                      blocked_by=ac.blocked_by, stopped_s=0.0 if ac.stopped_since is None else round(sim.clock.t - ac.stopped_since, 1),
                      frequency=ac.frequency, done=ac.done, entry_node=ac.entry_node,
-                     next_node=sim._route_origin(ac)[0] if ac.kind != "vehicle" else None)   # where an explicit taxi route must start
+                     next_node=sim._route_origin(ac)[0] if ac.kind != "vehicle" else None,   # where an explicit taxi route must start
+                     prev_node=sim._route_back(ac)[0] if ac.kind != "vehicle" else None)     # or, stopped, may start (turn round)
             frame[ac.callsign] = v
         self.frames.append(frame)
 

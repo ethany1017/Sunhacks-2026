@@ -20,7 +20,7 @@ On connect the server sends one `snapshot`, then a `delta` about every 100 ms (1
 ```json
 {"type":"snapshot","t":123.4,"speed":1,"paused":false,
  "agent":{"status":"idle","controller":"tower"},   (the active controller; always the built-in tower in the simulator)
- "scenario":{"name":"kphx_busy","duration_s":480},
+ "scenario":{"name":"kphx_busy","duration_s":480}, "level":{...Level}|null,
  "weather":{...Weather},
  "aircraft":[...Aircraft], "runways":[...Runway], "clearances":[...Clearance],
  "decisions":[...Decision], "voice":[...VoiceLine], "score":{...Score}, "referee":{...Referee}}
@@ -50,7 +50,10 @@ Same keys, all optional except `type` and `t`; lists contain only changed or new
 `{"verdict":"PASS|FAIL|RUNNING","fails":[Fail],"score":{...Score,"fails":0,"fails_by_rule":{"collision":0,"loss_of_separation":0,"runway_occupied":0,"runway_incursion":0,"diversion":0,"stuck":0,"unhandled_at_end":0}},"day_end_s":1200.0}`. Fail: `{"rule":"runway_occupied","callsigns":["AAL22","SWA4801"],"reason":"AAL22 landed on runway 08/26 while SWA4801 was still on it","t":312.4}`. `verdict` is `FAIL` from the first fail on (locked), `PASS` only once the day has ended with no fails, else `RUNNING`. Sent in the snapshot, in a delta when it changes and from `Simulation.referee_report()`. `observe()["referee"]` (the controller's view) is `{verdict, fails, day_end_s}` only, without `score`: its readback counts would reveal whether a readback the controller just resolved was wrong. Events: `referee_fail` (data = a Fail) the moment a rule is broken, once per ongoing violation; `referee_result` `{verdict, fails, score}` once, when every flight is complete (`scenario.complete`) or at `day_end_s` = scenario `duration_s` + 900 (`scenario.day_end`; `finished` becomes true and `run_to_completion()` stops there). Rules and limits: `sim/referee/limits.py`, `docs/ASSUMPTIONS.md`.
 
 ### Weather
-`{"t":0.0,"metar":"KPHX 151800Z 27005KT 10SM CLR 24/02 A3002","wind_dir":270,"wind_kt":5,"gust_kt":null,"vis_sm":10.0,"wx":null,"temp_f":75.0}`. Calm and static for now (`t` is when the report was issued); weather levels come later.
+`{"t":0.0,"metar":"KPHX 151800Z 27005KT 10SM CLR 24/02 A3002","wind_dir":270,"wind_kt":5,"gust_kt":null,"vis_sm":10.0,"wx":null,"temp_f":75.0}` (`t` is when the report was issued). Scenario files: calm and static. Levels: the level's reports at scheduled times (event `weather.update`, data = the new report), e.g. Light Rain `"KPHX 151300Z 27008KT 4SM -RA BR BKN015 OVC030 21/18 A2983"`, and one wind shift to `09014KT` (docs/LEVELS.md). Also in `observe()["weather"]`.
+
+### Level
+`{"id":"light_rain","name":"Light Rain","seed":21,"duration_s":1500.0,"tailwind_limit_kt":10.0,"effects":{"taxi_mult":0.8,"occupancy_mult":1.15,"approach_mult":0.6,"go_around_rate":0.05}}`, or `null` for a scenario file. In the snapshot (key `level`) and `observe()["level"]`. Levels, seeds and every number: `sim/levels.py`, docs/LEVELS.md.
 
 ### Decision
 `{"id":"d-9","t":120.0,"callsign":"SWA1234","action":"hold_short","summary":"Holding SWA1234 short of 07L/25R for the arrival","facts":["AAL22 on 2 mile final","07L/25R free for 40 s"],"rules":["Runway occupied: no crossing (JO 7110.65 3-7-2)"],"alternatives":[{"option":"cross now","reason":"conflicts with AAL22 landing in 38 s"}],"next_review_s":15,"voice_id":"v-31"}`
@@ -66,7 +69,8 @@ Same keys, all optional except `type` and `t`; lists contain only changed or new
 ```python
 # sim/core/engine.py
 class Simulation:
-    def __init__(self, scenario_path, graph_path, seed=None, controller="tower", run_dir=None): ...
+    def __init__(self, scenario_path=None, graph_path=None, seed=None, controller="tower", run_dir=None, graph=None,
+                 level=None, duration_s=None): ...   # a scenario file, or level="normal_day"|"light_rain" + seed (+ length)
     def step(self) -> list: ...            # advance one 100 ms tick, return events
     def snapshot(self) -> dict: ...        # contract snapshot
     def delta(self) -> dict: ...           # changes since last delta()/snapshot()
@@ -75,7 +79,7 @@ class Simulation:
     def observe(self) -> dict: ...         # observation view (delayed/noisy) + weather + runway status
     def issue_clearance(self, callsign, action, params=None) -> dict: ...
     def speak(self, callsign, text, speaker="agent") -> dict: ...
-    def set_runway_config(self, arrival_runways, departure_runways) -> dict: ...
+    def set_runway_config(self, arrival_runways, departure_runways) -> dict: ...   # runway ENDS, e.g. (["07R","08"], ["07L","08"])
     def record_decision(self, **fields) -> dict: ...
     def resolve_readback(self, readback_id, accept) -> dict: ...   # accept a pilot readback or say again (see observe()['pending_readbacks'])
     def referee_report(self) -> dict: ...  # the Referee state (see Referee above)
@@ -90,5 +94,9 @@ Clearance `action` values: `taxi_via`, `hold_short`, `cross_runway`, `line_up_an
 `taxi_via` params: `{"to": stand | runway end | node, "via"?: [taxiway letters], "entry"?: node}` lets the sim pick the shortest path. `{"route": [node ids], "to"?: stand | runway end}` is followed node for node: consecutive nodes must share a graph edge, and the route must include the aircraft's next node (`observe()` aircraft `next_node`; the stand node at the gate); nodes before it are dropped. With `to` a runway end the route must end on that runway (its last node is the entry); with `to` a stand it must end at the stand node. Shape errors: `route nodes A and B are not connected by a graph edge`, `route must include the aircraft's next node N ...`, `route for runway R must end at a node on that runway ...`, `route for gate G must end at its stand node ...`.
 
 Readbacks: event `readback` data is `{id, clearance_id, voice_id, text, parsed: {action, runway}, status: "pending"}` for every readback; it never says whether the readback is wrong (`parsed` holds only what the words say, so "Roger" parses to no action and no runway). Every delivered readback is listed in `observe()['pending_readbacks']` until `resolve_readback` accepts or rejects it; after 5 s of silence it is accepted (`readback.accepted` with `implicit: true`). The pilot acts on the clearance only once the readback is accepted. An accepted wrong hold-short readback makes that pilot miss that one hold point; later holds work normally.
+
+Runway direction: the active flow is the runway ends in `observe()["runway_config"]`; `set_runway_config(arrival_runways, departure_runways)` (ends, e.g. east flow `["07R","08"]`, `["07L","08"]`; event `runway.config`) changes it. New arrivals are handed over on their stream's runway in the active direction (25L <-> 07R, 26 <-> 08); traffic already moving keeps its runway until the controller changes it (`contact_tower_or_ground` or `cleared_to_land` with the new end; an arrival given the opposite direction flies round to the new final at 3,000 ft, event `arrival.reversed` `{from, to}`; a departure gets a new `taxi_via`). Pilots refuse a tailwind above `level.tailwind_limit_kt` (10 kt): `cleared_to_land`, `line_up_and_wait` and `cleared_for_takeoff` are answered "Unable ..." instead of a readback (event `pilot.unable` `{clearance_id, action, runway, tailwind_kt, limit_kt, voice_id}`, the clearance is `cancelled`); an arrival already cleared goes around at 1,800 m (`go_around` reason `pilot: tailwind ...`), a departure already cleared does not roll. Pilot-initiated go-arounds also happen at the level's `go_around_rate` (reason `pilot: unstable approach ...`). Approach control holds an arrival back (event `arrival.held`, once per flight) while it would arrive closer than the in-trail minimum or a missed approach is being resequenced on that final.
+
+Turning round: an explicit `taxi_via` route may start at `observe()` aircraft `prev_node` (the node behind a stopped aircraft) instead of `next_node`; the aircraft turns round where it stands.
 
 A clearance that cannot take effect in the aircraft's phase (for example `cleared_to_land` to an aircraft at a gate) is ended as soon as it is acknowledged: state `cancelled`, event `clearance.no_effect`. A `hold_short` completes when the aircraft stops at the hold point or is no longer routed over that runway.
