@@ -6,23 +6,27 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
+from atc import weather_live
+
 from . import db
 from .runner import Runner
 from .ws import router as ws_router
 
 runner = None
+live_wx = {"wx": {"source": "unavailable"}}  # real-world METAR for the top bar; display only, never read by the agent
 
 
 @asynccontextmanager
 async def lifespan(app):
     global runner
-    task = None
+    tasks = []
     if os.environ.get("AUTOSTART", "1") != "0":  # default: start the first level with the Agent, no dashboard needed
         runner = Runner()
         runner.start(runner.sim.get_levels()[0]["id"], "agent")
-        task = asyncio.create_task(runner.loop())
+        tasks.append(asyncio.create_task(runner.loop()))
+        tasks.append(asyncio.create_task(weather_live.refresh_forever(runner.sim.get_airport()["config"]["icao"], live_wx)))
     yield
-    if task:
+    for task in tasks:
         task.cancel()
 
 
@@ -83,3 +87,9 @@ async def switch_controller(req: SwitchRequest):
     except ValueError as e:
         raise HTTPException(400, str(e))
     return r.current()
+
+
+@app.get("/api/weather/live")
+async def live_weather():
+    """The live NOAA METAR (source "live", "cache" or "unavailable"). Display only."""
+    return live_wx["wx"]

@@ -35,6 +35,7 @@ data/reference_and_rules/vt_mirmohammadsadeghi_rot_dissertation/
 node_modules/
 dist/
 runs/
+backend/weather_cache/
 .env.local
 web/.env.local
 __pycache__/
