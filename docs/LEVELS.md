@@ -136,7 +136,7 @@ What was tuned and why:
 | Parameter | Old | New | Why | Source |
 |---|---|---|---|---|
 | hourly counts (`build_scenario`) | Poisson per hour slice | expected count, carried random remainder | a Poisson draw made "an average day" anything from 21 to 35 flights (Normal Day seed 3 had 22 arrivals against an expected 12 and diverted one); real scheduled traffic barely varies day to day | BTS Aug 2026 PHX, 06-17 local: sd 2-3% of the daily count |
-| `WIND_SHIFT_FRAC` | 0.55 | 0.45 | with the new counts the Human passed Normal Day on 4/5 seeds at 0.55; the failures were gridlocks and stuck departures at the 07L hold point after the flow change. Human Normal Day passes by shift time: 0.35: 3/5, 0.40: 5/5, 0.45: 5/5, 0.50: 3/5, 0.55: 4/5, 0.70: 3/5, 0.85: 4/5. 0.45 is the middle of the 5/5 range | assumption (when an easterly shift comes is a choice; one shift per day as S3 asked) |
+| `WIND_SHIFT_FRAC` | 0.55 | 0.45 | with the new counts the Human passed Normal Day on 4/5 seeds at 0.55; the failures were gridlocks and stuck departures at the 07L hold point after the flow change. Human Normal Day passes by shift time: 0.35: 3/5, 0.40: 5/5, 0.45: 5/5, 0.50: 3/5, 0.55: 4/5, 0.70: 3/5, 0.85: 4/5. 0.45 is the middle of the 5/5 range. This sweep ran on the same five training seeds the results table below reports, and the pass count moves without a trend (it looks like seed noise), so the Normal Day 5/5 is partly fitted to these seeds | assumption (when an easterly shift comes is a choice; one shift per day as S3 asked) |
 
 Tried and not adopted (Human, training seeds, new counts): `DEMAND_SCALE` 0.9 (Normal Day 2/5 pass), 1.1 (1/5),
 1.2 (1/5), all at the old shift time 0.55; at shift 0.45, Light Rain `spacing_margin_nm` 2.5 (Light Rain 5/5 fail, but 3.0 gives 4/5
@@ -164,9 +164,14 @@ For reference, the built-in tower on the same seeds: Normal Day PASS on 1-5 (avg
 (collision 2), 22 (unhandled 1), 23 (collision 1), PASS on 24 and 25 (avg delay 163-225 s).
 
 What this shows:
-- Normal Day: the Human passes all five training seeds. Over the shift times tried (0.35-0.85, 35 runs) it passed
-  about 3 in 4, so on unseen seeds expect an occasional Human fail; the failures are its own ground gridlocks after the
-  flow change, not demand.
+- Normal Day: the Human passes all five training seeds, but `WIND_SHIFT_FRAC` 0.45 was chosen by sweeping these same
+  five seeds. Across the sweep the pass count moved without a trend (0.35: 3/5, 0.40: 5/5, 0.45: 5/5, 0.50: 3/5,
+  0.55: 4/5, 0.70: 3/5, 0.85: 4/5), which looks like seed noise, so the 5/5 is partly fitted to these seeds. Across
+  all 35 sweep runs the Human passed 27 (about 77%), so on unseen seeds expect an occasional Human fail; the failures
+  are its own ground gridlocks after the flow change.
+- The S5 Light Rain target is only partly met: the spec wants the Human to fail Light Rain on traffic not handled
+  (diversions / backlog), but only 3 of 5 training seeds fail on traffic not handled (21, 22, 25; 22 and 25 also
+  include collisions), 1 of 5 fails on a collision only (23), and 1 of 5 passes (24).
 - Light Rain: the Human fails four of five. Delays roughly double (average 179-276 s against 74-96 s dry). The fail
   mix is honest, not all traffic handling: seed 21 is backlog only (unhandled at the day end); 22 and 25 mix ground
   collisions with stuck / unhandled traffic; 23 is a ground collision only (AAL1585 and a GA aircraft at t=443, before
@@ -176,6 +181,13 @@ What this shows:
   just below the 09h bank (50 arrivals an hour over two finals) at `DEMAND_SCALE` 1.0, so the rain failures come from
   taxi and runway time piling up through the day, not from arrival holding.
 
+Options for Ethan on Light Rain:
+- Accept the levels as they are (3 of 5 fail on traffic not handled, 1 on a collision only, 1 passes).
+- Use `spacing_margin_nm` 2.5, which gave 5/5 fails in the sweep, but it is knife-edge: 3.0 gave 4/5 again (seed 24
+  flips by chance).
+- Calibrate on more training seeds before freezing.
+- Change the target (for example, count a ground collision as an acceptable Light Rain fail).
+
 **Compared with real PHX** (BTS Aug 2026, scheduled 06-17 local). The FAA's unimpeded taxi times are not in the repo,
 so the 10th percentile stands in for unimpeded (assumption): taxi-out mean 16.9 min vs p10 10 min, about 7 min (415 s)
 excess; taxi-in mean 7.2 vs p10 4 min, about 3 min (190 s) excess. The Human's Normal Day delays (departures 83-110 s,
@@ -183,7 +195,8 @@ arrivals 52-85 s) are about a quarter of the average excess out and a third in: 
 the real p10 (10) and p25 (12), and a taxi-in of about 5 min (p25). That is a good real day, below the average. In
 Light Rain (departures 187-378 s, arrivals 163-182 s) the delays reach the real average. Two reasons the sim runs
 lighter than the real airport: it has no ramp or gate congestion, and it carries the BTS airline traffic only (about
-952 of Sky Harbor's 1,335 operations a day); the Human could not keep up at `DEMAND_SCALE` 1.1-1.2.
+952 of Sky Harbor's 1,335 operations a day). `DEMAND_SCALE` 0.9, 1.1 and 1.2 all gave more Human Normal Day fails
+than 1.0 (2/5, 1/5 and 1/5 pass against 4/5, all at shift 0.55), so the extra fails cannot be put down to demand alone.
 
 ## What a controller sees
 
