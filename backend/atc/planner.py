@@ -486,11 +486,12 @@ class Planner:
         for cs, a in self.ac.items():   # landing clearance already acknowledged (no longer "live" once it took effect)
             if a["phase"] == "final" and a.get("landing_cleared") and not any(x["callsign"] == cs for x in rc):
                 rc.append({"callsign": cs, "action": "cleared_to_land", "pavement": a["runway"], "t": self.t})
-        routes, parked = {}, {}
+        routes, parked, route_d = {}, {}, {}
         for cs, a in self.ac.items():
             r = self._remaining(cs, a)
             if r:
                 routes[cs] = r
+                route_d[cs] = self._route_d(cs, a, r)
             elif a["phase"] in ("taxi_out", "taxi_in", "hold_short") and a["speed_mps"] < 0.3 and a.get("next_node"):
                 parked[cs] = a["next_node"]
         paths = {}
@@ -512,7 +513,7 @@ class Planner:
         for c in self.live.values():
             live_actions.setdefault(c["callsign"], set()).add(c["action"])
         return {"t": self.t, "aircraft": self.ac, "live_actions": live_actions, "occupants": occupants, "clear_at": clear_at, "runway_clearances": rc,
-                "last_roll": self.last_roll, "routes": routes, "parked_on": parked, "paths": paths,
+                "last_roll": self.last_roll, "routes": routes, "route_d": route_d, "parked_on": parked, "paths": paths,
                 "pushbacks": self.pushbacks, "hot_nodes": self._hot_nodes(), "tailwind": {e: self._tailwind(e) for e in self.ends},
                 "tailwind_limit": lvl.get("tailwind_limit_kt") or safety.TAILWIND_LIMIT_KT, "rain": rain,
                 "rollout_s": ROLLOUT_S * eff.get("occupancy_mult", 1.0)}
@@ -561,6 +562,8 @@ class Planner:
         """proposal -> safety_check -> issue -> clearance. Returns the issue() result, or None if rejected / failed."""
         cs = a["callsign"]
         prop = dict(extra or {}, callsign=cs, action=action, end=end, pavement=pavement, route=route)
+        if route and "x" in a:
+            prop["route_d"] = self._route_d(cs, a, route)
         ok, rule, why = safety.check(self.pic, prop)
         key = (cs, action)
         data = {"action": action, "params": params}
@@ -896,10 +899,34 @@ class Planner:
         """Stopped at a runway hold line itself (not queued behind another aircraft)."""
         return bool(a.get("hold")) and a["speed_mps"] < 0.3 and str(a.get("blocked_by") or "").startswith("runway:")
 
+    def _route_d(self, cs, a, route):
+        """{edge: (distance to its start, distance to its end)} along a route from where the aircraft is now."""
+        if not route:
+            return {}
+        nn = a.get("next_node")
+        i = route.index(nn) if nn in route else 0
+        out, d = {}, self._dist((a["x"], a["y"]), self.xy[route[i]])
+        if i > 0:
+            out[(route[i - 1], route[i])] = (0.0, d)
+        for u, v in zip(route[i:], route[i + 1:]):
+            out[(u, v)] = (d, d + self.g[u][v]["length"])
+            d += self.g[u][v]["length"]
+        return out
+
     def _route(self, cs, src, dst, avoid_pav=None, avoid_nodes=()):
         """Dijkstra over the taxi graph: no runway centreline edges, never against another aircraft's route (head-on),
-        never through an aircraft stopped without a route, a heavy penalty per runway crossing."""
-        against = {(v, u) for o, r in self.pic["routes"].items() if o != cs for u, v in zip(r, r[1:])}
+        never through an aircraft stopped without a route, a heavy penalty per runway crossing. If every route meets
+        someone head-on, try again against only the near part of the other routes: the safety engine then accepts the
+        route only if the two are well apart in time on every shared stretch (safety.HEAD_ON_*)."""
+        return self._route1(cs, src, dst, avoid_pav, avoid_nodes) or \
+            self._route1(cs, src, dst, avoid_pav, avoid_nodes, near_m=safety.HEAD_ON_FAST_MPS * safety.HEAD_ON_NEAR_S)
+
+    def _route1(self, cs, src, dst, avoid_pav=None, avoid_nodes=(), near_m=None):
+        if near_m is None:
+            against = {(v, u) for o, r in self.pic["routes"].items() if o != cs for u, v in zip(r, r[1:])}
+        else:
+            against = {(v, u) for o, rd in self.pic["route_d"].items() if o != cs for (u, v), (d0, _) in rd.items()
+                       if d0 < near_m}
         shared = {(u, v) for o, r in self.pic["routes"].items() if o != cs for u, v in zip(r, r[1:])}
         blocked = {n for o, n in self.pic["parked_on"].items() if o != cs} | set(self.pic["hot_nodes"]) | set(avoid_nodes)
 

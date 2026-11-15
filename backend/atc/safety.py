@@ -7,6 +7,8 @@ The engine only stops the agent from SENDING unsafe clearances. The Referee (in 
 these margins sit above its limits (sim/referee/limits.py) so a clearance that passes here keeps the day legal.
 "7110.65" is FAA Order JO 7110.65 (Air Traffic Control).
 """
+import math
+
 
 # -- runway occupancy (7110.65 3-9-6 same-runway separation, 3-10-3 / 3-10-5 landing clearance) --------------------
 LANDING_BUFFER_S = 8.0       # a landing needs every other aircraft off the runway this long before touchdown
@@ -33,6 +35,11 @@ CONFLICT_MARGIN_M = 20.0     # route points closer than the two half wingspans +
 SHARP_TURN_DEG = 90.0        # a turn sharper than this near the start of a route sweeps its corner (planner geometry)
 SHARP_TURN_LOOK_M = 100.0    # ... checked over the first stretch of the route only
 SHARP_TURN_CLEAR_M = 40.0    # room beyond the half sizes at that corner (a 53 m sweep collided; 3 m observation noise)
+HEAD_ON_FAST_MPS = 10.0      # opposite use of one taxiway edge is allowed only if the two are apart in time: earliest
+HEAD_ON_SLOW_MPS = 3.0       # arrival at this speed, latest exit at this (holds and queues on the way),
+HEAD_ON_START_S = 10.0       # after this start delay,
+HEAD_ON_MARGIN_S = 60.0      # with this margin in between
+HEAD_ON_NEAR_S = 60.0        # (the planner's second-choice routes avoid only this much of the other routes ahead)
 SEE_AVOID_M = 15.0           # sim pilots stop for an aircraft this far (beyond half lengths) right ahead (sim README)
 FACING_MARGIN_M = 12.0       # nose-to-nose meeting range margin (corner cutting ~10 m, 3 m observation noise)
 FACING_DEG = 120.0           # headings this far apart: the two meet nose to nose
@@ -257,7 +264,7 @@ def taxi_conflict(pic, prop):
     for o, r in pic["routes"].items():
         if o == cs:
             continue
-        head_on = [(u, v) for u, v in zip(r, r[1:]) if (v, u) in mine]
+        head_on = [(u, v) for u, v in zip(r, r[1:]) if (v, u) in mine and not _apart(pic, prop, o, (u, v))]
         if head_on:
             return _no("taxi_conflict", f"Route meets {o} head-on between nodes {head_on[0][1]} and {head_on[0][0]}.")
     for o, n in pic.get("parked_on", {}).items():  # aircraft stopped with no route yet (e.g. pushed back, waiting)
@@ -313,6 +320,18 @@ def _into_push(pic, cs, me, path):
             if ((x - ax - k * ux) ** 2 + (y - ay - k * uy) ** 2) ** 0.5 < lim or ((x - bx) ** 2 + (y - by) ** 2) ** 0.5 < swing:
                 return o
     return None
+
+
+def _apart(pic, prop, o, edge):
+    """Two routes use one edge in opposite directions: are they far enough apart in time that the first is off it
+    before the other can reach it? Earliest entry at HEAD_ON_FAST_MPS, latest exit at HEAD_ON_SLOW_MPS after a
+    START_S start, plus HEAD_ON_MARGIN_S. Without distances: never apart (the strict rule)."""
+    mine, theirs = (prop.get("route_d") or {}).get((edge[1], edge[0])), (pic.get("route_d") or {}).get(o, {}).get(edge)
+    if not mine or not theirs:
+        return False
+    span = lambda d: (d[0] / HEAD_ON_FAST_MPS, HEAD_ON_START_S + d[1] / HEAD_ON_SLOW_MPS)
+    (a0, a1), (b0, b1) = span(mine), span(theirs)
+    return a1 + HEAD_ON_MARGIN_S < b0 or b1 + HEAD_ON_MARGIN_S < a0
 
 
 def half_diag(a):
