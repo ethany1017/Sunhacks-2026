@@ -159,7 +159,8 @@ accept or reject changes):
 Read this table before trusting any single demo run: every controller, including the Human the levels were calibrated
 against, fails many unseen days in this simulator, mostly on ground gridlock ("stuck"), one aircraft still taxiing when
 the day ends, and ground collisions. The Agent is not yet a reliable all-day controller; on these days it is level
-with the Human on Normal Day and ahead on Light Rain, and behind the plain tower rules on Light Rain validation days.
+with the Human on Normal Day and ahead on Light Rain, and behind the plain tower rules on the validation days of both
+levels (and on Normal Day held-out delay, 90 s against 82 s).
 
 **Training seeds** (normal_day 1-5, light_rain 21-25; the dashboard's Agent vs Human panel shows these and the held-out
 grading): Normal Day Human 5/5 (avg delay 84 s), Agent 3/5 (69 s; two days end with an aircraft not handled);

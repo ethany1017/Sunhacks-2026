@@ -348,3 +348,24 @@ aircraft parked there (LR110 E2/PE2, ND97 C11/PC11; the built-in Human collides 
 track passes 8 m from stand PF4: the safety engine refuses the push, the day fails on the 300 s gate rule instead).
 Not solved: LR102 (a GA aircraft parks 13 s after another aircraft's route past its stand was issued) and LR35 (a
 head-on route near the 07L crossing).
+
+## Final grading (held-out seeds, agent at 639b0ac)
+
+`python -m app.evaluate --controllers human agent --levels levels --seeds heldout --publish`, deterministic (no
+Claude key). The plain tower rows are `python -m sim.core.run --controller tower` on the same seeds.
+
+| level | controller | days passed | Referee fails | avg delay |
+|---|---|---|---|---|
+| Normal Day (9001-9003) | Human | 2/3 | 2 (collisions, 9003) | 102 s |
+| Normal Day | Agent | 2/3 | 1 (collision, 9003) | 90 s |
+| Normal Day | plain tower rules | 2/3 | 1 (collision, 9003) | 82 s |
+| Light Rain (9021-9023) | Human | 1/3 | 2 (stuck 9021, unhandled 9023) | 224 s |
+| Light Rain | Agent | 3/3 | 0 | 191 s |
+| Light Rain | plain tower rules | 1/3 | 2 (stuck 9021, unhandled 9023) | 194 s |
+
+Goal met on Light Rain, not met on Normal Day. Failure review, Normal Day 9003, t=1190.7 (read once, after training
+had stopped): arriving A320 AAL545, assigned gate B16, clips GA aircraft N2701BK (an SR22 departure standing at stand
+PB16 since t=0) as it turns into the gate. The Human (t=1196) and the plain tower collide with the same pair. This is
+the stand-pair class above (two stands on one lane node). Held-out seeds were also run as aggregate checks three times
+earlier in the night (1/6 at 1b786a4, 5/6 on the combined G2 candidate, 5/6 at 5abf8a6); no change was chosen from
+them.
