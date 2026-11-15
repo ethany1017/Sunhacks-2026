@@ -254,3 +254,66 @@ No loss_of_separation, runway_incursion or runway_occupied in any batch. Average
 Remaining collisions: a taxi-in to a stand sweeping a parked neighbour, and a head-on route near the 07L crossing.
 Tried and dropped by the analyst: an unjam extension for held pairs and a corner-aware speed profile (net negative).
 No unit test was added for the probe change (it needs a full multi-aircraft geometry fixture; covered by the harness).
+
+## Rounds G2 and G3: crossings before line-ups, late-day second departure runway, un-jam turn check
+
+Plans approved by the council before the change. Seeds: development = normal_day 1-20, 81-100 and light_rain 21-40,
+101-120; validation (never tuned on, run only by the coordinator) = normal_day 41-55 and light_rain 61-75. Held-out
+grading seeds were not used to choose anything.
+
+Failure reviews:
+- **LR22.** Two aircraft held short of departure runway 07L for 300-400 s waiting to cross and ended the day
+  unhandled. Each time the departure ahead got airborne the crossing was refused (the delayed observation still showed
+  the takeoff roll) and in the same pass the next departure got line-up, holding the runway another ~100 s. A good
+  controller gets waiting crossers across between departures.
+- **ND7** (found while prototyping). A crossing clearance went to an aircraft queued behind another at the hold line;
+  it could not move and its live clearance blocked the first one's crossing.
+- **LR26 and the "one aircraft unhandled at day end" class.** The last departures become ready around t=1410-1500
+  with nine ahead on the single departure runway (one departure per ~100 s); the last one rolls after the day ends.
+- **LR105** (found while prototyping). A late-day switch made just as an arrival appeared on final re-sequenced it
+  2.41 NM behind another (3 NM required): loss of separation. Fixed before measurement: see the switch conditions.
+- **ND95** (with G2 applied). After a 420 s nose-to-nose stand-off the existing un-jam re-route turned a stopped A330
+  in place into two aircraft stopped within ~60 m (4 collision events).
+
+Changes (planner only; every instruction and the configuration change still go through the safety engine):
+1. G2 crossing first: no line-up while an aircraft has been stopped 5 s or more at a hold line of that runway waiting
+   to cross (not departures queued for that runway, not crossers whose far side is blocked).
+2. G2 hold line only: only the aircraft actually at the hold line gets a crossing clearance.
+3. G2 late-day second departure runway: from 0.8 x the day length, with 4 or more departures ready or moving, switch
+   once so that all arrivals use one runway and the other becomes a second departure runway (chosen by the backlog's
+   taxi cost). Not while any arrival observed on final or going around has the runway being handed over as its runway
+   or approach end; an arrival that still appears on that final lands there and is never reassigned.
+   The safety engine checks only tailwind for a runway configuration change, so the protection against re-sequencing
+   arrivals rests on these planner conditions (unit test: no switch while an arrival is on that final).
+4. G3 un-jam turn check: a re-route that needs a stopped aircraft to turn more than 45 degrees where it stands is not
+   proposed if any other aircraft on the ground is within both half diagonals + 5 m. This can turn an un-jam collision
+   into a stuck fail (ND95 now fails on stuck, not collisions). No safety-engine rule was added for the turn sweep and
+   no unit test was written for it (it needs a multi-aircraft geometry fixture; covered by the harness runs below).
+
+Measured (Referee scores), before = commit 424d1b5:
+
+| set | level | before | G2 | G2 + G3 |
+|---|---|---|---|---|
+| development, 80 runs (analyst) | Normal Day | 25/40, collision events 2, avg delay 92 s | 25/40, collision events 5, 80 s | 25/40, collision events 1, 80 s |
+| development, 80 runs (analyst) | Light Rain | 8/40, collision events 7, 195 s | 14/40, collision events 8, 181 s | 14/40, collision events 8, 182 s |
+| development 1-40 only (worker re-run) | Normal Day | 13/20 (diversion 2, stuck 16, unhandled 7), 92 s | 12/20 (diversion 2, stuck 16, unhandled 8), 80 s | not re-run |
+| development 1-40 only (worker re-run) | Light Rain | 7/20 (collision 3, stuck 28, unhandled 12), 197 s | 10/20 (collision 3, stuck 25, unhandled 9), 181 s | not re-run |
+| validation, 30 runs (coordinator) | Normal Day | 6/15, collisions 4, stuck 21, unhandled 7, 85 s | 7/15, collisions 4, stuck 23, unhandled 7, 80 s | identical to G2 |
+| validation, 30 runs (coordinator) | Light Rain | 2/15, collisions 4, stuck 12, unhandled 9, 200 s | 6/15, collisions 2, stuck 7, unhandled 8, 180 s | identical to G2 |
+
+Same validation seeds for reference: Human 7/15 (avg delay 88 s) and 4/15 (199 s); plain tower 8/15 and 7/15.
+No loss_of_separation, runway_incursion or runway_occupied in any of these batches.
+
+**Condition not met, and overridden.** The council's condition for G2 was that a re-run of development seeds 1-40 must
+point the same way as the 80-run measurement. It did not on Normal Day: 13/20 -> 12/20 (ND2: PASS -> FAIL, two aircraft
+gridlocked at t=2396 and three unhandled at day end; ND14: PASS -> FAIL, a departure cleared for takeoff when the day
+ended; ND20: FAIL -> PASS). The coordinator adopted G2 anyway under Ethan's delegation for this run, with the council's
+agreement, because the same level is flat on the 40-seed development set (so seeds 81-100 gained one), +1 on the
+validation seeds nobody tuned on, average delay improves on every set, Light Rain improves on every set (+3, +6, +4),
+and no safety-fail type rises on validation. Single seeds flip both ways in this simulator from any timing change.
+
+Known remaining failures: ND95 (stuck, see above); LR110: a 737 on the simulator's own route to gate E2 clips a GA
+aircraft parked at the neighbouring stand PE2 (stand geometry in the frozen simulator; previously hidden because that
+aircraft never reached the gate); the other Light Rain collisions are the same pairs as before G2 (a pushback's
+end-of-push turn sweeping an aircraft held nearby: LR21, LR101, LR108; a taxi-out past an aircraft parked at a stand:
+LR102; a head-on route near the 07L crossing: LR35).

@@ -26,6 +26,7 @@ LINE_UP_GUARD_S = 100.0         # no line-up if a landing is due within this
 TAKEOFF_GUARD_S = 55.0          # no takeoff roll if a landing is due within this
 CROSS_GUARD_S = 90.0            # no crossing if a landing on that runway is due within this
 CROSS_WINDOW_S = 45.0
+CROSS_FIRST_S = 5.0             # an aircraft stopped this long to cross a departure runway goes before the next line-up
 FAR_SIDE_M = 150.0              # no crossing while an aircraft stands on the first this-many metres after the runway
 PUSHBACK_CLEAR_M = 90.0
 PUSH_DELAY_MAX_S = 200.0        # ... unless the departure has waited at the gate this long
@@ -44,11 +45,15 @@ RELEASE_EXTRA_M = 15.0          # a hold is only released with this much more ro
 EXIT_SPEED_MPS = 10.0           # speed at the runway exit (the simulator's pilots: sim/core/physics.py EXIT_SPEED)
 EXIT_TAXI_WEIGHT = 0.1          # exit choice: one second of runway occupancy is worth ten seconds of taxi to the gate
 UNJAM_AFTER_S = 15.0            # two aircraft waiting for each other this long: reroute one of them
+UNJAM_TURN_DEG = 45.0           # a re-route needing more turn than this from where the aircraft stands is a turn in place
+UNJAM_SWEEP_M = 5.0             # ... and needs this margin beyond both half diagonals to every other aircraft
 UNJAM_RETRY_S = 45.0            # and do not try again for the same aircraft sooner than this
 PUSH_KEEP_CLEAR_M = 60.0        # taxi routing: keep this far from an aircraft pushing back while another way exists
 TAXI_WAIT_S = 60.0              # a new taxi clearance waits up to this long for a way that is not head-on into traffic
 FLOW_FINISH_ETA_S = 150.0       # on a flow change, arrivals closer than this finish on the old direction (if still legal)
 TAILWIND_LIMIT_KT = 10.0        # pilots' tailwind limit when the level does not say (sim/levels.py TAILWIND_LIMIT_KT)
+LATE_DAY_FRAC = 0.8             # from this share of the briefed day length (level duration_s) on, a departure backlog...
+LATE_BACKLOG = 4                # ... of this many departures not yet airborne opens a second departure runway
 ROLLOUT_S = 72.0                # typical landing occupancy, dry (docs/LEVELS.md measures 69-77 s), times occupancy_mult
 CLAIMS = ("cleared_to_land", "cross_runway", "line_up_and_wait", "cleared_for_takeoff")   # clearances that hold a runway
 RULES = {
@@ -151,6 +156,7 @@ class Planner:
         self.pic = self._picture(by_cs)
         self._readbacks()
         self._flow(obs)
+        self._late_day(obs)
         for cs in sorted((c for c in by_cs if c not in self.order), key=lambda c: (by_cs[c]["eta_s"] or 0.0, c)):
             self.order[cs] = len(self.order)
         for a in by_cs.values():
@@ -691,6 +697,8 @@ class Planner:
                         route = nx.dijkstra_path(g.g, origin, nodes[-1], weight=w)
                     except (nx.NetworkXNoPath, nx.NodeNotFound):
                         continue
+                    if self._turn_sweeps(obs, x, route):
+                        continue
                     if self._propose(x, "taxi_via", {"route": route, "to": to},
                                      "New route for %s around %s (each was waiting for the other)" % (x["callsign"], y["callsign"]),
                                      ["%s and %s stopped nose to nose for %.0f s" % (x["callsign"], y["callsign"], x.get("stopped_s") or 0.0)],
@@ -699,6 +707,26 @@ class Planner:
                 else:
                     continue
                 break
+
+    def _turn_sweeps(self, obs, x, route):
+        """A stopped aircraft turning onto this route sweeps a disc of its half diagonal around where it stands: any other
+        aircraft (stopped, held or parked included) inside it + UNJAM_SWEEP_M means the turn would hit it (ND95)."""
+        g = self.g
+        xx = np.array(g.frame.to_xy(x["lon"], x["lat"]))
+        tgt = next((g.node_xy[n] for n in route if math.hypot(*(g.node_xy[n] - xx)) > 5.0), None)
+        if tgt is None:
+            return False
+        turn = abs((math.degrees(math.atan2(tgt[0] - xx[0], tgt[1] - xx[1])) - x["heading_deg"] + 180.0) % 360.0 - 180.0)
+        if turn <= UNJAM_TURN_DEG:
+            return False
+        r = math.hypot(x["length_m"], x["wingspan_m"]) / 2.0
+        for o in obs["aircraft"]:
+            if o["callsign"] == x["callsign"] or o["phase"] in ("final", "go_around", "airborne") or o["kind"] == "vehicle":
+                continue
+            ro = math.hypot(o.get("length_m") or 40.0, o.get("wingspan_m") or 36.0) / 2.0
+            if math.hypot(*(np.array(g.frame.to_xy(o["lon"], o["lat"])) - xx)) < r + ro + UNJAM_SWEEP_M:
+                return True
+        return False
 
     # -- runway flow (wind) ----------------------------------------------------------------------------------------
     def _set_config(self, arr, dep, reason, decision=None):
@@ -751,6 +779,50 @@ class Planner:
                          "after the change); pilots refuse more than %.0f kt" % (
                              w.get("wind_dir") or 0, w.get("wind_kt") or 0, worst, after, self._limit()), decision)
 
+    def _late_day(self, obs):
+        """Late in the day the departure bank outruns one departure runway (~100 s a departure in rain) while the two
+        arrival runways see a landing every few minutes: land everyone on one arrival runway and depart from the other."""
+        g, lvl = self.g, obs.get("level") or {}
+        cfg = obs["runway_config"]
+        if (getattr(self, "late_done", False) or len(cfg["arrival_runways"]) < 2 or not lvl.get("duration_s")
+                or self.t < LATE_DAY_FRAC * lvl["duration_s"]):
+            return
+        backlog = [o for o in self.ac.values() if o["kind"] == "departure" and o["phase"] not in ("airborne",)
+                   and (o["phase"] != "at_gate" or o.get("ready"))]
+        if len(backlog) < LATE_BACKLOG:
+            return
+        dep_pav = {g.end_runway[e] for e in cfg["departure_runways"]}
+        best = None
+        for end in cfg["arrival_runways"]:
+            due = [o for o in self.ac.values() if o["kind"] == "arrival" and o["phase"] in ("final", "go_around")
+                   and g.end_runway[end] in (o.get("runway"), g.end_runway.get(o.get("arrival_end") or ""))]
+            cost = 0.0
+            for o in backlog:       # taxi cost of the backlog to this end, with crossings of the departure runways
+                origin = o.get("next_node") or (g.stands[o["gate"]].lane_node if o.get("gate") in g.stands else None)
+                entry = self.si.choose_entry(end, origin, o["type"]) if origin else None
+                route = g.route(origin, entry) if entry else None
+                if route is None:
+                    cost += 1e4
+                    continue
+                path = g.build_path(route)
+                cost += path.length / 5.0 + 120.0 * sum(1 for r in path.runs if r.runway in dep_pav)
+            cand = (len(due), cost, end)
+            best = cand if best is None or cand < best else best
+        if best is None or best[0] > 0:
+            return          # an arrival is still on final for it: try again on a later pass
+        end = best[2]
+        arr = [e for e in cfg["arrival_runways"] if e != end]
+        dep = list(cfg["departure_runways"]) + [end]
+        if self._set_config(arr, dep, "Late-day departure bank: %d departures waiting for %s; arrivals now land on %s only "
+                            "and %s takes departures" % (len(backlog), ", ".join(cfg["departure_runways"]), ", ".join(arr), end)):
+            self.late_done = True
+            self.late_pav = g.end_runway[end]   # an arrival seen on its final only later still lands there: never re-sequenced
+            for o in backlog:       # departures not yet taxiing choose their runway again when they taxi
+                st = self.assigned.get(o["callsign"], {})
+                if "taxi" not in st:
+                    for k in ("end", "entry"):
+                        st.pop(k, None)
+
     # -- arrivals ---------------------------------------------------------------------------------------------------
     def _arrival(self, obs, a):
         cs, st = a["callsign"], self.assigned.setdefault(a["callsign"], {})
@@ -760,7 +832,8 @@ class Planner:
             st.pop("go_around", None)
             return
         if a["phase"] == "final":
-            if "end" in st and st["end"] not in obs["runway_config"]["arrival_runways"] and not a["landing_cleared"] and (
+            if "end" in st and st["end"] not in obs["runway_config"]["arrival_runways"] and not a["landing_cleared"] \
+                    and self.g.end_runway[st["end"]] != getattr(self, "late_pav", None) and (
                     (a["eta_s"] or 999.0) > FLOW_FINISH_ETA_S or self._tailwind(st["end"]) > self._limit()):
                 for k in ("end", "landing", "go_around", "exit"):     # flow changed: send it to the new direction
                     st.pop(k, None)
@@ -789,7 +862,9 @@ class Planner:
         g = self.g
         cfg = obs["runway_config"]["arrival_runways"]
         cur = a.get("arrival_end")
-        if cur:     # approach control sequenced it onto this final: keep it (or its other end after a flow change)
+        if cur and g.end_runway[cur] == getattr(self, "late_pav", None):
+            cfg = [cur]     # on this final since before the late-day change: it lands there, in its approach sequence
+        elif cur:   # approach control sequenced it onto this final: keep it (or its other end after a flow change)
             cfg = [e for e in (cur, g.other_end(cur)) if e in cfg] or cfg
         eta = a["eta_s"] or 120.0
         t = obs["t"]
@@ -872,6 +947,8 @@ class Planner:
                 st["go_around"] = True
 
     def _maybe_cross(self, obs, a):
+        if not str(a.get("blocked_by") or "runway:").startswith("runway:"):
+            return      # queued behind another aircraft, not at the hold line: the one in front crosses first
         hold = a["hold"]
         pav = hold["runway"]
         t = obs["t"]
@@ -1061,6 +1138,8 @@ class Planner:
         due = self._landing_due(obs, pav, LINE_UP_GUARD_S, a["callsign"])
         if blockers or due:
             return
+        if self._crosser_waiting(pav, a["callsign"]):
+            return      # an aircraft waiting to cross goes first: the next line-up would hold the runway another ~100 s
         queue = [o for o in self.ac.values() if o["kind"] == "departure" and o["phase"] == "hold_short" and o.get("hold")
                  and o["hold"]["runway"] == pav and "taxi" in self.assigned.get(o["callsign"], {})
                  and o["callsign"] not in self.ground_hold and self.assigned[o["callsign"]].get("end") == st["end"]
@@ -1082,6 +1161,21 @@ class Planner:
         if res:
             st["luaw"] = True
             self.watch[res["clearance_id"]] = (a["callsign"], "luaw")
+
+    def _crosser_waiting(self, pav, me):
+        """Someone stopped at a hold point of this runway waiting to cross it (not a departure queued for it)."""
+        for o in self.ac.values():
+            h = o.get("hold")
+            if o["callsign"] == me or not h or h.get("runway") != pav or o["speed_mps"] > 0.3 \
+                    or float(o.get("stopped_s") or 0.0) < CROSS_FIRST_S \
+                    or not str(o.get("blocked_by") or "runway:").startswith("runway:"):
+                continue
+            so = self.assigned.get(o["callsign"], {})
+            if o["kind"] == "departure" and so.get("end") and self.g.end_runway[so["end"]] == pav:
+                continue
+            if not self._far_side(self.obs, o, pav):    # it can actually go once the runway is free
+                return True
+        return False
 
     def _spacing_ok(self, st, a, t):
         last = self.last_airborne.get(self.g.end_runway[st["end"]])

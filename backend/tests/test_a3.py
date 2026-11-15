@@ -233,6 +233,88 @@ def test_departure_gap_is_a_decision_with_options_and_default():
     assert [c["callsign"] for c in si.issued] == ["A"] and pl.assigned["A"].get("luaw")
 
 
+def ground_planner(si, *aircraft):
+    """A bare planner on one runway P (ends 09/27) with a fake graph, for the crossing and line-up paths."""
+    pl = bare_planner(si, pic(*aircraft))
+    frame = type("F", (), {"to_xy": staticmethod(lambda lon, lat: (lon, lat))})()
+    pl.g = type("G", (), {"end_runway": {"09": "P", "27": "P"}, "node_xy": {"e": (0.0, 0.0)}, "frame": frame})()
+    pl.last_airborne, pl.watch, pl.assigned, pl.ac = {}, {}, {}, {a["callsign"]: a for a in aircraft}
+    pl.obs = {"t": 1000.0, "aircraft": list(aircraft), "runways": [{"id": "P", "occupancy": []}]}
+    return pl
+
+
+def test_crosser_waiting_at_the_hold_line_goes_before_the_next_line_up():
+    """LR22: aircraft held short of a departure runway 300-400 s to cross while every gap went to the next line-up."""
+    dep = ac("D", phase="hold_short", hold={"runway": "P"}, stopped_s=30.0, entry_node="e", type="B738", lon=0.0, lat=0.0)
+    crosser = ac("X", kind="arrival", phase="taxi_in", hold={"runway": "P"}, stopped_s=10.0, blocked_by="runway:busy",
+                 lon=500.0, lat=0.0)
+    for waiting, issued in ((crosser, []), (dict(crosser, stopped_s=3.0), ["D"]), (None, ["D"])):
+        si = FakeSI()
+        pl = ground_planner(si, *([dep] + ([waiting] if waiting else [])))
+        pl.assigned["D"] = {"end": "09", "taxi": True}
+        pl._line_up(pl.obs, dep, pl.assigned["D"])
+        assert [c["callsign"] for c in si.issued] == issued
+
+
+def test_only_the_aircraft_at_the_hold_line_gets_a_crossing_clearance():
+    """ND7: a crossing went to an aircraft queued behind another at the hold line; its live clearance blocked the first."""
+    front = ac("F", kind="arrival", phase="taxi_in", hold={"runway": "P"}, stopped_s=20.0, blocked_by="runway:busy",
+               lon=0.0, lat=0.0)
+    behind = ac("B", kind="arrival", phase="taxi_in", hold={"runway": "P"}, stopped_s=20.0, blocked_by="F",
+                lon=-60.0, lat=0.0)
+    si = FakeSI()
+    pl = ground_planner(si, front, behind)
+    pl._maybe_cross(pl.obs, behind)
+    assert si.issued == []
+    pl._maybe_cross(pl.obs, front)
+    assert [(c["callsign"], c["action"]) for c in si.issued] == [("F", "cross_runway")]
+
+
+def late_day_planner(si, arrivals, tailwind=None):
+    """Two arrival runways (08 on pavement A, 07R on B), departures from 07L (C), 22 of 25 min gone, 4 departures ready."""
+    deps = [ac("D%d" % i, phase="hold_short", next_node="n", type="B738") for i in range(4)]
+    planes = deps + list(arrivals)
+    pl = bare_planner(si, pic(*planes, tailwind=tailwind or {}))
+    pl.t = 1320.0
+    path = type("P", (), {"length": 500.0, "runs": []})()
+    pl.g = type("G", (), {"end_runway": {"08": "A", "07R": "B", "07L": "C"}, "stands": {},
+                          "route": lambda self, o, e: ["n", e], "build_path": lambda self, r: path})()
+    pl.si.choose_entry = lambda end, origin, typ: "e" + end if end == "07R" else None   # 07R is the cheap one to depart from
+    pl.si.set_runway_config = lambda arr, dep: si.configs.append((arr, dep))
+    si.configs = []
+    pl.assigned, pl.ac = {}, {a["callsign"]: a for a in planes}
+    obs = {"t": pl.t, "level": {"duration_s": 1500.0},
+           "runway_config": {"arrival_runways": ["08", "07R"], "departure_runways": ["07L"]}}
+    return pl, obs
+
+
+def test_late_day_second_departure_runway_never_hands_over_a_runway_with_an_arrival_on_final():
+    """LR26: last departures waited behind 9 others on one departure runway. LR105 (prototype): a switch made as an
+    arrival appeared on final re-sequenced it 2.41 NM behind another."""
+    on = lambda cs, end, pav: ac(cs, kind="arrival", phase="final", arrival_end=end, runway=pav, eta_s=200.0)
+    # an arrival on each final: no switch at all
+    si = FakeSI()
+    pl, obs = late_day_planner(si, [on("A1", "08", "A"), on("A2", "07R", "B")])
+    pl._late_day(obs)
+    assert si.configs == [] and not getattr(pl, "late_done", False)
+    # an arrival on the cheaper runway's final: the other one is handed over, through the safety check
+    si = FakeSI()
+    pl, obs = late_day_planner(si, [on("A2", "07R", "B")])
+    pl._late_day(obs)
+    assert si.configs == [(["07R"], ["07L", "08"])] and pl.late_done and pl.late_pav == "A"
+    assert [(e[0], e[2].get("approved")) for e in pl.events] == [("proposal", None), ("safety_check", True)]
+    # no arrival anywhere: the cheaper runway (07R) is handed over
+    si = FakeSI()
+    pl, obs = late_day_planner(si, [])
+    pl._late_day(obs)
+    assert si.configs == [(["08"], ["07L", "07R"])]
+    # the safety engine refuses a tailwind end: no switch
+    si = FakeSI()
+    pl, obs = late_day_planner(si, [], tailwind={"07R": 15.0})
+    pl._late_day(obs)
+    assert si.configs == [] and [e[2]["approved"] for e in pl.events if e[0] == "safety_check"] == [False]
+
+
 def test_no_sim_imports_in_the_agent():
     import subprocess
     out = subprocess.run(["grep", "-rn", r"import sim\|from sim", str(Path(__file__).resolve().parent.parent / "atc")],
