@@ -21,7 +21,12 @@ FLOW_FINISH_ETA_S = 150.0       # on a flow change an arrival this close finishe
 CROSSING_PENALTY_M = 2500.0     # taxi routing: per runway-pavement edge (never trade a crossing for a short detour)
 SHARED_EDGE_PENALTY_M = 60.0    # taxi routing: an edge another aircraft also uses (same direction)
 CROSSER_PRIORITY_S = 20.0       # a crossing waiting this long goes before the next takeoff on that runway
-CONVERGE_LOOK_M = 350.0         # ground: look this far ahead along each route for a shared junction
+PUSH_SPEED_MPS = 1.1            # pushback speed (tug), so the push movement lasts lead length / 1.1 s
+PUSHBACK_EARLIEST_S = 282.0 * 0.75 - 15.0   # NASA NTRS 20190027149: pushback 4.72 min mean; 2.5 sigma early, minus a margin
+PUSH_SWEEP_M = 45.0             # a pushed-back aircraft (centre on the lane node) reaches about this far
+LEAD_IN_M = 90.0                # a re-route for a moving aircraft keeps this much of its current route first
+ENTRY_NEAR_M = 120.0            # a departure at its runway's hold line this close (+ half length) to its entry node is at it
+CONVERGE_LOOK_M = 250.0         # ground: look this far ahead along each route for a shared junction
 CONVERGE_WINDOW_S = 20.0        # two aircraft reaching one junction closer in time than this: one holds
 CONVERGE_MIN_STOP_M = 80.0      # ...if it is still this far from the junction (readback + braking distance)
 CONVERGE_CLEAR_M = 70.0         # resume once the other aircraft is this far past the junction and from the holder
@@ -42,6 +47,7 @@ class Planner:
         for e in ap["edges"]:
             self.g.add_edge(e["from"], e["to"], length=e["length_m"], kind=e["kind"], pavement=e["pavement"])
         self.ends = si.runway_ends()
+        self.runway_nodes = {n for e in self.ends.values() for n in e["chain"]}
         self.choose = lambda decision: decision["default"]   # A4: Claude picks among decision["options"]
         self.mem = {}           # callsign -> planner memory
         self.expected = {}      # clearance id -> (callsign, action, runway end the readback must contain or None)
@@ -49,6 +55,7 @@ class Planner:
         self.last_roll = {}     # pavement -> {t, callsign, cwt, wtc}: the last takeoff roll seen
         self.pushbacks = {}     # callsign -> {xy: lane node, t: approval time}
         self.sequences = {}     # runway -> last emitted order
+        self._near_cache = {}
         self.flow = "west"
         self.started = False
 
@@ -115,7 +122,10 @@ class Planner:
         for cs, h in held.items():   # resume once the other aircraft is past the node
             a, o = self.ac[cs], self.ac.get(h["by"])
             node = self.xy[h["node"]]
-            past = o is None or (h["node"] not in self._remaining(h["by"], o)
+            if h.get("push"):
+                past = o is None or o["phase"] != "pushback"
+            else:
+                past = o is None or (h["node"] not in self._remaining(h["by"], o)
                                  and self._dist((o["x"], o["y"]), node) > CONVERGE_CLEAR_M) or \
                 (o["speed_mps"] < 0.3 and self._dist((o["x"], o["y"]), node) > o["length_m"] / 2 + CONVERGE_CLEAR_M)
             if past and not self._pending(cs, "hold_position"):
@@ -124,7 +134,14 @@ class Planner:
         movers = {cs: a for cs, a in self.ac.items() if a["phase"] in ("taxi_in", "taxi_out") and a["speed_mps"] > 1.0
                   and not self._m(cs).get("held")}
         ahead = {cs: self._ahead(cs, a) for cs, a in movers.items()}
-        names = sorted(movers)
+        hot = self.pic["hot_nodes"]
+        for cs, lst in ahead.items():
+            n, d = next(((n, d) for n, d in lst if n in hot), (None, 0.0))
+            if n and d >= CONVERGE_MIN_STOP_M and not self._live_action(cs, "cross_runway"):
+                if self._propose(self.ac[cs], "hold_position", {}, f"{hot[n]} is pushing back into the taxilane "
+                                                                    f"{d:.0f} m ahead of {cs}: {cs} holds position."):
+                    self._m(cs)["held"] = {"by": hot[n], "node": n, "t": self.t, "push": True}
+        names = sorted(c for c in movers if not self._m(c).get("held"))
         for i, p in enumerate(names):
             for q in names[i + 1:]:
                 if self._m(p).get("held") or self._m(q).get("held"):
@@ -176,6 +193,16 @@ class Planner:
                 self.emit(self.t, "alert", cs, {"level": "warning", "message": f"{cs} is going around."},
                           f"{cs} is going around; it rejoins the final on its own.")
             m["phase"] = ph
+            p = m.get("pend")   # a taxi clearance counts only once the pilot has it (a route the sim could not apply is dropped)
+            if p:
+                c = self.live.get(p["cid"])
+                if c and c["state"] == "acknowledged":
+                    m.update(p["set"])
+                    m.pop("pend")
+                elif not c:
+                    m.pop("pend")
+                    self.emit(self.t, "alert", cs, {"level": "info", "message": "taxi clearance did not take effect"},
+                              f"{cs}'s new taxi route could not be applied where it now is; planning again.")
         for cs in [c for c in self.pushbacks if c not in self.ac or self.ac[c]["phase"] not in ("at_gate", "pushback")]:
             self.pushbacks.pop(cs)
 
@@ -247,9 +274,27 @@ class Planner:
             live_actions.setdefault(c["callsign"], set()).add(c["action"])
         return {"t": self.t, "aircraft": self.ac, "live_actions": live_actions, "occupants": occupants, "clear_at": clear_at, "runway_clearances": rc,
                 "last_roll": self.last_roll, "routes": routes, "parked_on": parked,
-                "pushbacks": self.pushbacks, "tailwind": {e: self._tailwind(e) for e in self.ends},
+                "pushbacks": self.pushbacks, "hot_nodes": self._hot_nodes(), "tailwind": {e: self._tailwind(e) for e in self.ends},
                 "tailwind_limit": lvl.get("tailwind_limit_kt") or safety.TAILWIND_LIMIT_KT, "rain": rain,
                 "rollout_s": ROLLOUT_S * eff.get("occupancy_mult", 1.0)}
+
+    def _hot_nodes(self):
+        """Lane nodes a pushback may be moving into now: from its earliest likely push movement until it completes
+        (the pushing aircraft does not give way; the sim's pushback averages PUSHBACK_MEAN_S, sigma 10 %)."""
+        out = {}
+        for cs, p in self.pushbacks.items():
+            a = self.ac.get(cs)
+            if a and a["phase"] == "pushback" and (a["speed_mps"] > 0.05 or self.t >= p["t"] + PUSHBACK_EARLIEST_S - p["move_s"]):
+                for n in self._near(p["lane"]):
+                    out[n] = cs
+        return out
+
+    def _near(self, node):
+        """Graph nodes within PUSH_SWEEP_M of a node (cached): where a pushing aircraft's body can reach."""
+        if node not in self._near_cache:
+            x = self.xy[node]
+            self._near_cache[node] = [n for n, p in self.xy.items() if self._dist(p, x) < PUSH_SWEEP_M]
+        return self._near_cache[node]
 
     def _tailwind(self, end):
         wx = self.obs["weather"]
@@ -396,7 +441,7 @@ class Planner:
                             f"{cs} vacated the runway: taxi to gate {a['gate']} ({length:.0f} m), clear of "
                             f"opposite-direction traffic.", route=route)
         if res:
-            m.update(route=route, ri=0, taxied=True)
+            m["pend"] = {"cid": res["clearance_id"], "set": {"route": route, "ri": 0, "taxied": True}}
 
     def _no_route(self, cs):
         key = (cs, "taxi_via")
@@ -462,7 +507,9 @@ class Planner:
                                 extra={"lane_xy": self.xy[lane]})
             if res:
                 m["push"] = True
-                self.pushbacks[cs] = {"xy": self.xy[lane], "t": self.t}
+                stand = self.si.stand_nodes(a["gate"])["node"]
+                self.pushbacks[cs] = {"xy": self.xy[lane], "t": self.t, "lane": lane,
+                                      "move_s": self._dist(self.xy[stand], self.xy[lane]) / PUSH_SPEED_MPS}
             return
         dep_ends = self.obs["runway_config"]["departure_runways"]
         if ph == "taxi_out" and not m.get("route") and a["speed_mps"] < 0.3 and a.get("next_node"):
@@ -471,14 +518,20 @@ class Planner:
         at_line = self._at_line(a)
         dep_pav = self.ends[m["end"]]["runway"] if m.get("end") else None
         if ph in ("taxi_out", "hold_short") and m.get("end") and m["end"] not in dep_ends and m.get("route") \
-                and a["speed_mps"] < 0.3 and not self._pending(cs, "taxi_via") \
+                and not self._pending(cs, "taxi_via") and not m.get("held") and not m.get("pend") \
                 and not (at_line and a["hold"]["runway"] == dep_pav
                          and self._tailwind(m["end"]) <= self.pic["tailwind_limit"] - 2):
-            start = a.get("prev_node") if a.get("prev_node") else a.get("next_node")
-            self._taxi_out(a, m, start, why="Runway flow changed: ")
+            if a["speed_mps"] < 0.3 and a.get("prev_node"):
+                (not a.get("hold") and a["next_node"] not in self.runway_nodes and self._taxi_out(a, m, a["next_node"], why="Runway flow changed: ", first=True)) or \
+                    self._taxi_out(a, m, a["prev_node"], why="Runway flow changed (turning round): ", turn=True)
+            elif a["speed_mps"] >= 0.3 and a.get("next_node") and a["next_node"] not in self.runway_nodes:
+                lead = self._lead_in(cs, a)
+                if lead:
+                    self._taxi_out(a, m, lead[-1], why="Runway flow changed: ", lead=lead[:-1])
             return
         if at_line:
-            if a["hold"]["runway"] == dep_pav:
+            if a["hold"]["runway"] == dep_pav and m.get("entry") and \
+                    self._dist((a["x"], a["y"]), self.xy[m["entry"]]) < a["length_m"] / 2 + ENTRY_NEAR_M:
                 self._takeoff(a, m)
             else:
                 self._cross(a)
@@ -488,15 +541,16 @@ class Planner:
         """Stopped at a runway hold line itself (not queued behind another aircraft)."""
         return bool(a.get("hold")) and a["speed_mps"] < 0.3 and str(a.get("blocked_by") or "").startswith("runway:")
 
-    def _route(self, cs, src, dst):
+    def _route(self, cs, src, dst, avoid_pav=None, avoid_nodes=()):
         """Dijkstra over the taxi graph: no runway centreline edges, never against another aircraft's route (head-on),
         never through an aircraft stopped without a route, a heavy penalty per runway crossing."""
         against = {(v, u) for o, r in self.pic["routes"].items() if o != cs for u, v in zip(r, r[1:])}
         shared = {(u, v) for o, r in self.pic["routes"].items() if o != cs for u, v in zip(r, r[1:])}
-        blocked = {n for o, n in self.pic["parked_on"].items() if o != cs}
+        blocked = {n for o, n in self.pic["parked_on"].items() if o != cs} | set(self.pic["hot_nodes"]) | set(avoid_nodes)
 
         def w(u, v, d):
-            if d["kind"] == "runway" or (u, v) in against or (v in blocked and v != dst):
+            if d["kind"] == "runway" or (u, v) in against or (v in blocked and v not in (dst, src)) or \
+                    (avoid_pav and d["pavement"] == avoid_pav and v != dst):
                 return None
             return d["length"] + (CROSSING_PENALTY_M if d["pavement"] else 0.0) + (SHARED_EDGE_PENALTY_M if (u, v) in shared else 0.0)
         try:
@@ -504,31 +558,53 @@ class Planner:
         except (nx.NetworkXNoPath, nx.NodeNotFound):
             return None
 
-    def _taxi_out(self, a, m, start, why=""):
+    def _lead_in(self, cs, a):
+        """The next nodes of a moving aircraft's current route, LEAD_IN_M or more: a new route must start with them because
+        the aircraft passes its observed next node before the readback is accepted."""
+        r = self._remaining(cs, a)
+        nn = a.get("next_node")
+        if nn not in r:
+            return None
+        out, d = [], self._dist((a["x"], a["y"]), self.xy[nn])
+        for u, v in zip(r[r.index(nn):], r[r.index(nn) + 1:]):
+            out.append(u)
+            if d >= LEAD_IN_M:
+                break
+            d += self.g[u][v]["length"]
+        else:
+            return None
+        return out if not any(n in self.runway_nodes for n in out) else None
+
+    def _taxi_out(self, a, m, start, why="", first=False, turn=False, lead=()):
+        """Route a departure to the best active departure runway. first: only try (no alert if none); turn: the route
+        starts behind the aircraft (it turns round where it stands). Returns True if a clearance went out."""
         cs = a["callsign"]
         if self._pending(cs, "taxi_via"):
-            return
+            return False
         best = None
         for end in self.obs["runway_config"]["departure_runways"]:
             entry = self.si.choose_entry(end, start, a["type"])
             if not entry:
                 continue
-            route = self._route(cs, start, entry)
+            route = self._route(cs, start, entry, avoid_pav=self.ends[end]["runway"], avoid_nodes=set(lead))
             if not route:
                 continue
+            route = list(lead) + route
             length = sum(self.g[u][v]["length"] for u, v in zip(route, route[1:]))
             score = length + CROSSING_PENALTY_M * len(self._runs(route[:-1]))
             if best is None or score < best[0]:
                 best = (score, end, entry, route, length)
         if best is None:
-            self._no_route(cs)
-            return
+            if not first:
+                self._no_route(cs)
+            return False
         _, end, entry, route, length = best
         res = self._propose(a, "taxi_via", {"route": route, "to": end},
                             f"{why}Taxi {cs} to runway {end} ({length:.0f} m), clear of opposite-direction traffic.",
-                            end=end, route=route)
+                            end=end, route=route, extra={"turn_round": turn})
         if res:
-            m.update(end=end, entry=entry, route=route, ri=0)
+            m["pend"] = {"cid": res["clearance_id"], "set": {"end": end, "entry": entry, "route": route, "ri": 0}}
+        return bool(res)
 
     def _takeoff(self, a, m):
         cs, end = a["callsign"], m["end"]

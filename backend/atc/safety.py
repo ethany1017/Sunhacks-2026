@@ -23,6 +23,8 @@ WAKE_LIGHT_BEHIND_LARGE_S = 90.0         # assumption (the built-in tower's valu
 # -- taxi -------------------------------------------------------------------------------------------------------------
 PUSHBACK_LANE_M = 70.0       # two pushbacks into lanes this close are serialised...
 PUSHBACK_STAGGER_S = 90.0    # ...this far apart, so their push movements (at the end of ~280 s) do not overlap
+TURN_CLEAR_M = 30.0          # turning round in place needs this much room beyond the two aircraft's half sizes
+GROUND_PHASES = ("taxi_in", "taxi_out", "pushback", "hold_short", "line_up", "runway_exit", "landing_roll")
 # -- tailwind (pilot limit, typical transport AFM; the level exposes it as tailwind_limit_kt) --------------------------
 TAILWIND_LIMIT_KT = 10.0
 # -- rain / low visibility (the level's effects: wet runways occupy 15 % longer, approach control adds 1 NM) ----------
@@ -182,6 +184,13 @@ def taxi_conflict(pic, prop):
                                             f"{PUSHBACK_STAGGER_S:.0f} s.")
         return _ok("taxi_conflict")
     route = prop.get("route") or []
+    if prop.get("turn_round"):
+        me = pic["aircraft"][cs]
+        for o, a in pic["aircraft"].items():
+            if o != cs and a.get("phase") in GROUND_PHASES:
+                d = ((a["x"] - me["x"]) ** 2 + (a["y"] - me["y"]) ** 2) ** 0.5
+                if d < me["length_m"] / 2 + a["wingspan_m"] / 2 + TURN_CLEAR_M:
+                    return _no("taxi_conflict", f"{cs} cannot turn round where it stands: {o} is {d:.0f} m away.")
     mine = set(zip(route, route[1:]))
     for o, r in pic["routes"].items():
         if o == cs:
