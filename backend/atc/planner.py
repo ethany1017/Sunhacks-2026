@@ -41,7 +41,6 @@ CONVERGE_CLEAR_M = 70.0
 START_DELAY_S = 5.0             # readback plus spool-up before a stopped aircraft moves
 TAXI_AVG_MPS = 5.0              # average speed from a standing start over the first few hundred metres
 HOLD_MAX_S = 60.0               # a hold for an aircraft that has itself stopped ends after this         # resume once the other aircraft is this far past the junction and from the holder
-DEPARTURE_RUNWAYS = {"west": ["25R"], "east": ["07L"]}  # departures on the runway arrivals do not use
 FREQ = {"tower": "120.9", "ground": "132.55"}
 
 
@@ -67,7 +66,8 @@ class Planner:
         self.pushbacks = {}     # callsign -> {xy: lane node, t: approval time}
         self.sequences = {}     # runway -> last emitted order
         self._near_cache = {}
-        self.flow = "west"
+        self.flows = self._derive_flows()
+        self.flow = next(iter(self.flows))
         self.started = False
 
     # -- geometry ----------------------------------------------------------------------------------------------------
@@ -103,7 +103,10 @@ class Planner:
         self._readbacks()
         if not self.started:
             self.started = True
-            self._set_flow(self.flow, "Start of the day: arrivals on 25L and 26, departures on 25R (no arrivals on it).")
+            self.flow = min(self.flows, key=lambda f: max(self._tailwind(e) for e in sum(self._config(f), [])))
+            arr, dep = self._config(self.flow)
+            self._set_flow(self.flow, f"Start of the day, least tailwind: arrivals on {' and '.join(arr)}, departures "
+                                      f"on {' and '.join(dep)} (no arrivals on it).")
         self._flow()
         order = sorted(self.ac.values(), key=lambda a: (a.get("eta_s") or 0.0) if a["phase"] == "final" else 1e6)
         for a in order:
@@ -404,7 +407,7 @@ class Planner:
                 return float("inf")   # held up by traffic before it is clear of the runway
             rem = a["length_m"] / 2 + 70.0 - d
             if rem <= 0:
-                return self.t + 15.0  # past where it should be clear yet still reported on the runway: long exit, don't trust
+                return self.t + 8.0   # past where it should be clear yet still reported on the runway: long exit, don't trust
             return self.t + rem / min(max(a["speed_mps"], 1.0), 4.0) + 2.0
         if ph == "takeoff_roll":
             return self.t + 45.0 * occ * occ
@@ -584,9 +587,28 @@ class Planner:
                 self.emit(self.t, "alert", cs, {"level": "warning", "message": why, "source": "readback"}, why)
 
     # -- runway flow (wind) ------------------------------------------------------------------------------------------
+    def _derive_flows(self):
+        """Runway flows from the airport layout: the runway ends pointing one way, and the other. In each flow the
+        middle runway (by lateral position) takes departures and the others arrivals; one runway does both."""
+        names = ["north", "north-east", "east", "south-east", "south", "south-west", "west", "north-west"]
+        h0 = next(iter(self.ends.values()))["heading"]
+        flows = {}
+        for same in (True, False):
+            ends = [e for e, v in self.ends.items() if (abs((v["heading"] - h0 + 180) % 360 - 180) < 90) == same]
+            if not ends:
+                continue
+            h = math.radians(self.ends[ends[0]]["heading"])
+            lat = lambda e: (self.xy[self.ends[e]["threshold_node"]][0] * math.cos(h)
+                             - self.xy[self.ends[e]["threshold_node"]][1] * math.sin(h))
+            ends.sort(key=lat)
+            dep = [ends[len(ends) // 2]] if len(ends) != 2 else [ends[1]]
+            arr = [e for e in ends if e not in dep] or dep
+            flows[names[int((self.ends[ends[0]]["heading"] + 22.5) % 360 // 45)]] = (arr, dep)
+        return flows
+
     def _config(self, flow):
-        arr = ["25L", "26"] if flow == "west" else ["07R", "08"]
-        return arr, DEPARTURE_RUNWAYS[flow]
+        arr, dep = self.flows[flow]
+        return list(arr), list(dep)
 
     def _set_flow(self, flow, reason, decision=None):
         arr, dep = self._config(flow)
@@ -607,7 +629,9 @@ class Planner:
         worst = max(self._tailwind(e) for e in cur[0] + cur[1])
         if worst <= FLOW_SWITCH_TAILWIND_KT:
             return
-        other = "east" if self.flow == "west" else "west"
+        other = next((f for f in self.flows if f != self.flow), None)
+        if other is None:
+            return
         new = self._config(other)
         after = max(self._tailwind(e) for e in new[0] + new[1])
         if after >= worst:

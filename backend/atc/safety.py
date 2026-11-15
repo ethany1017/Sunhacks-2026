@@ -26,6 +26,9 @@ PUSHBACK_STAGGER_S = 90.0
 PUSH_CLEAR_M = 5.0           # margin between a pushback's swept area and any other aircraft    # ...this far apart, so their push movements (at the end of ~280 s) do not overlap
 CONVERGE_WINDOW_S = 20.0     # two aircraft predicted at one junction closer in time than this: the later one waits
 CONFLICT_MARGIN_M = 20.0     # route points closer than the two half wingspans + this are one junction
+SHARP_TURN_DEG = 90.0        # a turn sharper than this near the start of a route sweeps its corner (planner geometry)
+SHARP_TURN_LOOK_M = 100.0    # ... checked over the first stretch of the route only
+SHARP_TURN_CLEAR_M = 40.0    # room beyond the half sizes at that corner (a 53 m sweep collided; 3 m observation noise)
 TURN_CLEAR_M = 30.0          # turning round in place needs this much room beyond the two aircraft's half sizes
 GROUND_PHASES = ("taxi_in", "taxi_out", "pushback", "hold_short", "line_up", "runway_exit", "landing_roll")
 # -- tailwind (pilot limit, typical transport AFM; the level exposes it as tailwind_limit_kt) --------------------------
@@ -222,6 +225,21 @@ def taxi_conflict(pic, prop):
                 d = ((a["x"] - me["x"]) ** 2 + (a["y"] - me["y"]) ** 2) ** 0.5
                 if d < me["length_m"] / 2 + a["wingspan_m"] / 2 + TURN_CLEAR_M:
                     return _no("taxi_conflict", f"{cs} cannot turn round where it stands: {o} is {d:.0f} m away.")
+    me = pic["aircraft"].get(cs)
+    h, at, d = (me or {}).get("heading_deg"), (me or {}).get("x"), 0.0
+    at = (me["x"], me["y"]) if me and at is not None else None
+    for p in (prop.get("path") or []) if at else []:   # a sharp turn swings the tail and wings round its corner
+        if d > SHARP_TURN_LOOK_M:
+            break
+        if h is not None and abs((p["hdg"] - h + 180) % 360 - 180) > SHARP_TURN_DEG:
+            for o, a in pic["aircraft"].items():
+                if o != cs and a.get("phase") in GROUND_PHASES:
+                    g = ((a["x"] - at[0]) ** 2 + (a["y"] - at[1]) ** 2) ** 0.5
+                    if g < me["length_m"] / 2 + a["wingspan_m"] / 2 + SHARP_TURN_CLEAR_M:
+                        return _no("taxi_conflict", f"{cs}'s route turns sharply {d:.0f} m ahead and {o} is {g:.0f} m "
+                                                    f"from that corner.")
+        d += ((p["xy"][0] - at[0]) ** 2 + (p["xy"][1] - at[1]) ** 2) ** 0.5
+        at = p["xy"]   # turns measured against the aircraft's own heading (the first short leg's bearing is noisy)
     mine = set(zip(route, route[1:]))
     for o, r in pic["routes"].items():
         if o == cs:
