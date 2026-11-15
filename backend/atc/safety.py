@@ -33,6 +33,9 @@ CONFLICT_MARGIN_M = 20.0     # route points closer than the two half wingspans +
 SHARP_TURN_DEG = 90.0        # a turn sharper than this near the start of a route sweeps its corner (planner geometry)
 SHARP_TURN_LOOK_M = 100.0    # ... checked over the first stretch of the route only
 SHARP_TURN_CLEAR_M = 40.0    # room beyond the half sizes at that corner (a 53 m sweep collided; 3 m observation noise)
+SEE_AVOID_M = 15.0           # sim pilots stop for an aircraft this far (beyond half lengths) right ahead (sim README)
+FACING_MARGIN_M = 12.0       # nose-to-nose meeting range margin (corner cutting ~10 m, 3 m observation noise)
+FACING_DEG = 120.0           # headings this far apart: the two meet nose to nose
 TURN_CLEAR_M = 30.0         # turning round in place needs this much room beyond the two aircraft's half sizes
 GROUND_PHASES = ("taxi_in", "taxi_out", "pushback", "hold_short", "line_up", "runway_exit", "landing_roll")
 # -- tailwind (pilot limit, typical transport AFM; the level exposes it as tailwind_limit_kt) --------------------------
@@ -223,6 +226,9 @@ def taxi_conflict(pic, prop):
             d = ((px - along * ux) ** 2 + (py - along * uy) ** 2) ** 0.5
             if d < me["wingspan_m"] / 2 + a["length_m"] / 2 + PUSH_CLEAR_M:
                 return _no("taxi_conflict", f"{o} is in {cs}'s pushback path ({d:.0f} m from it).")
+            r = ((a["x"] - b0[0]) ** 2 + (a["y"] - b0[1]) ** 2) ** 0.5   # it swings round to its taxi heading there
+            if r < half_diag(me) + half_diag(a) + PUSH_CLEAR_M:
+                return _no("taxi_conflict", f"{o} is {r:.0f} m from where {cs} swings round at the end of its pushback.")
         return _ok("taxi_conflict")
     route = prop.get("route") or []
     if prop.get("turn_round"):
@@ -265,7 +271,8 @@ def taxi_conflict(pic, prop):
     for o, theirs in pic.get("paths", {}).items():
         if o == cs:
             continue
-        hit = converging(mine, theirs, (me.get("wingspan_m", 36.0) + pic["aircraft"][o]["wingspan_m"]) / 2)
+        b = pic["aircraft"][o]
+        hit = converging(mine, theirs, (me.get("wingspan_m", 36.0) + b["wingspan_m"]) / 2, facing_range(me, b))
         if hit:
             return _no("taxi_conflict", f"{cs} and {o} would reach the same junction {hit[0]:.0f} s / {hit[1]:.0f} s from "
                                         f"now (closer than {CONVERGE_WINDOW_S:.0f} s apart).")
@@ -273,9 +280,10 @@ def taxi_conflict(pic, prop):
 
 
 def _into_push(pic, cs, me, path):
-    """A pushback that may be moving now (the planner's hot pushbacks) whose stand-to-lane sweep (plus its half length
+    """An approved pushback (it may start moving at any time and cannot be stopped; LR21: an aircraft that taxied up
+    while it waited was hit when it swung round) whose stand-to-lane sweep (plus its half length
     past the lane) the route ahead reaches within the two half spans + PUSH_CLEAR_M."""
-    hot = {o for o in pic.get("hot_nodes", {}).values() if o != cs}
+    hot = {o for o, pb in pic.get("pushbacks", {}).items() if o != cs and (pic["aircraft"].get(o) or {}).get("phase") == "pushback"}
     if not hot or not me or "x" not in me or not path:
         return None
     pts, prev, d = [], (me["x"], me["y"]), 0.0
@@ -299,23 +307,37 @@ def _into_push(pic, cs, me, path):
         L = max(((bx - ax) ** 2 + (by - ay) ** 2) ** 0.5, 1e-6)
         ux, uy = (bx - ax) / L, (by - ay) / L
         lim = me.get("wingspan_m", 36.0) / 2 + a["wingspan_m"] / 2 + PUSH_CLEAR_M
+        swing = half_diag(me) + half_diag(a) + PUSH_CLEAR_M
         for x, y in pts:
             k = max(0.0, min(L + a["length_m"] / 2, (x - ax) * ux + (y - ay) * uy))
-            if ((x - ax - k * ux) ** 2 + (y - ay - k * uy) ** 2) ** 0.5 < lim:
+            if ((x - ax - k * ux) ** 2 + (y - ay - k * uy) ** 2) ** 0.5 < lim or ((x - bx) ** 2 + (y - by) ** 2) ** 0.5 < swing:
                 return o
     return None
 
 
-def converging(mine, theirs, half_spans):
-    """(my eta, their eta) at the first pair of route points closer than the half wingspans + margin that both reach
-    within CONVERGE_WINDOW_S of each other, unless one simply follows the other there (same heading in). Path points:
-    {xy, eta, hdg} (hdg = direction of the edge into the point)."""
+def half_diag(a):
+    """Half the diagonal of an aircraft's footprint: how far it reaches while turning on the spot."""
+    return ((a.get("length_m", 40.0) / 2) ** 2 + (a.get("wingspan_m", 36.0) / 2) ** 2) ** 0.5
+
+
+def facing_range(a, b):
+    """Two aircraft meeting nose to nose stop for each other inside this range (sim see-and-avoid: half lengths + 15 m),
+    plus a margin for corner cutting (LR24: stopped 43 m apart on taxiway legs 57 m apart) and observation noise."""
+    return (a.get("length_m", 40.0) + b.get("length_m", 40.0)) / 2 + SEE_AVOID_M + FACING_MARGIN_M
+
+
+def converging(mine, theirs, half_spans, facing=0.0):
+    """(my eta, their eta) at the first pair of route points closer than the half wingspans + margin (or, heading at
+    each other, closer than `facing`) that both reach within CONVERGE_WINDOW_S of each other, unless one simply follows
+    the other there (same heading in). Path points: {xy, eta, hdg} (hdg = direction of the edge into the point)."""
     r = half_spans + CONFLICT_MARGIN_M
     for p in mine:
         for q in theirs:
-            if (p["xy"][0] - q["xy"][0]) ** 2 + (p["xy"][1] - q["xy"][1]) ** 2 > r * r:
+            hd = abs((p["hdg"] - q["hdg"] + 180) % 360 - 180)
+            rr = max(r, facing) if hd > FACING_DEG else r
+            if (p["xy"][0] - q["xy"][0]) ** 2 + (p["xy"][1] - q["xy"][1]) ** 2 > rr * rr:
                 continue
-            if abs((p["hdg"] - q["hdg"] + 180) % 360 - 180) < 40:
+            if hd < 40:
                 continue   # in trail on the same line: the pilots keep their distance
             if abs(p["eta"] - q["eta"]) < CONVERGE_WINDOW_S:
                 return p["eta"], q["eta"]

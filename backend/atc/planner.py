@@ -350,11 +350,15 @@ class Planner:
                     continue
                 ap_, aq_ = movers[p], movers[q]
                 radius = (ap_["wingspan_m"] + aq_["wingspan_m"]) / 2 + CONFLICT_MARGIN_M
+                facing = safety.facing_range(ap_, aq_)
                 hit = None
                 for np_, dp in ahead[p]:
                     for nq_, dq in ahead[q]:
-                        if self._dist(self.xy[np_], self.xy[nq_]) < radius:
+                        dd = self._dist(self.xy[np_], self.xy[nq_])
+                        if dd < max(radius, facing):
                             hd = abs((self._hdg_into(p, ap_, np_) - self._hdg_into(q, aq_, nq_) + 180) % 360 - 180)
+                            if dd >= radius and hd <= safety.FACING_DEG:
+                                continue   # only nose to nose counts that far apart
                             if hd < 40:
                                 continue   # in trail there (the same way): the pilots keep their distance
                             hit = (np_, dp, nq_, dq)

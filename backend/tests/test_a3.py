@@ -132,7 +132,8 @@ def test_taxi_conflict_route_into_a_moving_pushback():
     prop = {"callsign": "ME", "action": "resume_taxi", "route": ["a", "b"], "path": path}
     pushes = {"PB": {"xy": (0.0, 20.0), "stand_xy": (0.0, 60.0), "t": 900.0, "lane": "b"}}
     assert safety.taxi_conflict(pic(me, pb, pushbacks=pushes, hot_nodes={"b": "PB"}), prop)[0] is False
-    assert safety.taxi_conflict(pic(me, pb, pushbacks=pushes), prop)[0]           # not moving yet: no conflict
+    assert not safety.taxi_conflict(pic(me, pb, pushbacks=pushes), prop)[0]       # approved, not moving yet: still protected
+    assert safety.taxi_conflict(pic(me, dict(pb, phase="taxi_out"), pushbacks=pushes), prop)[0]   # push finished
 
 
 def test_check_reports_first_failure_or_all_passed():
