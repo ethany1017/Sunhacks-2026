@@ -599,6 +599,9 @@ class Planner:
             self._m(cs).pop("held", None)   # a new movement clearance supersedes a hold_position
         if pavement:
             self._m(cs).setdefault("pav_of", {})[res["clearance_id"]] = pavement
+            if action in safety.RUNWAY_ACTIONS:   # visible to the rest of this pass (no two runway clearances in one tick)
+                self.pic["runway_clearances"].append({"callsign": cs, "action": action, "pavement": pavement, "t": self.t})
+                self.pic["live_actions"].setdefault(cs, set()).add(action)
         self.emit(self.t, "clearance", cs, {"clearance_id": res["clearance_id"], "action": action, "params": params,
                                             "text": res["text"]}, res["text"])
         return res
@@ -880,7 +883,9 @@ class Planner:
                 if lead:
                     self._taxi_out(a, m, lead[-1], why="Runway flow changed: ", lead=lead[:-1])
             return
-        if at_line:
+        if ph == "line_up" and m.get("end"):
+            self._takeoff(a, m)   # lined up (or lining up) and waiting: the takeoff clearance follows at minimum spacing
+        elif at_line:
             if a["hold"]["runway"] == dep_pav:   # routes never cross their own departure runway: this is the entry
                 self._takeoff(a, m)
             else:
@@ -962,6 +967,11 @@ class Planner:
         pav = self.ends[end]["runway"]
         if self._pending(cs, "cleared_for_takeoff") or a.get("takeoff_cleared"):
             return
+        if a["phase"] == "line_up" or self._pending(cs, "line_up_and_wait"):
+            self._propose(a, "cleared_for_takeoff", {"runway": end},
+                          f"{cs} is lined up on runway {end}; cleared for takeoff as soon as the preceding departure, "
+                          f"the arrivals and the wake spacing allow.", end=end, pavement=pav)
+            return
         waiting = [o for o in self.ac.values() if o["callsign"] != cs and self._at_line(o) and o["hold"]["runway"] == pav
                    and (o.get("stopped_s") or 0) > CROSSER_PRIORITY_S
                    and not (o["kind"] == "departure" and self._m(o["callsign"]).get("end")
@@ -979,9 +989,13 @@ class Planner:
             decision["choice"] = self.choose(decision)
             if decision["choice"] != cs:
                 return
-        self._propose(a, "cleared_for_takeoff", {"runway": end},
-                      f"{cs} is first in line at runway {end}; cleared for takeoff when the runway, the arrivals and "
-                      f"the wake spacing allow.", end=end, pavement=pav, decision=decision)
+        last = self.last_roll.get(pav)
+        lead = self.ac.get(last["callsign"]) if last else None
+        if lead is not None and lead["phase"] in ("takeoff_roll", "line_up"):
+            return   # line up only once the preceding departure has lifted off (never two on the runway)
+        self._propose(a, "line_up_and_wait", {"runway": end},
+                      f"{cs} is first in line at runway {end}; line up and wait so the takeoff follows the preceding "
+                      f"departure at the minimum spacing.", end=end, pavement=pav, decision=decision)
 
     # -- sequence events -----------------------------------------------------------------------------------------------
     def _sequence(self):
