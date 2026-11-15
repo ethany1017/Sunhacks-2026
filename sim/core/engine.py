@@ -282,8 +282,7 @@ class Simulation:
             voice.status = "ok"
             self.emit("readback.accepted", c.callsign, {"readback_id": rb.id, "clearance_id": c.id, "implicit": implicit})
             if rb.error and c.action == "hold_short":
-                self._acknowledge(c, apply=False)
-                self._miss_hold(self.aircraft[c.callsign], c.params["runway"])
+                self._acknowledge(c, apply=not self._miss_hold(self.aircraft[c.callsign], c.params["runway"]))
             else:
                 self._acknowledge(c)
             return {"ok": True}
@@ -646,17 +645,19 @@ class Simulation:
                 stopped = True
         return stopped
 
-    def _miss_hold(self, ac: Aircraft, end: str) -> None:
+    def _miss_hold(self, ac: Aircraft, end: str) -> bool:
         """An accepted wrong hold-short readback: the pilot does not stop at the next hold point for this runway only.
-        Later hold instructions and every other hold point on the route work normally."""
+        Later hold instructions and every other hold point on the route work normally. False if there is no hold point
+        to miss: the caller then applies the clearance normally (it ends as no_effect, exactly as a correct one would)."""
         pav = self.runway_pavement(end)
         if ac.path is None or pav is None:
-            return
+            return False
         half = ac.length_m / 2
         for i, r in enumerate(ac.path.runs):
             if r.runway == pav and r.s0 - half - HOLD_OFFSET_M > ac.s + ac.speed ** 2 / (2 * A_BRAKE):
                 ac.cleared_runs.add(i)
-                return
+                return True
+        return False
 
     def _cross(self, ac: Aircraft, c: Clearance) -> bool:
         pav = self.runway_pavement(c.params["runway"])
@@ -717,7 +718,8 @@ class Simulation:
                 "runways": [self.res.view(r, self.t) for r in self.graph.runways],
                 "runway_config": dict(self.runway_cfg), "weather": self.weather_view(), "pending_readbacks": pending,
                 "clearances": [c.view() for c in self.clearances.values() if c.state in ("issued", "acknowledged")],
-                "referee": self.referee_report()}
+                # no score: its readback counts would tell the controller whether a readback it just resolved was wrong
+                "referee": {k: v for k, v in self.referee_report().items() if k != "score"}}
 
     # -- physics tick ----------------------------------------------------------------------------------------
     def runway_busy(self, runway: str, ac: Aircraft) -> bool:

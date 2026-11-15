@@ -1,6 +1,7 @@
 """S2 Referee: each fail rule is forced and caught, one violation is one record, the tower passes the smoke day."""
 from __future__ import annotations
 
+import json
 from typing import Any, Dict, List
 
 from sim.core.aircraft_types import get_type
@@ -127,8 +128,7 @@ def test_accepted_wrong_hold_short_readback_is_an_incursion(manual_sim: Simulati
     steps(sim, 31)
     sim.scenario.readback_error_rate = 0.0
     rb = next(p for p in sim.observe()["pending_readbacks"] if p["clearance_id"] == c)
-    seen = sim.observe()["referee"]["score"]                  # nothing says the pending readback is wrong
-    assert seen["readback_errors_accepted"] == 0 and seen["readback_errors_caught"] == 0
+    assert "score" not in sim.observe()["referee"]            # nothing says the pending readback is wrong
     sim.resolve_readback(rb["id"], True)                      # the controller misses it: the pilot misses the hold
     for _ in range(3000):
         sim.step()
@@ -136,6 +136,26 @@ def test_accepted_wrong_hold_short_readback_is_an_incursion(manual_sim: Simulati
             break
     got = fails(sim, "runway_incursion")
     assert len(got) == 1 and got[0]["callsigns"] == ["TST1"] and "07L/25R" in got[0]["reason"]
+    assert sim.referee_report()["score"]["readback_errors_accepted"] == 1
+
+
+def test_resolving_a_wrong_readback_does_not_tell_the_controller(manual_sim: Simulation, graph) -> None:
+    sim = manual_sim
+    _taxiing(sim, graph, "TST4", _crossing_route(graph))
+    sim.scenario.readback_error_rate = 1.0
+    c = sim.issue_clearance("TST4", "hold_short", {"runway": "25R"})["clearance_id"]
+    rb = None
+    for _ in range(100):
+        sim.step()
+        rb = next((p for p in sim.observe()["pending_readbacks"] if p["clearance_id"] == c), None)
+        if rb:
+            break
+    assert rb is not None
+    before = sim.observe()["referee"]
+    sim.resolve_readback(rb["id"], True)
+    after = sim.observe()
+    assert after["referee"] == before and "score" not in after["referee"]
+    assert "readback_errors" not in json.dumps(after)
     assert sim.referee_report()["score"]["readback_errors_accepted"] == 1
 
 
