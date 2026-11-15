@@ -28,6 +28,7 @@ LEAD_IN_M = 90.0                # a re-route for a moving aircraft keeps this mu
 CONVERGE_LOOK_M = 250.0         # ground: look this far ahead along each route for a shared junction
 CONFLICT_MARGIN_M = 20.0        # two route points closer than the half wingspans + this are one conflict point
 CONVERGE_WINDOW_S = 20.0        # two aircraft reaching one junction closer in time than this: one holds
+CONVERGE_TIGHT_S = 10.0         # ...if a hold would stop in the other's path, hold only when this close in time
 CONVERGE_MIN_STOP_M = 80.0      # ...if it is still this far from the junction (readback + braking distance)
 BODY_MIN_STOP_M = 40.0          # stop for a stopped fuselage over a junction only if it can still stop short of it
 SEE_AVOID_M = 15.0              # the pilots stop for any aircraft this close (beyond half lengths) ahead (sim README)
@@ -211,6 +212,14 @@ class Planner:
             d += self.g[u][v]["length"]
         return False
 
+    def _hdg_into(self, cs, a, n):
+        """Bearing of a's route leg into node n (from where it is, for its next node)."""
+        r = self._remaining(cs, a)
+        i = r.index(n) if n in r else 0
+        u = (a["x"], a["y"]) if n == a.get("next_node") or i == 0 else self.xy[r[i - 1]]
+        v = self.xy[n]
+        return math.degrees(math.atan2(v[0] - u[0], v[1] - u[1])) % 360 if self._dist(u, v) > 0.5 else a["heading_deg"]
+
     def _waits_for(self, a, b):
         """Is a (transitively) held for b?"""
         seen = set()
@@ -318,14 +327,14 @@ class Planner:
                 if self._m(p).get("held") or self._m(q).get("held"):
                     continue
                 ap_, aq_ = movers[p], movers[q]
-                hd = abs((ap_["heading_deg"] - aq_["heading_deg"] + 180) % 360 - 180)
-                if hd < 40:
-                    continue   # in trail (or side by side the same way): the pilots keep their distance
                 radius = (ap_["wingspan_m"] + aq_["wingspan_m"]) / 2 + CONFLICT_MARGIN_M
                 hit = None
                 for np_, dp in ahead[p]:
                     for nq_, dq in ahead[q]:
                         if self._dist(self.xy[np_], self.xy[nq_]) < radius:
+                            hd = abs((self._hdg_into(p, ap_, np_) - self._hdg_into(q, aq_, nq_) + 180) % 360 - 180)
+                            if hd < 40:
+                                continue   # in trail there (the same way): the pilots keep their distance
                             hit = (np_, dp, nq_, dq)
                             break
                     if hit:
@@ -341,7 +350,11 @@ class Planner:
                 if not cands:
                     continue   # both too close to stop short of the junction: the pilots' see-and-avoid takes it
                 cands.sort(reverse=True)   # the later one holds, unless only the other would stop clear of its path
-                later = next((x for _, x in cands if self._stops_clear(x, q if x == p else p)), cands[0][1])
+                later = next((x for _, x in cands if self._stops_clear(x, q if x == p else p)), None)
+                if later is None:
+                    if abs(tp - tq) > CONVERGE_TIGHT_S:
+                        continue   # holding would block the first one's path, and it is through well before
+                    later = cands[0][1]
                 first = q if later == p else p
                 if self._waits_for(first, later):
                     continue   # holding it would close a wait cycle
