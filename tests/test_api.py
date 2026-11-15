@@ -49,9 +49,7 @@ def test_control_pause_speed_haboob_and_errors(client: TestClient, monkeypatch) 
     res = client.post("/control", json={"action": "trigger_haboob"}).json()
     assert res["ok"] is True
     assert client.post("/control", json={"action": "trigger_haboob"}).json()["ok"] is False
-    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
-    claude = client.post("/control", json={"action": "set_controller", "value": "claude"}).json()
-    assert claude["ok"] is False and "claude" in claude["error"]
+    assert client.post("/control", json={"action": "set_controller", "value": "x"}).status_code == 422   # not offered
     assert client.post("/control", json={"action": "bogus"}).status_code == 422
 
 
@@ -62,7 +60,7 @@ def test_decisions_endpoint_and_reset(client: TestClient) -> None:
     while not snap["decisions"] and time.time() < deadline:
         time.sleep(0.2)
         snap = client.get("/state").json()
-    assert snap["decisions"], "baseline should have recorded decisions"
+    assert snap["decisions"], "the tower should have recorded decisions"
     d = client.get("/decisions/%s" % snap["decisions"][0]["id"]).json()
     assert d["facts"] and d["rules"] is not None and "alternatives" in d
     assert client.get("/decisions/nope").status_code == 404
@@ -71,3 +69,16 @@ def test_decisions_endpoint_and_reset(client: TestClient) -> None:
         assert client.post("/control", json={"action": "reset"}).json()["ok"] is True
         seen = [ws.receive_json() for _ in range(6)]
         assert any(m["type"] == "snapshot" and m["t"] < 5 for m in seen)
+
+
+def test_dotenv_loader_sets_missing_keys_only(tmp_path, monkeypatch) -> None:
+    import os
+    from api.main import load_dotenv
+    env = tmp_path / ".env"
+    env.write_text("# comment\nKPHX_TEST_A=one\nKPHX_TEST_B='two'\nEMPTY=\n")
+    monkeypatch.delenv("KPHX_TEST_A", raising=False)
+    monkeypatch.setenv("KPHX_TEST_B", "already-set")
+    load_dotenv(env)
+    assert os.environ["KPHX_TEST_A"] == "one" and os.environ["KPHX_TEST_B"] == "already-set" and "EMPTY" not in os.environ
+    monkeypatch.delenv("KPHX_TEST_A", raising=False)
+    load_dotenv(tmp_path / "missing.env")        # no file: no error

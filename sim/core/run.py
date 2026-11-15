@@ -10,11 +10,11 @@ from sim.metrics.score import format_table
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="Run a KPHX scenario to completion with the baseline controller")
+    ap = argparse.ArgumentParser(description="Run a KPHX scenario to completion with the built-in tower")
     ap.add_argument("scenario")
     ap.add_argument("--seed", type=int, default=None)
     ap.add_argument("--run-dir", default=None)
-    ap.add_argument("--controller", default="baseline")
+    ap.add_argument("--controller", default="tower")
     args = ap.parse_args()
     sim = Simulation(args.scenario, seed=args.seed, controller=args.controller,
                      run_dir=Path(args.run_dir) if args.run_dir else Path("runs") / Path(args.scenario).stem)

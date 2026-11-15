@@ -1,19 +1,19 @@
-"""Hand the current simulation state to a freshly built BaselineController so it neither repeats nor forgets clearances.
+"""Hand the current simulation state to a freshly built TowerController so it neither repeats nor forgets clearances.
 
-Used when the Claude agent hands over (switch to baseline, or the baseline covering an API failure): the baseline keeps
+Used when another controller hands the airport back to the tower mid-run: the tower keeps
 per-aircraft progress flags, and without them it would re-issue runway assignments, taxi and pushback clearances.
 """
 from __future__ import annotations
 
 from typing import Any, Dict
 
-from sim.agent.baseline import BaselineController
+from sim.tower.controller import TowerController
 from sim.core.engine import Simulation
 
 LIVE_STATES = ("issued", "acknowledged")
 
 
-def prime_baseline(bl: BaselineController, sim: Simulation) -> BaselineController:
+def prime_tower(bl: TowerController, sim: Simulation) -> TowerController:
     live = sorted((a for a in sim.aircraft.values() if a.kind != "vehicle" and not a.removed), key=lambda a: a.seq)
     for i, ac in enumerate(live):
         bl.order[ac.callsign] = i

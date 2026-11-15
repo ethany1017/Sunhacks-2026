@@ -102,8 +102,8 @@ export class Panels {
     $("btn-pause").classList.toggle("paused", s.paused);
     const thinking = s.agent.status === "thinking";
     $("agent").classList.toggle("thinking", thinking);
-    $("agent-name").textContent = s.agent.controller === "claude" ? "CLAUDE AGENT" : s.agent.controller === "baseline" ? "BASELINE AGENT" : s.agent.controller.toUpperCase();
-    $("agent-state").textContent = thinking ? "thinking…" : s.agent.status === "fallback" ? "API error · baseline covering" : s.paused ? "paused" : "monitoring";
+    $("agent-name").textContent = s.agent.controller === "tower" ? "PHX TOWER" : s.agent.controller.toUpperCase();
+    $("agent-state").textContent = thinking ? "thinking…" : s.paused ? "paused" : "monitoring";
     const w = s.weather;
     if (w) {
       $("metar").classList.toggle("alert", w.active || (w.vis_sm ?? 10) < 3);
@@ -186,7 +186,7 @@ export class Panels {
     if (key !== this.lastDecKey) {
       this.lastDecKey = key;
       const body = $("decision-body");
-      body.innerHTML = dec ? this.decisionHtml(dec) : `<div class="empty">${who ? `No decision recorded yet for ${esc(who)}.` : "Waiting for the agent's first decision…"}</div>`;
+      body.innerHTML = dec ? this.decisionHtml(dec) : `<div class="empty">${who ? `No decision recorded yet for ${esc(who)}.` : "Waiting for the tower's first decision…"}</div>`;
       body.firstElementChild?.classList.add("fresh");
     }
     // clearance timeline

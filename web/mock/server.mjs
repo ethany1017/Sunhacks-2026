@@ -317,7 +317,7 @@ function freshState() {
     t: -420,
     paused: false,
     speed: 1,
-    controller: "baseline",
+    controller: "tower",
     aircraft: new Map(),
     removed: [],
     gatesInUse: new Set(),
@@ -899,10 +899,6 @@ function control(action, value) {
       resetFlag = true;
       break;
     }
-    case "set_controller":
-      if (value === "claude") return { ok: false, error: "claude controller requires ANTHROPIC_API_KEY (mock server)" };
-      S.controller = "baseline";
-      break;
     default: return { ok: false, error: `unknown action ${action}` };
   }
   return { ok: true, state: { paused: S.paused, speed: S.speed, controller: S.controller } };

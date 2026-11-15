@@ -1,5 +1,7 @@
 # Architecture: a fully autonomous airport control agent (proposal, draft for Gus and Ethan)
 
+> **Superseded framing.** This is the original proposal, written when the project was an AI agent. The project is now the airport simulator itself, run by a built-in rule-based tower (`sim/tower/`); the Claude agent was moved out to `agent/`. The simulator sections below still describe the code.
+
 Status: **proposal**, rewritten Nov 14, 2026 from the research in [`../data-catalog.md`](../data-catalog.md). Nothing here is implemented or agreed yet.
 
 The goal is a competition demo: one AI agent that runs the whole airport on its own, in simulation, and explains what it did. There is no second checker and no human approving instructions. The agent decides, speaks, listens and acts by itself. We are not building this for real-world use.

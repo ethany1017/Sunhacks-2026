@@ -1,7 +1,7 @@
-# KPHX autonomous control simulator: backend targets (Python 3.9+)
+# KPHX airport simulator: backend targets (Python 3.9+)
 PY := .venv/bin/python
 
-.PHONY: venv graph scenarios sim haboob api test web web-install demo
+.PHONY: venv graph scenarios sim haboob api test agent-test web web-install demo
 
 venv:
 	python3 -m venv .venv
@@ -24,7 +24,12 @@ api:
 	$(PY) -m uvicorn api.main:app --host 127.0.0.1 --port 8000
 
 test:
-	$(PY) -m pytest -q
+	$(PY) -m pytest -q tests
+
+# optional Claude agent (agent/), not part of the simulator
+agent-test:
+	.venv/bin/pip install -q -r agent/requirements.txt
+	$(PY) -m pytest -q agent/tests
 
 web-install:
 	cd web && npm install

@@ -63,7 +63,7 @@ Every number below is a placeholder chosen to make the simulation behave plausib
 
 Seeded (smoke seed 11, haboob seed 25). Airline weights SWA 40, AAL 24, SKW 10, DAL 7, UAL 6, ENY 5, FFT 4, ASA 4 (placeholders for the BTS carrier mix). Fleets per airline are drawn from the CSV types. Gates are spread over concourses by first letter and must have a route to the 25R and 26 entries. Smoke: 3 arrivals (threshold times 95, 205, 315 s) and 3 departures (ready 5, 70, 140 s), no weather, no readback errors. Haboob: 6 arrivals (75 to 395 s) and 6 departures (ready 0 to 145 s) including one general aviation Cessna/Cirrus/PC-12 from the GA ramp, one ground vehicle patrolling 300 to 1,000 m of taxi route kept 70 m clear of the aircraft routes, trigger at 180 s, readback error rate 10%. Pilot readback delay 1.5 to 3.0 s. The scenario window (`duration_s` 480) is when flights are scheduled; a run continues until every flight is complete (about 14 minutes for the haboob because departures held for the storm clear afterwards).
 
-## Baseline controller (`sim/agent/baseline.py`)
+## Built-in tower (`sim/tower/controller.py`)
 
 First come, first served, 2 Hz decision pass. Landing clearance inside 70 s ETA when the runway is free; go-around instruction at 22 s if still blocked; 100 s minimum slot between landings per runway; no line-up if a landing is due within 100 s; no takeoff roll if a landing is due within 55 s; no crossing if a landing is due within 90 s; crossing window 45 s. Departure spacing 60 s, 90 s for a light behind a medium, 120 s behind a heavy (a stand-in for the 7110.65 wake table, not the table). Runway choice weighs taxi distance, 40 s per crossing, 90 s per aircraft already queued, 60 s if the runway also takes arrivals. Default configuration: arrivals 25L and 26, departures 25R and 26. Low-visibility mode when vis < 3 SM or gust >= 40 kt: departures only on 25R, new pushbacks and takeoffs held; restored after 30 s of calm.
 
@@ -73,15 +73,4 @@ Throughput is touchdowns plus liftoffs in the last 600 s. Clearance reversal: a 
 
 ## Not built
 
-`python -m sim.replay` (the event log records state changes, not positions, so it cannot reconstruct the position stream), per-scenario observation dropouts, and wake-separation inside the baseline are not implemented. The Claude controller (`sim/agent/claude_agent.py`, `tools.py`, `prompt.md`) is built and tested only against a fake client; no real model call has been made.
-
-## Claude agent (`sim/agent/claude_agent.py`)
-
-| Item | Value |
-|---|---|
-| Model | `claude-opus-5-5` at effort `low` (thinking is always on; low effort for speed), override with env `KPHX_AGENT_MODEL` / `KPHX_AGENT_EFFORT` |
-| Wake | on events plus a 5 sim-second timer; one wake in flight; at most 8 tool calls and 15 s wall time each; budget exhaustion triggers an immediate follow-up wake |
-| Threading | worker thread talks to the API; tool calls are queued and run by the simulation thread, so no locks |
-| Failure | any API error: log (key scrubbed), baseline (primed with current clearances) covers for 5 s wall, doubling to 60 s, then Claude retries |
-| Wake distance table | TBL 5-5-4 values from research_notes; the table numbering mismatch noted in data-catalog 3.12 is unresolved |
-| `KPHX_AGENT_PAUSE_WHILE_THINKING=1` | pauses the clock during a wake (default off) |
+`python -m sim.replay` (the event log records state changes, not positions, so it cannot reconstruct the position stream), per-scenario observation dropouts, and wake-separation inside the tower are not implemented. The Claude agent is not part of the simulator; see `agent/README.md`.
