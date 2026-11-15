@@ -1,6 +1,7 @@
 """Seed/replay a scripted demo run into the event DB.
 
-Everything airport-specific (runways, nodes, coordinates, ICAO) is derived from backend/airport/.
+Everything airport-specific (runways, nodes, coordinates, ICAO) is derived from the layout the simulator
+returns through simif.connect().get_airport(); it is emitted first as an `airport` event.
 Usage (from backend/): .venv/bin/python scripts/seed.py [--speed 4] [--instant]
 """
 import argparse
@@ -11,6 +12,7 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+import simif  # noqa: E402
 from app import airport, db  # noqa: E402
 
 KT = 0.514444  # m/s per knot
@@ -147,6 +149,7 @@ def build_events(apt, run_id):
     arr_gate, dep_gate = parking[0], parking[-1]
 
     # --- setup ---
+    S.add(0, "airport", None, apt, "Airport layout from the simulator.")
     S.add(0, "sim_start", None, {"run_id": run_id, "airport": cfg["name"], "icao": cfg["icao"], "speed": 1},
           "Scripted demo run started.")
     raw = f"{cfg['icao']} 141851Z {wind_dir:03d}12G18KT 10SM FEW080 24/M02 A2998"
@@ -280,9 +283,11 @@ def main():
     ap.add_argument("--speed", type=float, default=4, help="sim seconds per wall second")
     ap.add_argument("--instant", action="store_true", help="write everything with no sleeping")
     args = ap.parse_args()
+    apt = simif.connect().get_airport()
+    airport.validate(apt)
     run_id = db.start_run()
-    events = build_events(airport.load(), run_id)
-    events[0]["data"]["speed"] = args.speed
+    events = build_events(apt, run_id)
+    events[1]["data"]["speed"] = args.speed  # events[0] is the airport layout
     print(f"run {run_id}: {len(events)} events over {events[-1]['t']:.0f} sim s -> {db.db_path()}")
     prev = 0.0
     for e in events:

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import type { Aircraft, SimEvent, WeatherData } from '@/types'
+import type { Aircraft, Airport, SimEvent, WeatherData } from '@/types'
 
 const FEED_CAP = 300
 
@@ -9,6 +9,7 @@ export const clock = (t: number) => {
 }
 
 export type TowerState = {
+  airport: Airport | null // from the latest `airport` event
   feed: SimEvent[] // newest first
   aircraft: Record<string, Aircraft>
   weather: WeatherData | null
@@ -16,7 +17,7 @@ export type TowerState = {
   t: number
 }
 
-export const INITIAL: TowerState = { feed: [], aircraft: {}, weather: null, runway: null, t: 0 }
+export const INITIAL: TowerState = { airport: null, feed: [], aircraft: {}, weather: null, runway: null, t: 0 }
 
 // Applies a batch of events to a copy of `prev`. Mutates only the copy, so a replay of thousands of
 // events costs one state update.
@@ -24,8 +25,12 @@ export function applyEvents(prev: TowerState, events: SimEvent[]): TowerState {
   let s: TowerState = { ...prev, aircraft: { ...prev.aircraft } }
   const fresh: SimEvent[] = []
   for (const e of events) {
+    if (e.type === 'airport') {
+      s.airport = e.data // not a feed item; the map redraws from it
+      continue
+    }
     if (e.type === 'sim_start') {
-      s = { ...INITIAL, aircraft: {} }
+      s = { ...INITIAL, aircraft: {}, airport: s.airport } // the layout arrives just before sim_start
       fresh.length = 0
       prev = INITIAL
     }

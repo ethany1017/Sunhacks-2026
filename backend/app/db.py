@@ -7,7 +7,7 @@ from pathlib import Path
 
 BACKEND_DIR = Path(__file__).resolve().parent.parent
 EVENT_TYPES = {
-    "sim_start", "sim_end", "weather", "runway_change", "aircraft_spawn", "position", "proposal",
+    "airport", "sim_start", "sim_end", "weather", "runway_change", "aircraft_spawn", "position", "proposal",
     "ai_decision", "safety_check", "clearance", "audio", "readback", "readback_correction",
     "sequence", "alert",
 }
@@ -60,6 +60,18 @@ def emit(run_id, type, t, callsign=None, data=None, reason=""):
         )
         seq = cur.lastrowid
     return {"t": t, "seq": seq, "type": type, "callsign": callsign, "data": data, "reason": reason}
+
+
+def emit_many(run_id, events):
+    """Write events (dicts with t, type, callsign, data, reason) in one transaction."""
+    for e in events:
+        if e["type"] not in EVENT_TYPES:
+            raise ValueError(f"unknown event type {e['type']!r}")
+    with _conn() as c:
+        c.executemany(
+            "INSERT INTO events(run_id, t, type, callsign, data, reason) VALUES (?, ?, ?, ?, ?, ?)",
+            [(run_id, e["t"], e["type"], e["callsign"], json.dumps(e["data"]), e["reason"]) for e in events],
+        )
 
 
 def current_run_id():

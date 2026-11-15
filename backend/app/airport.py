@@ -1,9 +1,6 @@
-"""Load and validate the three airport files (config.json, airport.geojson, graph.json)."""
-import json
+"""Validate an airport layout {"config", "geojson", "graph"} as returned by the simulator's get_airport()."""
 from collections import deque
-from pathlib import Path
 
-AIRPORT_DIR = Path(__file__).resolve().parent.parent / "airport"
 FEATURE_KINDS = {"runway", "taxiway", "hold_short", "parking"}
 
 
@@ -29,7 +26,9 @@ def _check_lonlat(pair, where):
         raise AirportError(f"{where}: latitude {lat!r} out of range")
 
 
-def validate(config, geojson, graph):
+def validate(layout):
+    _need(layout, ["config", "geojson", "graph"], "airport layout")
+    config, geojson, graph = layout["config"], layout["geojson"], layout["graph"]
     _need(config, ["name", "icao", "map"], "config.json")
     _need(config["map"], ["center", "zoom"], "config.json map")
     _check_lonlat(config["map"]["center"], "config.json map.center")
@@ -104,14 +103,3 @@ def validate(config, geojson, graph):
         else:
             raise AirportError(f"parking node {nid!r} cannot reach any runway node through the graph")
 
-
-def load(directory=AIRPORT_DIR):
-    directory = Path(directory)
-    files = {}
-    for key, name in (("config", "config.json"), ("geojson", "airport.geojson"), ("graph", "graph.json")):
-        try:
-            files[key] = json.loads((directory / name).read_text())
-        except (OSError, json.JSONDecodeError) as e:
-            raise AirportError(f"{name}: cannot load ({e})") from e
-    validate(files["config"], files["geojson"], files["graph"])
-    return files

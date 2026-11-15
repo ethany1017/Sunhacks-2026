@@ -1,0 +1,36 @@
+{
+  "name": "movement_test",
+  "description": "TEMPORARY Phase 2 movement test with hardcoded paths and timing (no planner or safety engine yet): two arrivals land and park, one departure taxis out and takes off once both arrivals are off the runway.",
+  "runway": "27",
+  "aircraft": [
+    {
+      "callsign": "N101TZ", "kind": "arrival", "aircraft_type": "C172", "spawn_t": 0,
+      "legs": [
+        {"phase": "approach", "approach": "27", "from_nm": 2.5, "to_nm": 0.3},
+        {"phase": "landing", "approach": "27", "from_nm": 0.3, "to_nm": 0},
+        {"phase": "rollout", "nodes": ["RW_E", "RW_A3", "RW_A2"]},
+        {"phase": "taxi", "nodes": ["RW_A2", "HS_A2", "TW_A2", "TW_AP", "AP", "P1"]}
+      ]
+    },
+    {
+      "callsign": "N202TZ", "kind": "arrival", "aircraft_type": "PA28", "spawn_t": 52,
+      "legs": [
+        {"phase": "approach", "approach": "27", "from_nm": 2.5, "to_nm": 0.3},
+        {"phase": "landing", "approach": "27", "from_nm": 0.3, "to_nm": 0},
+        {"phase": "rollout", "nodes": ["RW_E", "RW_A3", "RW_A2"]},
+        {"phase": "taxi", "nodes": ["RW_A2", "HS_A2", "TW_A2", "TW_AP", "AP", "P2"]}
+      ]
+    },
+    {
+      "callsign": "N303TZ", "kind": "departure", "aircraft_type": "C182", "spawn_t": 0,
+      "legs": [
+        {"phase": "parked", "hold_s": 100},
+        {"phase": "taxi", "nodes": ["P4", "AP", "TW_AP", "TW_A3", "HS_A3"]},
+        {"phase": "holding", "hold_s": 8},
+        {"phase": "lineup", "nodes": ["HS_A3", "RW_A3"]},
+        {"phase": "takeoff", "nodes": ["RW_A3", "RW_A2"]},
+        {"phase": "departed", "extend_m": 1500}
+      ]
+    }
+  ]
+}

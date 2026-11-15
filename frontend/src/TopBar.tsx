@@ -24,7 +24,7 @@ export function TopBar({ config, weather, runway, t, connected }: Props) {
       <div className="flex shrink-0 flex-col">
         <span className="text-[28px] font-bold tracking-wide text-emerald-400">{PROJECT_NAME}</span>
         <span className="flex items-center gap-2 text-base text-slate-400">
-          {config?.name ?? 'Loading airport…'}
+          {config?.name ?? 'Waiting for airport layout…'}
           {config?.placeholder && <Badge className="bg-amber-500/90 text-xs font-bold text-black">PLACEHOLDER AIRPORT</Badge>}
         </span>
       </div>

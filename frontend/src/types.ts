@@ -1,6 +1,6 @@
 import type { FeatureCollection } from 'geojson'
 
-// The backend contract: GET /api/airport and the WS /ws event stream.
+// The backend contract: the WS /ws event stream. The airport layout arrives as an `airport` event.
 
 export type LonLat = [number, number]
 
@@ -16,6 +16,7 @@ export type RunwayEnd = { designator: string; heading: number; threshold: LonLat
 export type Airport = {
   config: AirportConfig
   geojson: FeatureCollection
+  graph: unknown // routing graph; not drawn by the dashboard
 }
 
 export type Phase =
@@ -28,6 +29,7 @@ export type WeatherData = {
 }
 
 export type SimEvent =
+  | Ev<'airport', Airport>
   | Ev<'sim_start', { run_id: number; airport: string; icao: string; speed: number }>
   | Ev<'sim_end', Record<string, never>>
   | Ev<'weather', WeatherData>
