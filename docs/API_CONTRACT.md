@@ -19,7 +19,7 @@ On connect the server sends one `snapshot`, then a `delta` about every 100 ms (1
 ### snapshot
 ```json
 {"type":"snapshot","t":123.4,"speed":1,"paused":false,
- "agent":{"status":"idle","controller":"baseline"},
+ "agent":{"status":"idle","controller":"baseline"},   (status: idle | thinking | fallback = baseline covering after a Claude API error)
  "scenario":{"name":"kphx_haboob","duration_s":480,"haboob_triggered":false},
  "weather":{...Weather},
  "aircraft":[...Aircraft], "runways":[...Runway], "clearances":[...Clearance],

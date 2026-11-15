@@ -89,7 +89,7 @@ export interface Score {
   throughput_per_10min: number;
 }
 export interface AgentInfo {
-  status: "idle" | "thinking";
+  status: "idle" | "thinking" | "fallback";
   controller: string;
 }
 export interface ScenarioInfo {

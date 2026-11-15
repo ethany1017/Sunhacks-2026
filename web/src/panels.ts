@@ -103,7 +103,7 @@ export class Panels {
     const thinking = s.agent.status === "thinking";
     $("agent").classList.toggle("thinking", thinking);
     $("agent-name").textContent = s.agent.controller === "claude" ? "CLAUDE AGENT" : s.agent.controller === "baseline" ? "BASELINE AGENT" : s.agent.controller.toUpperCase();
-    $("agent-state").textContent = thinking ? "thinking…" : s.paused ? "paused" : "monitoring";
+    $("agent-state").textContent = thinking ? "thinking…" : s.agent.status === "fallback" ? "API error · baseline covering" : s.paused ? "paused" : "monitoring";
     const w = s.weather;
     if (w) {
       $("metar").classList.toggle("alert", w.active || (w.vis_sm ?? 10) < 3);

@@ -56,7 +56,7 @@ def test_smoke_scenario_completes_through_claude_agent_with_fake_client(tmp_path
     first = client.calls[0]
     assert first["system"][0]["cache_control"] == {"type": "ephemeral"} and "KPHX" in first["system"][0]["text"]
     assert {t["name"] for t in first["tools"]} >= {"issue_clearance", "record_decision"}
-    assert first["model"] == "claude-sonnet-5-5"
+    assert first["model"] == "claude-opus-5-5" and first["output_config"] == {"effort": "low"}
     sim.close()
 
 
@@ -120,7 +120,7 @@ def test_api_errors_fall_back_to_baseline_and_never_leak_the_key(tmp_path: Path,
         sim.run_to_completion()
     assert sim.finished and sim.score()["completed"] == 6          # baseline covered every wake
     assert agent.stats["api_errors"] == 1 and agent.stats["fallback_ticks"] > 100
-    assert agent.status == "idle" and agent.last_error and SECRET not in agent.last_error
+    assert agent.status == "fallback" and agent.last_error and SECRET not in agent.last_error
     assert SECRET not in caplog.text and "baseline covers" in caplog.text
     assert len(client.calls) == 1                                  # in backoff: no further calls
     sim.close()
@@ -276,11 +276,11 @@ def test_api_switch_to_claude_and_back(tmp_path: Path, monkeypatch: Any) -> None
 def test_dotenv_loader_sets_missing_keys_only(tmp_path: Path, monkeypatch: Any) -> None:
     from api.main import load_dotenv
     env = tmp_path / ".env"
-    env.write_text("# comment\nANTHROPIC_API_KEY=%s\nCLAUDE_MODEL='x-model'\nEMPTY=\n" % SECRET)
+    env.write_text("# comment\nANTHROPIC_API_KEY=%s\nKPHX_AGENT_MODEL='x-model'\nEMPTY=\n" % SECRET)
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
-    monkeypatch.setenv("CLAUDE_MODEL", "already-set")
+    monkeypatch.setenv("KPHX_AGENT_MODEL", "already-set")
     load_dotenv(env)
     import os
-    assert os.environ["ANTHROPIC_API_KEY"] == SECRET and os.environ["CLAUDE_MODEL"] == "already-set" and "EMPTY" not in os.environ
+    assert os.environ["ANTHROPIC_API_KEY"] == SECRET and os.environ["KPHX_AGENT_MODEL"] == "already-set" and "EMPTY" not in os.environ
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
     load_dotenv(tmp_path / "missing.env")        # no file: no error

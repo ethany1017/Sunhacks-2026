@@ -79,9 +79,9 @@ Throughput is touchdowns plus liftoffs in the last 600 s. Clearance reversal: a 
 
 | Item | Value |
 |---|---|
-| Model | `claude-sonnet-5-5`, override with env `CLAUDE_MODEL` |
+| Model | `claude-opus-5-5` at effort `low` (thinking is always on; low effort for speed), override with env `KPHX_AGENT_MODEL` / `KPHX_AGENT_EFFORT` |
 | Wake | on events plus a 5 sim-second timer; one wake in flight; at most 8 tool calls and 15 s wall time each; budget exhaustion triggers an immediate follow-up wake |
 | Threading | worker thread talks to the API; tool calls are queued and run by the simulation thread, so no locks |
 | Failure | any API error: log (key scrubbed), baseline (primed with current clearances) covers for 5 s wall, doubling to 60 s, then Claude retries |
 | Wake distance table | TBL 5-5-4 values from research_notes; the table numbering mismatch noted in data-catalog 3.12 is unresolved |
-| `CLAUDE_PAUSE_WHILE_THINKING=1` | pauses the clock during a wake (default off) |
+| `KPHX_AGENT_PAUSE_WHILE_THINKING=1` | pauses the clock during a wake (default off) |

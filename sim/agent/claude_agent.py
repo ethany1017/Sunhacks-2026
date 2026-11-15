@@ -27,7 +27,8 @@ from sim.core.engine import Simulation
 
 log = logging.getLogger("kphx.claude_agent")
 PROMPT_PATH = Path(__file__).with_name("prompt.md")
-DEFAULT_MODEL = "claude-sonnet-5-5"
+DEFAULT_MODEL = "claude-opus-5-5"
+DEFAULT_EFFORT = "low"   # thinking is always on for this model; low effort keeps each wake fast enough for a live airport
 EVENT_KEEP = {"aircraft.spawned": ("kind", "type", "runway", "gate"), "departure.ready": ("gate",), "aircraft.phase": ("to",),
               "aircraft.touchdown": ("runway",), "aircraft.airborne": ("runway",), "aircraft.completed": (), "aircraft.parked": ("gate",),
               "clearance.issued": ("action", "text"), "clearance.acknowledged": ("action",), "clearance.complete": ("action",),
@@ -46,9 +47,10 @@ def _env_flag(name: str) -> bool:
 @dataclass
 class ClaudeConfig:
     model: str = ""
-    max_tokens: int = 1500
-    max_tool_calls: int = 8              # per wake
-    wake_wall_s: float = 15.0            # wall-clock cap per wake
+    effort: str = ""                     # output_config.effort: low | medium | high | xhigh | max
+    max_tokens: int = 8000               # includes thinking tokens
+    max_tool_calls: int = 16             # per wake
+    wake_wall_s: float = 30.0            # wall-clock cap per wake
     timer_s: float = 5.0                 # sim seconds between timer wakes
     clearance_timeout_s: float = 20.0    # an unacknowledged clearance older than this wakes the agent
     recent_events: int = 20              # events included in the wake message
@@ -59,8 +61,9 @@ class ClaudeConfig:
     backoff_max_s: float = 60.0
 
     def __post_init__(self) -> None:
-        self.model = self.model or os.environ.get("CLAUDE_MODEL") or DEFAULT_MODEL
-        if _env_flag("CLAUDE_PAUSE_WHILE_THINKING"):
+        self.model = self.model or os.environ.get("KPHX_AGENT_MODEL") or DEFAULT_MODEL
+        self.effort = self.effort or os.environ.get("KPHX_AGENT_EFFORT") or DEFAULT_EFFORT
+        if _env_flag("KPHX_AGENT_PAUSE_WHILE_THINKING"):
             self.pause_while_thinking = True
 
 
@@ -123,6 +126,8 @@ class ClaudeAgent:
 
     @property
     def status(self) -> str:
+        if self._fallback is not None:
+            return "fallback"            # the baseline is covering after an API failure; shown as such on the dashboard
         return "thinking" if self._busy and not self._worker_done else "idle"
 
     @property
@@ -334,12 +339,6 @@ class ClaudeAgent:
             with self._lock:
                 self._outcome = outcome
 
-    @staticmethod
-    def _param(block: Any) -> Dict[str, Any]:
-        if block.type == "tool_use":
-            return {"type": "tool_use", "id": block.id, "name": block.name, "input": block.input}
-        return {"type": "text", "text": getattr(block, "text", "")}
-
     def _converse(self, epoch: Any, message: str) -> Dict[str, Any]:
         start = self._now()
         msgs: List[Dict[str, Any]] = [{"role": "user", "content": message}]
@@ -350,13 +349,18 @@ class ClaudeAgent:
                 break
             try:
                 resp = self.client.messages.create(model=self.cfg.model, max_tokens=self.cfg.max_tokens, system=self._system,
-                                                   tools=TOOL_DEFS, messages=msgs, timeout=remaining)
+                                                   tools=TOOL_DEFS, messages=msgs, timeout=remaining,
+                                                   output_config={"effort": self.cfg.effort})
             except Exception as e:
                 return {"error": "%s: %s" % (type(e).__name__, _scrub(str(e))), "calls": calls}
+            stop = getattr(resp, "stop_reason", None)
+            if stop == "refusal":
+                return {"error": "model declined the request (refusal)", "calls": calls}
             blocks = list(resp.content)
-            msgs.append({"role": "assistant", "content": [self._param(b) for b in blocks]})
+            # Blocks go back unchanged: thinking blocks must be replayed exactly as received.
+            msgs.append({"role": "assistant", "content": blocks})
             uses = [b for b in blocks if b.type == "tool_use"]
-            if not uses:
+            if not uses or stop == "max_tokens":   # a truncated response may carry an incomplete tool call: do not run it
                 break
             results = []
             for b in uses:
