@@ -77,6 +77,11 @@ const subscribe = (f: () => void) => {
   return () => subs.delete(f)
 }
 
+// Callsign of the line being spoken right now, or null.
+export function useSpeaking(): string | null {
+  return useSyncExternalStore(subscribe, () => snap).now?.callsign ?? null
+}
+
 export function VoicePanel() {
   const s = useSyncExternalStore(subscribe, () => snap)
   const live = s.on && !s.blocked
