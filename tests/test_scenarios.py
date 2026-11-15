@@ -71,3 +71,13 @@ def test_ground_vehicle_and_ga_aircraft_are_in_the_haboob_scenario(tmp_path, gra
         sim.step()
     assert (veh.x - start[0]) ** 2 + (veh.y - start[1]) ** 2 > 100.0       # it drives
     sim.close()
+
+
+def test_reset_mid_run_gives_a_fresh_tower_and_the_run_still_completes(tmp_path, graph) -> None:
+    sim = Simulation(SMOKE, run_dir=tmp_path / "reset", graph=graph)
+    while sim.t < 40:
+        sim.step()
+    sim.control("reset")
+    sim.run_to_completion()
+    assert sim.finished and sim.score()["completed"] == 6       # before the fix one departure stayed at its gate forever
+    sim.close()
