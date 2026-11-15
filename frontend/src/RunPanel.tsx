@@ -10,8 +10,8 @@ async function post(path: string, body: object) {
   if (!res.ok) throw new Error((await res.json().catch(() => null))?.detail ?? `HTTP ${res.status}`)
 }
 
-const SELECT = 'rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-lg text-slate-100'
-const BUTTON = 'shrink-0 whitespace-nowrap rounded-md px-4 py-2 text-lg font-semibold disabled:opacity-40'
+const SELECT = 'rounded-lg border border-slate-900 bg-white px-3 py-1.5 text-base text-slate-900'
+const BUTTON = 'shrink-0 whitespace-nowrap rounded-lg px-4 py-1.5 text-base font-semibold disabled:opacity-40'
 
 export function Controls({ run, ended }: { run: RunInfo | null; ended: boolean }) {
   const [opts, setOpts] = useState<Options | null>(null)
@@ -42,15 +42,15 @@ export function Controls({ run, ended }: { run: RunInfo | null; ended: boolean }
       <select className={SELECT} value={controller} onChange={(e) => setController(e.target.value)} aria-label="Controller">
         {opts?.controllers.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
       </select>
-      <button className={`${BUTTON} bg-emerald-600 text-white hover:bg-emerald-500`} disabled={!level}
+      <button className={`${BUTTON} bg-blue-700 text-white hover:bg-blue-800`} disabled={!level}
         onClick={() => act(post('/api/run', { level, controller }))}>
         {run ? 'Reset run' : 'Start run'}
       </button>
-      <button className={`${BUTTON} bg-sky-700 text-white hover:bg-sky-600`} disabled={!run || ended || !other}
+      <button className={`${BUTTON} border border-slate-900 bg-white text-slate-900 hover:bg-slate-50`} disabled={!run || ended || !other}
         onClick={() => other && act(post('/api/controller', { controller: other.id }))}>
         Switch to {other?.label.split(' ')[0] ?? '…'}
       </button>
-      {error && <span className="text-lg text-red-400">{error}</span>}
+      {error && <span className="text-lg text-red-600">{error}</span>}
     </div>
   )
 }
@@ -60,13 +60,13 @@ export function Banner({ verdict, fails, run, ended }: { verdict: string; fails:
   if (verdict === 'FAIL') {
     const first = fails[0]
     return (
-      <div className="border-b-4 border-red-400 bg-red-700 px-6 py-4 text-white">
+      <div className="rounded-xl border border-red-800 bg-red-600 px-5 py-3 text-white">
         <div className="flex items-baseline gap-4">
-          <span className="text-5xl font-black tracking-wider">FAIL</span>
+          <span className="text-4xl font-black tracking-wider">FAIL</span>
           <span className="text-xl font-semibold">{who}{fails.length > 1 ? ` · ${fails.length} fails` : ''}</span>
         </div>
         {first && (
-          <div className="mt-1 text-2xl leading-snug">
+          <div className="mt-1 text-xl leading-snug">
             <span className="font-mono font-bold">{first.callsigns.join(', ')}</span> · {first.rule.replaceAll('_', ' ')}: {first.reason}
           </div>
         )}
@@ -74,11 +74,13 @@ export function Banner({ verdict, fails, run, ended }: { verdict: string; fails:
     )
   }
   if (verdict === 'PASS') {
-    return <div className="bg-emerald-700 px-6 py-3 text-4xl font-black tracking-wider text-white">PASS <span className="text-xl font-semibold">{who}</span></div>
+    return <div className="rounded-xl border border-green-800 bg-green-600 px-5 py-2.5 text-3xl font-black tracking-wider text-white">PASS <span className="text-lg font-semibold">{who}</span></div>
   }
   return (
-    <div className="border-b border-slate-800 bg-slate-900 px-6 py-2 text-lg text-slate-400">
-      <span className="font-semibold tracking-widest text-slate-300">{ended ? 'ENDED' : 'RUNNING'}</span> · {who} · Referee: no fails so far
+    <div className="flex items-center gap-3 rounded-xl border border-slate-900 bg-white px-5 py-2 text-base text-slate-600">
+      <span className="size-2.5 rounded-full bg-green-600" />
+      <span className="font-semibold tracking-[0.12em] text-slate-900">{ended ? 'ENDED' : 'RUNNING'}</span>
+      <span>{who}</span><span className="text-slate-300">·</span><span>Referee: no fails so far</span>
     </div>
   )
 }
@@ -86,25 +88,29 @@ export function Banner({ verdict, fails, run, ended }: { verdict: string; fails:
 const mins = (s: number | undefined) => (s == null ? '--' : `${(s / 60).toFixed(1)} min`)
 
 export function Scoreboard({ m }: { m: Metrics | null }) {
-  const rows: [string, string | number][] = [
+  const stats: [string, string | number][] = [
     ['Fails', m?.fails ?? '--'],
     ['Completed', m?.completed ?? '--'],
     ['Avg delay', m ? `${Math.round(m.avg_delay_s)} s` : '--'],
     ['Total delay', mins(m?.total_delay_s)],
     ['Go-arounds', m?.go_arounds ?? '--'],
     ['Diversions', m?.diversions ?? '--'],
-    ['Readback errors caught', m?.readback_errors_caught ?? '--'],
-    ['Readback errors missed', m?.readback_errors_accepted ?? '--'],
   ]
   return (
-    <div className="grid grid-cols-2 gap-x-6 gap-y-1 border-b border-slate-800 p-3 min-[1600px]:p-4">
-      <div className="col-span-2 text-sm font-semibold tracking-widest text-slate-500">SCOREBOARD</div>
-      {rows.map(([k, v]) => (
-        <div key={k} className="flex justify-between gap-2 text-base min-[1600px]:text-xl">
-          <span className="text-slate-400">{k}</span>
-          <span className={`font-mono text-xl font-bold min-[1600px]:text-2xl ${k === 'Fails' && Number(v) > 0 ? 'text-red-400' : 'text-slate-100'}`}>{v}</span>
-        </div>
-      ))}
+    <div className="rounded-xl border border-slate-900 bg-white px-4 py-3 min-[1600px]:py-4">
+      <div className="text-xs font-semibold tracking-[0.12em] text-slate-500">SCORE</div>
+      <div className="mt-1 grid grid-cols-3 gap-x-4 gap-y-2">
+        {stats.map(([k, v]) => (
+          <div key={k} className="flex flex-col">
+            <span className="text-xs font-medium text-slate-500 min-[1600px]:text-sm">{k}</span>
+            <span className={`font-mono text-2xl leading-tight font-bold tabular-nums min-[1600px]:text-3xl ${k === 'Fails' && Number(v) > 0 ? 'text-red-600' : 'text-slate-950'}`}>{v}</span>
+          </div>
+        ))}
+      </div>
+      <div className="mt-2 flex justify-between border-t border-slate-900 pt-2 text-sm text-slate-500 min-[1600px]:text-base">
+        <span>Readback errors caught <span className="font-mono font-bold text-slate-950">{m?.readback_errors_caught ?? '--'}</span></span>
+        <span>Missed <span className={`font-mono font-bold ${Number(m?.readback_errors_accepted) > 0 ? 'text-red-600' : 'text-slate-950'}`}>{m?.readback_errors_accepted ?? '--'}</span></span>
+      </div>
     </div>
   )
 }
@@ -120,22 +126,22 @@ export function Comparison({ c }: { c: Cmp | null }) {
   const line = (t: EvalTotals | undefined) => (t ? `${t.passed}/${t.runs} pass · ${t.fails} fails` : '--')
   return (
     <>
-    <div className="border-b border-slate-800 px-3 py-2 text-base min-[1600px]:hidden">
-      <span className="font-semibold tracking-widest text-slate-500">AGENT VS HUMAN</span>{' '}
-      <span className="text-slate-400">training seeds: </span>
-      <span className="font-mono text-emerald-300">Agent {line(tr?.agent)}</span>
-      <span className="text-slate-500"> | </span>
-      <span className="font-mono text-slate-300">Human {line(tr?.human)}</span>
+    <div className="rounded-xl border border-slate-900 bg-white px-4 py-2 text-base min-[1600px]:hidden">
+      <span className="text-xs font-semibold tracking-[0.12em] text-slate-500">AGENT VS HUMAN</span>{' '}
+      <span className="text-slate-500">training seeds: </span>
+      <span className="font-mono font-semibold text-slate-950">Agent {line(tr?.agent)}</span>
+      <span className="text-slate-300"> | </span>
+      <span className="font-mono text-slate-500">Human {line(tr?.human)}</span>
     </div>
-    <div className="hidden border-b border-slate-800 p-4 min-[1600px]:block">
-      <div className="text-sm font-semibold tracking-widest text-slate-500">
+    <div className="hidden rounded-xl border border-slate-900 bg-white p-4 min-[1600px]:block">
+      <div className="text-xs font-semibold tracking-[0.12em] text-slate-500">
         AGENT VS HUMAN{c.human_impl === 'tower' ? ' · Human = built-in tower (stand-in)' : ' · Human = simulated average controller'}
       </div>
       <div className="grid grid-cols-[1fr_auto_auto_auto_auto] gap-x-4 text-lg">
-        {['', 'Pass', 'Fails', 'Avg delay', 'Diverted'].map((h) => <span key={h} className="text-sm font-semibold text-slate-500">{h}</span>)}
+        {['', 'Pass', 'Fails', 'Avg delay', 'Diverted'].map((h) => <span key={h} className="text-sm font-medium text-slate-400">{h}</span>)}
         {rows.filter((r) => r.t).map(({ key, name, t }) => (
           <Fragment key={key}>
-            <span className={name.endsWith('Agent') ? 'text-emerald-300' : 'text-slate-400'}>{name}</span>
+            <span className={name.endsWith('Agent') ? 'font-semibold text-slate-950' : 'text-slate-500'}>{name}</span>
             <span className="text-right font-mono">{t!.passed}/{t!.runs}</span>
             <span className="text-right font-mono">{t!.fails}</span>
             <span className="text-right font-mono">{Math.round(t!.avg_delay_s)} s</span>

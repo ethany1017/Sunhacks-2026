@@ -20,8 +20,8 @@ function useLiveWeather() {
 function Field({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex shrink-0 flex-col">
-      <span className="text-sm font-semibold tracking-widest text-slate-500">{label}</span>
-      <span className="font-mono text-xl leading-tight text-slate-100 tabular-nums min-[1600px]:text-[26px]">{value}</span>
+      <span className="text-xs font-semibold tracking-[0.12em] text-slate-500">{label}</span>
+      <span className="font-mono text-xl leading-tight font-semibold text-slate-900 tabular-nums min-[1600px]:text-[22px]">{value}</span>
     </div>
   )
 }
@@ -37,33 +37,33 @@ export function TopBar({ config, weather, runway, t, connected }: Props) {
     ? 'unavailable'
     : `${live.source === 'cache' ? 'cached · ' : ''}${live.metar.replace(/^(METAR|SPECI) /, '').split(' RMK')[0]}`
   return (
-    <header className="flex items-center gap-4 border-b min-[1600px]:gap-6 border-slate-800 bg-slate-950 px-6 py-3">
+    <header className="flex items-center gap-4 min-[1600px]:gap-6 rounded-xl border border-slate-900 bg-white px-5 py-2.5">
       <div className="flex shrink-0 flex-col">
         <span className="flex items-center gap-3">
-          <span className="text-2xl font-bold tracking-wide text-emerald-400 min-[1600px]:text-[28px]">{PROJECT_NAME}</span>
-          <span className="rounded-md border-2 border-amber-400 px-2 py-0.5 text-base font-black tracking-widest text-amber-300">SIMULATION ONLY</span>
+          <span className="text-2xl font-bold tracking-tight text-slate-950 min-[1600px]:text-[28px]">{PROJECT_NAME}</span>
+          <span className="rounded-sm border border-slate-900 px-2 py-0.5 text-xs font-semibold tracking-[0.14em] text-slate-900">SIMULATION ONLY</span>
         </span>
-        <span className="text-base text-slate-400">{config?.name ?? 'Waiting for airport layout…'}</span>
+        <span className="text-base text-slate-500">{config?.name ?? 'Waiting for airport layout…'}</span>
       </div>
       <div className="flex min-w-0 flex-1 flex-col gap-1">
         <div className="flex min-w-0 items-baseline gap-3">
-          <span className="w-24 shrink-0 text-sm font-semibold tracking-widest text-slate-500 min-[1600px]:w-32">LEVEL WX</span>
-          <span className="line-clamp-2 font-mono text-base leading-snug text-slate-100 min-[1600px]:line-clamp-none min-[1600px]:truncate min-[1600px]:text-[21px]">{weather?.metar ?? '--'}</span>
+          <span className="w-24 shrink-0 text-xs font-semibold tracking-[0.12em] text-slate-500 min-[1600px]:w-32">LEVEL WX</span>
+          <span className="line-clamp-2 font-mono text-base leading-snug min-[1600px]:line-clamp-none min-[1600px]:truncate min-[1600px]:text-[18px] text-slate-900">{weather?.metar ?? '--'}</span>
         </div>
         <div className="flex min-w-0 items-baseline gap-3" title="Real-world weather from aviationweather.gov. Display only: the agent flies the level's weather.">
-          <span className="w-24 shrink-0 text-sm font-semibold tracking-widest text-sky-500 min-[1600px]:w-32">LIVE {config?.icao ?? live?.icao ?? ''}</span>
-          <span className="truncate font-mono text-sm text-sky-300/90 min-[1600px]:text-lg">{liveText}</span>
+          <span className="w-24 shrink-0 text-xs font-semibold tracking-[0.12em] text-slate-400 min-[1600px]:w-32">LIVE {config?.icao ?? live?.icao ?? ''}</span>
+          <span className="truncate font-mono text-sm text-slate-500 min-[1600px]:text-lg">{liveText}</span>
         </div>
       </div>
       <Field label="WIND" value={weather ? windText(weather.wind_dir, weather.wind_kt, weather.gust_kt) : '--'} />
       <Field label="RUNWAYS" value={runway ?? '--'} />
       <div className="flex shrink-0 flex-col">
-        <span className="flex items-center gap-2 text-sm font-semibold tracking-widest text-slate-500">
+        <span className="flex items-center gap-2 text-xs font-semibold tracking-[0.12em] text-slate-500">
           SIM TIME
-          <span className={`size-3 rounded-full ${connected ? 'bg-emerald-400' : 'animate-pulse bg-red-500'}`} />
-          <span className={connected ? 'text-emerald-400' : 'text-red-400'}>{connected ? 'ONLINE' : 'OFFLINE'}</span>
+          <span className={`size-2.5 rounded-full ${connected ? 'bg-green-600' : 'animate-pulse bg-red-600'}`} />
+          <span className={connected ? 'text-slate-500' : 'text-red-600'}>{connected ? 'ONLINE' : 'OFFLINE'}</span>
         </span>
-        <span className="font-mono text-[34px] leading-tight font-bold min-[1600px]:text-[44px] text-slate-100 tabular-nums">{clock(t)}</span>
+        <span className="font-mono text-[28px] leading-tight font-bold min-[1600px]:text-[36px] text-slate-950 tabular-nums">{clock(t)}</span>
       </div>
     </header>
   )

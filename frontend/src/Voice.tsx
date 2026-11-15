@@ -83,18 +83,18 @@ export function VoicePanel() {
   return (
     <div className="ml-auto flex min-w-0 items-center gap-3">
       {s.now && (
-        <div className="flex min-w-0 items-baseline gap-2 text-lg" data-testid="now-speaking">
-          <span className="shrink-0 animate-pulse font-semibold tracking-widest text-emerald-400">
+        <div className="flex min-w-0 items-baseline gap-2 text-base" data-testid="now-speaking">
+          <span className="shrink-0 animate-pulse font-semibold tracking-[0.12em] text-blue-700">
             ◉ {s.now.speaker === 'tower' ? 'TOWER' : 'PILOT'}
           </span>
-          {s.now.callsign && <span className="shrink-0 font-mono font-semibold text-slate-100">{s.now.callsign}</span>}
-          <span className="truncate text-slate-300">“{s.now.text}”</span>
+          {s.now.callsign && <span className="shrink-0 font-mono font-semibold text-slate-950">{s.now.callsign}</span>}
+          <span className="truncate text-slate-600">“{s.now.text}”</span>
         </div>
       )}
       <button
         type="button"
         onClick={toggle}
-        className={`shrink-0 rounded-md border-2 px-3 py-1 text-base font-semibold tracking-wide ${live ? 'border-emerald-500 text-emerald-300' : 'border-amber-400 text-amber-300'}`}
+        className={`shrink-0 rounded-lg border px-3 py-1 text-sm font-semibold tracking-wide ${live ? 'border-blue-700 text-blue-700' : 'border-slate-900 bg-slate-900 text-white'}`}
       >
         {live ? 'SOUND ON · Mute' : s.blocked ? 'Click to enable sound' : 'SOUND OFF · Enable'}
       </button>
