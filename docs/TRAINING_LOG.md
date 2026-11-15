@@ -317,3 +317,34 @@ aircraft parked at the neighbouring stand PE2 (stand geometry in the frozen simu
 aircraft never reached the gate); the other Light Rain collisions are the same pairs as before G2 (a pushback's
 end-of-push turn sweeping an aircraft held nearby: LR21, LR101, LR108; a taxi-out past an aircraft parked at a stand:
 LR102; a head-on route near the 07L crossing: LR35).
+
+## Round G4: a pushback is predicted at push speed (plan approved by the council before the change)
+
+Failure review: LR21 t=844/893 (SKW1192 / ASA2107), LR108 t=779/827 (SWA960 / SWA434), LR101 t=1000/1055 (SKW3019 /
+DAL2209), all development seeds. A taxiing aircraft was crossing a pushback lane end while a neighbour's push was
+moving at 1.1 m/s. The ground probe predicted the pushing aircraft with the taxi speed profile (accelerating to
+7.7 m/s), which produced a phantom clash; the probe held the crosser, which stopped 32-43 m past the lane end, inside
+the push's end-of-push turn, and the turn hit it. A good controller knows a push crawls and lets the crosser continue.
+
+Change (planner only, two lines in `_future`): an aircraft in phase `pushback` is predicted at its own observed speed.
+Unit test: `backend/tests/test_probe.py` (fails without the change).
+
+| set | level | before (5abf8a6) | after |
+|---|---|---|---|
+| development, 80 runs (analyst) | Normal Day | 25/40, collision 1, stuck 40, unhandled 15, 80.2 s | identical on all 40 seeds |
+| development, 80 runs (analyst) | Light Rain | 14/40, collision events 8, stuck 56, unhandled 21, 181.9 s | 14/40, collision events 3, stuck 60, unhandled 24, 182.0 s |
+| validation, 30 runs (coordinator) | Normal Day | 7/15, collisions 4, stuck 23, unhandled 7, 80 s | 7/15, collisions 3, stuck 23, unhandled 7, 77 s |
+| validation, 30 runs (coordinator) | Light Rain | 6/15, collisions 2, stuck 7, unhandled 8, 180 s | 6/15, collisions 2, stuck 7, unhandled 8, 181 s |
+
+This is a safety fix, not a pass-rate gain: LR21 FAIL -> PASS, LR101 and LR108 change from collision fails to stuck /
+unhandled fails, and LR39 flips PASS -> FAIL on a gridlock at t=1354 (stuck and unhandled rise on Light Rain
+development seeds). No loss_of_separation, runway_incursion or runway_occupied in any batch.
+Known gap: a push observed at speed 0 (just started or paused) is now predicted to stay where it is for the 20 s
+window; if it starts moving inside the window the probe could see a clash late.
+
+Collisions that remain and that no controller instruction avoids in the frozen simulator (analyst's static sweep
+check of stand pairs): an aircraft taxiing to a stand that shares its lane node with a neighbouring stand clips an
+aircraft parked there (LR110 E2/PE2, ND97 C11/PC11; the built-in Human collides there too); LR23 (gate F4's push
+track passes 8 m from stand PF4: the safety engine refuses the push, the day fails on the 300 s gate rule instead).
+Not solved: LR102 (a GA aircraft parks 13 s after another aircraft's route past its stand was issued) and LR35 (a
+head-on route near the 07L crossing).

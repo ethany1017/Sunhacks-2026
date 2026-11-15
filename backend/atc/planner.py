@@ -542,6 +542,8 @@ class Planner:
         nxt = a.get("next_node")
         v0 = 0.0 if from_rest else speed
         top = RESUME_TAXI_SPEED if (from_rest or 0.3 < speed < RESUME_TAXI_SPEED) else speed
+        if a["phase"] == "pushback":    # a push moves at push speed, never taxi speed (LR21: a phantom clash held an
+            top = v0 = speed            # aircraft crossing the lane end inside the push's end-of-push turn)
         v = np.minimum(v0 + TAXI_ACCEL * (np.arange(int(secs)) + 0.5), max(top, v0))
         t = np.concatenate([[0.0], np.cumsum(v)])
         if nxt in nodes and a["phase"] != "pushback":
