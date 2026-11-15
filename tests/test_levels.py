@@ -167,8 +167,9 @@ def test_tower_turns_the_airport_round_before_the_tailwind_limit(pair) -> None:
         wx = [(e["sim_time_ms"], e["data"]) for e in ev if e["kind"] == "weather.update"]
         cfg = [(e["sim_time_ms"], e["data"]) for e in ev if e["kind"] == "runway.config"]
         assert len(wx) == len(levels.WIND_STEPS) and wx[-1][1]["wind_dir"] == 90
-        assert cfg and cfg[0][1] == {"arrival_runways": ["07R", "08"], "departure_runways": ["07L", "08"]}
-        assert cfg[0][0] < wx[-1][0]                       # switched while the tailwind was still within the limit
+        east = [c for c in cfg if c[1]["arrival_runways"] == ["07R", "08"]]
+        assert east and east[0][1]["departure_runways"] == ["07L"]   # departures keep off the arrival runway
+        assert east[0][0] < wx[-1][0]                       # switched while the tailwind was still within the limit
         assert any(e["kind"] == "referee_result" for e in ev)
 
 
