@@ -220,6 +220,10 @@ class Planner:
         occ = (self.obs.get("level") or {}).get("effects", {}).get("occupancy_mult", 1.0)
         m = self._m(cs)
         ph = a["phase"]
+        c = a.get("clearance") or {}
+        if a["speed_mps"] < 0.5 and str(a.get("blocked_by") or "").startswith("runway:") and \
+                c.get("action") != "cross_runway":
+            return float("inf")   # stopped at a hold point while still on the runway
         if ph in ("landing_roll", "runway_exit") and m.get("exit"):
             ex = self.xy[m["exit"]]
             d = self._dist((a["x"], a["y"]), ex)
@@ -423,7 +427,12 @@ class Planner:
             self._final(a, m)
         elif ph == "taxi_in" and self._at_line(a):
             self._cross(a)
-        elif ph == "taxi_in" and not m.get("taxied") and a["speed_mps"] < 0.3 and a.get("next_node") and a.get("gate"):
+        elif ph in ("landing_roll", "runway_exit") and a["speed_mps"] < 0.3 and \
+                str(a.get("blocked_by") or "").startswith("runway:"):
+            self._cross(a, a["runway"])   # its exit route runs onto the same runway's pavement again: clear it across
+        elif ph in ("taxi_in", "landing_roll", "runway_exit") and not m.get("taxied") and a["speed_mps"] < 0.3 \
+                and not a.get("blocked_by") and ((a.get("stopped_s") or 0) > 1.0 or ph != "taxi_in") and a.get("next_node") \
+                and a.get("gate"):
             self._taxi_in(a, m)
 
     def _taxi_in(self, a, m):
@@ -488,9 +497,9 @@ class Planner:
             self._propose(a, "go_around", {}, f"{cs} cannot be cleared to land on {end} in time: the runway will not be "
                                               f"clear; a go-around is safer than landing on an occupied runway.")
 
-    def _cross(self, a):
+    def _cross(self, a, pav=None):
         cs = a["callsign"]
-        pav = a["hold"]["runway"]
+        pav = pav or a["hold"]["runway"]
         if self._pending(cs, "cross_runway"):
             return
         self._propose(a, "cross_runway", {"runway": self.si.runway_label(pav)},
