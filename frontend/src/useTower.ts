@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import type { Aircraft, Airport, Comparison, Metrics, RefereeFail, RunInfo, SimEvent, WeatherData } from '@/types'
+import type { Aircraft, Airport, Comparison, Metrics, RefereeFail, RunInfo, RunwayConfig, SimEvent, WeatherData } from '@/types'
 
 const FEED_CAP = 300
 
@@ -13,7 +13,8 @@ export type TowerState = {
   feed: SimEvent[] // newest first
   aircraft: Record<string, Aircraft>
   weather: WeatherData | null
-  runway: string | null
+  runway: string | null // one-line label of the active runway configuration
+  runways: RunwayConfig | null
   t: number
   run: RunInfo | null // level and the active controller
   verdict: 'RUNNING' | 'PASS' | 'FAIL'
@@ -24,7 +25,7 @@ export type TowerState = {
 }
 
 export const INITIAL: TowerState = {
-  airport: null, feed: [], aircraft: {}, weather: null, runway: null, t: 0,
+  airport: null, feed: [], aircraft: {}, weather: null, runway: null, runways: null, t: 0,
   run: null, verdict: 'RUNNING', fails: [], metrics: null, comparison: null, ended: false,
 }
 
@@ -55,6 +56,7 @@ export function applyEvents(prev: TowerState, events: SimEvent[]): TowerState {
         break
       case 'runway_change':
         s.runway = e.data.runway
+        s.runways = e.data
         break
       case 'aircraft_spawn':
         if (cs) s.aircraft[cs] = { callsign: cs, ...e.data }

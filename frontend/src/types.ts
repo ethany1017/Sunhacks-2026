@@ -28,6 +28,16 @@ export type WeatherData = {
   metar: string; wind_dir: number; wind_kt: number; gust_kt: number | null; vis_sm: number; wx: string | null; temp_f: number; t?: number
 }
 
+export type RunwayConfig = { arrival_runways: string[]; departure_runways: string[]; runway: string }
+
+// The real-world METAR (GET /api/weather/live). Display only.
+export type LiveWeather = {
+  source: 'live' | 'cache' | 'unavailable'; icao?: string; metar?: string; wind_dir?: number | string | null
+  wind_kt?: number | null; gust_kt?: number | null; vis_sm?: number | string | null; obs_time?: string | null
+}
+
+export type Decision = { kind: string; options: { id: string; label?: string }[]; default: string; choice?: string }
+
 export type RefereeFail = { rule: string; callsigns: string[]; reason: string; t: number }
 
 export type Metrics = {
@@ -59,17 +69,17 @@ export type SimEvent =
   | Ev<'sim_start', { run_id: number; airport: string; icao: string; speed: number }>
   | Ev<'sim_end', { why?: string }>
   | Ev<'weather', WeatherData>
-  | Ev<'runway_change', { runway: string; arrival_runways: string[]; departure_runways: string[] }>
+  | Ev<'runway_change', RunwayConfig>
   | Ev<'aircraft_spawn', { kind: Kind; aircraft_type: string; lat: number; lon: number; heading: number; phase: Phase }>
   | Ev<'position', { lat: number; lon: number; heading: number; phase: Phase; speed_kt: number; kind?: Kind; altitude_ft?: number }>
-  | Ev<'proposal', { action: string; runway: string | null; route: string[] | null }>
-  | Ev<'ai_decision', { question: string; options: { id: string; label: string }[]; choice: string; explanation: string; source: 'claude' | 'fallback' }>
+  | Ev<'proposal', { action: string; params?: Record<string, unknown>; decision?: Decision }>
+  | Ev<'ai_decision', Decision & { choice: string; explanation: string; source: 'claude' | 'fallback' }>
   | Ev<'safety_check', { approved: boolean; rule: string; action: string }>
-  | Ev<'clearance', { text: string; action: string; runway: string | null }>
+  | Ev<'clearance', { text: string; action: string; params?: Record<string, unknown> }>
   | Ev<'audio', { url: string; speaker: 'tower' | 'pilot'; text: string }>
   | Ev<'readback', { transcript: string; matched: boolean }>
-  | Ev<'readback_correction', { text: string }>
-  | Ev<'sequence', { arrivals: string[]; departures: string[] }>
+  | Ev<'readback_correction', { transcript: string }>
+  | Ev<'sequence', { runway: string; order: string[] }>
   | Ev<'alert', { level: 'info' | 'warning' | 'critical'; message: string; source?: string }>
 
 export type Aircraft = {
@@ -79,4 +89,5 @@ export type Aircraft = {
   lon: number
   heading: number
   phase: Phase
+  altitude_ft?: number
 }

@@ -2,7 +2,7 @@ import * as maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import { useEffect, useRef } from 'react'
-import type { Aircraft, Airport, RunwayEnd } from '@/types'
+import type { Aircraft, Airport, LonLat, RunwayConfig, RunwayEnd } from '@/types'
 
 // MapLibre locates its worker relative to its own module, which Vite's dependency bundling breaks.
 maplibregl.setWorkerUrl(workerUrl)
@@ -28,7 +28,24 @@ async function loadStyle(): Promise<maplibregl.StyleSpecification> {
   }
 }
 
-function addAirportLayers(map: maplibregl.Map, geojson: Airport['geojson']) {
+// Final approach courses (one per runway end), drawn for the active arrival runways.
+function finals(airport: Airport): GeoJSON.FeatureCollection {
+  const approaches = (airport.graph as { approaches?: Record<string, { path: LonLat[] }> })?.approaches ?? {}
+  return {
+    type: 'FeatureCollection',
+    features: Object.entries(approaches).map(([end, a]) => ({
+      type: 'Feature', geometry: { type: 'LineString', coordinates: a.path }, properties: { end },
+    })),
+  }
+}
+
+function addAirportLayers(map: maplibregl.Map, airport: Airport) {
+  const geojson = airport.geojson
+  map.addSource('finals', { type: 'geojson', data: finals(airport) })
+  map.addLayer({
+    id: 'final', type: 'line', source: 'finals', filter: ['in', ['get', 'end'], ['literal', []]],
+    paint: { 'line-color': COLOR.arrival, 'line-opacity': 0.6, 'line-width': 3, 'line-dasharray': [2, 2] },
+  })
   map.addSource('airport', { type: 'geojson', data: geojson })
   const kind = (k: string) => ['==', ['get', 'kind'], k] as maplibregl.FilterSpecification
   map.addLayer({
@@ -84,15 +101,37 @@ type View = {
   ready: boolean // airport layers exist in the current style
   tracks: Map<string, Track>
   ends: { end: RunwayEnd; runwayId: string; marker: maplibregl.Marker }[]
-  runway: string | null
+  runways: RunwayConfig | null
   aircraft: Record<string, Aircraft>
 }
 
 function syncRunway(v: View) {
   if (!v.map) return
-  const activeId = v.ends.find((x) => x.end.designator === v.runway)?.runwayId ?? ''
-  for (const { end, marker } of v.ends) marker.getElement().classList.toggle('active', end.designator === v.runway)
-  if (v.ready) v.map.setPaintProperty('runway', 'line-color', ['case', ['==', ['get', 'id'], activeId], RUNWAY_ACTIVE, RUNWAY])
+  const arr = v.runways?.arrival_runways ?? []
+  const active = new Set([...arr, ...(v.runways?.departure_runways ?? [])])
+  const ids = v.ends.filter((x) => active.has(x.end.designator)).map((x) => x.runwayId)
+  for (const { end, marker } of v.ends) marker.getElement().classList.toggle('active', active.has(end.designator))
+  if (!v.ready) return
+  v.map.setPaintProperty('runway', 'line-color', ['case', ['in', ['get', 'id'], ['literal', ids]], RUNWAY_ACTIVE, RUNWAY])
+  v.map.setFilter('final', ['in', ['get', 'end'], ['literal', arr]])
+}
+
+// Which labels win when two would overlap: flying and runway traffic first, parked aircraft last.
+const RANK: Record<string, number> = { final: 0, go_around: 0, airborne: 0, landing_roll: 0, takeoff_roll: 0, line_up: 0, at_gate: 2, parked: 2 }
+const LABEL_BOX = { w: 110, h: 30 }
+
+// Hide any callsign label that would overlap one already shown (greedy, by rank). Runs every frame: n is ~40.
+function declutter(v: View) {
+  const map = v.map!
+  const shown: maplibregl.Point[] = []
+  const order = [...v.tracks.entries()].sort(([a], [b]) => (RANK[v.aircraft[a]?.phase] ?? 1) - (RANK[v.aircraft[b]?.phase] ?? 1))
+  for (const [, tr] of order) {
+    const p = map.project(tr.marker.getLngLat())
+    const free = shown.every((q) => Math.abs(q.x - p.x) > LABEL_BOX.w || Math.abs(q.y - p.y) > LABEL_BOX.h)
+    if (free) shown.push(p)
+    const label = tr.marker.getElement().querySelector<HTMLElement>('.aircraft-label')!
+    if (label.hidden === free) label.hidden = !free
+  }
 }
 
 function syncAircraft(v: View) {
@@ -122,9 +161,9 @@ function syncAircraft(v: View) {
   }
 }
 
-export function AirportMap({ airport, runway, aircraft }: { airport: Airport; runway: string | null; aircraft: Record<string, Aircraft> }) {
+export function AirportMap({ airport, runways, aircraft }: { airport: Airport; runways: RunwayConfig | null; aircraft: Record<string, Aircraft> }) {
   const container = useRef<HTMLDivElement>(null)
-  const view = useRef<View>({ map: null, ready: false, tracks: new Map(), ends: [], runway: null, aircraft: {} })
+  const view = useRef<View>({ map: null, ready: false, tracks: new Map(), ends: [], runways: null, aircraft: {} })
 
   // Create the map once per airport.
   useEffect(() => {
@@ -155,7 +194,7 @@ export function AirportMap({ airport, runway, aircraft }: { airport: Airport; ru
         }
       })
       map.on('style.load', () => {
-        addAirportLayers(map, airport.geojson)
+        addAirportLayers(map, airport)
         v.ready = true
         syncRunway(v)
       })
@@ -180,6 +219,7 @@ export function AirportMap({ airport, runway, aircraft }: { airport: Airport; ru
           const k = tr.dur ? Math.min((now - tr.start) / tr.dur, 1) : 1
           tr.marker.setLngLat([tr.from[0] + (tr.to[0] - tr.from[0]) * k, tr.from[1] + (tr.to[1] - tr.from[1]) * k])
         }
+        declutter(v)
         frame = requestAnimationFrame(tick)
       }
       frame = requestAnimationFrame(tick)
@@ -193,9 +233,9 @@ export function AirportMap({ airport, runway, aircraft }: { airport: Airport; ru
   }, [airport])
 
   useEffect(() => {
-    view.current.runway = runway
+    view.current.runways = runways
     syncRunway(view.current)
-  }, [runway])
+  }, [runways])
 
   useEffect(() => {
     view.current.aircraft = aircraft

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import type { Comparison as Cmp, EvalTotals, Metrics, RefereeFail, RunInfo } from '@/types'
+import { Fragment, useEffect, useState } from 'react'
+import type { Comparison as Cmp, Metrics, RefereeFail, RunInfo } from '@/types'
 
 // The dashboard's only actions: pick a level and a controller, start/reset a run, switch controller mid-run.
 
@@ -100,9 +100,9 @@ export function Scoreboard({ m }: { m: Metrics | null }) {
     <div className="grid grid-cols-2 gap-x-6 gap-y-1 border-b border-slate-800 p-4">
       <div className="col-span-2 text-sm font-semibold tracking-widest text-slate-500">SCOREBOARD</div>
       {rows.map(([k, v]) => (
-        <div key={k} className="flex justify-between text-lg">
+        <div key={k} className="flex justify-between text-xl">
           <span className="text-slate-400">{k}</span>
-          <span className={`font-mono font-semibold ${k === 'Fails' && Number(v) > 0 ? 'text-red-400' : 'text-slate-100'}`}>{v}</span>
+          <span className={`font-mono text-2xl font-bold ${k === 'Fails' && Number(v) > 0 ? 'text-red-400' : 'text-slate-100'}`}>{v}</span>
         </div>
       ))}
     </div>
@@ -114,19 +114,25 @@ const SECTION_NAMES = { training: 'Training seeds', heldout: 'Held-out seeds', p
 // Latest Agent vs Human evaluation (python -m app.evaluate --publish), judged only by the simulator's Referee.
 export function Comparison({ c }: { c: Cmp | null }) {
   if (!c) return null
-  const cell = (t: EvalTotals | undefined) =>
-    t ? `${t.passed}/${t.runs} · ${t.fails} · ${Math.round(t.avg_delay_s)} s · ${t.diversions}` : '--'
+  const rows = (['training', 'heldout', 'practice'] as const).flatMap((k) =>
+    (['human', 'agent'] as const).map((who) => ({ key: `${k}-${who}`, name: `${SECTION_NAMES[k]} · ${who === 'human' ? 'Human' : 'Agent'}`, t: c.sections[k]?.[who] })))
   return (
     <div className="border-b border-slate-800 p-4">
-      <div className="text-sm font-semibold tracking-widest text-slate-500">AGENT VS HUMAN</div>
-      <div className="mb-1 text-xs text-slate-500">pass · fails · avg delay · diversions{c.human_impl === 'tower' ? ' · Human = built-in tower for now' : ''}</div>
-      {(['training', 'heldout', 'practice'] as const).filter((k) => c.sections[k]).map((k) => (
-        <div key={k} className="grid grid-cols-[9rem_1fr_1fr] gap-x-3 text-lg">
-          <span className="text-slate-400">{SECTION_NAMES[k]}</span>
-          <span className="font-mono">H {cell(c.sections[k]?.human)}</span>
-          <span className="font-mono">A {cell(c.sections[k]?.agent)}</span>
-        </div>
-      ))}
+      <div className="text-sm font-semibold tracking-widest text-slate-500">
+        AGENT VS HUMAN{c.human_impl === 'tower' ? ' · Human = built-in tower for now' : ''}
+      </div>
+      <div className="grid grid-cols-[1fr_auto_auto_auto_auto] gap-x-4 text-lg">
+        {['', 'Pass', 'Fails', 'Avg delay', 'Diverted'].map((h) => <span key={h} className="text-sm font-semibold text-slate-500">{h}</span>)}
+        {rows.filter((r) => r.t).map(({ key, name, t }) => (
+          <Fragment key={key}>
+            <span className={name.endsWith('Agent') ? 'text-emerald-300' : 'text-slate-400'}>{name}</span>
+            <span className="text-right font-mono">{t!.passed}/{t!.runs}</span>
+            <span className="text-right font-mono">{t!.fails}</span>
+            <span className="text-right font-mono">{Math.round(t!.avg_delay_s)} s</span>
+            <span className="text-right font-mono">{t!.diversions}</span>
+          </Fragment>
+        ))}
+      </div>
     </div>
   )
 }
