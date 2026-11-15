@@ -223,6 +223,11 @@ class RealSimulator:
         self._seen_readbacks.update(r["id"] for r in new)
         return new
 
+    def readback_waiting(self):
+        """Has a pilot readback been delivered that get_readbacks() has not returned yet? (Cheap: no observe() draw, so a
+        controller can answer readbacks on the tick they arrive, as the built-in tower does.)"""
+        return any(r.delivered and not r.resolved and r.id not in self._seen_readbacks for r in self.sim.readbacks.values())
+
     def resolve_readback(self, readback_id, accept):
         return self.sim.resolve_readback(readback_id, accept)
 
@@ -241,7 +246,17 @@ class RealSimulator:
         """Published performance of an ICAO type: wake categories, size, approach and lift-off speeds."""
         ty = get_type(icao)
         return {"icao": ty.icao, "wtc": ty.wtc, "cwt": ty.cwt, "light": ty.light, "wingspan_m": ty.wingspan_m,
-                "length_m": ty.length_m, "vref_mps": ty.vref_mps, "vlof_mps": ty.vlof_mps}
+                "length_m": ty.length_m, "vref_mps": ty.vref_mps, "vlof_mps": ty.vlof_mps,
+                "landing_decel": ty.landing_decel}
+
+    def layout(self):
+        """The published airport graph (sim.graph.model.AirportGraph): static layout only (node positions, edges, runway
+        chains, stands, path geometry, the local metric frame). No live state; callers must treat it as read-only."""
+        return self.graph
+
+    def runway_pavement(self, name):
+        """Runway pavement id ("08/26") for a runway end ("26") or pavement name; None if neither."""
+        return self.sim.runway_pavement(name)
 
     def runway_ends(self):
         """{end: {runway, heading, threshold_node, chain}}: chain = runway centreline nodes from this end to the far end."""

@@ -112,3 +112,87 @@ fails including 4 collisions), practice 6/8.
 | light_rain | 23 | FAIL collision 1 | FAIL stuck 1, unhandled 1 | 25 / 23 | 182 / 355 | 0 / 0 | 0 / 0 | 0/0 / 0/0 |
 | light_rain | 24 | PASS | FAIL stuck 2, unhandled 1 | 24 / 21 | 192 / 193 | 1 / 1 | 0 / 0 | 0/0 / 0/0 |
 | light_rain | 25 | FAIL collision 2, unhandled 1 | FAIL unhandled 1 | 23 / 24 | 276 / 267 | 0 / 0 | 0 / 0 | 2/0 / 1/0 |
+
+## Re-base on tower procedures
+
+**Why.** The A3-A6 planner was tuned on 5 seeds per level and did not generalise: on development seeds normal_day 6-20 /
+light_rain 26-40 it passed ND 3/15 (20 collisions) and LR 0/15. Gus's rule-based tower (`sim/tower/controller.py`, the
+base of the Human without its handicaps) did much better on normal_day 1-20 / light_rain 21-40, so the planner's
+decision logic is now the tower's, ported into `backend/atc/planner.py` with its constants, decision order and ground
+probe, behind our safety engine and through the simif adapter (`backend/atc/` imports nothing from `sim`; the static
+airport graph comes from the new `si.layout()`).
+
+What the port changes from the tower: every instruction is proposal -> safety_check -> issue -> clearance; what the
+tower read from raw sim events (takeoff roll, airborne, parked, a pilot's "unable") is read from the observation;
+readbacks are answered on the tick they arrive (`si.readback_waiting()`; answering them up to 0.4 s later made crossing
+clearances systematically later than the tower's); runway flow, arrival runway and departure line-up order are
+`choose` decisions (default = the tower's choice). One fix beyond the tower is in the port: a flow-change reroute that
+the sim dropped (`clearance.no_effect`, the aircraft had passed the route's start) is planned again when the observed
+`entry_node` shows the old route is still flown (ND17: a departure lined up on 25R after the turn-round and blocked the
+runway for the rest of the day).
+
+No safety rule was changed. Safety rejections in the port are few per run (typically 3-9: crossings refused while a
+takeoff roll is still observed on the runway or another crossing clearance is live; a few head-on taxi routes; a few
+pushbacks through a neighbour's footprint).
+
+**After** (agent: commit with this section, run after the last code edit; tower: `python -m sim.core.run --controller
+tower` on the same frozen simulator, same seeds, run tonight):
+
+normal_day: agent pass 13/20, safety fails 1, stuck 14; tower pass 14/20, safety fails 1, stuck 39.
+light_rain: agent pass 5/20, safety fails 5, stuck 16; tower pass 8/20, safety fails 6, stuck 29.
+Collisions over the 40 runs: agent 6, tower 7. No loss_of_separation, runway_occupied or runway_incursion for either.
+
+The port is below the tower on pass count (ND -1, LR -3). The runs diverge chaotically from the tower's within the first
+few minutes (observation noise draws and timing differ), so single seeds flip both ways (agent passes ND11, ND20, LR29,
+LR39 that the tower fails; fails ND1, ND4, ND13, LR25, LR31, LR35, LR36, LR37 that the tower passes). Remaining failure
+classes seen: ground collisions between a taxi-in and a taxi-out at a junction near a runway crossing (LR21, LR31, LR35,
+LR38, ND1); a departure stopped on its push lane whose only way out is head-on into an arriving aircraft's route, which
+the safety engine refuses, while the arrival waits for it (ND13, LR34: gridlock, the tower would have sent the head-on
+route); arrivals stuck holding short of 07L after the turn-round (LR36, LR37); one unhandled aircraft at day end.
+
+| level | seed | agent verdict | agent fails by rule | done | avg delay (s) | tower verdict | tower fails by rule | tower avg delay (s) |
+|---|---|---|---|---|---|---|---|---|
+| normal_day | 1 | FAIL | collision 1 | 25 | 85 | PASS | - | 60 |
+| normal_day | 2 | PASS | - | 24 | 91 | PASS | - | 88 |
+| normal_day | 3 | PASS | - | 25 | 83 | PASS | - | 72 |
+| normal_day | 4 | FAIL | unhandled_at_end 1 | 24 | 70 | PASS | - | 78 |
+| normal_day | 5 | PASS | - | 25 | 61 | PASS | - | 58 |
+| normal_day | 6 | PASS | - | 25 | 106 | PASS | - | 83 |
+| normal_day | 7 | PASS | - | 25 | 103 | PASS | - | 94 |
+| normal_day | 8 | PASS | - | 24 | 74 | PASS | - | 65 |
+| normal_day | 9 | PASS | - | 25 | 92 | PASS | - | 89 |
+| normal_day | 10 | PASS | - | 25 | 78 | PASS | - | 70 |
+| normal_day | 11 | PASS | - | 25 | 102 | FAIL | stuck 14, unhandled_at_end 1 | 26 |
+| normal_day | 12 | FAIL | diversion 2, stuck 1, unhandled_at_end 1 | 21 | 94 | FAIL | diversion 2, stuck 1, unhandled_at_end 1 | 94 |
+| normal_day | 13 | FAIL | stuck 2, unhandled_at_end 1 | 23 | 97 | PASS | - | 92 |
+| normal_day | 14 | FAIL | unhandled_at_end 1 | 24 | 76 | FAIL | unhandled_at_end 1 | 74 |
+| normal_day | 15 | FAIL | stuck 1, unhandled_at_end 1 | 24 | 108 | FAIL | collision 1 | 95 |
+| normal_day | 16 | PASS | - | 25 | 92 | PASS | - | 84 |
+| normal_day | 17 | PASS | - | 25 | 94 | PASS | - | 93 |
+| normal_day | 18 | PASS | - | 25 | 111 | PASS | - | 71 |
+| normal_day | 19 | FAIL | stuck 10, unhandled_at_end 1 | 12 | 52 | FAIL | stuck 13, unhandled_at_end 1 | 45 |
+| normal_day | 20 | PASS | - | 25 | 102 | FAIL | stuck 11, unhandled_at_end 1 | 138 |
+| light_rain | 21 | FAIL | collision 2 | 25 | 197 | FAIL | collision 2 | 197 |
+| light_rain | 22 | FAIL | unhandled_at_end 1 | 23 | 165 | FAIL | unhandled_at_end 1 | 173 |
+| light_rain | 23 | FAIL | stuck 1 | 25 | 202 | FAIL | collision 1 | 163 |
+| light_rain | 24 | PASS | - | 24 | 165 | PASS | - | 163 |
+| light_rain | 25 | FAIL | unhandled_at_end 1 | 23 | 201 | PASS | - | 225 |
+| light_rain | 26 | FAIL | stuck 1, unhandled_at_end 1 | 22 | 196 | FAIL | unhandled_at_end 1 | 223 |
+| light_rain | 27 | PASS | - | 25 | 171 | PASS | - | 159 |
+| light_rain | 28 | PASS | - | 25 | 215 | PASS | - | 200 |
+| light_rain | 29 | PASS | - | 25 | 157 | FAIL | stuck 12, unhandled_at_end 1 | 107 |
+| light_rain | 30 | FAIL | unhandled_at_end 1 | 23 | 149 | FAIL | stuck 1, unhandled_at_end 1 | 175 |
+| light_rain | 31 | FAIL | collision 1, unhandled_at_end 1 | 22 | 237 | PASS | - | 248 |
+| light_rain | 32 | FAIL | stuck 6, unhandled_at_end 1 | 16 | 163 | FAIL | stuck 7, unhandled_at_end 1 | 114 |
+| light_rain | 33 | FAIL | unhandled_at_end 1 | 21 | 229 | FAIL | unhandled_at_end 1 | 256 |
+| light_rain | 34 | FAIL | stuck 1, unhandled_at_end 1 | 23 | 187 | FAIL | stuck 3, unhandled_at_end 1 | 184 |
+| light_rain | 35 | FAIL | collision 1 | 25 | 205 | PASS | - | 172 |
+| light_rain | 36 | FAIL | stuck 1, unhandled_at_end 1 | 24 | 230 | PASS | - | 249 |
+| light_rain | 37 | FAIL | stuck 6, unhandled_at_end 1 | 16 | 176 | PASS | - | 173 |
+| light_rain | 38 | FAIL | collision 1, unhandled_at_end 1 | 24 | 212 | FAIL | unhandled_at_end 1 | 195 |
+| light_rain | 39 | PASS | - | 25 | 177 | FAIL | collision 3, stuck 6, unhandled_at_end 1 | 122 |
+| light_rain | 40 | FAIL | unhandled_at_end 1 | 23 | 277 | FAIL | unhandled_at_end 1 | 253 |
+
+normal_day: agent pass 13/20, safety fails 1, stuck 14; tower pass 14/20, safety fails 1, stuck 39
+
+light_rain: agent pass 5/20, safety fails 5, stuck 16; tower pass 8/20, safety fails 6, stuck 29

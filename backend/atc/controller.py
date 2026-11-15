@@ -22,9 +22,11 @@ class Controller:
         if self.si is None:
             return
         self._n += 1
-        if self._n % DECIDE_EVERY_TICKS:
-            return
         if self.planner is None:
             self.planner = Planner(self.si, self.emit)
+        if self._n % DECIDE_EVERY_TICKS:
+            if getattr(self.si, "readback_waiting", lambda: False)():
+                self.planner.answer_readbacks(self.si.get_state())   # answered on the tick they arrive
+            return
         self.status = "planning"
         self.planner.tick(self.si.get_state())

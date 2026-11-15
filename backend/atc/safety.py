@@ -1,7 +1,7 @@
 """Agent safety engine: deterministic rules that approve or reject every proposed instruction before it is sent.
 
 Each rule is `rule(pic, prop) -> (ok, rule_name, reason)`. `pic` is the controller's picture of the airport this tick
-(built by the planner from simif observations and its own record of what it cleared); `prop` is the proposal
+(built by the planner out of the simif observations and its own record of what it cleared); `prop` is the proposal
 `{callsign, action, end, pavement, route, ...}`. `check()` runs the rules for the action; the first rejection wins.
 The engine only stops the agent from SENDING unsafe clearances. The Referee (in the simulator) judges independently;
 these margins sit above its limits (sim/referee/limits.py) so a clearance that passes here keeps the day legal.

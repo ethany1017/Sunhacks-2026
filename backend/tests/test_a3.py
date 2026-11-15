@@ -163,13 +163,18 @@ class FakeSI:
         return pav
 
     @staticmethod
+    def runway_pavement(name):
+        return {"09": "P", "27": "P"}.get(name, name)
+
+    @staticmethod
     def spoken_runway(end):
         return {"09": "zero niner", "27": "two seven"}[end]
 
 
 def bare_planner(si, p):
     pl = object.__new__(Planner)   # no airport needed for the proposal and readback paths
-    pl.si, pl.t, pl.pic, pl.rejected, pl.expected, pl.mem, pl.ends = si, p["t"], p, {}, {}, {}, {"09": {}}
+    pl.si, pl.t, pl.pic, pl.rejected, pl.expected, pl.ends = si, p["t"], p, {}, {}, {"09": {}}
+    pl.claims, pl.claim_action, pl.cross_ids, pl.routes, pl.ground_hold, pl._issued_now = {}, {}, set(), {}, {}, set()
     pl.events = []
     pl.emit = lambda t, typ, cs, data, reason: pl.events.append((typ, cs, data, reason))
     return pl
@@ -179,19 +184,60 @@ def test_unsafe_proposal_is_rejected_recorded_and_never_issued():
     si = FakeSI()
     p = pic(ac("ME"), ac("X"), occupants={"P": ["X"]})
     pl = bare_planner(si, p)
-    res = pl._propose(p["aircraft"]["ME"], "cleared_for_takeoff", {"runway": "09"}, "ME is first in line.",
-                      end="09", pavement="P")
+    res = pl._propose(p["aircraft"]["ME"], "cleared_for_takeoff", {"runway": "09"}, "ME is first in line")
     assert res is None and si.issued == []
     types = [e[0] for e in pl.events]
     assert types == ["proposal", "safety_check", "alert"]             # the rejection is also an alert
     assert pl.events[2][2]["rule"] == "runway_occupancy"
     chk = pl.events[1]
     assert chk[2]["approved"] is False and chk[2]["rule"] == "runway_occupancy" and "X" in chk[3]
-    pl._propose(p["aircraft"]["ME"], "cleared_for_takeoff", {"runway": "09"}, "again", end="09", pavement="P")
+    assert chk[2]["reason"] == chk[3]
+    pl._propose(p["aircraft"]["ME"], "cleared_for_takeoff", {"runway": "09"}, "again")
     assert len(pl.events) == 3                                   # one record per rejection episode
     p["occupants"] = {}
-    assert pl._propose(p["aircraft"]["ME"], "cleared_for_takeoff", {"runway": "09"}, "clear now", end="09", pavement="P")
+    assert pl._propose(p["aircraft"]["ME"], "cleared_for_takeoff", {"runway": "09"}, "clear now")
     assert len(si.issued) == 1 and [e[0] for e in pl.events][-3:] == ["proposal", "safety_check", "clearance"]
+    assert pl.claims == {("P", "ME"): "c1"} and pl.expected["c1"] == ("ME", "cleared_for_takeoff", "09")
+    # the new clearance holds the runway for the rest of this pass: a second one onto it is rejected
+    p["aircraft"]["YOU"] = ac("YOU")
+    assert pl._propose(p["aircraft"]["YOU"], "cleared_for_takeoff", {"runway": "09"}, "me too") is None
+
+
+def test_choose_hook_defaults_to_the_planner_default():
+    lay = type("SI", (), {"layout": lambda self: None, "runway_ends": lambda self: {}})()
+    pl = Planner(lay, lambda *a: None)
+    d = {"kind": "runway_flow", "options": [{"id": "switch"}, {"id": "keep"}], "default": "switch"}
+    assert pl.choose(d) == "switch"
+
+
+def test_departure_gap_is_a_decision_with_options_and_default():
+    """Two departures waiting at one runway entry: the line-up goes to whichever the choose hook picks."""
+    si = FakeSI()
+    pl = bare_planner(si, pic())
+    pl.g = type("G", (), {"end_runway": {"09": "P"}, "node_xy": {"e": (0.0, 0.0)}})()
+    pl.ends = {"09": {}}
+    pl.last_airborne, pl.watch, pl.assigned = {}, {}, {}
+    first = ac("A", phase="hold_short", hold={"runway": "P"}, stopped_s=50.0, entry_node="e", type="B738")
+    second = ac("B", phase="hold_short", hold={"runway": "P"}, stopped_s=10.0, entry_node="e", type="B738")
+    pl.ac = {"A": first, "B": second}
+    for cs in ("A", "B"):
+        pl.assigned[cs] = {"end": "09", "taxi": True}
+    pl.pic["aircraft"] = pl.ac
+    obs = {"t": 1000.0, "aircraft": [first, second], "runways": [{"id": "P", "occupancy": []}]}
+    seen = []
+    pl.choose = lambda d: (seen.append(d), d["default"])[1]
+    pl._line_up(obs, second, pl.assigned["B"])
+    assert si.issued == [] and seen[0]["kind"] == "departure_gap" and seen[0]["default"] == "A"
+    assert [o["id"] for o in seen[0]["options"]] == ["A", "B"]
+    pl._line_up(obs, first, pl.assigned["A"])
+    assert [c["callsign"] for c in si.issued] == ["A"] and pl.assigned["A"].get("luaw")
+
+
+def test_no_sim_imports_in_the_agent():
+    import subprocess
+    out = subprocess.run(["grep", "-rn", r"import sim\|from sim", str(Path(__file__).resolve().parent.parent / "atc")],
+                         capture_output=True, text=True).stdout
+    assert out == ""
 
 
 def test_readback_wrong_is_rejected_and_correct_accepted():
@@ -224,17 +270,6 @@ def test_readback_for_a_clearance_issued_before_the_switch_is_checked_not_waved_
                "h3": {"action": "cleared_to_land", "text": land}}
     pl._readbacks()
     assert si.resolved == [("r1", False), ("r2", False), ("r3", True), ("r4", False)]
-
-
-def test_arrival_near_its_holding_limit_goes_first():
-    pl = bare_planner(FakeSI(), pic())
-    arr = ac("A1", kind="arrival", phase="final", runway="P", eta_s=120.0, holding_s=100.0, holding_limit_s=600.0)
-    pl.ac = {"A1": arr}
-    assert pl._low_fuel("P") is None                      # plenty of holding left
-    arr["holding_s"] = 320.0
-    assert pl._low_fuel("P") == "A1" and pl._low_fuel("Q") is None
-    arr["eta_s"] = 400.0
-    assert pl._low_fuel("P") is None                      # still far out
 
 
 # -- end to end ----------------------------------------------------------------------------------------------------

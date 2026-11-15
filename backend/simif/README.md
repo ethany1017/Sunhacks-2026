@@ -73,6 +73,7 @@ events raised inside `step()` are returned, so call the tools (`issue`, `set_run
 ### Tools
 - `issue({callsign, action, params?})` → `{ok, clearance_id, voice_id, text}` or `{ok: false, error}`. Actions: taxi_via, hold_short, cross_runway, line_up_and_wait, cleared_for_takeoff, cleared_to_land, go_around, hold_position, resume_taxi, pushback_approved, contact_tower_or_ground (params: docs/API_CONTRACT.md). "Transmitted" only: the real acknowledgement is the readback.
 - `get_readbacks()` → pending readbacks (shape as `pending_readbacks`) not returned by an earlier call.
+- `readback_waiting()` → True if a delivered readback has not been returned by `get_readbacks()` yet (no observe() call; lets the agent answer readbacks on the tick they arrive).
 - `resolve_readback(readback_id, accept)` → accept, or say again. Unresolved readbacks are accepted after 5 s of silence.
 - `set_runway_config(arrival_runways, departure_runways)` → `{ok}`; runway ends like "26", "25L" (east flow `["07R","08"]`, `["07L","08"]`). Traffic already moving keeps its runway until re-cleared (docs/API_CONTRACT.md "Runway direction").
 - `get_runway_config()` → `{arrival_runways, departure_runways, runway}`: the active ends and a label.
@@ -85,6 +86,9 @@ events raised inside `step()` are returned, so call the tools (`issue`, `set_run
   - `choose_exit(end, icao, gate)` / `exit_options(end, icao, gate)` → the preferred exit node / feasible exits ranked by the same formula as the sim's pilots.
   - `taxi_route(src, dst)` → shortest node route on the taxi graph (no traffic considered).
   - `runway_label(pavement)` → "07L/25R"-style label used in clearances and readbacks.
+  - `runway_pavement(name)` → pavement id ("08/26") for a runway end ("26") or pavement name, else None.
+  - `type_info(icao)["landing_decel"]` → the type's landing deceleration (m/s²), for exit planning.
+  - `layout()` → the published airport graph object itself (`AirportGraph`): `frame.to_xy(lon, lat)`, `node_xy`, `g` (directed networkx graph, edge data `eid`), `edges[eid]` (`kind, length, pavement, pts`), `runways[pav]` (`id, chain, length_m, ends`), `stands[gate]` (`node, lane_node`), `end_runway`, `end_info(end)`, `other_end(end)`, `entries(end)`, `route(src, dst)`, `build_path(nodes)` (`runs, pts, length, free_flow_time(d)`), `edge_between(u, v)`, `taxiways_on(route)`. Static layout only, no live state; read-only. The agent's planner (a port of the built-in tower's procedures) uses it for routing and geometry, so `backend/atc/` never imports `sim`.
 - `get_referee()` → `{verdict: RUNNING/PASS/FAIL, fails: [{rule, callsigns, reason, t}], day_end_s}`. No score (it would leak readback truth).
 
 ## Metrics only (true state; the backend loop and dashboard, never controller decisions)
