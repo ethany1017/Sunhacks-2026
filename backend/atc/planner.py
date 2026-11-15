@@ -17,6 +17,7 @@ LAND_DECIDE_ETA_S = 30.0        # last chance before the 1,800 m decision point 
 SHORT_FINAL_CHECK_S = 20.0      # cleared arrival this close with the runway still blocked: go around (last resort)
 ROLLOUT_S = 72.0                # typical landing occupancy, dry (docs/LEVELS.md measures 69-77 s), times occupancy_mult
 FLOW_SWITCH_TAILWIND_KT = 4.0   # turn the airport round once the active direction has more tailwind than this
+OLD_FLOW_DEPART_S = 60.0        # a departure already at its old runway may still go this soon after the flow turns
 FLOW_FINISH_ETA_S = 150.0       # on a flow change an arrival this close finishes on the old direction while legal
 CROSSING_PENALTY_M = 2500.0     # taxi routing: per runway-pavement edge (never trade a crossing for a short detour)
 SHARED_EDGE_PENALTY_M = 60.0    # taxi routing: an edge another aircraft also uses (same direction)
@@ -36,6 +37,7 @@ SIM_CORRIDOR_M = 30.0           # the pilots stop for a stopped aircraft this cl
 HOLD_REACT_S = 4.0              # hold_position: readback delay before the pilots brake
 HOLD_DECEL_MPS2 = 0.5           # assumed (gentle) taxi braking
 UNJAM_NO_RUNWAY_M = 110.0       # an unjam re-route reaches runway pavement no sooner than half a length + this (hold offset + margin)
+BODY_REROUTE_S = 90.0           # held this long for a stopped aircraft: look for a way round it
 UNJAM_AFTER_S = 15.0            # mutual block this long: re-route one of the pair
 IN_TRAIL_COS = 0.77             # within ~40 deg of the same direction: following, not crossing
 BODY_MARGIN_M = 5.0             # extra clearance past the two half spans when passing a stopped aircraft
@@ -70,6 +72,7 @@ class Planner:
         self._near_cache = {}
         self.flows = self._derive_flows()
         self.flow = next(iter(self.flows))
+        self.flow_t = 0.0
         self.started = False
 
     # -- geometry ----------------------------------------------------------------------------------------------------
@@ -182,24 +185,33 @@ class Planner:
                     self._live_action(cs, "cross_runway"):
                 continue
             m["unjam"] = (a.get("next_node"), o)
-            near = {n for n, (x, y) in self.xy.items()
-                    if math.hypot(x - b["x"], y - b["y"]) < (a["length_m"] + b["length_m"]) / 2 + SEE_AVOID_M + SIM_CORRIDOR_M}
-            dst, end = m["route"][-1], m.get("end")
-            for start, turn in ((a.get("next_node"), False), (a.get("prev_node"), True)):
-                if not start or start in near:
-                    continue
-                route = self._route(cs, start, dst, avoid_pav=self.ends[end]["runway"] if end else None, avoid_nodes=near)
-                if not route or self._pavement_within(route, (a["x"], a["y"]), a["length_m"] / 2 + UNJAM_NO_RUNWAY_M):
-                    continue   # never start a re-route at a runway: the pilots would be inside its hold point already
-                to = end if a["phase"] == "taxi_out" and end else a.get("gate")
-                res = self._propose(a, "taxi_via", {"route": route, "to": to},
-                                    f"{cs} and {o} are stopped nose to nose, each waiting for the other: {cs} takes a route "
-                                    f"round {o}.", end=end if a["phase"] == "taxi_out" else None, route=route,
-                                    extra={"turn_round": turn, "path": self._path(route, (a["x"], a["y"]), 0.0)})
-                if res:
-                    m.pop("held", None)
-                    m["pend"] = {"cid": res["clearance_id"], "set": {"route": route, "ri": 0}}
-                    return
+            if self._route_round(cs, a, o, f"{cs} and {o} are stopped nose to nose, each waiting for the other: "
+                                           f"{cs} takes a route round {o}."):
+                return
+
+    def _route_round(self, cs, a, o, reason):
+        """Re-route a stopped taxiing aircraft to its destination on a route that keeps clear of aircraft o."""
+        m, b = self._m(cs), self.ac[o]
+        if not m.get("route") or self._pending(cs, "taxi_via") or self._live_action(cs, "cross_runway"):
+            return False
+        near = {n for n, (x, y) in self.xy.items()
+                if math.hypot(x - b["x"], y - b["y"]) < (a["length_m"] + b["length_m"]) / 2 + SEE_AVOID_M + SIM_CORRIDOR_M}
+        dst, end = m["route"][-1], m.get("end")
+        for start, turn in ((a.get("next_node"), False), (a.get("prev_node"), True)):
+            if not start or start in near:
+                continue
+            route = self._route(cs, start, dst, avoid_pav=self.ends[end]["runway"] if end else None, avoid_nodes=near)
+            if not route or self._pavement_within(route, (a["x"], a["y"]), a["length_m"] / 2 + UNJAM_NO_RUNWAY_M):
+                continue   # never start a re-route at a runway: the pilots would be inside its hold point already
+            to = end if a["phase"] == "taxi_out" and end else a.get("gate")
+            res = self._propose(a, "taxi_via", {"route": route, "to": to}, reason,
+                                end=end if a["phase"] == "taxi_out" else None, route=route,
+                                extra={"turn_round": turn, "path": self._path(route, (a["x"], a["y"]), 0.0)})
+            if res:
+                m.pop("held", None)
+                m["pend"] = {"cid": res["clearance_id"], "set": {"route": route, "ri": 0}}
+                return True
+        return False
 
     def _pavement_within(self, route, xy, dmax):
         """Does the route reach runway pavement within dmax of xy (measured along it)?"""
@@ -283,9 +295,14 @@ class Planner:
             node = self.xy[h["node"]]
             if h.get("push"):
                 past = o is None or o["phase"] != "pushback"
-            elif h.get("body"):   # no timeout: waiting forever beats taxiing into a parked fuselage
+            elif h.get("body"):   # no timeout (waiting beats taxiing into a parked fuselage), but try a way round
                 past = o is None or o["phase"] not in safety.GROUND_PHASES or not (
                     self._body_hit(cs, a, o, 0.0) or self._freeze(cs, a, o, 0.0))
+                if not past and self.t - h["t"] > BODY_REROUTE_S and not h.get("tried") and a["speed_mps"] < 0.3:
+                    h["tried"] = True
+                    self._route_round(cs, a, h["by"], f"{h['by']} has been stopped in {cs}'s way for "
+                                                      f"{self.t - h['t']:.0f} s: {cs} takes a route round it.")
+                    continue
             else:
                 past = o is None or (h["node"] not in self._remaining(h["by"], o)
                                  and self._dist((o["x"], o["y"]), node) > CONVERGE_CLEAR_M) or \
@@ -642,7 +659,7 @@ class Planner:
         self.emit(self.t, "safety_check", None, {"action": "set_runway_config", "approved": ok, "rule": rule}, why)
         if ok:
             self.si.set_runway_config(arr, dep)
-            self.flow = flow
+            self.flow, self.flow_t = flow, self.t
         return ok
 
     def _flow(self):
@@ -819,7 +836,8 @@ class Planner:
         if ph in ("taxi_out", "hold_short") and m.get("end") and m["end"] not in dep_ends and m.get("route") \
                 and not self._pending(cs, "taxi_via") and not m.get("held") and not m.get("pend") \
                 and not (at_line and a["hold"]["runway"] == dep_pav
-                         and self._tailwind(m["end"]) <= self.pic["tailwind_limit"] - 2):
+                         and self._tailwind(m["end"]) <= self.pic["tailwind_limit"] - 2
+                         and self.t - self.flow_t < OLD_FLOW_DEPART_S):   # finish the old flow briefly: the wind is still turning
             if a["speed_mps"] < 0.3 and a.get("prev_node"):
                 (not a.get("hold") and a["next_node"] not in self.runway_nodes and self._taxi_out(a, m, a["next_node"], why="Runway flow changed: ", first=True)) or \
                     self._taxi_out(a, m, a["prev_node"], why="Runway flow changed (turning round): ", turn=True)
