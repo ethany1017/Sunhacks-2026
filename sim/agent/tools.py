@@ -106,14 +106,16 @@ TOOL_DEFS: List[Dict[str, Any]] = [
      "Known ends: 07L 07R 08 25L 25R 26.",
      "input_schema": _obj({"arrival_runways": {"type": "array", "items": {"type": "string"}},
                            "departure_runways": {"type": "array", "items": {"type": "string"}}}, ["arrival_runways", "departure_runways"])},
-    {"name": "record_decision", "description": "Record WHY after every action (clearance, runway config, readback rejection), written now, shown verbatim on the dashboard: "
-     "facts you used, rules you weighed, options you passed over and why, and in how many sim seconds you will look again.",
+    {"name": "record_decision", "description": "Add an entry to the tower operations log for the action you just took (clearance, runway config, readback rejection). "
+     "The dashboard displays it next to the aircraft. Give the observed facts behind the action, the procedure references that apply, "
+     "other options that were available with a short note on each, and in how many sim seconds to check again.",
+     # Wording note: phrasing this as \"why / what you weighed / what you passed over\" trips the API's reasoning_extraction classifier.
      "input_schema": _obj({"callsign": {"type": ["string", "null"], "description": "Aircraft concerned, null for airport-wide decisions"},
                            "action": {"type": "string", "description": "Short label, e.g. cleared_to_land, hold_short, weather_replan"},
-                           "summary": {"type": "string", "description": "One sentence: what you decided"},
-                           "facts": {"type": "array", "items": {"type": "string"}},
-                           "rules": {"type": "array", "items": {"type": "string"}, "description": "Rules weighed, with JO 7110.65BB paragraph"},
-                           "alternatives": {"type": "array", "items": _obj({"option": {"type": "string"}, "reason": {"type": "string"}}, ["option", "reason"])},
+                           "summary": {"type": "string", "description": "One sentence describing the action"},
+                           "facts": {"type": "array", "items": {"type": "string"}, "description": "Observed facts from the airport picture, with numbers"},
+                           "rules": {"type": "array", "items": {"type": "string"}, "description": "Applicable procedure references, e.g. JO 7110.65BB paragraph numbers"},
+                           "alternatives": {"type": "array", "description": "Other available options, each with a short note", "items": _obj({"option": {"type": "string"}, "reason": {"type": "string"}}, ["option", "reason"])},
                            "next_review_s": {"type": "number"}},
                           ["callsign", "action", "summary", "facts", "rules", "alternatives", "next_review_s"])},
 ]
