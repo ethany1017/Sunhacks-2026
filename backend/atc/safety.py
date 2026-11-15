@@ -31,6 +31,7 @@ RAIN_GUARD_MULT = 1.3        # every arrival guard above grows by 30 % in rain
 
 RUNWAY_ACTIONS = ("cleared_to_land", "line_up_and_wait", "cleared_for_takeoff", "cross_runway")
 RUNWAY_PHASES_ROLLING = ("takeoff_roll",)
+AMENDS_CROSSING = ("taxi_via", "hold_position", "resume_taxi")   # the sim replaces a live crossing clearance with these
 
 
 def _ok(rule, reason=""):
@@ -153,7 +154,10 @@ def wake_turbulence(pic, prop):
 def hold_short(pic, prop):
     """A crossing needs its own clearance (7110.65 3-7-2): only with the runway clear, nothing cleared onto it, and
     no landing or takeoff due on it. Taxi routes never include a crossing: pilots stop at every hold point."""
-    if prop["action"] == "taxi_via":
+    if prop["action"] in AMENDS_CROSSING:
+        if "cross_runway" in pic.get("live_actions", {}).get(prop["callsign"], ()):
+            return _no("hold_short", f"{prop['callsign']} is crossing a runway: a new taxi instruction would cancel its "
+                                     f"crossing clearance while it is on the runway.")
         return _ok("hold_short", "The taxi route stops at every runway hold point until a crossing clearance.")
     pav, cs = prop["pavement"], prop["callsign"]
     rolling = [cs2 for cs2, a in pic["aircraft"].items() if cs2 != cs and a.get("phase") in RUNWAY_PHASES_ROLLING
@@ -198,6 +202,8 @@ RULES = {
     "cross_runway": (hold_short, runway_occupancy, arrival_departure_spacing),
     "taxi_via": (taxi_conflict, hold_short),
     "pushback_approved": (taxi_conflict,),
+    "hold_position": (hold_short,),
+    "resume_taxi": (hold_short,),
     "set_runway_config": (tailwind,),
 }
 

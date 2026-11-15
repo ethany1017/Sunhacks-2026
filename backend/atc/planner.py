@@ -20,8 +20,11 @@ FLOW_SWITCH_TAILWIND_KT = 4.0   # turn the airport round once the active directi
 FLOW_FINISH_ETA_S = 150.0       # on a flow change an arrival this close finishes on the old direction while legal
 CROSSING_PENALTY_M = 2500.0     # taxi routing: per runway-pavement edge (never trade a crossing for a short detour)
 SHARED_EDGE_PENALTY_M = 60.0    # taxi routing: an edge another aircraft also uses (same direction)
-ENTRY_NEAR_M = 150.0            # a departure holding this close to its entry node is at its runway (not a crossing)
 CROSSER_PRIORITY_S = 20.0       # a crossing waiting this long goes before the next takeoff on that runway
+CONVERGE_LOOK_M = 350.0         # ground: look this far ahead along each route for a shared junction
+CONVERGE_WINDOW_S = 20.0        # two aircraft reaching one junction closer in time than this: one holds
+CONVERGE_MIN_STOP_M = 80.0      # ...if it is still this far from the junction (readback + braking distance)
+CONVERGE_CLEAR_M = 70.0         # resume once the other aircraft is this far past the junction and from the holder
 DEPARTURE_RUNWAYS = {"west": ["25R"], "east": ["07L"]}  # departures on the runway arrivals do not use
 FREQ = {"tower": "120.9", "ground": "132.55"}
 
@@ -87,7 +90,72 @@ class Planner:
         order = sorted(self.ac.values(), key=lambda a: (a.get("eta_s") or 0.0) if a["phase"] == "final" else 1e6)
         for a in order:
             (self._arrival if a["kind"] == "arrival" else self._departure)(a)
+        self._ground()
         self._sequence()
+
+    # -- ground conflicts: two aircraft converging on one node -------------------------------------------------------
+    def _ahead(self, cs, a):
+        """[(node, distance along the route)] for the remaining route ahead of a moving ground aircraft."""
+        r = self._remaining(cs, a)
+        nn = a.get("next_node")
+        if not r or nn not in r:
+            return []
+        i = r.index(nn)
+        out, d = [], self._dist((a["x"], a["y"]), self.xy[nn])
+        out.append((nn, d))
+        for u, v in zip(r[i:], r[i + 1:]):
+            d += self.g[u][v]["length"]
+            if d > CONVERGE_LOOK_M:
+                break
+            out.append((v, d))
+        return out
+
+    def _ground(self):
+        held = {cs: m["held"] for cs, m in self.mem.items() if m.get("held") and cs in self.ac}
+        for cs, h in held.items():   # resume once the other aircraft is past the node
+            a, o = self.ac[cs], self.ac.get(h["by"])
+            node = self.xy[h["node"]]
+            past = o is None or (h["node"] not in self._remaining(h["by"], o)
+                                 and self._dist((o["x"], o["y"]), node) > CONVERGE_CLEAR_M) or \
+                (o["speed_mps"] < 0.3 and self._dist((o["x"], o["y"]), node) > o["length_m"] / 2 + CONVERGE_CLEAR_M)
+            if past and not self._pending(cs, "hold_position"):
+                if self._propose(a, "resume_taxi", {}, f"{h['by']} is past the junction: {cs} resumes taxi."):
+                    self._m(cs).pop("held")
+        movers = {cs: a for cs, a in self.ac.items() if a["phase"] in ("taxi_in", "taxi_out") and a["speed_mps"] > 1.0
+                  and not self._m(cs).get("held")}
+        ahead = {cs: self._ahead(cs, a) for cs, a in movers.items()}
+        names = sorted(movers)
+        for i, p in enumerate(names):
+            for q in names[i + 1:]:
+                if self._m(p).get("held") or self._m(q).get("held"):
+                    continue
+                aq = dict(ahead[q])
+                common = next(((n, d) for n, d in ahead[p] if n in aq), None)
+                if common is None:
+                    continue
+                n, dp = common
+                dq = aq[n]
+                rp, rq = self._remaining(p, movers[p]), self._remaining(q, movers[q])
+                ip, iq = rp.index(n), rq.index(n)
+                if ip > 0 and iq > 0 and rp[ip - 1] == rq[iq - 1]:
+                    continue   # same incoming edge: one follows the other (the pilots keep their distance)
+                tp, tq = dp / max(movers[p]["speed_mps"], 2.0), dq / max(movers[q]["speed_mps"], 2.0)
+                if abs(tp - tq) > CONVERGE_WINDOW_S:
+                    continue
+                cands = [(t_, x) for t_, x, d_ in ((tp, p, dp), (tq, q, dq))
+                         if d_ >= CONVERGE_MIN_STOP_M and not self._live_action(x, "cross_runway")]
+                if not cands:
+                    continue   # both too close to stop short of the junction: the pilots' see-and-avoid takes it
+                later = max(cands)[1]
+                first = q if later == p else p
+                a = self.ac[later]
+                if self._propose(a, "hold_position", {}, f"{later} and {first} are converging on the same junction "
+                                                         f"({dp:.0f} m / {dq:.0f} m away): {later} holds position until "
+                                                         f"{first} is through."):
+                    self._m(later)["held"] = {"by": first, "node": n, "t": self.t}
+
+    def _live_action(self, cs, action):
+        return any(c["callsign"] == cs and c["action"] == action for c in self.live.values())
 
     def _m(self, cs):
         return self.mem.setdefault(cs, {})
@@ -102,7 +170,7 @@ class Planner:
             if ph == "landing_roll" and prev != "landing_roll":
                 m["td_t"] = self.t
                 if m.get("exit") and a.get("gate"):
-                    m["route"] = self.si.taxi_route(m["exit"], self.si.stand_nodes(a["gate"])["node"])
+                    m["route"], m["ri"] = self.si.taxi_route(m["exit"], self.si.stand_nodes(a["gate"])["node"]), 0
             if ph == "go_around" and prev != "go_around":
                 m.pop("land", None)
                 self.emit(self.t, "alert", cs, {"level": "warning", "message": f"{cs} is going around."},
@@ -112,14 +180,14 @@ class Planner:
             self.pushbacks.pop(cs)
 
     def _remaining(self, cs, a):
-        route = self._m(cs).get("route")
-        if not route:
+        m = self._m(cs)
+        route = m.get("route")
+        if not route or a["phase"] in ("takeoff_roll", "airborne", "parked"):
             return []
         nn = a.get("next_node")
-        if nn in route:
-            i = route.index(nn)
-            return route[max(i - 1, 0):]
-        return route if a["phase"] in ("landing_roll", "runway_exit", "pushback", "at_gate") else []
+        if nn in route[m.get("ri", 0):]:
+            m["ri"] = route.index(nn, m.get("ri", 0))
+        return route[max(m.get("ri", 0) - 1, 0):]
 
     def _clear_at(self, cs, a):
         """Predicted time an aircraft on a runway is off it."""
@@ -174,7 +242,10 @@ class Planner:
         lvl = self.obs.get("level") or {}
         eff = lvl.get("effects") or {}
         rain = (wx.get("vis_sm") or 10.0) < safety.RAIN_VIS_SM or eff.get("occupancy_mult", 1.0) > 1.0
-        return {"t": self.t, "aircraft": self.ac, "occupants": occupants, "clear_at": clear_at, "runway_clearances": rc,
+        live_actions = {}
+        for c in self.live.values():
+            live_actions.setdefault(c["callsign"], set()).add(c["action"])
+        return {"t": self.t, "aircraft": self.ac, "live_actions": live_actions, "occupants": occupants, "clear_at": clear_at, "runway_clearances": rc,
                 "last_roll": self.last_roll, "routes": routes, "parked_on": parked,
                 "pushbacks": self.pushbacks, "tailwind": {e: self._tailwind(e) for e in self.ends},
                 "tailwind_limit": lvl.get("tailwind_limit_kt") or safety.TAILWIND_LIMIT_KT, "rain": rain,
@@ -229,8 +300,13 @@ class Planner:
         return res
 
     def _pending(self, cs, action):
-        """A clearance of this action sent to this aircraft is still awaiting its readback / effect."""
-        return any(c["callsign"] == cs and c["action"] == action and c["id"] in self.expected for c in self.live.values())
+        """A clearance of this action sent to this aircraft is still in force or awaiting its readback. Runway clearances
+        count while live (re-sending one would amend it); taxi instructions only until read back and visible."""
+        for c in self.live.values():
+            if c["callsign"] == cs and c["action"] == action and c["id"] in self.expected:
+                if action in safety.RUNWAY_ACTIONS or c["state"] == "issued" or self.t - c["issued_t"] < 4.0:
+                    return True
+        return False
 
     # -- readbacks ---------------------------------------------------------------------------------------------------
     def _readbacks(self):
@@ -301,7 +377,7 @@ class Planner:
         cs, m, ph = a["callsign"], self._m(a["callsign"]), a["phase"]
         if ph == "final":
             self._final(a, m)
-        elif ph == "taxi_in" and a.get("hold") and a["speed_mps"] < 0.3:
+        elif ph == "taxi_in" and self._at_line(a):
             self._cross(a)
         elif ph == "taxi_in" and not m.get("taxied") and a["speed_mps"] < 0.3 and a.get("next_node") and a.get("gate"):
             self._taxi_in(a, m)
@@ -320,7 +396,7 @@ class Planner:
                             f"{cs} vacated the runway: taxi to gate {a['gate']} ({length:.0f} m), clear of "
                             f"opposite-direction traffic.", route=route)
         if res:
-            m.update(route=route, taxied=True)
+            m.update(route=route, ri=0, taxied=True)
 
     def _no_route(self, cs):
         key = (cs, "taxi_via")
@@ -392,20 +468,25 @@ class Planner:
         if ph == "taxi_out" and not m.get("route") and a["speed_mps"] < 0.3 and a.get("next_node"):
             self._taxi_out(a, m, a["next_node"])
             return
+        at_line = self._at_line(a)
+        dep_pav = self.ends[m["end"]]["runway"] if m.get("end") else None
         if ph in ("taxi_out", "hold_short") and m.get("end") and m["end"] not in dep_ends and m.get("route") \
                 and a["speed_mps"] < 0.3 and not self._pending(cs, "taxi_via") \
-                and not (a.get("hold") and self._at_entry(a, m) and self._tailwind(m["end"]) <= self.pic["tailwind_limit"] - 2):
+                and not (at_line and a["hold"]["runway"] == dep_pav
+                         and self._tailwind(m["end"]) <= self.pic["tailwind_limit"] - 2):
             start = a.get("prev_node") if a.get("prev_node") else a.get("next_node")
             self._taxi_out(a, m, start, why="Runway flow changed: ")
             return
-        if ph == "hold_short" and a.get("hold"):
-            if a["hold"]["runway"] == self.ends[m["end"]]["runway"] and self._at_entry(a, m):
+        if at_line:
+            if a["hold"]["runway"] == dep_pav:
                 self._takeoff(a, m)
             else:
                 self._cross(a)
 
-    def _at_entry(self, a, m):
-        return m.get("entry") and self._dist((a["x"], a["y"]), self.xy[m["entry"]]) < ENTRY_NEAR_M
+    @staticmethod
+    def _at_line(a):
+        """Stopped at a runway hold line itself (not queued behind another aircraft)."""
+        return bool(a.get("hold")) and a["speed_mps"] < 0.3 and str(a.get("blocked_by") or "").startswith("runway:")
 
     def _route(self, cs, src, dst):
         """Dijkstra over the taxi graph: no runway centreline edges, never against another aircraft's route (head-on),
@@ -447,20 +528,21 @@ class Planner:
                             f"{why}Taxi {cs} to runway {end} ({length:.0f} m), clear of opposite-direction traffic.",
                             end=end, route=route)
         if res:
-            m.update(end=end, entry=entry, route=route)
+            m.update(end=end, entry=entry, route=route, ri=0)
 
     def _takeoff(self, a, m):
         cs, end = a["callsign"], m["end"]
         pav = self.ends[end]["runway"]
         if self._pending(cs, "cleared_for_takeoff") or a.get("takeoff_cleared"):
             return
-        waiting = [o for o in self.ac.values() if o["callsign"] != cs and o.get("hold") and o["hold"]["runway"] == pav
-                   and o["phase"] in ("taxi_in", "taxi_out", "hold_short") and (o.get("stopped_s") or 0) > CROSSER_PRIORITY_S
-                   and not (o["kind"] == "departure" and self._at_entry(o, self._m(o["callsign"])))]
+        waiting = [o for o in self.ac.values() if o["callsign"] != cs and self._at_line(o) and o["hold"]["runway"] == pav
+                   and (o.get("stopped_s") or 0) > CROSSER_PRIORITY_S
+                   and not (o["kind"] == "departure" and self._m(o["callsign"]).get("end")
+                            and self.ends[self._m(o["callsign"])["end"]]["runway"] == pav)]
         if waiting:
             return   # a crossing has waited long enough: it goes first, then the next departure
-        queue = [o for o in self.ac.values() if o["kind"] == "departure" and o["phase"] == "hold_short" and o.get("hold")
-                 and o["hold"]["runway"] == pav and self._at_entry(o, self._m(o["callsign"]))]
+        queue = [o for o in self.ac.values() if o["kind"] == "departure" and self._at_line(o) and o["hold"]["runway"] == pav
+                 and self._m(o["callsign"]).get("end") and self.ends[self._m(o["callsign"])["end"]]["runway"] == pav]
         queue.sort(key=lambda o: (-(o.get("stopped_s") or 0), o["callsign"]))
         decision = None
         if len(queue) > 1:
