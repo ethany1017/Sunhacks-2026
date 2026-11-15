@@ -36,7 +36,7 @@ LEVELS = [
      "description": "8 flights, half of the runway readbacks wrong (Roger or wrong runway): catch and reject them."},
     {"id": "runway_config_change", "name": "Practice: runway config change", "practice": True, "level": "normal_day",
      "duration_s": 600.0, "seed": 1,
-     "description": "A 10 min Normal Day (training seed 1): the wind shift at 330 s forces west to east flow."},
+     "description": "A 10 min Normal Day (training seed 1): the wind backs from west to east during the run: the airport has to turn round to east flow before the final wind report, as the tailwind on the west runways builds."},
     {"id": "rain_peak", "name": "Practice: rain peak", "practice": True, "level": "light_rain", "duration_s": 750.0,
      "seed": 21,
      "description": "A 12.5 min Light Rain day (training seed 21): rain spacing, slow taxi, go-arounds, plus the wind shift."},

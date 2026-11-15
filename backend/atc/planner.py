@@ -36,7 +36,8 @@ HOLD_REACT_S = 4.0              # hold_position: readback delay before the pilot
 HOLD_DECEL_MPS2 = 0.5           # assumed (gentle) taxi braking
 UNJAM_NO_RUNWAY_M = 110.0       # an unjam re-route reaches runway pavement no sooner than half a length + this (hold offset + margin)
 UNJAM_AFTER_S = 15.0            # mutual block this long: re-route one of the pair
-BODY_MARGIN_M = 10.0            # extra clearance past a's half span and a quarter of the stopped aircraft's span
+IN_TRAIL_COS = 0.77             # within ~40 deg of the same direction: following, not crossing
+BODY_MARGIN_M = 5.0             # extra clearance past the two half spans when passing a stopped aircraft
 CONVERGE_CLEAR_M = 70.0
 START_DELAY_S = 5.0             # readback plus spool-up before a stopped aircraft moves
 TAXI_AVG_MPS = 5.0              # average speed from a standing start over the first few hundred metres
@@ -116,16 +117,24 @@ class Planner:
         self._sequence()
 
     # -- ground conflicts: two aircraft converging on one node -------------------------------------------------------
-    def _under(self, b, n, a):
-        """Is node n under (or within a's half span of) the fuselage of aircraft b?"""
+    def _body_hit(self, cs, a, b, min_d=BODY_MIN_STOP_M):
+        """Next route node of the first point on a's route ahead (beyond min_d) whose wings would reach the stopped b's
+        fuselage line: the half spans of both plus a margin."""
         h = math.radians(b["heading_deg"])
         ux, uy = math.sin(h) * b["length_m"] / 2, math.cos(h) * b["length_m"] / 2
-        px, py = self.xy[n][0] - b["x"], self.xy[n][1] - b["y"]
-        k = max(-1.0, min(1.0, (px * ux + py * uy) / max(ux * ux + uy * uy, 1e-6)))
-        return math.hypot(px - k * ux, py - k * uy) < a["wingspan_m"] / 2 + b["wingspan_m"] / 4 + BODY_MARGIN_M
+        lim = a["wingspan_m"] / 2 + b["wingspan_m"] / 2 + BODY_MARGIN_M
+        bx, by = math.sin(h), math.cos(h)
+        for x, y, d, rx, ry, n in self._route_pts(cs, a, CONVERGE_LOOK_M):
+            if d < min_d or rx * bx + ry * by > IN_TRAIL_COS:
+                continue   # (in trail with b there: the pilots queue behind it)
+            px, py = x - b["x"], y - b["y"]
+            k = max(-1.0, min(1.0, (px * ux + py * uy) / max(ux * ux + uy * uy, 1e-6)))
+            if math.hypot(px - k * ux, py - k * uy) < lim:
+                return n
+        return None
 
     def _route_pts(self, cs, a, maxd):
-        """Points every 8 m along a's remaining route from where it is, up to maxd: [(x, y, d, ux, uy)]."""
+        """Points every 8 m along a's remaining route from where it is, up to maxd: [(x, y, d, ux, uy, next node)]."""
         r = self._remaining(cs, a)
         nn = a.get("next_node")
         if nn not in r:
@@ -138,7 +147,7 @@ class Planner:
                 ux, uy = (q[0] - prev[0]) / seg, (q[1] - prev[1]) / seg
                 k = 0.0
                 while k < seg:
-                    out.append((prev[0] + ux * k, prev[1] + uy * k, d + k, ux, uy))
+                    out.append((prev[0] + ux * k, prev[1] + uy * k, d + k, ux, uy, n))
                     k += 8.0
                 d += seg
             if d > maxd:
@@ -267,7 +276,7 @@ class Planner:
                 past = o is None or o["phase"] != "pushback"
             elif h.get("body"):   # no timeout: waiting forever beats taxiing into a parked fuselage
                 past = o is None or o["phase"] not in safety.GROUND_PHASES or not (
-                    self._under(o, h["node"], a) or self._freeze(cs, a, o, 0.0))
+                    self._body_hit(cs, a, o, 0.0) or self._freeze(cs, a, o, 0.0))
             else:
                 past = o is None or (h["node"] not in self._remaining(h["by"], o)
                                  and self._dist((o["x"], o["y"]), node) > CONVERGE_CLEAR_M) or \
@@ -298,8 +307,7 @@ class Planner:
             for o, b in still.items():
                 if o == cs or self._waits_for(o, cs) or abs((a["heading_deg"] - b["heading_deg"] + 180) % 360 - 180) < 40:
                     continue   # stopped ahead in trail: the pilots' car-following stops behind it
-                n = next((n for n, d in lst if d >= BODY_MIN_STOP_M and self._under(b, n, a)), None) or \
-                    self._freeze(cs, a, b)
+                n = self._body_hit(cs, a, b) or self._freeze(cs, a, b)
                 if n and self._propose(a, "hold_position", {}, f"{o} is stopped across the junction ahead of {cs}: "
                                                                 f"{cs} holds position until it moves clear."):
                     self._m(cs)["held"] = {"by": o, "node": n, "t": self.t, "body": True}
