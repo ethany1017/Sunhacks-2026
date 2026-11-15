@@ -118,7 +118,7 @@ def pair(tmp_path_factory, graph) -> Dict[str, Any]:
                     seen["taxi"] = max(seen["taxi"], a.speed)
                 elif a.phase == "final" and a.wp is None and 5000.0 < sim.physics.approach_distance(a) < 6000.0:
                     seen["final"].append(a.speed - a.type.vref_mps)
-        sim = run_level(level, 3, 900.0, tmp_path_factory.mktemp(level), graph, probe=probe)
+        sim = run_level(level, 5, 900.0, tmp_path_factory.mktemp(level), graph, probe=probe)   # S5: a seed whose dry day has a close spawn
         out[level] = (sim, seen)
     return out
 

@@ -43,6 +43,9 @@ See the S4 report for the tower and Human tables on Normal Day 1-5 and Light Rai
 seeds as the tower on Normal Day (2, 4, 5) and Light Rain (23). Its delays are higher on the seeds that pass, and it
 missed one wrong readback on each of Normal Day 5 and Light Rain 21.
 
+S5 (level calibration proposal, not yet frozen): the Human's results on the calibrated levels are in
+`docs/LEVELS.md`, "S5 calibration proposal". The S4 numbers above were measured on the earlier levels.
+
 ## Sources looked up
 
 - Cardosi, Falzarano, Han (1998), *Pilot-Controller Communication Errors: An Analysis of ASRS Reports*, DOT/FAA/AR-98/17 (via search summary).
