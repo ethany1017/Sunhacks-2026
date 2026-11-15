@@ -163,6 +163,17 @@ def hold_short(pic, prop):
         if on_rwy or "cross_runway" in pic.get("live_actions", {}).get(cs, ()):
             return _no("hold_short", f"{cs} is on or crossing a runway: it must not be stopped there.")
         return _ok("hold_short")
+    crossing = "cross_runway" in pic.get("live_actions", {}).get(cs, ())
+    if prop["action"] == "resume_taxi" and crossing:
+        return _no("hold_short", f"{cs} holds a crossing clearance: resuming would replace it while the runway stays "
+                                 f"open to the pilot (it would cross without a clearance).")
+    if prop["action"] == "taxi_via" and crossing:
+        a = pic["aircraft"].get(cs, {})
+        on_rwy = any(cs in occ for occ in pic["occupants"].values())
+        at_line = a.get("speed_mps", 9) < 0.3 and str(a.get("blocked_by") or "").startswith("runway:")
+        if not (on_rwy or at_line):
+            return _no("hold_short", f"{cs} holds a crossing clearance and may be past the hold line: no new route "
+                                     f"until it is across.")
     if prop["action"] in ("taxi_via", "resume_taxi"):
         return _ok("hold_short", "The taxi route stops at every runway hold point until a crossing clearance.")
     pav, cs = prop["pavement"], prop["callsign"]

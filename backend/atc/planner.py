@@ -26,9 +26,11 @@ PUSHBACK_EARLIEST_S = 282.0 * 0.75 - 15.0   # NASA NTRS 20190027149: pushback 4.
 PUSH_SWEEP_M = 45.0             # a pushed-back aircraft (centre on the lane node) reaches about this far
 LEAD_IN_M = 90.0                # a re-route for a moving aircraft keeps this much of its current route first
 CONVERGE_LOOK_M = 250.0         # ground: look this far ahead along each route for a shared junction
+CONFLICT_MARGIN_M = 20.0        # two route points closer than the half wingspans + this are one conflict point
 CONVERGE_WINDOW_S = 20.0        # two aircraft reaching one junction closer in time than this: one holds
 CONVERGE_MIN_STOP_M = 80.0      # ...if it is still this far from the junction (readback + braking distance)
-CONVERGE_CLEAR_M = 70.0         # resume once the other aircraft is this far past the junction and from the holder
+CONVERGE_CLEAR_M = 70.0
+HOLD_MAX_S = 60.0               # a hold for an aircraft that has itself stopped ends after this         # resume once the other aircraft is this far past the junction and from the holder
 DEPARTURE_RUNWAYS = {"west": ["25R"], "east": ["07L"]}  # departures on the runway arrivals do not use
 FREQ = {"tower": "120.9", "ground": "132.55"}
 
@@ -127,6 +129,8 @@ class Planner:
                 past = o is None or (h["node"] not in self._remaining(h["by"], o)
                                  and self._dist((o["x"], o["y"]), node) > CONVERGE_CLEAR_M) or \
                 (o["speed_mps"] < 0.3 and self._dist((o["x"], o["y"]), node) > o["length_m"] / 2 + CONVERGE_CLEAR_M)
+            if not past and o is not None and o["speed_mps"] < 0.3 and self.t - h["t"] > HOLD_MAX_S:
+                past = True   # the other aircraft is stopped too (waiting itself): do not wait for it forever
             if past and not self._pending(cs, "hold_position"):
                 if self._propose(a, "resume_taxi", {}, f"{h['by']} is past the junction: {cs} resumes taxi."):
                     self._m(cs).pop("held")
@@ -145,16 +149,22 @@ class Planner:
             for q in names[i + 1:]:
                 if self._m(p).get("held") or self._m(q).get("held"):
                     continue
-                aq = dict(ahead[q])
-                common = next(((n, d) for n, d in ahead[p] if n in aq), None)
-                if common is None:
+                ap_, aq_ = movers[p], movers[q]
+                hd = abs((ap_["heading_deg"] - aq_["heading_deg"] + 180) % 360 - 180)
+                if hd < 40:
+                    continue   # in trail (or side by side the same way): the pilots keep their distance
+                radius = (ap_["wingspan_m"] + aq_["wingspan_m"]) / 2 + CONFLICT_MARGIN_M
+                hit = None
+                for np_, dp in ahead[p]:
+                    for nq_, dq in ahead[q]:
+                        if self._dist(self.xy[np_], self.xy[nq_]) < radius:
+                            hit = (np_, dp, nq_, dq)
+                            break
+                    if hit:
+                        break
+                if hit is None:
                     continue
-                n, dp = common
-                dq = aq[n]
-                rp, rq = self._remaining(p, movers[p]), self._remaining(q, movers[q])
-                ip, iq = rp.index(n), rq.index(n)
-                if ip > 0 and iq > 0 and rp[ip - 1] == rq[iq - 1]:
-                    continue   # same incoming edge: one follows the other (the pilots keep their distance)
+                n_p, dp, n_q, dq = hit
                 tp, tq = dp / max(movers[p]["speed_mps"], 2.0), dq / max(movers[q]["speed_mps"], 2.0)
                 if abs(tp - tq) > CONVERGE_WINDOW_S:
                     continue
@@ -168,7 +178,7 @@ class Planner:
                 if self._propose(a, "hold_position", {}, f"{later} and {first} are converging on the same junction "
                                                          f"({dp:.0f} m / {dq:.0f} m away): {later} holds position until "
                                                          f"{first} is through."):
-                    self._m(later)["held"] = {"by": first, "node": n, "t": self.t}
+                    self._m(later)["held"] = {"by": first, "node": n_q if later == p else n_p, "t": self.t}
 
     def _live_action(self, cs, action):
         return any(c["callsign"] == cs and c["action"] == action for c in self.live.values())
@@ -500,8 +510,8 @@ class Planner:
     def _cross(self, a, pav=None):
         cs = a["callsign"]
         pav = pav or a["hold"]["runway"]
-        if self._pending(cs, "cross_runway"):
-            return
+        if self._pending(cs, "cross_runway") or self._m(cs).get("held"):
+            return   # a held aircraft resumes first: a later resume would replace the crossing clearance
         self._propose(a, "cross_runway", {"runway": self.si.runway_label(pav)},
                       f"{cs} is holding short of {pav}; crossing when the runway is clear and nothing is due on it.",
                       end=None, pavement=pav)
