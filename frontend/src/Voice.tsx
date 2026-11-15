@@ -1,15 +1,16 @@
 import { useSyncExternalStore } from 'react'
 import type { SimEvent } from '@/types'
 
-// Plays `audio` events one at a time, in order. Lines made before this WebSocket connection opened are history (the
-// replay after a reload) and never play; lines older than MAX_AGE_S (wall clock, stamped by the backend) are skipped so
-// speech never lags far behind the map; the queue keeps at most MAX_QUEUE lines. A playback error or a stalled file skips to the next line.
-const MAX_AGE_S = 10
-const MAX_QUEUE = 3
+// Plays `audio` events one at a time, in order. Lines made before this WebSocket connection opened or before the
+// current run started are history (a replay or the previous run) and never play. At the 10x demo pace one spoken line
+// spans ~40 sim s, so the voice keeps to the newest exchange only: a tower line replaces whatever is queued, its pilot
+// readback joins it, a readback whose clearance was skipped is dropped, and a tower line older than MAX_AGE_S (wall
+// clock, stamped by the backend) is skipped. A playback error or a stalled file skips to the next line.
+const MAX_AGE_S = 4 // measured on Light Rain 25 at 10x: median ~9 sim s from the event to the start of its speech
 const LOAD_MS = 8_000 // a file that hasn't loaded by then is skipped; once loaded, its duration + 2 s
 const KEY = 'towerzero.sound' // 'on' once the user enabled sound this session
 
-type Line = { url: string; speaker: string; callsign: string | null; text: string; wall: number }
+type Line = { url: string; speaker: string; callsign: string | null; text: string; wall: number; clearance: unknown }
 type Snap = { on: boolean; blocked: boolean; now: Line | null }
 
 const el = typeof Audio === 'undefined' ? null : new Audio()
@@ -26,7 +27,9 @@ const set = (p: Partial<Snap>) => {
 function next() {
   clearTimeout(stall)
   const fresh = Date.now() / 1000 - MAX_AGE_S
-  queue = queue.filter((l) => l.wall >= fresh)
+  const tower = queue.filter((l) => l.speaker === 'tower' && l.wall >= fresh)
+  // a readback plays only right after its own clearance (the one just spoken, or one still queued)
+  queue = queue.filter((l) => tower.includes(l) || (l.speaker !== 'tower' && (l.clearance === snap.now?.clearance || tower.some((t) => t.clearance === l.clearance))))
   const line = queue.shift() ?? null
   set({ now: line })
   if (!line || !el) return
@@ -49,26 +52,35 @@ function next() {
   })
 }
 
-// Called by the WebSocket client when a connection opens: what follows first is the run's history.
+function silence() {
+  queue = []
+  clearTimeout(stall)
+  el?.pause()
+}
+
+// Called by the WebSocket client when a connection opens (what follows first is the run's history) and on every
+// `run_start` (a reset): stop speaking and ignore any line made before now.
 export function audioConnected() {
   since = Date.now() / 1000 - 0.5 // ponytail: same-machine clocks assumed (backend and browser on one laptop)
+  silence()
+  if (snap.now) set({ now: null })
 }
 
 // Called by the WebSocket client for every `audio` event.
 export function onAudio(e: Extract<SimEvent, { type: 'audio' }>) {
   const d = e.data
   if (!snap.on || snap.blocked || !d.wall || d.wall < since || d.wall < Date.now() / 1000 - MAX_AGE_S) return
-  queue.push({ url: d.url, speaker: d.speaker, callsign: e.callsign, text: d.text, wall: d.wall })
-  if (queue.length > MAX_QUEUE) queue = queue.slice(-MAX_QUEUE)
+  const line = { url: d.url, speaker: d.speaker, callsign: e.callsign, text: d.text, wall: d.wall, clearance: d.clearance_id }
+  if (d.speaker === 'tower') queue = [line] // the newest exchange replaces older ones
+  else if (d.clearance_id != null && (queue[queue.length - 1] ?? snap.now)?.clearance === d.clearance_id) queue.push(line)
+  else return // its clearance was skipped or a newer one is queued: no readback out of context
   if (!snap.now) next()
 }
 
 function toggle() {
   const on = !snap.on || snap.blocked // the click is the user gesture the browser wants
   sessionStorage.setItem(KEY, on ? 'on' : 'off')
-  queue = []
-  clearTimeout(stall)
-  el?.pause()
+  silence()
   set({ on, blocked: false, now: null })
 }
 

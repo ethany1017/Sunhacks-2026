@@ -138,6 +138,7 @@ export function useTower() {
         }
         buffer.push(e)
         if (e.type === 'audio') onAudio(e)
+        else if (e.type === 'run_start') audioConnected() // a reset: drop the previous run's speech
         if (!frame) frame = requestAnimationFrame(flush)
       }
       sock.onclose = () => {
