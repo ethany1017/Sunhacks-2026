@@ -261,6 +261,10 @@ class TowerController:
                             ["JO 7110.65BB 3-7-1 Ground traffic movement"], [], 15)
             return
         if ph == "taxi_out" and "push" in st and "taxi" not in st and a["speed_mps"] < 0.3:
+            if "end" not in st:                       # pushed back under another controller: no runway chosen yet
+                self._assign_departure(sim, obs, a, st)
+                if "end" not in st:
+                    return
             st["taxi"] = True
             self._issue(sim, a, "taxi_via", {"to": st["end"], "entry": st["entry"]},
                         "Taxi %s to runway %s via %s" % (cs, st["end"], ", ".join(st["via"]) or "shortest route"),

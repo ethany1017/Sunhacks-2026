@@ -89,3 +89,28 @@ def test_readback_with_wrong_runway_side_must_be_noticed(tmp_path, graph) -> Non
 
 
 
+
+def test_mid_run_controller_switch_hands_back_to_the_tower_cleanly(tmp_path, graph) -> None:
+    """Restored from the pre-split suite (it ran only through the Claude agent): tower -> other -> tower mid-run."""
+    from tests.conftest import SMOKE, NoopController
+    sim = Simulation(SMOKE, run_dir=tmp_path / "switch", graph=graph)
+    assert sim.controller_name == "tower" and sim.set_controller("nonsense")["ok"] is False
+    while sim.t < 100:
+        sim.step()
+    assert sim.set_controller(NoopController())["ok"] and sim.controller_name == "noop"
+    while sim.t < 160:
+        sim.step()
+    assert sim.set_controller("tower")["ok"] and sim.controller_name == "tower"      # primed from the current state
+    sim.run_to_completion()
+    sim.close()
+    assert sim.finished and sim.score()["completed"] == 6
+    once = {"pushback_approved", "line_up_and_wait", "cleared_for_takeoff", "cleared_to_land", "taxi_via"}
+    seen = {}
+    for e in sim.log.events:
+        if e["kind"] == "clearance.issued" and e["data"]["action"] in once:
+            key = (e["entity_id"], e["data"]["action"])
+            seen[key] = seen.get(key, 0) + 1
+    go_arounds = [e["entity_id"] for e in sim.log.events if e["kind"] == "go_around"]   # a new approach needs a new landing clearance
+    dup = [k for k, v in seen.items() if v > 1 + (go_arounds.count(k[0]) if k[1] == "cleared_to_land" else 0)]
+    assert not dup, dup                                                           # no duplicate clearances after handover
+    assert [e for e in sim.log.events if e["kind"] in ("conflict", "separation_loss", "deadlock")] == []
