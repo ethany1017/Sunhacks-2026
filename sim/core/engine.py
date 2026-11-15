@@ -29,7 +29,7 @@ from sim.graph.model import AirportGraph, Piece, Track
 from sim.metrics.score import compute_score
 from sim.voice import phraseology
 from sim.voice.pilots import make_readback
-from sim.weather.replay import WeatherReplay
+from sim.weather.calm import CalmWeather
 
 ACTIONS = ("taxi_via", "hold_short", "cross_runway", "line_up_and_wait", "cleared_for_takeoff", "cleared_to_land",
            "go_around", "hold_position", "resume_taxi", "pushback_approved", "contact_tower_or_ground")
@@ -73,7 +73,7 @@ class Simulation:
             run_dir = run_dir.parent / ("%s-r%d" % (run_dir.name, self._resets))
         run_id = run_dir.name if run_dir else "%s-seed%d" % (sc.name, self.seed)
         self.log = EventLog(run_id, run_dir)
-        self.weather = WeatherReplay(**sc.weather)
+        self.weather = CalmWeather()
         self.res = Reservations(list(self.graph.runways))
         self.physics = Physics(self)
         self.obs = views.ObservationBuffer()
@@ -100,8 +100,6 @@ class Simulation:
         self._reset_sent()
         self.log.emit("scenario.start", None, 0, {"scenario": sc.name, "seed": self.seed, "flights": len(sc.flights),
                                                   "duration_s": sc.duration_s})
-        if sc.haboob_trigger_s is not None:
-            self.log.emit("weather.scheduled", None, 0, {"trigger_s": sc.haboob_trigger_s})
         for v in sc.vehicles:
             self._spawn_vehicle(v)
 
@@ -148,7 +146,6 @@ class Simulation:
         start = len(self.log.events)
         self.clock.advance()
         t = self.t
-        self._weather_tick(t)
         self._spawn_tick(t)
         self._readback_tick(t)
         self._call_controller()
@@ -174,25 +171,8 @@ class Simulation:
         self.controller.on_tick(self, events)
 
     # -- weather ---------------------------------------------------------------------------------
-    def _weather_tick(self, t: float) -> None:
-        trig = self.scenario.haboob_trigger_s
-        if trig is not None and self.weather.trigger_s is None and t >= trig:
-            self.trigger_haboob()
-        for row in self.weather.step(t):
-            self.emit("weather.update", "KPHX", {k: row.get(k) for k in ("metar", "wind_dir", "wind_kt", "gust_kt", "vis_sm", "wx")}
-                      | {"low_vis": self.weather.low_vis, "haboob_progress": self.weather.current.get("haboob_progress")})
-
-    def trigger_haboob(self) -> Dict[str, Any]:
-        if not self.weather.trigger(self.t):
-            return _err("haboob already triggered")
-        self.emit("weather.haboob_triggered", "KPHX", {"trigger_s": self.t})
-        return {"ok": True}
-
     def weather_view(self) -> Dict[str, Any]:
-        w = dict(self.weather.current)
-        w.pop("_min", None)
-        w["t"] = round(w.get("t", 0.0), 1)
-        return w
+        return dict(self.weather.current)
 
     # -- spawning ----------------------------------------------------------------------------------
     def _spawn_tick(self, t: float) -> None:
@@ -999,10 +979,6 @@ class Simulation:
                 self.clock.set_speed(int(value))
             except (TypeError, ValueError):
                 return _err("speed must be one of %s" % (SPEEDS,))
-        elif action == "trigger_haboob":
-            res = self.trigger_haboob()
-            if not res["ok"]:
-                return res
         elif action == "reset":
             speed, paused = self.clock.speed, self.clock.paused
             self.log.close()
@@ -1027,8 +1003,7 @@ class Simulation:
     def _meta(self) -> Dict[str, Any]:
         return {"speed": self.clock.speed, "paused": self.clock.paused,
                 "agent": {"status": getattr(self.controller, "status", "idle"), "controller": self.controller_name},
-                "scenario": {"name": self.scenario.name, "duration_s": self.scenario.duration_s,
-                             "haboob_triggered": self.weather.trigger_s is not None}}
+                "scenario": {"name": self.scenario.name, "duration_s": self.scenario.duration_s}}
 
     def _runway_views(self) -> List[Dict[str, Any]]:
         return [self.res.view(r, self.t) for r in self.graph.runways]

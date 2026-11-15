@@ -2,7 +2,7 @@
 
 SunHacks 2026 hackathon project by Gus and Ethan.
 
-A simulator of Phoenix Sky Harbor (KPHX) operating on its own: aircraft arrive, land, taxi to gates, push back, taxi out and take off on the real KPHX taxiway layout, with a rule-based tower issuing clearances, simulated pilots reading them back, and real weather replayed into the airport. A live map shows the whole airport as it runs.
+A simulator of Phoenix Sky Harbor (KPHX) operating on its own: aircraft arrive, land, taxi to gates, push back, taxi out and take off on the real KPHX taxiway layout, with a rule-based tower issuing clearances, simulated pilots reading them back, under calm static weather. A live map shows the whole airport as it runs.
 
 > **Simulation only.** Aircraft, pilots and the tower are all simulated.
 
@@ -13,8 +13,8 @@ A simulator of Phoenix Sky Harbor (KPHX) operating on its own: aircraft arrive, 
 - **The ground:** the KPHX taxiway graph built from OpenStreetMap, runway occupancy, hold-short points, crossings and ground vehicles.
 - **The tower:** a built-in rule-based controller (`sim/tower/`) that sequences arrivals and departures first come, first served, and records the reason for each clearance.
 - **Radio:** clearances in standard phraseology, pilot readbacks (including scripted mistakes), spoken aloud in the browser.
-- **Weather:** a replay of the real August 25, 2025 haboob (dust storm) at KPHX from NOAA observations.
-- **Scoring:** separation losses, runway conflicts, deadlocks, delay, throughput and recovery after the storm, computed from the event log.
+- **Weather:** one calm static KPHX report for now; weather levels come later.
+- **Scoring:** separation losses, runway conflicts, deadlocks, delay and throughput, computed from the event log.
 
 ## How it works
 
@@ -34,9 +34,9 @@ Scenario (flights, weather, vehicles)
 | --- | --- | --- |
 | Engine | `sim/core/` | Clock, true state, physics, runway reservations, conflict detection, event log. |
 | Airport graph | `sim/graph/` | KPHX taxiways, runways and gates from OpenStreetMap. |
-| Tower | `sim/tower/` | Rule-based controller: sequencing, taxi routes, runway use, crossings, weather replanning. |
+| Tower | `sim/tower/` | Rule-based controller: sequencing, taxi routes, runway use, crossings. |
 | Pilots and radio | `sim/voice/` | Phraseology and simulated readbacks. |
-| Weather | `sim/weather/` | Haboob replay. |
+| Weather | `sim/weather/` | Calm static weather report. |
 | Scoring | `sim/metrics/` | Metrics over the event log. |
 | API | `api/` | FastAPI server; steps the sim in real time and streams it over WebSocket. |
 | Dashboard | `web/` | Live satellite map, flight lists, runway timeline, radio transcript, weather. |
@@ -50,12 +50,12 @@ The engine talks to its controller through a small tool surface (`issue_clearanc
 - **Selected decision:** what the tower did, the facts and rules behind it, and the alternatives it passed over.
 - **Runway timeline:** current occupancy and planned movements.
 - **Radio:** spoken clearances and pilot readbacks.
-- **Weather:** current conditions and haboob status.
+- **Weather:** current conditions.
 
 ## Demo scope
 
 - **Airport:** Phoenix Sky Harbor International (KPHX)
-- **Scenario:** the haboob at KPHX with 12 aircraft and one ground vehicle; the storm hits at 3 minutes and the tower has to hold departures and recover afterwards.
+- **Scenario:** `kphx_busy` with 12 aircraft, one ground vehicle and a 10% pilot readback error rate (the API default); `kphx_smoke` with 6 aircraft.
 
 ## Research and data
 
@@ -74,13 +74,13 @@ make graph         # build the KPHX taxiway graph into data/processed/
 make web-install   # dashboard dependencies
 make test          # simulator tests
 make sim           # headless smoke run with the score table
-make haboob        # headless haboob run
+make busy          # headless busy run (12 aircraft, readback errors)
 make demo          # API on :8000 and dashboard on :5173, open http://localhost:5173
 ```
 
 Optional key: `web/.env.local` with `VITE_GOOGLE_MAPS_API_KEY=...` for the Google satellite map (gitignored; without it the dashboard falls back to free USGS imagery with an "offline map" badge).
 
-Dashboard keys: Space pause, 1-4 speeds, H trigger the haboob, R reset, F fullscreen, M mute. `?offline` in the URL forces the fallback map.
+Dashboard keys: Space pause, 1-4 speeds, R reset, F fullscreen, M mute. `?offline` in the URL forces the fallback map.
 
 ## Claude agent (not part of the simulator)
 

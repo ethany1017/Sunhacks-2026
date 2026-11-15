@@ -35,8 +35,6 @@ class Scenario:
     flights: List[Flight]
     vehicles: List[VehicleSpec] = field(default_factory=list)
     start_sim_s: float = 0.0
-    haboob_trigger_s: Optional[float] = None
-    weather: Dict[str, Any] = field(default_factory=dict)
     pushback_mean_s: float = 282.0     # 4.7 min default (BUILD_PROMPT 5.2); scenarios may compress for the demo
     readback_error_rate: float = 0.08
     observation_delay_s: float = 1.0

@@ -17,7 +17,7 @@ from sim.core.engine import Simulation
 
 ROOT = Path(__file__).resolve().parents[1]
 GRAPH_GEOJSON = ROOT / "data/processed/kphx_graph.geojson"
-DEFAULT_SCENARIO = ROOT / "sim/scenarios/kphx_haboob.json"
+DEFAULT_SCENARIO = ROOT / "sim/scenarios/kphx_busy.json"
 CORS_ORIGINS = ["http://localhost:5173", "http://127.0.0.1:5173"]
 
 

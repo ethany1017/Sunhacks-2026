@@ -29,7 +29,7 @@ Every number below is a placeholder chosen to make the simulation behave plausib
 | Car-following gap | 60 m bumper to bumper, corridor 30 m either side of the path | spec |
 | Crossing right of way | lower scenario sequence wins; a stopped aircraft always blocks; head-on traffic blocks both | prevents symmetric stalls; head-on gridlock is left to be logged as a deadlock |
 | Hold line offset | nose 8 m short of the pavement | keeps the tail and wingtips clear |
-| Pushback | mean 282 s (4.7 min, spec default), 10% sigma, 1.1 m/s over the lead; the demo scenarios override the mean (smoke 60 s, haboob 75 s) so a run stays under about 15 minutes | demo pacing |
+| Pushback | mean 282 s (4.7 min, spec default), 10% sigma, 1.1 m/s over the lead; the demo scenarios override the mean (smoke 60 s, busy 75 s) so a run stays under about 15 minutes | demo pacing |
 | Heading rate | 25 deg/s on the ground, 3 deg/s in the air | smooth turns |
 | Final approach | starts 11 km out on a 3 degree glide, speed Vref + 20 m/s easing to Vref over the last 9 km; Vref from the CSV (`approach_speed_kt_acd_vref_proxy`); touchdown at the threshold | no flare model |
 | Landing roll | touchdown at 0.96 Vref, constant deceleration to a 10 m/s exit speed at the chosen exit (2.2 m/s^2 medium, 2.0 heavy, 1.4 light as the planning value); exit chosen at 1.25x the needed distance | measured landing runway occupancy is about 55 to 65 s (spec target 55 s) |
@@ -49,27 +49,24 @@ Every number below is a placeholder chosen to make the simulation behave plausib
 | Ground aircraft vs reservations | entering pavement is blocked if someone is on it or holds an earlier crossing/line-up reservation, or a landing/takeoff reservation overlaps the next 25 s (physics, not a rule applied to the agent) |
 | Reservation windows | landing: ETA-8 s to ETA+65 s; takeoff: 70 s; line-up 60 s (extended while waiting); crossing: time to cross plus 8 s |
 
-## Weather (`sim/weather/replay.py`)
+## Weather (`sim/weather/calm.py`)
 
 | Item | Value | Why |
 |---|---|---|
-| Before the trigger | first CSV row (calm, 10 SM) held constant | demo must not depend on a live storm |
-| Replay | rows from 2025-08-26 00:20 UTC, 2 sim seconds per CSV minute, starting at the trigger (sim 180 s in the haboob scenario, or POST /control `trigger_haboob`) | compresses the storm to about 4 sim minutes |
-| Low visibility | vis < 1 SM: taxi speed x0.6; runway occupancy +20% (landing roll speed /1.2, takeoff acceleration /1.44) | spec, flagged as assumptions |
-| `haboob_progress` | 0 before the trigger, 0.5 when vis first drops below 1 SM, 1.0 when vis returns to 2 SM or better | drives the dust wall visual |
-| Missing wind in a row | carried forward from the previous row | many 5-minute rows omit wind |
+| Report | `KPHX 151800Z 27005KT 10SM CLR 24/02 A3002`, held constant for the whole run | placeholder until weather comes from a level (S3) |
+| Effect | taxi speed and runway occupancy multipliers both 1.0 (no effect) | calm weather |
 
 ## Traffic (`sim/scenarios/generate.py`)
 
-Seeded (smoke seed 11, haboob seed 25). Airline weights SWA 40, AAL 24, SKW 10, DAL 7, UAL 6, ENY 5, FFT 4, ASA 4 (placeholders for the BTS carrier mix). Fleets per airline are drawn from the CSV types. Gates are spread over concourses by first letter and must have a route to the 25R and 26 entries. Smoke: 3 arrivals (threshold times 95, 205, 315 s) and 3 departures (ready 5, 70, 140 s), no weather, no readback errors. Haboob: 6 arrivals (75 to 395 s) and 6 departures (ready 0 to 145 s) including one general aviation Cessna/Cirrus/PC-12 from the GA ramp, one ground vehicle patrolling 300 to 1,000 m of taxi route kept 70 m clear of the aircraft routes, trigger at 180 s, readback error rate 10%. Pilot readback delay 1.5 to 3.0 s. The scenario window (`duration_s` 480) is when flights are scheduled; a run continues until every flight is complete (about 14 minutes for the haboob because departures held for the storm clear afterwards).
+Seeded (smoke seed 11, busy seed 25). Airline weights SWA 40, AAL 24, SKW 10, DAL 7, UAL 6, ENY 5, FFT 4, ASA 4 (placeholders for the BTS carrier mix). Fleets per airline are drawn from the CSV types. Gates are spread over concourses by first letter and must have a route to the 25R and 26 entries. Smoke: 3 arrivals (threshold times 95, 205, 315 s) and 3 departures (ready 5, 70, 140 s), no weather, no readback errors. Busy: 6 arrivals (75 to 395 s) and 6 departures (ready 0 to 145 s) including one general aviation Cessna/Cirrus/PC-12 from the GA ramp, one ground vehicle patrolling 300 to 1,000 m of taxi route kept 70 m clear of the aircraft routes, readback error rate 10%. Pilot readback delay 1.5 to 3.0 s. The scenario window (`duration_s` 480) is when flights are scheduled; a run continues until every flight is complete.
 
 ## Built-in tower (`sim/tower/controller.py`)
 
-First come, first served, 2 Hz decision pass. Landing clearance inside 70 s ETA when the runway is free; go-around instruction at 22 s if still blocked; 100 s minimum slot between landings per runway; no line-up if a landing is due within 100 s; no takeoff roll if a landing is due within 55 s; no crossing if a landing is due within 90 s; crossing window 45 s. Departure spacing 60 s, 90 s for a light behind a medium, 120 s behind a heavy (a stand-in for the 7110.65 wake table, not the table). Runway choice weighs taxi distance, 40 s per crossing, 90 s per aircraft already queued, 60 s if the runway also takes arrivals. Default configuration: arrivals 25L and 26, departures 25R and 26. Low-visibility mode when vis < 3 SM or gust >= 40 kt: departures only on 25R, new pushbacks and takeoffs held; restored after 30 s of calm.
+First come, first served, 2 Hz decision pass. Landing clearance inside 70 s ETA when the runway is free; go-around instruction at 22 s if still blocked; 100 s minimum slot between landings per runway; no line-up if a landing is due within 100 s; no takeoff roll if a landing is due within 55 s; no crossing if a landing is due within 90 s; crossing window 45 s. Departure spacing 60 s, 90 s for a light behind a medium, 120 s behind a heavy (a stand-in for the 7110.65 wake table, not the table). Runway choice weighs taxi distance, 40 s per crossing, 90 s per aircraft already queued, 60 s if the runway also takes arrivals. Default configuration: arrivals 25L and 26, departures 25R and 26.
 
 ## Scoring (`sim/metrics/score.py`)
 
-Throughput is touchdowns plus liftoffs in the last 600 s. Clearance reversal: a hold or go-around that supersedes an earlier unfinished movement clearance. Average delay is actual time minus free-flow time (arrivals: touchdown to gate; departures: ready to liftoff, including pushback). Recovery time is seconds from visibility returning to 1 SM or better until the next takeoff. Landing occupancy is touchdown until the tail clears the pavement.
+Throughput is touchdowns plus liftoffs in the last 600 s. Clearance reversal: a hold or go-around that supersedes an earlier unfinished movement clearance. Average delay is actual time minus free-flow time (arrivals: touchdown to gate; departures: ready to liftoff, including pushback). Landing occupancy is touchdown until the tail clears the pavement.
 
 ## Not built
 

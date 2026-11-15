@@ -4,7 +4,7 @@ import hashlib
 from pathlib import Path
 
 from sim.core.engine import Simulation
-from tests.conftest import HABOOB, SMOKE
+from tests.conftest import BUSY, SMOKE
 
 
 def run_hash(scenario: Path, run_dir: Path, seed=None, graph=None) -> str:
@@ -21,9 +21,9 @@ def test_same_seed_gives_identical_event_log(tmp_path, graph) -> None:
     assert a == b
 
 
-def test_same_seed_identical_with_weather_and_readback_errors(tmp_path, graph) -> None:
-    a = run_hash(HABOOB, tmp_path / "a" / "run", graph=graph)
-    b = run_hash(HABOOB, tmp_path / "b" / "run", graph=graph)
+def test_same_seed_identical_with_readback_errors(tmp_path, graph) -> None:
+    a = run_hash(BUSY, tmp_path / "a" / "run", graph=graph)
+    b = run_hash(BUSY, tmp_path / "b" / "run", graph=graph)
     assert a == b
 
 

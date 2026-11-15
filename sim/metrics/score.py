@@ -11,23 +11,6 @@ def _ts(ev: Dict[str, Any]) -> float:
     return ev["sim_time_ms"] / 1000.0
 
 
-def recovery_time_s(events: EventList) -> Optional[float]:
-    """Seconds from visibility returning to 1 SM or better until the first takeoff after the haboob; None if n/a."""
-    hit: Optional[float] = None
-    clear: Optional[float] = None
-    for ev in events:
-        if ev["kind"] != "weather.update":
-            continue
-        if ev["data"].get("low_vis") and hit is None:
-            hit = _ts(ev)
-        elif hit is not None and clear is None and not ev["data"].get("low_vis"):
-            clear = _ts(ev)
-    if clear is None:
-        return None
-    after = [_ts(e) for e in events if e["kind"] == "aircraft.airborne" and _ts(e) >= clear]
-    return round(after[0] - clear, 1) if after else None
-
-
 def compute_score(events: EventList, t: float) -> Dict[str, Any]:
     kinds: Dict[str, EventList] = {}
     for ev in events:
@@ -49,7 +32,6 @@ def compute_score(events: EventList, t: float) -> Dict[str, Any]:
         "clearance_amendments": len(amended),
         "go_arounds": len(kinds.get("go_around", [])),
         "avg_landing_occupancy_s": round(sum(occupancy) / len(occupancy), 1) if occupancy else None,
-        "recovery_time_s": recovery_time_s(events),
         "decisions": len(kinds.get("decision", [])),
     }
 
@@ -73,7 +55,7 @@ def format_table(score: Dict[str, Any]) -> str:
             ("Aircraft completed", score["completed"]), ("Average delay (s)", score["avg_delay_s"]),
             ("Throughput (ops / 10 min)", score["throughput_per_10min"]),
             ("Avg landing occupancy (s)", score["avg_landing_occupancy_s"]),
-            ("Recovery after haboob (s)", score["recovery_time_s"]), ("Decisions recorded", score["decisions"])]
+            ("Decisions recorded", score["decisions"])]
     width = max(len(r[0]) for r in rows)
     line = "+-%s-+-%s-+" % ("-" * width, "-" * 10)
     body = "\n".join("| %s | %10s |" % (k.ljust(width), "n/a" if v is None else v) for k, v in rows)

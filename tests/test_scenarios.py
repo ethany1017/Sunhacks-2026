@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 from sim.core.engine import Simulation
-from sim.metrics.score import compute_score
-from tests.conftest import HABOOB, SMOKE
+from tests.conftest import BUSY, SMOKE
 
 
 def test_smoke_runs_to_completion_with_no_conflicts(tmp_path, graph) -> None:
@@ -12,7 +11,7 @@ def test_smoke_runs_to_completion_with_no_conflicts(tmp_path, graph) -> None:
     assert sim.finished and len(sim.scenario.flights) == 6
     bad = [e for e in sim.log.events if e["kind"] in ("conflict", "separation_loss", "deadlock")]
     assert not bad, bad
-    score = compute_score(sim.log.events, sim.t)
+    score = sim.score()
     assert score["completed"] == 6 and score["readback_errors_accepted"] == 0
     assert (tmp_path / "smoke" / "events.jsonl").exists()
 
@@ -26,31 +25,19 @@ def test_every_event_uses_the_envelope(tmp_path, graph) -> None:
     assert all(required <= set(e) for e in sim.log.events)
 
 
-def test_haboob_scenario_weather_replan_and_clean_run(tmp_path, graph) -> None:
-    sim = Simulation(HABOOB, run_dir=tmp_path / "hab", graph=graph)
+def test_busy_scenario_runs_clean_with_calm_static_weather(tmp_path, graph) -> None:
+    sim = Simulation(BUSY, run_dir=tmp_path / "busy", graph=graph)
+    assert sim.scenario.readback_error_rate > 0
+    w0 = sim.weather_view()
     sim.run_to_completion()
     sim.close()
-    assert sim.finished
-    kinds = [e["kind"] for e in sim.log.events]
-    assert "weather.haboob_triggered" in kinds and kinds.count("weather.update") > 20
-    assert any(e["data"].get("low_vis") for e in sim.log.events if e["kind"] == "weather.update")
-    cfg = [e["data"] for e in sim.log.events if e["kind"] == "runway.config"]
-    assert len(cfg) >= 2 and cfg[0]["departure_runways"] == ["25R"]               # replanned, then restored
-    actions = {d["action"] for d in sim.decisions.values()}
-    assert {"weather_replan", "weather_recover"} <= actions
+    assert sim.finished and sim.score()["completed"] == 12
     assert [e for e in sim.log.events if e["kind"] in ("conflict", "separation_loss", "deadlock")] == []
-    score = compute_score(sim.log.events, sim.t)
-    assert score["completed"] == 12 and score["recovery_time_s"] is not None
-
-
-def test_low_visibility_slows_taxi_and_extends_occupancy(tmp_path, graph) -> None:
-    sim = Simulation(HABOOB, run_dir=tmp_path / "wx", graph=graph)
+    assert sim.weather_view() == w0 and w0["vis_sm"] == 10.0 
+    assert set(w0) == {"t", "metar", "wind_dir", "wind_kt", "gust_kt", "vis_sm", "wx", "temp_f"}
+    assert not any(e["kind"].startswith("weather.") for e in sim.log.events)
     assert sim.weather.taxi_mult == 1.0 and sim.weather.occupancy_mult == 1.0
-    sim.control("trigger_haboob")
-    while not sim.weather.low_vis and sim.t < 400:
-        sim.step()
-    assert sim.weather.low_vis and sim.weather.taxi_mult == 0.6 and sim.weather.occupancy_mult == 1.2
-    sim.close()
+    assert any(e["kind"] == "readback.rejected" for e in sim.log.events)      # the tower caught wrong readbacks itself
 
 
 def test_scores_expose_the_contract_fields(tmp_path, graph) -> None:
@@ -62,8 +49,8 @@ def test_scores_expose_the_contract_fields(tmp_path, graph) -> None:
             "throughput_per_10min"} <= set(score)
 
 
-def test_ground_vehicle_and_ga_aircraft_are_in_the_haboob_scenario(tmp_path, graph) -> None:
-    sim = Simulation(HABOOB, run_dir=tmp_path / "veh", graph=graph)
+def test_ground_vehicle_and_ga_aircraft_are_in_the_busy_scenario(tmp_path, graph) -> None:
+    sim = Simulation(BUSY, run_dir=tmp_path / "veh", graph=graph)
     assert len(sim.scenario.vehicles) == 1 and any(f.airline == "GA" for f in sim.scenario.flights)
     veh = next(a for a in sim.aircraft.values() if a.kind == "vehicle")
     start = (veh.x, veh.y)

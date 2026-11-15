@@ -90,7 +90,7 @@ def vehicle_route(graph: AirportGraph, rng: np.random.Generator, avoid: List[Lin
     return None
 
 
-def build(name: str, seed: int, n_arr: int, n_dep: int, arr_etas: List[float], dep_ready: List[float], haboob: Optional[float],
+def build(name: str, seed: int, n_arr: int, n_dep: int, arr_etas: List[float], dep_ready: List[float], readback_error_rate: float,
           ga: bool, vehicle: bool, pushback_mean_s: float, duration: float) -> Dict[str, Any]:
     graph = AirportGraph.load()
     rng = np.random.default_rng(seed)
@@ -126,18 +126,15 @@ def build(name: str, seed: int, n_arr: int, n_dep: int, arr_etas: List[float], d
         if route:
             vehicles.append({"id": "GSE1", "route": route, "speed_mps": 6.0})
     sc: Dict[str, Any] = {"name": name, "seed": seed, "duration_s": duration, "start_sim_s": 0.0,
-                          "pushback_mean_s": pushback_mean_s, "readback_error_rate": 0.1 if haboob else 0.0,
+                          "pushback_mean_s": pushback_mean_s, "readback_error_rate": readback_error_rate,
                           "flights": sorted(flights, key=lambda f: f["scheduled_sim_s"]), "vehicles": vehicles}
-    if haboob is not None:
-        sc["haboob_trigger_s"] = haboob
-        sc["weather"] = {"start_utc": "2025-08-26 00:20", "sec_per_min": 2.0}
     return sc
 
 
 def main() -> None:
-    smoke = build("kphx_smoke", 11, 3, 3, [95, 205, 315], [5, 70, 140], None, False, False, 60.0, 300.0)
-    haboob = build("kphx_haboob", 25, 6, 6, [75, 140, 205, 270, 335, 395], [0, 15, 40, 70, 105, 145], 180.0, True, True, 75.0, 480.0)
-    for sc in (smoke, haboob):
+    smoke = build("kphx_smoke", 11, 3, 3, [95, 205, 315], [5, 70, 140], 0.0, False, False, 60.0, 300.0)
+    busy = build("kphx_busy", 25, 6, 6, [75, 140, 205, 270, 335, 395], [0, 15, 40, 70, 105, 145], 0.1, True, True, 75.0, 480.0)
+    for sc in (smoke, busy):
         (OUT / (sc["name"] + ".json")).write_text(json.dumps(sc, indent=1) + "\n")
         print("wrote", sc["name"], [(f["callsign"], f["type"], f["kind"][:3], f["gate"], f["scheduled_sim_s"]) for f in sc["flights"]])
 

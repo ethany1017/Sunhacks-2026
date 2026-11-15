@@ -10,7 +10,7 @@ from sim.graph.model import AirportGraph
 
 ROOT = Path(__file__).resolve().parents[1]
 SMOKE = ROOT / "sim/scenarios/kphx_smoke.json"
-HABOOB = ROOT / "sim/scenarios/kphx_haboob.json"
+BUSY = ROOT / "sim/scenarios/kphx_busy.json"
 
 
 class NoopController:

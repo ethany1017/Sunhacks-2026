@@ -7,7 +7,7 @@ from pydantic import BaseModel
 
 
 class ControlRequest(BaseModel):
-    action: Literal["pause", "resume", "speed", "trigger_haboob", "reset"]
+    action: Literal["pause", "resume", "speed", "reset"]
     value: Any = None
 
 
@@ -107,7 +107,6 @@ class VoiceLine(BaseModel):
 
 class Weather(BaseModel):
     t: float
-    active: bool
     metar: str
     wind_dir: Optional[int]
     wind_kt: Optional[int]
@@ -115,7 +114,6 @@ class Weather(BaseModel):
     vis_sm: Optional[float]
     wx: Optional[str]
     temp_f: Optional[float]
-    haboob_progress: float
 
 
 class Snapshot(BaseModel):

@@ -31,13 +31,6 @@ for (const [w, h, name] of sizes) {
     await page.waitForTimeout(2800);
     await page.screenshot({ path: path.join(out, "dashboard-selected-1920.png") });
     await page.locator("#list-dep .row.sel").click().catch(() => {});
-    await page.waitForTimeout(1500);
-    await fetch(`${API}/control`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "speed", value: 5 }) });
-    await fetch(`${API}/control`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "trigger_haboob" }) });
-    await page.waitForTimeout(22000);
-    await page.screenshot({ path: path.join(out, "dashboard-haboob-1920.png") });
-    await fetch(`${API}/control`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "reset" }) });
-    await fetch(`${API}/control`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "speed", value: 1 }) });
   }
   await ctx.close();
 }

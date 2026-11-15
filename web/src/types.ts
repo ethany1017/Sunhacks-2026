@@ -49,7 +49,6 @@ export interface Clearance {
 }
 export interface Weather {
   t?: number;
-  active: boolean;
   metar: string;
   wind_dir: number | null;
   wind_kt: number | null;
@@ -57,7 +56,6 @@ export interface Weather {
   vis_sm: number | null;
   wx: string | null;
   temp_f?: number | null;
-  haboob_progress: number;
 }
 export interface Decision {
   id: string;
@@ -95,7 +93,6 @@ export interface AgentInfo {
 export interface ScenarioInfo {
   name: string;
   duration_s: number;
-  haboob_triggered: boolean;
   start_utc?: string;
 }
 

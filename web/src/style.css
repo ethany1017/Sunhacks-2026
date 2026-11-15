@@ -31,8 +31,6 @@ kbd { font-family: var(--mono); font-size: 11px; background: rgba(255,255,255,.1
 .maplibregl-canvas { outline: none; }
 .maplibregl-ctrl-bottom-right, .maplibregl-ctrl-attrib { display: none; }
 
-#dust, #vignette { position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: 0; transition: opacity .6s; }
-#vignette { background: radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 38%, rgba(48, 22, 4, .8) 100%); }
 
 .glass {
   background: var(--glass);

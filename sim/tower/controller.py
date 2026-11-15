@@ -16,9 +16,6 @@ TAKEOFF_GUARD_S = 55.0          # no takeoff roll if a landing is due within thi
 CROSS_GUARD_S = 90.0            # no crossing if a landing on that runway is due within this
 CROSS_WINDOW_S = 45.0
 PUSHBACK_CLEAR_M = 90.0
-LOW_VIS_VIS_SM, LOW_VIS_GUST_KT, LOW_VIS_CALM_S = 3.0, 40, 30.0
-LOW_VIS_ARRIVALS = ["25L", "26"]
-LOW_VIS_DEPARTURES = ["25R"]
 RULES = {
     "taxi": "JO 7110.65BB 3-7-2 Taxi and ground movement operations: issue the route up to the runway hold short point",
     "cross": "JO 7110.65BB 3-7-2: a runway crossing needs its own clearance; hold short until the runway is clear",
@@ -51,9 +48,6 @@ class TowerController:
         self.last_arrival_slot: Dict[str, float] = {}     # runway pavement -> last landing slot time
         self.last_airborne: Dict[str, Tuple[float, str]] = {}   # pavement -> (t, wake class)
         self.claims: Dict[Tuple[str, str], str] = {}      # (pavement, callsign) -> clearance id that holds the runway
-        self.low_vis_mode = False
-        self.calm_since: Optional[float] = None
-        self.saved_cfg: Optional[Dict[str, List[str]]] = None
 
     # -- entry point -----------------------------------------------------------------------------------
     def on_tick(self, sim: Simulation, events: List[Dict[str, Any]]) -> None:
@@ -63,14 +57,13 @@ class TowerController:
                 self.last_airborne[ev["data"]["runway"]] = (ev["sim_time_ms"] / 1000.0, get_type(self._type_of(sim, cs)).wtc)
                 self.assigned.setdefault(cs, {})["airborne"] = True
         obs: Optional[Dict[str, Any]] = None
-        if any(e["kind"] in ("readback", "weather.update") for e in events) or sim.clock.tick % DECIDE_EVERY_TICKS == 0:
+        if any(e["kind"] == "readback" for e in events) or sim.clock.tick % DECIDE_EVERY_TICKS == 0:
             obs = sim.observe()
         if obs is None:
             return
         live = {c["id"] for c in obs["clearances"]}
         self.claims = {k: cid for k, cid in self.claims.items() if cid in live}
         self._readbacks(sim, obs)
-        self._weather(sim, obs)
         if sim.clock.tick % DECIDE_EVERY_TICKS == 0:
             by_cs = {a["callsign"]: a for a in obs["aircraft"] if a["kind"] != "vehicle"}
             for cs in sorted((c for c in by_cs if c not in self.order), key=lambda c: (by_cs[c]["eta_s"] or 0.0, c)):
@@ -143,42 +136,6 @@ class TowerController:
                 alternatives=[{"option": "accept the readback", "reason": "wrong or missing runway; the pilot would act on the wrong instruction"}],
                 next_review_s=5)
 
-    # -- weather ------------------------------------------------------------------------------------------------
-    def _weather(self, sim: Simulation, obs: Dict[str, Any]) -> None:
-        w = obs["weather"]
-        vis, gust = w.get("vis_sm"), w.get("gust_kt") or 0
-        bad = (vis is not None and vis < LOW_VIS_VIS_SM) or gust >= LOW_VIS_GUST_KT
-        if bad:
-            self.calm_since = None
-        elif self.calm_since is None:
-            self.calm_since = obs["t"]
-        if bad and not self.low_vis_mode:
-            self.low_vis_mode = True
-            self.saved_cfg = dict(obs["runway_config"])
-            sim.set_runway_config(LOW_VIS_ARRIVALS, LOW_VIS_DEPARTURES)
-            sim.record_decision(
-                callsign=None, action="weather_replan",
-                summary="Haboob arriving: departures only on 25R and runway 26 kept for arrivals, holding new pushbacks and takeoffs while visibility is low.",
-                facts=["METAR: %s" % w.get("metar"), "Visibility %s SM, wind %s at %s kt, gust %s kt" % (
-                    vis, w.get("wind_dir"), w.get("wind_kt"), w.get("gust_kt"))],
-                rules=["Low visibility: taxi speed and runway occupancy times grow, so cut crossings and runway mixing",
-                       RULES["takeoff"]],
-                alternatives=[{"option": "keep both departure and arrival runways active", "reason": "more crossings in poor visibility"},
-                              {"option": "stop arrivals", "reason": "aircraft on final cannot hold; keep landing them with extra spacing"}],
-                next_review_s=30)
-        elif self.low_vis_mode and self.calm_since is not None and obs["t"] - self.calm_since >= LOW_VIS_CALM_S:
-            self.low_vis_mode = False
-            cfg = self.saved_cfg or {}
-            if cfg:
-                sim.set_runway_config(cfg["arrival_runways"], cfg["departure_runways"])
-            sim.record_decision(
-                callsign=None, action="weather_recover",
-                summary="Visibility recovered: restored the normal runway configuration and released held departures.",
-                facts=["METAR: %s" % w.get("metar"), "Visibility %s SM" % vis],
-                rules=["Resume normal operations when visibility and gusts allow"],
-                alternatives=[{"option": "stay in the low-visibility configuration", "reason": "capacity is needed to clear the departure backlog"}],
-                next_review_s=30)
-
     # -- arrivals --------------------------------------------------------------------------------------------------
     def _arrival(self, sim: Simulation, obs: Dict[str, Any], a: Dict[str, Any]) -> None:
         cs, st = a["callsign"], self.assigned.setdefault(a["callsign"], {})
@@ -243,8 +200,7 @@ class TowerController:
             return
         t = obs["t"]
         pav = sim.graph.end_runway[st["end"]]
-        extra = 30.0 if self.low_vis_mode else 0.0
-        blockers = self._blockers(obs, pav, a["callsign"], t + eta - 10.0, t + eta + 65.0 + extra)
+        blockers = self._blockers(obs, pav, a["callsign"], t + eta - 10.0, t + eta + 65.0)
         if blockers:
             if eta <= GO_AROUND_ETA_S and "go_around" not in st:
                 st["go_around"] = True
@@ -297,15 +253,6 @@ class TowerController:
         ph = a["phase"]
         if ph == "at_gate" and a["ready"]:
             if "end" not in st:
-                if self.low_vis_mode:
-                    if "held" not in st:
-                        st["held"] = True
-                        sim.record_decision(callsign=cs, action="hold_at_gate",
-                                            summary="Holding %s at gate %s: haboob visibility" % (cs, a["gate"]),
-                                            facts=["Low-visibility mode active"], rules=[RULES["takeoff"]],
-                                            alternatives=[{"option": "push back now", "reason": "it would only queue at the hold line in zero visibility"}],
-                                            next_review_s=10)
-                    return
                 self._assign_departure(sim, obs, a, st)
             if "push" not in st and self._lane_clear(sim, obs, a):
                 st["push"] = True
@@ -374,7 +321,7 @@ class TowerController:
         return True
 
     def _line_up(self, sim: Simulation, obs: Dict[str, Any], a: Dict[str, Any], st: Dict[str, Any]) -> None:
-        if "luaw" in st or self.low_vis_mode:
+        if "luaw" in st:
             return
         t = obs["t"]
         pav = sim.graph.end_runway[st["end"]]
@@ -396,14 +343,6 @@ class TowerController:
         return t - last[0] >= departure_gap_s(last[1], get_type(a["type"]).wtc)
 
     def _takeoff(self, sim: Simulation, obs: Dict[str, Any], a: Dict[str, Any], st: Dict[str, Any]) -> None:
-        if self.low_vis_mode:
-            if "lowvis_note" not in st:
-                st["lowvis_note"] = True
-                sim.record_decision(callsign=a["callsign"], action="hold_in_position",
-                                    summary="Withholding takeoff clearance for %s: low visibility" % a["callsign"],
-                                    facts=["Haboob visibility below 3 SM"], rules=[RULES["takeoff"]],
-                                    alternatives=[{"option": "clear for takeoff", "reason": "zero visibility on the runway"}], next_review_s=10)
-            return
         t = obs["t"]
         pav = sim.graph.end_runway[st["end"]]
         blockers = self._blockers(obs, pav, a["callsign"], t, t + 30.0)

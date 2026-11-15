@@ -328,7 +328,6 @@ function freshState() {
     dirty: { clr: new Map(), dec: new Map(), voice: new Map() },
     scheduled: [],
     counters: { c: 0, d: 0, v: 0, a: 0 },
-    haboob: { triggered: false, t0: 0 },
     nextArr: -400,
     nextDep: -380,
     completed: 0,
@@ -513,9 +512,6 @@ function spawnVehicle() {
 
 // ---------------------------------------------------------------- per-aircraft stepping
 const TAXI_V = 11;
-function wxFactor() {
-  return 1 - 0.4 * haboobProgress();
-}
 function holdEff(ac) {
   if (ac.queueN === undefined && ac.s > ac.holdS - 140) {
     ac.queueN = [...S.aircraft.values()].filter((o) => o !== ac && o.kind === "departure" && o.runway === ac.runway && o.queueN !== undefined && ["taxi_out", "hold_short"].includes(o.phase)).length;
@@ -525,7 +521,7 @@ function holdEff(ac) {
 function targetSpeed(ac) {
   const P = ac.path;
   const remain = P.total - ac.s;
-  const taxi = Math.min(TAXI_V * wxFactor(), slowLimit(P, ac.s));
+  const taxi = Math.min(TAXI_V, slowLimit(P, ac.s));
   const stopAt = (d) => Math.sqrt(2 * 1.6 * Math.max(0, d));
   switch (ac.phase) {
     case "final": return 72;
@@ -752,24 +748,8 @@ function serializeAircraft(ac) {
 }
 
 // ---------------------------------------------------------------- weather
-function haboobProgress() {
-  if (!S.haboob.triggered) return 0;
-  return clamp((S.t - S.haboob.t0) / 120, 0, 1);
-}
 function weatherNow() {
-  const p = haboobProgress();
-  const baseMin = 22 * 60 + 50;
-  const sec = Math.floor(baseMin * 60 + S.t);
-  const hh = String(Math.floor(sec / 3600) % 24).padStart(2, "0");
-  const mm = String(Math.floor(sec / 60) % 60).padStart(2, "0");
-  const dir = Math.round(270 + (110 - 270) * p + 360) % 360;
-  const kt = Math.round(9 + 26 * p);
-  const gust = p > 0.1 ? Math.round(18 + 38 * p) : null;
-  const vis = p === 0 ? 10 : Math.max(0.25, Math.round((10 - 9.75 * p) * 4) / 4);
-  const visTxt = vis >= 10 ? "10SM" : vis < 1 ? "1/4SM" : `${vis}SM`;
-  const wx = p > 0.2 ? "DS" : null;
-  const metar = `KPHX 25${hh}${mm}Z ${String(dir).padStart(3, "0")}${String(kt).padStart(2, "0")}${gust ? `G${gust}` : ""}KT ${visTxt}${wx ? " +DS" : ""} ${p > 0.2 ? "BKN012" : "FEW080"} ${p > 0.2 ? "33/12" : "41/10"} A2984 RMK AO2`;
-  return { t: Math.round(S.t * 10) / 10, active: p > 0, metar, wind_dir: dir, wind_kt: kt, gust_kt: gust, vis_sm: vis, wx, temp_f: null, haboob_progress: Math.round(p * 1000) / 1000 };
+  return { t: 0, metar: "KPHX 151800Z 27005KT 10SM CLR 24/02 A3002", wind_dir: 270, wind_kt: 5, gust_kt: null, vis_sm: 10, wx: null, temp_f: 75 };
 }
 
 // ---------------------------------------------------------------- tick
@@ -792,7 +772,7 @@ function agentPayload() {
   return { status: Date.now() < S.thinkUntil ? "thinking" : "idle", controller: S.controller };
 }
 function scenarioPayload() {
-  return { name: "kphx_haboob", duration_s: 480, haboob_triggered: S.haboob.triggered };
+  return { name: "kphx_busy", duration_s: 480 };
 }
 
 function simStep(dt) {
@@ -875,22 +855,6 @@ function control(action, value) {
     case "speed":
       if (![1, 2, 5, 10, 20].includes(Number(value))) return { ok: false, error: "speed must be 1,2,5,10 or 20" };
       S.speed = Number(value);
-      break;
-    case "trigger_haboob":
-      if (!S.haboob.triggered) {
-        S.haboob = { triggered: true, t0: S.t };
-        S.thinkUntil = Date.now() + 3000;
-        const v = [...S.aircraft.values()].find((a) => a.kind !== "vehicle");
-        if (v) {
-          const d = { id: `d-${++S.counters.d}`, t: S.t, callsign: v.callsign, action: "hold_position", voice_id: null, next_review_s: 20,
-            summary: "Haboob inbound: slowing surface traffic and re-spacing arrivals",
-            facts: ["Dust wall 20 NM southeast, moving 35 kt", "Visibility forecast below 1/2 SM within 2 min", "Taxi speed reduced 40 percent"],
-            rules: ["Reduced visibility: increase spacing between taxiing aircraft (JO 7110.65 3-7-1)", "Runway occupancy time grows in dust (assumption A-14)"],
-            alternatives: [{ option: "Suspend all departures", reason: "Three departures can still leave before visibility drops" }, { option: "Divert arrivals now", reason: "Only two arrivals inside 15 NM, both can land first" }] };
-          S.decisions.push(d);
-          S.dirty.dec.set(d.id, d);
-        }
-      }
       break;
     case "reset": {
       const sp = S.speed;

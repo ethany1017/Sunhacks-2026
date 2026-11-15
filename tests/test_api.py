@@ -38,7 +38,7 @@ def test_websocket_sends_snapshot_then_deltas_at_about_10hz(client: TestClient) 
     assert 12 <= count <= 28            # about 10 Hz
 
 
-def test_control_pause_speed_haboob_and_errors(client: TestClient, monkeypatch) -> None:
+def test_control_pause_speed_and_errors(client: TestClient, monkeypatch) -> None:
     assert client.post("/control", json={"action": "speed", "value": 5}).json()["state"]["speed"] == 5
     assert client.post("/control", json={"action": "speed", "value": 7}).json()["ok"] is False
     assert client.post("/control", json={"action": "pause"}).json()["state"]["paused"] is True
@@ -46,9 +46,6 @@ def test_control_pause_speed_haboob_and_errors(client: TestClient, monkeypatch) 
     time.sleep(0.5)
     assert client.get("/state").json()["t"] == t0                      # paused
     assert client.post("/control", json={"action": "resume"}).json()["state"]["paused"] is False
-    res = client.post("/control", json={"action": "trigger_haboob"}).json()
-    assert res["ok"] is True
-    assert client.post("/control", json={"action": "trigger_haboob"}).json()["ok"] is False
     assert client.post("/control", json={"action": "set_controller", "value": "x"}).status_code == 422   # not offered
     assert client.post("/control", json={"action": "bogus"}).status_code == 422
 

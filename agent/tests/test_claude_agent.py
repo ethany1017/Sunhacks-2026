@@ -11,7 +11,7 @@ import pytest
 
 from agent.claude_agent import ClaudeAgent, ClaudeConfig, _Call
 from sim.core.engine import Simulation
-from tests.conftest import HABOOB, SMOKE
+from tests.conftest import BUSY, SMOKE
 from agent.tests.fakes import FakeAnthropic, ScriptedPolicy
 
 SECRET = "fake-test-key-must-never-appear-in-logs"
@@ -60,14 +60,13 @@ def test_smoke_scenario_completes_through_claude_agent_with_fake_client(tmp_path
     sim.close()
 
 
-def test_haboob_with_readback_errors_through_claude_agent(tmp_path: Path, graph: Any) -> None:
+def test_busy_with_readback_errors_through_claude_agent(tmp_path: Path, graph: Any) -> None:
     agent = ClaudeAgent(client=FakeAnthropic(), config=ClaudeConfig(sync=True))
-    sim = make_sim(tmp_path, graph, agent, HABOOB)
+    sim = make_sim(tmp_path, graph, agent, BUSY)
     sim.run_to_completion()
     score = sim.score()
     assert sim.finished and score["completed"] == 12 and score["readback_errors_accepted"] == 0
     assert any(e["kind"] == "readback.rejected" for e in sim.log.events)            # wrong readbacks were caught
-    assert any(e["kind"] == "runway.config" for e in sim.log.events)                # weather replan happened
     sim.close()
 
 

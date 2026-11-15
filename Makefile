@@ -1,7 +1,7 @@
 # KPHX airport simulator: backend targets (Python 3.9+)
 PY := .venv/bin/python
 
-.PHONY: venv graph scenarios sim haboob api test agent-test web web-install demo
+.PHONY: venv graph scenarios sim busy api test agent-test web web-install demo
 
 venv:
 	python3 -m venv .venv
@@ -17,8 +17,8 @@ scenarios:
 sim:
 	$(PY) -m sim.core.run sim/scenarios/kphx_smoke.json
 
-haboob:
-	$(PY) -m sim.core.run sim/scenarios/kphx_haboob.json
+busy:
+	$(PY) -m sim.core.run sim/scenarios/kphx_busy.json
 
 api:
 	$(PY) -m uvicorn api.main:app --host 127.0.0.1 --port 8000

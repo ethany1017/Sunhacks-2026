@@ -106,7 +106,7 @@ export class Panels {
     $("agent-state").textContent = thinking ? "thinking…" : s.paused ? "paused" : "monitoring";
     const w = s.weather;
     if (w) {
-      $("metar").classList.toggle("alert", w.active || (w.vis_sm ?? 10) < 3);
+      $("metar").classList.toggle("alert", (w.vis_sm ?? 10) < 3);
       const wd = w.wind_dir;
       ($("wind-arrow") as unknown as SVGElement).style.transform = `rotate(${((wd ?? 0) + 180) % 360}deg)`;
       $("m-wind").textContent = wd === null ? "VRB" : `${String(Math.round(wd)).padStart(3, "0")}° ${w.wind_kt ?? 0}${w.gust_kt ? `G${w.gust_kt}` : ""}kt`;

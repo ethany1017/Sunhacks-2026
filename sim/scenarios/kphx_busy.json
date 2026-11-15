@@ -1,5 +1,5 @@
 {
- "name": "kphx_haboob",
+ "name": "kphx_busy",
  "seed": 25,
  "duration_s": 480.0,
  "start_sim_s": 0.0,
@@ -134,10 +134,5 @@
    ],
    "speed_mps": 6.0
   }
- ],
- "haboob_trigger_s": 180.0,
- "weather": {
-  "start_utc": "2025-08-26 00:20",
-  "sec_per_min": 2.0
- }
+ ]
 }

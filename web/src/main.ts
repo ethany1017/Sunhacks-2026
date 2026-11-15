@@ -150,7 +150,6 @@ window.addEventListener("keydown", (e) => {
       if (store.paused) void store.control("resume");
       break;
     }
-    case "h": case "H": void store.control("trigger_haboob").then((err) => { if (err) toast(err); }); break;
     case "r": case "R": void store.control("reset"); break;
     case "m": case "M": toggleMute(); break;
     case "o": case "O": select(null, true); break;
@@ -161,23 +160,6 @@ window.addEventListener("keydown", (e) => {
       break;
   }
 });
-
-// ------------------------------------------------------------------ weather visuals
-let lastProgress = -1;
-function weatherVisuals(): void {
-  const p = store.weather?.haboob_progress ?? 0;
-  const active = (store.weather?.active ?? false) || p > 0;
-  setBadge("b-haboob", active);
-  if (Math.abs(p - lastProgress) < 0.002) return;
-  lastProgress = p;
-  const dust = $("dust");
-  const front = p * 135 - 15; // % along the SE -> NW axis
-  const wall = `linear-gradient(to top left, rgba(150,88,32,.82) 0%, rgba(176,108,40,.62) ${Math.max(0, front - 28)}%, rgba(196,128,52,.34) ${Math.max(0, front - 8)}%, rgba(196,128,52,0) ${front + 12}%)`;
-  const grain = "radial-gradient(ellipse 40% 22% at 20% 80%, rgba(255,200,120,.16), transparent 70%), radial-gradient(ellipse 36% 26% at 62% 58%, rgba(255,190,110,.13), transparent 70%), radial-gradient(ellipse 30% 24% at 82% 28%, rgba(255,210,140,.1), transparent 70%)";
-  dust.style.background = `${grain}, ${wall}`;
-  dust.style.opacity = p > 0 ? "1" : "0";
-  $("vignette").style.opacity = String(Math.min(1, p * 1.15));
-}
 
 // ------------------------------------------------------------------ frame loop + FPS governor
 const perf = { frames: 0, last: performance.now(), fps: 0, slow: 0 };
@@ -207,7 +189,6 @@ function frame(now: number): void {
     buildLayers({ store, now, simT, view: map.getView(), quality, data, onPick: (id) => select(id, true) }),
   );
   panels.update(now);
-  weatherVisuals();
 }
 
 // ------------------------------------------------------------------ boot

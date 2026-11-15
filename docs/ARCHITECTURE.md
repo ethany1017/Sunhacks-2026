@@ -15,7 +15,7 @@ The goal is a competition demo: one AI agent that runs the whole airport on its 
 | Simulator | Custom deterministic discrete-event simulator in Python | No existing open tool covers ground movement. BluebirdATC is en-route only (AGPL-3.0). BlueSky is airborne; its taxi support is unconfirmed. OpenTaxi (very new, 2 stars) is a reference to vet in the first hour, not a dependency. |
 | Truth vs observation | The simulator keeps the true state; the agent sees an observation of it | Lets us make the demo interesting: late samples, a missing vehicle, a pilot who reads back wrong. |
 | Voice | Push-to-talk, batch speech-to-text, text-to-speech for the agent and a second voice for simulated pilots | Cheap and easy to rehearse; no realtime API. |
-| Weather | Backend proxy to the Aviation Weather Center, plus a scripted replay of the Aug 25, 2025 haboob | The demo must not depend on a live storm. |
+| Weather | Calm static report in the simulator for now; weather levels later | The demo must not depend on live weather. |
 | Log | Append-only JSONL event log | Drives replay, the dashboard, explanations and scoring. |
 
 ## 2. How it runs
@@ -53,8 +53,8 @@ sim/
   agent/                 agent loop, system prompt, tool definitions, rulebook text
   tools/                 route planner, sequencing helper, ETA and spacing calculators
   voice/                 phraseology templates, speech-to-text and text-to-speech adapters, simulated pilots
-  weather/               AWC client, haboob replay
-  scenarios/             kphx_haboob.json, plus small test scenarios
+  weather/               calm static weather
+  scenarios/             kphx_busy.json, kphx_smoke.json
   metrics/               scoring functions over the event log
 api/                     FastAPI app, WebSocket stream of events
 web/                     dashboard (Vite + TypeScript + MapLibre + deck.gl)
@@ -85,7 +85,7 @@ Steps:
 - **The agent.** It holds the rulebook (the separation and runway rules in `data-catalog.md`, from JO 7110.65BB, written into its prompt and tools), the current airport state, and a set of tools. It decides arrival and departure order, taxi routes, runway use, crossings, holds and go-arounds, and replans when weather or a pilot's response changes things. Helper tools (shortest path, wake-spacing time, ETA) give it numbers; they do not approve or reject anything.
 - **Clearances.** Every instruction is a typed tool call (callsign, action, runway, route, hold point). The sim applies it. Each clearance has an id and a state (issued, acknowledged, complete, amended, cancelled) so the dashboard can show it and the agent does not repeat itself.
 - **Voice.** The agent's words come from phraseology templates (verified phrases in `data/voice_and_comms/`) and are spoken by text-to-speech. Simulated pilots reply in a second voice, with optional radio noise and scripted mistakes (wrong runway side, a dropped word). The agent hears the reply through speech-to-text and decides for itself whether the readback is right, asks again if not, and carries on.
-- **Weather.** Backend proxy to the AWC API (no key, 100 requests per minute, descriptive User-Agent). Keep the raw report beside the parsed values and mark old data as stale. The demo uses `data/weather_and_status/haboob_clean_2025-08-25/` as a scripted replay with a trigger at a chosen simulated time. Unit traps: AWC JSON altimeter is hPa, wind is "from", visibility can be `10+`.
+- **Weather.** Backend proxy to the AWC API (no key, 100 requests per minute, descriptive User-Agent). Keep the raw report beside the parsed values and mark old data as stale. Unit traps: AWC JSON altimeter is hPa, wind is "from", visibility can be `10+`.
 
 ## 6. Event log and explanations
 
@@ -97,16 +97,16 @@ Map (MapLibre, OpenFreeMap tiles, optional USGS aerial image of KPHX), arrivals 
 
 ## 8. Scoring and tests
 
-Scoring functions run over the event log: separation losses, runway conflicts, taxi deadlocks, readback mistakes, delay per aircraft, throughput, recovery time after the weather hits. These are how we show the agent works, not a gate in front of it. Baselines for KPHX taxi times and hourly traffic come from `data/kphx_traffic/bts_otp_*/derived/` (BTS covers only large US carriers, so real traffic is higher).
+Scoring functions run over the event log: separation losses, runway conflicts, taxi deadlocks, readback mistakes, delay per aircraft, throughput. These are how we show the agent works, not a gate in front of it. Baselines for KPHX taxi times and hourly traffic come from `data/kphx_traffic/bts_otp_*/derived/` (BTS covers only large US carriers, so real traffic is higher).
 
-Tests to write early: same-seed replays give the same decisions; a golden replay of the haboob scenario; no repeated clearance after a restart; the agent recovers from a missed readback and from a closed runway. Deadlock handling is our own design and has no external source.
+Tests to write early: same-seed replays give the same decisions; a golden replay of the busy scenario; no repeated clearance after a restart; the agent recovers from a missed readback and from a closed runway. Deadlock handling is our own design and has no external source.
 
 ## 9. Build order (about 20 hours to the Sunday 11 AM Devpost deadline)
 
 1. Hour 0-2: reduced KPHX graph, scenario file, event log writer. Vet OpenTaxi for reusable ideas.
 2. Hour 2-6: sim core, aircraft movement along routes, tool definitions, a first agent loop that clears a single arrival to its gate.
 3. Hour 4-8 (parallel): API with WebSocket and the dashboard map with moving aircraft and a decision panel.
-4. Hour 8-12: multiple aircraft, runway sequencing and crossings; weather replay and replanning.
+4. Hour 8-12: multiple aircraft, runway sequencing and crossings; weather and replanning.
 5. Hour 12-16: voice loop with simulated pilots and readbacks.
 6. Hour 16-19: scenario polish, scoring, a recorded fallback run in case the live demo fails.
 7. Last hour: secret scan, README setup instructions, Devpost write-up that discloses AI-assisted code.

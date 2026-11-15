@@ -5,11 +5,11 @@ import math
 from sim.core.engine import Simulation
 from sim.core.entities import Aircraft
 from sim.core.aircraft_types import get_type
-from tests.conftest import HABOOB
+from tests.conftest import BUSY
 
 
 def test_no_teleporting_and_smooth_motion_over_a_full_run(tmp_path, graph) -> None:
-    sim = Simulation(HABOOB, run_dir=tmp_path / "r", graph=graph)
+    sim = Simulation(BUSY, run_dir=tmp_path / "r", graph=graph)
     prev = {}
     worst_step = worst_turn = worst_acc = 0.0
     while not sim.finished and sim.t < 1500:

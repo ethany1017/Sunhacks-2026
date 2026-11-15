@@ -8,7 +8,7 @@ Conventions: `lon`/`lat` in degrees (WGS84), `heading_deg` 0 = north, clockwise,
 
 - `GET /graph` -> GeoJSON FeatureCollection. Top-level extra key `meta`: `{"center":[lon,lat],"bounds":[west,south,east,north]}`. Feature `properties.kind` is one of `taxiway`, `taxilane`, `runway`, `runway_pavement` (Polygon), `apron` (Polygon), `taxiway_pavement` (Polygon, FAA taxiway surfaces, render under the lines; optional to draw), `stand` (Point, `name`), `hold` (Point, `runway`), `crossing` (Point). Taxiway/taxilane/runway are LineStrings with `ref` (letter or "08/26") and `id`.
 - `GET /state` -> a snapshot (below).
-- `POST /control` body `{"action": "pause"|"resume"|"speed"|"trigger_haboob"|"reset", "value": ...}` -> `{"ok":true,"state":{paused,speed,controller}}`. `speed` value is 1, 2, 5, 10 or 20.
+- `POST /control` body `{"action": "pause"|"resume"|"speed"|"reset", "value": ...}` -> `{"ok":true,"state":{paused,speed,controller}}`. `speed` value is 1, 2, 5, 10 or 20.
 - `GET /decisions/{id}` -> a Decision.
 - `GET /health` -> `{"ok":true}`.
 
@@ -20,7 +20,7 @@ On connect the server sends one `snapshot`, then a `delta` about every 100 ms (1
 ```json
 {"type":"snapshot","t":123.4,"speed":1,"paused":false,
  "agent":{"status":"idle","controller":"tower"},   (the active controller; always the built-in tower in the simulator)
- "scenario":{"name":"kphx_haboob","duration_s":480,"haboob_triggered":false},
+ "scenario":{"name":"kphx_busy","duration_s":480},
  "weather":{...Weather},
  "aircraft":[...Aircraft], "runways":[...Runway], "clearances":[...Clearance],
  "decisions":[...Decision], "voice":[...VoiceLine], "score":{...Score}}
@@ -47,7 +47,7 @@ Same keys, all optional except `type` and `t`; lists contain only changed or new
 `{"id":"c-17","callsign":"SWA1234","action":"cross_runway","text":"Southwest 1234, cross runway 7 left at Foxtrot 9","state":"issued|acknowledged|complete|amended|cancelled","issued_t":120.0,"ack_t":null,"done_t":null}`
 
 ### Weather
-`{"t":120.0,"active":false,"metar":"KPHX 252300Z ...","wind_dir":290,"wind_kt":9,"gust_kt":null,"vis_sm":10,"wx":null,"temp_f":null,"haboob_progress":0.0}`; `haboob_progress` 0..1 drives the dust-wall visual (0 = not started, 1 = fully passed over the airport).
+`{"t":0.0,"metar":"KPHX 151800Z 27005KT 10SM CLR 24/02 A3002","wind_dir":270,"wind_kt":5,"gust_kt":null,"vis_sm":10.0,"wx":null,"temp_f":75.0}`. Calm and static for now (`t` is when the report was issued); weather levels come later.
 
 ### Decision
 `{"id":"d-9","t":120.0,"callsign":"SWA1234","action":"hold_short","summary":"Holding SWA1234 short of 07L/25R for the arrival","facts":["AAL22 on 2 mile final","07L/25R free for 40 s"],"rules":["Runway occupied: no crossing (JO 7110.65 3-7-2)"],"alternatives":[{"option":"cross now","reason":"conflicts with AAL22 landing in 38 s"}],"next_review_s":15,"voice_id":"v-31"}`
@@ -56,7 +56,7 @@ Same keys, all optional except `type` and `t`; lists contain only changed or new
 `{"id":"v-31","t":120.0,"speaker":"agent|pilot","callsign":"SWA1234","text":"Southwest 1234, hold short of runway 7 left","status":"ok|corrected|pending"}`. The browser speaks new lines aloud (agent voice vs pilot voice).
 
 ### Score
-`{"separation_losses":0,"runway_conflicts":0,"deadlocks":0,"readback_errors_accepted":0,"completed":4,"avg_delay_s":18.2,"throughput_per_10min":6}` plus extra keys the UI may ignore: `clearance_reversals`, `clearance_amendments`, `go_arounds`, `avg_landing_occupancy_s`, `recovery_time_s` (null until known), `decisions`.
+`{"separation_losses":0,"runway_conflicts":0,"deadlocks":0,"readback_errors_accepted":0,"completed":4,"avg_delay_s":18.2,"throughput_per_10min":6}` plus extra keys the UI may ignore: `clearance_reversals`, `clearance_amendments`, `go_arounds`, `avg_landing_occupancy_s`, `decisions`.
 
 ## Engine interface (Python)
 
