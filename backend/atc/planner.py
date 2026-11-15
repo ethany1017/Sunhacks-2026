@@ -1,0 +1,489 @@
+"""Deterministic planner: every decision pass it looks at the simif observation and proposes instructions.
+
+Flow per instruction: proposal -> safety.check -> simif.issue -> clearance -> readback check. The planner decides WHAT
+should happen next (sequence, runway, route, who takes a gap); the safety engine decides WHETHER it may happen now.
+Key decisions (runway flow, which departure takes the gap) are built as options + a default; `choose` picks one
+(A4 plugs Claude in there; here it always takes the default).
+"""
+import math
+
+import networkx as nx
+
+from . import safety
+
+M_PER_DEG = 111320.0
+LAND_CLEAR_ETA_S = 120.0        # start offering the landing clearance this far out (the runway must be predicted clear)
+LAND_DECIDE_ETA_S = 30.0        # last chance before the 1,800 m decision point (~26 s at Vref): clear it or go around
+SHORT_FINAL_CHECK_S = 12.0      # cleared arrival this close with the runway still blocked: go around (last resort)
+ROLLOUT_S = 72.0                # typical landing occupancy, dry (docs/LEVELS.md measures 69-77 s), times occupancy_mult
+FLOW_SWITCH_TAILWIND_KT = 4.0   # turn the airport round once the active direction has more tailwind than this
+FLOW_FINISH_ETA_S = 150.0       # on a flow change an arrival this close finishes on the old direction while legal
+CROSSING_PENALTY_M = 2500.0     # taxi routing: per runway-pavement edge (never trade a crossing for a short detour)
+SHARED_EDGE_PENALTY_M = 60.0    # taxi routing: an edge another aircraft also uses (same direction)
+ENTRY_NEAR_M = 150.0            # a departure holding this close to its entry node is at its runway (not a crossing)
+CROSSER_PRIORITY_S = 20.0       # a crossing waiting this long goes before the next takeoff on that runway
+DEPARTURE_RUNWAYS = {"west": ["25R"], "east": ["07L"]}  # departures on the runway arrivals do not use
+FREQ = {"tower": "120.9", "ground": "132.55"}
+
+
+class Planner:
+    def __init__(self, si, emit):
+        self.si, self.emit = si, emit
+        ap = si.get_airport()["graph"]
+        nodes = ap["nodes"]
+        lat0 = sum(n["lat"] for n in nodes.values()) / len(nodes)
+        lon0 = sum(n["lon"] for n in nodes.values()) / len(nodes)
+        self._ll0 = (lat0, lon0, math.cos(math.radians(lat0)))
+        self.xy = {nid: self._to_xy(n["lon"], n["lat"]) for nid, n in nodes.items()}
+        self.g = nx.Graph()
+        for e in ap["edges"]:
+            self.g.add_edge(e["from"], e["to"], length=e["length_m"], kind=e["kind"], pavement=e["pavement"])
+        self.ends = si.runway_ends()
+        self.choose = lambda decision: decision["default"]   # A4: Claude picks among decision["options"]
+        self.mem = {}           # callsign -> planner memory
+        self.expected = {}      # clearance id -> (callsign, action, runway end the readback must contain or None)
+        self.rejected = {}      # (callsign, action) -> rule of the last recorded rejection (one record per episode)
+        self.last_roll = {}     # pavement -> {t, callsign, cwt, wtc}: the last takeoff roll seen
+        self.pushbacks = {}     # callsign -> {xy: lane node, t: approval time}
+        self.sequences = {}     # runway -> last emitted order
+        self.flow = "west"
+        self.started = False
+
+    # -- geometry ----------------------------------------------------------------------------------------------------
+    def _to_xy(self, lon, lat):
+        lat0, lon0, c = self._ll0
+        return ((lon - lon0) * M_PER_DEG * c, (lat - lat0) * M_PER_DEG)
+
+    def _dist(self, a, b):
+        return math.hypot(a[0] - b[0], a[1] - b[1])
+
+    def _runs(self, route):
+        """Runway pavements a node route crosses, in order (consecutive pavement edges of one runway count once)."""
+        out, prev = [], None
+        for u, v in zip(route, route[1:]):
+            pav = self.g[u][v]["pavement"]
+            if pav and pav != prev:
+                out.append(pav)
+            prev = pav
+        return out
+
+    # -- main pass ---------------------------------------------------------------------------------------------------
+    def tick(self, obs):
+        self.obs, self.t = obs, obs["t"]
+        self.live = {c["id"]: c for c in obs["clearances"]}
+        self.ac = {}
+        for a in obs["aircraft"]:
+            if a["kind"] == "vehicle":
+                continue
+            a["x"], a["y"] = self._to_xy(a["lon"], a["lat"])
+            self.ac[a["callsign"]] = a
+        self._track()
+        self.pic = self._picture()
+        self._readbacks()
+        if not self.started:
+            self.started = True
+            self._set_flow(self.flow, "Start of the day: arrivals on 25L and 26, departures on 25R (no arrivals on it).")
+        self._flow()
+        order = sorted(self.ac.values(), key=lambda a: (a.get("eta_s") or 0.0) if a["phase"] == "final" else 1e6)
+        for a in order:
+            (self._arrival if a["kind"] == "arrival" else self._departure)(a)
+        self._sequence()
+
+    def _m(self, cs):
+        return self.mem.setdefault(cs, {})
+
+    def _track(self):
+        """Phase transitions seen in the observation: touchdown and takeoff-roll times, forgotten clearances."""
+        for cs, a in self.ac.items():
+            m = self._m(cs)
+            ph, prev = a["phase"], m.get("phase")
+            if ph == "takeoff_roll" and prev != "takeoff_roll":
+                self.last_roll[a["runway"]] = {"t": self.t, "callsign": cs, "cwt": a.get("wake"), "wtc": a.get("wtc")}
+            if ph == "landing_roll" and prev != "landing_roll":
+                m["td_t"] = self.t
+                if m.get("exit") and a.get("gate"):
+                    m["route"] = self.si.taxi_route(m["exit"], self.si.stand_nodes(a["gate"])["node"])
+            if ph == "go_around" and prev != "go_around":
+                m.pop("land", None)
+                self.emit(self.t, "alert", cs, {"level": "warning", "message": f"{cs} is going around."},
+                          f"{cs} is going around; it rejoins the final on its own.")
+            m["phase"] = ph
+        for cs in [c for c in self.pushbacks if c not in self.ac or self.ac[c]["phase"] not in ("at_gate", "pushback")]:
+            self.pushbacks.pop(cs)
+
+    def _remaining(self, cs, a):
+        route = self._m(cs).get("route")
+        if not route:
+            return []
+        nn = a.get("next_node")
+        if nn in route:
+            i = route.index(nn)
+            return route[max(i - 1, 0):]
+        return route if a["phase"] in ("landing_roll", "runway_exit", "pushback", "at_gate") else []
+
+    def _clear_at(self, cs, a):
+        """Predicted time an aircraft on a runway is off it."""
+        occ = (self.obs.get("level") or {}).get("effects", {}).get("occupancy_mult", 1.0)
+        m = self._m(cs)
+        ph = a["phase"]
+        if ph in ("landing_roll", "runway_exit") and m.get("exit"):
+            ex = self.xy[m["exit"]]
+            d = self._dist((a["x"], a["y"]), ex)
+            v = max(a["speed_mps"], 10.0)
+            if ph == "landing_roll":
+                return self.t + d / ((v + 10.0) / 2.0) * occ + (a["length_m"] / 2 + 70.0) / 5.0
+            return self.t + max(a["length_m"] / 2 + 70.0 - d, 0.0) / 4.0 + 2.0
+        if ph == "takeoff_roll":
+            return self.t + 45.0 * occ * occ
+        c = a.get("clearance") or {}
+        if c.get("action") == "cross_runway":
+            return (c.get("issued_t") or self.t) + 45.0
+        return float("inf")
+
+    def _picture(self):
+        """The safety engine's view: observation + what this controller cleared and predicts."""
+        occupants, clear_at = {}, {}
+        for r in self.obs["runways"]:
+            occ = [w["callsign"] for w in r["occupancy"] if w["kind"] == "occupied" and w["end_s"] >= self.t - 0.15]
+            occupants[r["id"]] = sorted(set(occ))
+            for cs in occ:
+                if cs in self.ac:
+                    clear_at[cs] = self._clear_at(cs, self.ac[cs])
+        rc = []
+        for c in self.live.values():
+            if c["action"] in safety.RUNWAY_ACTIONS and c["id"] in self.expected:
+                cs = c["callsign"]
+                pav = self._m(cs).get("pav_of", {}).get(c["id"])
+                if pav and cs in self.ac:
+                    rc.append({"callsign": cs, "action": c["action"], "pavement": pav, "t": c["issued_t"]})
+                    if cs not in clear_at:
+                        a = self.ac[cs]
+                        clear_at[cs] = (self.t + (a.get("eta_s") or 0) + ROLLOUT_S if c["action"] == "cleared_to_land"
+                                        else self.t + 75.0 if c["action"] != "cross_runway" else c["issued_t"] + 45.0)
+        for cs, a in self.ac.items():   # landing clearance already acknowledged (no longer "live" once it took effect)
+            if a["phase"] == "final" and a.get("landing_cleared") and not any(x["callsign"] == cs for x in rc):
+                rc.append({"callsign": cs, "action": "cleared_to_land", "pavement": a["runway"], "t": self.t})
+        routes, parked = {}, {}
+        for cs, a in self.ac.items():
+            r = self._remaining(cs, a)
+            if r:
+                routes[cs] = r
+            elif a["phase"] in ("taxi_out", "taxi_in", "hold_short") and a["speed_mps"] < 0.3 and a.get("next_node"):
+                parked[cs] = a["next_node"]
+        wx = self.obs["weather"]
+        lvl = self.obs.get("level") or {}
+        eff = lvl.get("effects") or {}
+        rain = (wx.get("vis_sm") or 10.0) < safety.RAIN_VIS_SM or eff.get("occupancy_mult", 1.0) > 1.0
+        return {"t": self.t, "aircraft": self.ac, "occupants": occupants, "clear_at": clear_at, "runway_clearances": rc,
+                "last_roll": self.last_roll, "routes": routes, "parked_on": parked,
+                "pushbacks": self.pushbacks, "tailwind": {e: self._tailwind(e) for e in self.ends},
+                "tailwind_limit": lvl.get("tailwind_limit_kt") or safety.TAILWIND_LIMIT_KT, "rain": rain,
+                "rollout_s": ROLLOUT_S * eff.get("occupancy_mult", 1.0)}
+
+    def _tailwind(self, end):
+        wx = self.obs["weather"]
+        if not wx.get("wind_kt"):
+            return 0.0
+        return -float(wx["wind_kt"]) * math.cos(math.radians(float(wx.get("wind_dir") or 0) - self.ends[end]["heading"]))
+
+    # -- proposals ---------------------------------------------------------------------------------------------------
+    def _propose(self, a, action, params, reason, end=None, pavement=None, route=None, extra=None, decision=None):
+        """proposal -> safety_check -> issue -> clearance. Returns the issue() result, or None if rejected / failed."""
+        cs = a["callsign"]
+        prop = dict(extra or {}, callsign=cs, action=action, end=end, pavement=pavement, route=route)
+        ok, rule, why = safety.check(self.pic, prop)
+        key = (cs, action)
+        data = {"action": action, "params": params}
+        if decision:
+            data["decision"] = decision
+        if not ok:
+            if self.rejected.get(key) != rule:
+                self.rejected[key] = rule
+                self.emit(self.t, "proposal", cs, data, reason)
+                self.emit(self.t, "safety_check", cs, {"action": action, "approved": False, "rule": rule}, why)
+            return None
+        self.rejected.pop(key, None)
+        self.emit(self.t, "proposal", cs, data, reason)
+        self.emit(self.t, "safety_check", cs, {"action": action, "approved": True, "rule": rule}, why)
+        res = self.si.issue({"callsign": cs, "action": action, "params": params})
+        if not res.get("ok"):
+            self.emit(self.t, "alert", cs, {"level": "warning", "message": res.get("error"), "action": action},
+                      f"The simulator refused {action} for {cs}: {res.get('error')}")
+            return None
+        exp_rwy = params.get("runway") if action in safety.RUNWAY_ACTIONS + ("hold_short",) else None
+        if action in safety.RUNWAY_ACTIONS and exp_rwy in self.ends:
+            pass
+        elif action in ("cross_runway", "hold_short"):
+            exp_rwy = self.si.runway_label(pavement)
+        if action == "taxi_via":
+            if params.get("to") in self.ends:
+                exp_rwy = params["to"]
+            else:
+                runs = self._runs(route or [])
+                exp_rwy = self.si.runway_label(runs[0]) if runs else None
+        self.expected[res["clearance_id"]] = (cs, action, exp_rwy)
+        if pavement:
+            self._m(cs).setdefault("pav_of", {})[res["clearance_id"]] = pavement
+        self.emit(self.t, "clearance", cs, {"clearance_id": res["clearance_id"], "action": action, "params": params,
+                                            "text": res["text"]}, res["text"])
+        return res
+
+    def _pending(self, cs, action):
+        """A clearance of this action sent to this aircraft is still awaiting its readback / effect."""
+        return any(c["callsign"] == cs and c["action"] == action and c["id"] in self.expected for c in self.live.values())
+
+    # -- readbacks ---------------------------------------------------------------------------------------------------
+    def _readbacks(self):
+        for rb in self.si.get_readbacks():
+            exp = self.expected.get(rb["clearance_id"])
+            heard = rb.get("parsed") or {}
+            if exp is None:
+                ok, why = True, "Readback for a clearance this controller did not issue; accepted."
+            else:
+                _, action, rwy = exp
+                ok = heard.get("action") == action and (rwy is None or heard.get("runway") == rwy)
+                why = (f"Readback matches the {action.replace('_', ' ')} clearance" + (f" for runway {rwy}." if rwy else ".")
+                       if ok else f"Readback does not match: expected {action.replace('_', ' ')}"
+                       + (f" runway {rwy}" if rwy else "") + f", heard {heard.get('action') or 'no instruction'}"
+                       + (f" runway {heard.get('runway')}" if heard.get("runway") else "") + ".")
+            self.si.resolve_readback(rb["id"], ok)
+            cs = rb["callsign"]
+            self.emit(self.t, "readback", cs, {"readback_id": rb["id"], "clearance_id": rb["clearance_id"],
+                                               "transcript": rb["text"], "matched": ok}, why)
+            if not ok:
+                self.emit(self.t, "readback_correction", cs, {"readback_id": rb["id"], "clearance_id": rb["clearance_id"],
+                                                              "transcript": rb["text"]},
+                          f"Wrong readback from {cs}; asked the pilot to read the clearance back again. {why}")
+                self.emit(self.t, "alert", cs, {"level": "warning", "message": why, "source": "readback"}, why)
+
+    # -- runway flow (wind) ------------------------------------------------------------------------------------------
+    def _config(self, flow):
+        arr = ["25L", "26"] if flow == "west" else ["07R", "08"]
+        return arr, DEPARTURE_RUNWAYS[flow]
+
+    def _set_flow(self, flow, reason, decision=None):
+        arr, dep = self._config(flow)
+        prop = {"callsign": None, "action": "set_runway_config", "ends": arr + dep}
+        ok, rule, why = safety.check(self.pic, prop)
+        data = {"action": "set_runway_config", "params": {"arrival_runways": arr, "departure_runways": dep}}
+        if decision:
+            data["decision"] = decision
+        self.emit(self.t, "proposal", None, data, reason)
+        self.emit(self.t, "safety_check", None, {"action": "set_runway_config", "approved": ok, "rule": rule}, why)
+        if ok:
+            self.si.set_runway_config(arr, dep)
+            self.flow = flow
+        return ok
+
+    def _flow(self):
+        cur = self._config(self.flow)
+        worst = max(self._tailwind(e) for e in cur[0] + cur[1])
+        if worst <= FLOW_SWITCH_TAILWIND_KT:
+            return
+        other = "east" if self.flow == "west" else "west"
+        new = self._config(other)
+        after = max(self._tailwind(e) for e in new[0] + new[1])
+        if after >= worst:
+            return
+        wx = self.obs["weather"]
+        options = [{"id": "switch", "label": f"turn the airport round to {other} flow", "tailwind_kt": round(after, 1)},
+                   {"id": "keep", "label": f"keep {self.flow} flow", "tailwind_kt": round(worst, 1)}]
+        decision = {"kind": "runway_flow", "options": options, "default": "switch"}
+        decision["choice"] = self.choose(decision)
+        if decision["choice"] != "switch":
+            return
+        self._set_flow(other, f"Wind {wx.get('wind_dir')}/{wx.get('wind_kt')} kt gives {worst:.1f} kt tailwind on the "
+                              f"active runways ({after:.1f} kt after the change): turning the airport round before "
+                              f"pilots start refusing.", decision)
+
+    # -- arrivals ----------------------------------------------------------------------------------------------------
+    def _arrival(self, a):
+        cs, m, ph = a["callsign"], self._m(a["callsign"]), a["phase"]
+        if ph == "final":
+            self._final(a, m)
+        elif ph == "taxi_in" and a.get("hold") and a["speed_mps"] < 0.3:
+            self._cross(a)
+        elif ph == "taxi_in" and not m.get("taxied") and a["speed_mps"] < 0.3 and a.get("next_node") and a.get("gate"):
+            self._taxi_in(a, m)
+
+    def _taxi_in(self, a, m):
+        cs = a["callsign"]
+        if self._pending(cs, "taxi_via"):
+            return
+        stand = self.si.stand_nodes(a["gate"])["node"]
+        route = self._route(cs, a["next_node"], stand)
+        if not route:
+            self._no_route(cs)
+            return
+        length = sum(self.g[u][v]["length"] for u, v in zip(route, route[1:]))
+        res = self._propose(a, "taxi_via", {"route": route, "to": a["gate"]},
+                            f"{cs} vacated the runway: taxi to gate {a['gate']} ({length:.0f} m), clear of "
+                            f"opposite-direction traffic.", route=route)
+        if res:
+            m.update(route=route, taxied=True)
+
+    def _no_route(self, cs):
+        key = (cs, "taxi_via")
+        if self.rejected.get(key) != "no_route":
+            self.rejected[key] = "no_route"
+            self.emit(self.t, "alert", cs, {"level": "info", "message": "no conflict-free taxi route yet"},
+                      f"{cs} waits: every taxi route meets other traffic head-on.")
+
+    def _final(self, a, m):
+        cs, end = a["callsign"], a.get("arrival_end")
+        if not end:
+            return
+        eta = a.get("eta_s") or 999.0
+        arr_ends = self.obs["runway_config"]["arrival_runways"]
+        limit = self.pic["tailwind_limit"]
+        if end not in arr_ends and not a.get("landing_cleared") and not self._pending(cs, "contact_tower_or_ground") and (
+                eta > FLOW_FINISH_ETA_S or self._tailwind(end) > limit - 1.0):
+            new = self.ends[end]["runway"]
+            new = next((e for e in arr_ends if self.ends[e]["runway"] == new), None)
+            if new:
+                self._propose(a, "contact_tower_or_ground", {"facility": "tower", "frequency": FREQ["tower"], "runway": new},
+                              f"Runway flow changed: {cs} re-sequenced to runway {new} instead of {end}.")
+            return
+        if a.get("landing_cleared") or self._pending(cs, "cleared_to_land"):
+            if a.get("landing_cleared") and eta < SHORT_FINAL_CHECK_S and not m.get("ga"):
+                late = [o for o in self.pic["occupants"].get(a["runway"], [])
+                        if o != cs and self.pic["clear_at"].get(o, float("inf")) > self.t + eta]
+                if late:
+                    m["ga"] = True
+                    self._propose(a, "go_around", {}, f"{cs} is {eta:.0f} s from touchdown and {', '.join(late)} is "
+                                                      f"still on runway {a['runway']}: go around.")
+            return
+        if eta > LAND_CLEAR_ETA_S:
+            return
+        if not m.get("exit"):
+            m["exit"] = self.si.choose_exit(end, a["type"], a["gate"]) if a.get("gate") else None
+        res = self._propose(a, "cleared_to_land", {"runway": end, **({"exit": m["exit"]} if m.get("exit") else {})},
+                            f"{cs} is {eta:.0f} s from runway {end}; clearing it to land so it never has to go around.",
+                            end=end, pavement=a["runway"], extra={"eta": eta})
+        if res:
+            m["land"] = res["clearance_id"]
+            m.pop("ga", None)
+        elif eta <= LAND_DECIDE_ETA_S and not m.get("ga"):
+            m["ga"] = True
+            self._propose(a, "go_around", {}, f"{cs} cannot be cleared to land on {end} in time: the runway will not be "
+                                              f"clear; a go-around is safer than landing on an occupied runway.")
+
+    def _cross(self, a):
+        cs = a["callsign"]
+        pav = a["hold"]["runway"]
+        if self._pending(cs, "cross_runway"):
+            return
+        self._propose(a, "cross_runway", {"runway": self.si.runway_label(pav)},
+                      f"{cs} is holding short of {pav}; crossing when the runway is clear and nothing is due on it.",
+                      end=None, pavement=pav)
+
+    # -- departures --------------------------------------------------------------------------------------------------
+    def _departure(self, a):
+        cs, m, ph = a["callsign"], self._m(a["callsign"]), a["phase"]
+        if ph == "at_gate" and a.get("ready") and not m.get("push"):
+            lane = self.si.stand_nodes(a["gate"])["lane_node"]
+            res = self._propose(a, "pushback_approved", {}, f"{cs} is ready at gate {a['gate']}: pushback approved.",
+                                extra={"lane_xy": self.xy[lane]})
+            if res:
+                m["push"] = True
+                self.pushbacks[cs] = {"xy": self.xy[lane], "t": self.t}
+            return
+        dep_ends = self.obs["runway_config"]["departure_runways"]
+        if ph == "taxi_out" and not m.get("route") and a["speed_mps"] < 0.3 and a.get("next_node"):
+            self._taxi_out(a, m, a["next_node"])
+            return
+        if ph in ("taxi_out", "hold_short") and m.get("end") and m["end"] not in dep_ends and m.get("route") \
+                and a["speed_mps"] < 0.3 and not self._pending(cs, "taxi_via") \
+                and not (a.get("hold") and self._at_entry(a, m) and self._tailwind(m["end"]) <= self.pic["tailwind_limit"] - 2):
+            start = a.get("prev_node") if a.get("prev_node") else a.get("next_node")
+            self._taxi_out(a, m, start, why="Runway flow changed: ")
+            return
+        if ph == "hold_short" and a.get("hold"):
+            if a["hold"]["runway"] == self.ends[m["end"]]["runway"] and self._at_entry(a, m):
+                self._takeoff(a, m)
+            else:
+                self._cross(a)
+
+    def _at_entry(self, a, m):
+        return m.get("entry") and self._dist((a["x"], a["y"]), self.xy[m["entry"]]) < ENTRY_NEAR_M
+
+    def _route(self, cs, src, dst):
+        """Dijkstra over the taxi graph: no runway centreline edges, never against another aircraft's route (head-on),
+        never through an aircraft stopped without a route, a heavy penalty per runway crossing."""
+        against = {(v, u) for o, r in self.pic["routes"].items() if o != cs for u, v in zip(r, r[1:])}
+        shared = {(u, v) for o, r in self.pic["routes"].items() if o != cs for u, v in zip(r, r[1:])}
+        blocked = {n for o, n in self.pic["parked_on"].items() if o != cs}
+
+        def w(u, v, d):
+            if d["kind"] == "runway" or (u, v) in against or (v in blocked and v != dst):
+                return None
+            return d["length"] + (CROSSING_PENALTY_M if d["pavement"] else 0.0) + (SHARED_EDGE_PENALTY_M if (u, v) in shared else 0.0)
+        try:
+            return nx.dijkstra_path(self.g, src, dst, weight=w)
+        except (nx.NetworkXNoPath, nx.NodeNotFound):
+            return None
+
+    def _taxi_out(self, a, m, start, why=""):
+        cs = a["callsign"]
+        if self._pending(cs, "taxi_via"):
+            return
+        best = None
+        for end in self.obs["runway_config"]["departure_runways"]:
+            entry = self.si.choose_entry(end, start, a["type"])
+            if not entry:
+                continue
+            route = self._route(cs, start, entry)
+            if not route:
+                continue
+            length = sum(self.g[u][v]["length"] for u, v in zip(route, route[1:]))
+            score = length + CROSSING_PENALTY_M * len(self._runs(route[:-1]))
+            if best is None or score < best[0]:
+                best = (score, end, entry, route, length)
+        if best is None:
+            self._no_route(cs)
+            return
+        _, end, entry, route, length = best
+        res = self._propose(a, "taxi_via", {"route": route, "to": end},
+                            f"{why}Taxi {cs} to runway {end} ({length:.0f} m), clear of opposite-direction traffic.",
+                            end=end, route=route)
+        if res:
+            m.update(end=end, entry=entry, route=route)
+
+    def _takeoff(self, a, m):
+        cs, end = a["callsign"], m["end"]
+        pav = self.ends[end]["runway"]
+        if self._pending(cs, "cleared_for_takeoff") or a.get("takeoff_cleared"):
+            return
+        waiting = [o for o in self.ac.values() if o["callsign"] != cs and o.get("hold") and o["hold"]["runway"] == pav
+                   and o["phase"] in ("taxi_in", "taxi_out", "hold_short") and (o.get("stopped_s") or 0) > CROSSER_PRIORITY_S
+                   and not (o["kind"] == "departure" and self._at_entry(o, self._m(o["callsign"])))]
+        if waiting:
+            return   # a crossing has waited long enough: it goes first, then the next departure
+        queue = [o for o in self.ac.values() if o["kind"] == "departure" and o["phase"] == "hold_short" and o.get("hold")
+                 and o["hold"]["runway"] == pav and self._at_entry(o, self._m(o["callsign"]))]
+        queue.sort(key=lambda o: (-(o.get("stopped_s") or 0), o["callsign"]))
+        decision = None
+        if len(queue) > 1:
+            options = [{"id": o["callsign"], "label": f"{o['callsign']} ({o['type']}, wake {o.get('wake')}) waiting "
+                                                      f"{o.get('stopped_s', 0):.0f} s"} for o in queue]
+            decision = {"kind": "departure_gap", "runway": end, "options": options, "default": queue[0]["callsign"]}
+            decision["choice"] = self.choose(decision)
+            if decision["choice"] != cs:
+                return
+        self._propose(a, "cleared_for_takeoff", {"runway": end},
+                      f"{cs} is first in line at runway {end}; cleared for takeoff when the runway, the arrivals and "
+                      f"the wake spacing allow.", end=end, pavement=pav, decision=decision)
+
+    # -- sequence events -----------------------------------------------------------------------------------------------
+    def _sequence(self):
+        seqs = {}
+        for a in self.ac.values():
+            if a["kind"] == "arrival" and a["phase"] == "final" and a.get("arrival_end"):
+                seqs.setdefault(a["arrival_end"], []).append((a.get("eta_s") or 0.0, a["callsign"]))
+        for end, lst in seqs.items():
+            order = [cs for _, cs in sorted(lst)]
+            if self.sequences.get(end) != order:
+                self.sequences[end] = order
+                self.emit(self.t, "sequence", None, {"runway": end, "order": order},
+                          f"Arrival sequence runway {end}: {', '.join(order)} (first come, first served by time to the "
+                          f"threshold).")

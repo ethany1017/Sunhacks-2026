@@ -86,7 +86,7 @@ class Runner:
         self.flush()
 
     def _plug(self, controller):
-        self.sim.set_controller(controller, Controller() if controller == "agent" else None)
+        self.sim.set_controller(controller, Controller(self.sim, self._add) if controller == "agent" else None)
 
     # -- stepping ------------------------------------------------------------------------------------------
     def tick(self):

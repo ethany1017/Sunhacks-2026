@@ -235,6 +235,42 @@ class RealSimulator:
         """Controller-safe Referee view: {verdict, fails, day_end_s} (no score)."""
         return self._observe()["referee"]
 
+    # -- static layout helpers (airport graph and aircraft type table only: controller-safe) -------------------
+    def type_info(self, icao):
+        """Published performance of an ICAO type: wake categories, size, approach and lift-off speeds."""
+        ty = get_type(icao)
+        return {"icao": ty.icao, "wtc": ty.wtc, "cwt": ty.cwt, "light": ty.light, "wingspan_m": ty.wingspan_m,
+                "length_m": ty.length_m, "vref_mps": ty.vref_mps, "vlof_mps": ty.vlof_mps}
+
+    def runway_ends(self):
+        """{end: {runway, heading, threshold_node, chain}}: chain = runway centreline nodes from this end to the far end."""
+        out = {}
+        for r in self.graph.runways.values():
+            for des, info in r.ends.items():
+                chain = r.chain if info["node"] == r.chain[0] else r.chain[::-1]
+                out[des] = {"runway": r.id, "heading": info["heading_deg"], "threshold_node": info["node"], "chain": list(chain)}
+        return out
+
+    def stand_nodes(self, gate):
+        st = self.graph.stands[gate]
+        return {"node": st.node, "lane_node": st.lane_node}
+
+    def choose_entry(self, end, origin, icao):
+        """Nearest runway entry node (from `origin`) with enough runway left for this type to take off."""
+        return self.sim.choose_entry(end, origin, get_type(icao))
+
+    def choose_exit(self, end, icao, gate):
+        """The runway exit node a landing of this type on `end` would use for its gate (the pilots' default)."""
+        return self.sim.choose_exit(end, get_type(icao), self.graph.stands[gate].node)
+
+    def taxi_route(self, src, dst):
+        """The shortest taxi route the pilots fly when not given an explicit one (an arrival from its exit to the gate)."""
+        return self.graph.route(src, dst)
+
+    def runway_label(self, pavement):
+        """The runway end name a clearance for this pavement uses in the active configuration (what readbacks repeat)."""
+        return self.sim.runway_label(pavement)
+
     # -- metrics only: true state, never for controller decisions ------------------------------------------
     def metrics(self):
         """{t, aircraft: true positions (snapshot views), referee: full report with score}. Backend loop/dashboard only."""
