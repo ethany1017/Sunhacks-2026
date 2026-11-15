@@ -68,7 +68,7 @@ validation days of both levels.
 | 3 | Integrate | **Done.** `agent` already contains `sim`; `main` is fast-forwarded to `agent`. The Human / Agent switch and both levels work from the dashboard. |
 | 4 | Check everything | **Pass.** Backend 89 tests, simulator 75 tests, Gus's agent 18 tests, both frontend builds. Starts with no keys. WebSocket replay works. Same seed gives the same run on both levels. Fallbacks work with no Claude key, no ElevenLabs key and no network. |
 | 5 | Final grading | **Fail on the stated requirement.** Light Rain meets it. Normal Day does not (2/3, one fail). |
-| 6 | Training loop | **Done to the cutoff.** Seven rounds are logged in [TRAINING_LOG.md](TRAINING_LOG.md). The best version (639b0ac) is kept. |
+| 6 | Training loop | **Done; stopped at 08:20, before the 09:30 cutoff, because the last round found nothing to adopt.** Every round is logged in [TRAINING_LOG.md](TRAINING_LOG.md). The best version (639b0ac) is kept. |
 | 7 | Demo ready | **Pass.** See "Demo checks" below. The main flow takes 6 to 7 minutes at 10x, not 3 to 5. |
 | 8 | Ship | Tests and builds pass on the commit that was pushed. The push itself is confirmed in Claude's closing message, since this file had to be committed first. |
 | 9 | This report | Done. |
@@ -117,6 +117,9 @@ Every plan went to the review council before any code changed. Where the council
    13/20). The council agreed to the override because every other set improved. It is recorded in the training log.
 5. **Held-out seeds were run four times, not once.** Three aggregate checks during the night (1/6, 5/6, 5/6) and the
    final grading. No change was chosen from them.
+   After the final grading I read the one failing held-out day (9003) for the failure review, and one last idea for
+   that kind of collision was then tested on development seeds only. It did not help and was not adopted, so the
+   graded agent is unchanged.
 6. **Ran the plain tower on the held-out seeds** so the results have an honest baseline, even though it shows the
    tower beating the Agent on Normal Day delay.
 7. **Demo seeds are Light Rain 25 and Normal Day 3.** Chosen from the training seeds as days where the two

@@ -369,3 +369,22 @@ PB16 since t=0) as it turns into the gate. The Human (t=1196) and the plain towe
 the stand-pair class above (two stands on one lane node). Held-out seeds were also run as aggregate checks three times
 earlier in the night (1/6 at 1b786a4, 5/6 on the combined G2 candidate, 5/6 at 5abf8a6); no change was chosen from
 them.
+
+## Last round, not adopted: hold an arrival for a departing stand neighbour (development seeds only)
+
+Idea: when an arrival is routed to a stand that shares its lane node with a stand holding a departure, hold the
+arrival short until the departure has left. Scan of the 80 development runs found one case of that class (ND97:
+GA arrival N3394CD into PC11 beside departure HAL4648 at C11), and there the departure is not ready until about
+t=1355; its ready time is not in the observation. The other stand-pair collision (LR110) is beside a parked arrival,
+which never leaves.
+
+| variant | Normal Day (40) | Light Rain (40) |
+|---|---|---|
+| base (639b0ac) | 25/40, collision 1, stuck 40, unhandled 15, 80.2 s | 14/40, collision 3, stuck 60, unhandled 24, 182.0 s |
+| hold for any departure | 25/40, collision 0, stuck 43, unhandled 15, 80.9 s | identical to base |
+| hold only for a ready or pushing departure | identical to base (never triggers) | identical to base |
+
+Holding for any departure turns the ND97 collision into a gridlock with a third aircraft (the hold outlasts the
+stopped-aircraft limit before the departure moves). Holding only for a ready departure changes nothing. Neither was
+adopted; the planner stays at 639b0ac. This round started after the coordinator had read the held-out 9003 failure
+(same class); it was measured on development seeds only and changed nothing, so the final grading stands as run.
