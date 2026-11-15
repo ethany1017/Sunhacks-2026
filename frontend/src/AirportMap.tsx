@@ -234,7 +234,9 @@ export function AirportMap({ airport, runways, aircraft, types = {}, speaking = 
       })
       map.touchZoomRotate.disableRotation()
       const pad = () => ({ top: 0, right: 0, bottom: 0, left: 0, ...insetRef.current?.() })
-      map.jumpTo({ center, zoom, padding: pad() })
+      // config zoom fits the ~1280 px of map left visible at 1920x1080; zoom out to fit smaller screens (1280x720)
+      const p = pad()
+      map.jumpTo({ center, zoom: zoom + Math.min(0, Math.log2((el.clientWidth - p.right - p.left) / 1280)), padding: p })
       map.on('resize', () => map.jumpTo({ padding: pad() }))
       v.map = map
       let fellBack = style === BLANK
