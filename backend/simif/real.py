@@ -72,6 +72,7 @@ class RealSimulator:
         self._seen_readbacks = set()
         self._obs = None  # this tick's observe(), enriched; see _observe()
         self._human_real = False  # True once the sim accepted set_controller(HUMAN)
+        self._heard = {}  # readback id -> (clearance id, transcript): pilot readbacks waiting for the controller's verdict
 
     # -- lifecycle --------------------------------------------------------------------------------
     def get_levels(self):
@@ -114,7 +115,7 @@ class RealSimulator:
         if self.sim is not None:
             self.sim.close()
         self.sim, self._obs = new, None
-        self.level, self._seen_readbacks = lv, set()
+        self.level, self._seen_readbacks, self._heard = lv, set(), {}
         self.set_controller("human")
 
     def set_controller(self, kind, obj=None):
@@ -181,6 +182,23 @@ class RealSimulator:
                 level, msg = ALERTS[k]
                 msg = msg.format(cs=cs, **d)
                 out.append(_ev(t, "alert", cs, dict(d, level=level, message=msg, source=k), msg))
+            elif k == "readback":
+                self._heard[d["id"]] = (d["clearance_id"], d["text"])
+            elif self.controller == "human" and k == "clearance.issued":
+                # The built-in Human's own work, in the same shapes our planner emits (the Agent emits its own, so no
+                # duplicates). The readback is shown when the Human resolves it: `matched` is only that verdict.
+                out.append(_ev(t, "clearance", cs, {"clearance_id": d["clearance_id"], "action": d["action"],
+                                                    "params": d["params"], "text": d["text"]}, d["text"]))
+            elif k in ("readback.accepted", "readback.rejected"):
+                cid, text = self._heard.pop(d["readback_id"], (d["clearance_id"], ""))
+                if self.controller == "human" and text:
+                    ok = k == "readback.accepted"
+                    rd = {"readback_id": d["readback_id"], "clearance_id": cid, "transcript": text}
+                    out.append(_ev(t, "readback", cs, dict(rd, matched=ok), "The Human controller accepted the readback."
+                                   if ok else "The Human controller rejected the readback and asked for it again."))
+                    if not ok:
+                        out.append(_ev(t, "readback_correction", cs, rd,
+                                       f"Wrong readback from {cs}; asked the pilot to read the clearance back again."))
             elif k in ("scenario.complete", "scenario.day_end"):
                 why = "Every flight was handled." if k == "scenario.complete" else "The day ended."
                 out.append(_ev(t, "sim_end", None, {"why": k.split(".")[1]}, why))

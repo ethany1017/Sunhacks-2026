@@ -96,6 +96,26 @@ def test_switch_controller_mid_run(runner):
     assert next(e for e in ev if e["type"] == "referee_result")["data"]["verdict"] in ("PASS", "FAIL")
 
 
+def test_human_work_reaches_the_feed_once(runner):
+    """The built-in Human's clearances and readbacks become contract events; across switches every clearance id and
+    readback id appears exactly once (the Agent emits its own, the adapter only the Human's)."""
+    runner.start("smoke", "human")
+    for t, to in ((60, "agent"), (120, "human"), (180, "agent")):
+        while runner.sim.t < t:
+            runner.tick()
+        runner.switch(to)
+    runner.run_headless()
+    ev = db.events_for_run(runner.run_id)
+    cl = Counter(e["data"]["clearance_id"] for e in ev if e["type"] == "clearance")
+    rb = Counter(e["data"]["readback_id"] for e in ev if e["type"] == "readback")
+    assert cl and rb and max(cl.values()) == 1 and max(rb.values()) == 1
+    assert len(cl) == len(runner.sim.sim.clearances)  # every clearance the sim issued, whoever sent it
+    human = [e for e in ev if e["type"] in ("clearance", "readback") and e["t"] < 60]
+    assert human and all(isinstance(e["data"].get("matched", True), bool) and e["reason"] for e in human)
+    assert all(set(e["data"]) == {"readback_id", "clearance_id", "transcript", "matched"}
+               for e in ev if e["type"] == "readback")
+
+
 def test_agent_code_never_imports_sim():
     pat = re.compile(r"^\s*(from|import)\s+sim(\.|\s|$)", re.M)
     for d in ("atc", "app"):
