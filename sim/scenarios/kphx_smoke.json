@@ -1,0 +1,65 @@
+{
+ "name": "kphx_smoke",
+ "seed": 11,
+ "duration_s": 300.0,
+ "start_sim_s": 0.0,
+ "pushback_mean_s": 60.0,
+ "readback_error_rate": 0.0,
+ "flights": [
+  {
+   "callsign": "AAL2702",
+   "airline": "AAL",
+   "type": "A321",
+   "kind": "departure",
+   "scheduled_sim_s": 5.0,
+   "gate": "F4",
+   "runway_preference": null
+  },
+  {
+   "callsign": "DAL4651",
+   "airline": "DAL",
+   "type": "B752",
+   "kind": "departure",
+   "scheduled_sim_s": 70.0,
+   "gate": "C8",
+   "runway_preference": null
+  },
+  {
+   "callsign": "SKW722",
+   "airline": "SKW",
+   "type": "CRJ9",
+   "kind": "arrival",
+   "scheduled_sim_s": 95.0,
+   "gate": "D",
+   "runway_preference": "26"
+  },
+  {
+   "callsign": "ASA3719",
+   "airline": "ASA",
+   "type": "B39M",
+   "kind": "departure",
+   "scheduled_sim_s": 140.0,
+   "gate": "A25",
+   "runway_preference": null
+  },
+  {
+   "callsign": "SWA4801",
+   "airline": "SWA",
+   "type": "B738",
+   "kind": "arrival",
+   "scheduled_sim_s": 205.0,
+   "gate": "B20",
+   "runway_preference": "25L"
+  },
+  {
+   "callsign": "ENY437",
+   "airline": "ENY",
+   "type": "E75S",
+   "kind": "arrival",
+   "scheduled_sim_s": 315.0,
+   "gate": "E10",
+   "runway_preference": "26"
+  }
+ ],
+ "vehicles": []
+}

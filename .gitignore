@@ -29,3 +29,13 @@ data/reference_and_rules/arxiv_2201_11654_arot/
 data/reference_and_rules/mit_simaiakis_atio2011/
 data/reference_and_rules/tudelft_joas_arot/
 data/reference_and_rules/vt_mirmohammadsadeghi_rot_dissertation/
+
+# Build artifacts and local config
+.venv/
+node_modules/
+dist/
+runs/
+.env.local
+web/.env.local
+__pycache__/
+*.pyc

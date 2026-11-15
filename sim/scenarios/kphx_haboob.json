@@ -1,0 +1,143 @@
+{
+ "name": "kphx_haboob",
+ "seed": 25,
+ "duration_s": 480.0,
+ "start_sim_s": 0.0,
+ "pushback_mean_s": 75.0,
+ "readback_error_rate": 0.1,
+ "flights": [
+  {
+   "callsign": "AAL829",
+   "airline": "AAL",
+   "type": "B738",
+   "kind": "departure",
+   "scheduled_sim_s": 0.0,
+   "gate": "C12",
+   "runway_preference": null
+  },
+  {
+   "callsign": "SKW1797",
+   "airline": "SKW",
+   "type": "E75L",
+   "kind": "departure",
+   "scheduled_sim_s": 15.0,
+   "gate": "B15B",
+   "runway_preference": null
+  },
+  {
+   "callsign": "N427SP",
+   "airline": "GA",
+   "type": "C172",
+   "kind": "departure",
+   "scheduled_sim_s": 40.0,
+   "gate": "P3-3",
+   "runway_preference": null
+  },
+  {
+   "callsign": "SWA233",
+   "airline": "SWA",
+   "type": "B39M",
+   "kind": "departure",
+   "scheduled_sim_s": 70.0,
+   "gate": "F5",
+   "runway_preference": null
+  },
+  {
+   "callsign": "SWA541",
+   "airline": "SWA",
+   "type": "B38M",
+   "kind": "arrival",
+   "scheduled_sim_s": 75.0,
+   "gate": "C13",
+   "runway_preference": "26"
+  },
+  {
+   "callsign": "SWA1523",
+   "airline": "SWA",
+   "type": "B39M",
+   "kind": "departure",
+   "scheduled_sim_s": 105.0,
+   "gate": "A4",
+   "runway_preference": null
+  },
+  {
+   "callsign": "SKW680",
+   "airline": "SKW",
+   "type": "E75L",
+   "kind": "arrival",
+   "scheduled_sim_s": 140.0,
+   "gate": "B22",
+   "runway_preference": "25L"
+  },
+  {
+   "callsign": "AAL1069",
+   "airline": "AAL",
+   "type": "A319",
+   "kind": "departure",
+   "scheduled_sim_s": 145.0,
+   "gate": "E7",
+   "runway_preference": null
+  },
+  {
+   "callsign": "AAL4496",
+   "airline": "AAL",
+   "type": "A321",
+   "kind": "arrival",
+   "scheduled_sim_s": 205.0,
+   "gate": "D15",
+   "runway_preference": "26"
+  },
+  {
+   "callsign": "AAL2139",
+   "airline": "AAL",
+   "type": "A321",
+   "kind": "arrival",
+   "scheduled_sim_s": 270.0,
+   "gate": "F10",
+   "runway_preference": "25L"
+  },
+  {
+   "callsign": "AAL1181",
+   "airline": "AAL",
+   "type": "A319",
+   "kind": "arrival",
+   "scheduled_sim_s": 335.0,
+   "gate": "A1",
+   "runway_preference": "26"
+  },
+  {
+   "callsign": "SWA3870",
+   "airline": "SWA",
+   "type": "B737",
+   "kind": "arrival",
+   "scheduled_sim_s": 395.0,
+   "gate": "E5",
+   "runway_preference": "25L"
+  }
+ ],
+ "vehicles": [
+  {
+   "id": "GSE1",
+   "route": [
+    "4069900601",
+    "4069900599",
+    "332106161",
+    "14054066079",
+    "332106109",
+    "6471790606",
+    "6471790586",
+    "4069898075",
+    "4069898080",
+    "332106106",
+    "4069898084",
+    "x102"
+   ],
+   "speed_mps": 6.0
+  }
+ ],
+ "haboob_trigger_s": 180.0,
+ "weather": {
+  "start_utc": "2025-08-26 00:20",
+  "sec_per_min": 2.0
+ }
+}
