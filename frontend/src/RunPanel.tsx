@@ -10,8 +10,8 @@ async function post(path: string, body: object) {
   if (!res.ok) throw new Error((await res.json().catch(() => null))?.detail ?? `HTTP ${res.status}`)
 }
 
-const SELECT = 'rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-lg text-slate-100'
-const BUTTON = 'shrink-0 whitespace-nowrap rounded-md px-4 py-2 text-lg font-semibold disabled:opacity-40'
+const SELECT = 'rounded-lg border border-white/15 bg-slate-900/80 px-3 py-2 text-lg text-slate-100'
+const BUTTON = 'shrink-0 whitespace-nowrap rounded-lg px-4 py-2 text-lg font-semibold disabled:opacity-40'
 
 export function Controls({ run, ended }: { run: RunInfo | null; ended: boolean }) {
   const [opts, setOpts] = useState<Options | null>(null)
@@ -60,7 +60,7 @@ export function Banner({ verdict, fails, run, ended }: { verdict: string; fails:
   if (verdict === 'FAIL') {
     const first = fails[0]
     return (
-      <div className="border-b-4 border-red-400 bg-red-700 px-6 py-4 text-white">
+      <div className="pointer-events-auto rounded-xl border-2 border-red-400 bg-red-700/95 px-6 py-4 text-white shadow-2xl shadow-red-950/60">
         <div className="flex items-baseline gap-4">
           <span className="text-5xl font-black tracking-wider">FAIL</span>
           <span className="text-xl font-semibold">{who}{fails.length > 1 ? ` · ${fails.length} fails` : ''}</span>
@@ -74,10 +74,10 @@ export function Banner({ verdict, fails, run, ended }: { verdict: string; fails:
     )
   }
   if (verdict === 'PASS') {
-    return <div className="bg-emerald-700 px-6 py-3 text-4xl font-black tracking-wider text-white">PASS <span className="text-xl font-semibold">{who}</span></div>
+    return <div className="pointer-events-auto rounded-xl border border-emerald-400/60 bg-emerald-700/95 px-6 py-3 text-4xl shadow-2xl shadow-black/50 font-black tracking-wider text-white">PASS <span className="text-xl font-semibold">{who}</span></div>
   }
   return (
-    <div className="border-b border-slate-800 bg-slate-900 px-6 py-2 text-lg text-slate-400">
+    <div className="pointer-events-auto rounded-xl border border-white/10 bg-slate-950/70 px-5 py-2 text-lg text-slate-400 backdrop-blur-md">
       <span className="font-semibold tracking-widest text-slate-300">{ended ? 'ENDED' : 'RUNNING'}</span> · {who} · Referee: no fails so far
     </div>
   )
@@ -97,8 +97,8 @@ export function Scoreboard({ m }: { m: Metrics | null }) {
     ['Readback errors missed', m?.readback_errors_accepted ?? '--'],
   ]
   return (
-    <div className="grid grid-cols-2 gap-x-6 gap-y-1 border-b border-slate-800 p-3 min-[1600px]:p-4">
-      <div className="col-span-2 text-sm font-semibold tracking-widest text-slate-500">SCOREBOARD</div>
+    <div className="grid grid-cols-2 gap-x-6 gap-y-1 border-b border-white/10 p-3 min-[1600px]:p-4">
+      <div className="col-span-2 text-sm font-semibold tracking-[0.2em] text-slate-400">SCOREBOARD</div>
       {rows.map(([k, v]) => (
         <div key={k} className="flex justify-between gap-2 text-base min-[1600px]:text-xl">
           <span className="text-slate-400">{k}</span>
@@ -120,15 +120,15 @@ export function Comparison({ c }: { c: Cmp | null }) {
   const line = (t: EvalTotals | undefined) => (t ? `${t.passed}/${t.runs} pass · ${t.fails} fails` : '--')
   return (
     <>
-    <div className="border-b border-slate-800 px-3 py-2 text-base min-[1600px]:hidden">
+    <div className="border-b border-white/10 px-3 py-2 text-base min-[1600px]:hidden">
       <span className="font-semibold tracking-widest text-slate-500">AGENT VS HUMAN</span>{' '}
       <span className="text-slate-400">training seeds: </span>
       <span className="font-mono text-emerald-300">Agent {line(tr?.agent)}</span>
       <span className="text-slate-500"> | </span>
       <span className="font-mono text-slate-300">Human {line(tr?.human)}</span>
     </div>
-    <div className="hidden border-b border-slate-800 p-4 min-[1600px]:block">
-      <div className="text-sm font-semibold tracking-widest text-slate-500">
+    <div className="hidden border-b border-white/10 p-4 min-[1600px]:block">
+      <div className="text-sm font-semibold tracking-[0.2em] text-slate-400">
         AGENT VS HUMAN{c.human_impl === 'tower' ? ' · Human = built-in tower (stand-in)' : ' · Human = simulated average controller'}
       </div>
       <div className="grid grid-cols-[1fr_auto_auto_auto_auto] gap-x-4 text-lg">

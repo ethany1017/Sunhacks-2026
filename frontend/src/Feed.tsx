@@ -8,7 +8,7 @@ type SafetyCheck = Extract<SimEvent, { type: 'safety_check' }>
 // A feed row: one event, plus the safety_check that answered it (proposals and AI decisions).
 type Item = { e: SimEvent; safety?: SafetyCheck }
 
-const NEUTRAL = 'border-slate-700/70'
+const NEUTRAL = 'border-white/15'
 const GOOD = 'border-emerald-700/60'
 const BAD = 'border-red-500 bg-red-950/60'
 const WARN = 'border-amber-500 bg-amber-950/50'
@@ -93,7 +93,7 @@ function SafetyLine({ s }: { s: SafetyCheck }) {
   )
 }
 
-function Row({ e, safety }: Item) {
+function Row({ e, safety, hot }: Item & { hot?: boolean }) {
   let l = look(e)
   if (e.type === 'proposal' && safety) {
     l = safety.data.approved
@@ -101,10 +101,10 @@ function Row({ e, safety }: Item) {
       : { ...l, label: `SAFETY REJECTED · ${words(safety.data.rule)}`, tone: BAD }
   }
   return (
-    <Card className={`gap-1 rounded-lg border-l-4 bg-slate-900/80 px-4 py-3 shadow-none ${l.tone}`}>
+    <Card className={`gap-1 rounded-lg border-l-4 bg-slate-900/60 px-4 py-3 shadow-none ${l.tone} ${hot ? 'ring-2 ring-emerald-400' : ''}`}>
       <div className="flex flex-wrap items-center gap-x-3 text-lg">
         <span className="font-mono text-slate-400 tabular-nums">{clock(e.t)}</span>
-        <span className={`font-semibold tracking-wide ${LABEL_COLOR[l.tone] ?? 'text-slate-300'}`}>{l.label}</span>
+        <span className={`rounded-md bg-white/[0.07] px-2 font-semibold tracking-wider ${LABEL_COLOR[l.tone] ?? 'text-slate-300'}`}>{l.label}</span>
         {e.callsign && <span className="font-mono font-semibold text-slate-100">{e.callsign}</span>}
         {l.badge && (
           <Badge className={`ml-auto text-sm ${l.badge === 'Claude' ? 'bg-violet-600 text-white' : 'bg-slate-600 text-white'}`}>{l.badge}</Badge>
@@ -126,11 +126,16 @@ function Row({ e, safety }: Item) {
   )
 }
 
-export function Feed({ events }: { events: SimEvent[] }) {
+export function Feed({ events, speaking = null }: { events: SimEvent[]; speaking?: string | null }) {
+  let hotSeen = false // highlight only the newest card of the aircraft being spoken
   return (
     <div className="flex h-full flex-col gap-2 overflow-y-auto p-3">
       {events.length === 0 && <p className="p-4 text-xl text-slate-500">Waiting for events…</p>}
-      {group(events).map((it) => <Row key={it.e.seq} {...it} />)}
+      {group(events).map((it) => {
+        const hot = !!speaking && it.e.callsign === speaking && !hotSeen
+        if (hot) hotSeen = true
+        return <Row key={it.e.seq} {...it} hot={hot} />
+      })}
     </div>
   )
 }

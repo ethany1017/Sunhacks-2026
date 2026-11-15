@@ -7,21 +7,32 @@ import type { Aircraft, Airport, LonLat, RunwayConfig, RunwayEnd } from '@/types
 // MapLibre locates its worker relative to its own module, which Vite's dependency bundling breaks.
 maplibregl.setWorkerUrl(workerUrl)
 
-const STYLE_URL = 'https://tiles.openfreemap.org/styles/dark'
+// Satellite imagery, like the first viewer (web/src/map.ts). Fallback: the blank dark style below.
+const USGS_TILES = 'https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}'
+const IMAGERY: maplibregl.StyleSpecification = {
+  version: 8,
+  sources: {
+    usgs: { type: 'raster', tiles: [USGS_TILES], tileSize: 256, maxzoom: 16, attribution: 'USDA, USGS The National Map: Orthoimagery' },
+  },
+  layers: [
+    { id: 'bg', type: 'background', paint: { 'background-color': '#0a1018' } },
+    { id: 'usgs', type: 'raster', source: 'usgs', paint: { 'raster-brightness-max': 0.92, 'raster-saturation': -0.12, 'raster-fade-duration': 0 } },
+  ],
+}
 const BLANK: maplibregl.StyleSpecification = {
   version: 8,
   sources: {},
   layers: [{ id: 'bg', type: 'background', paint: { 'background-color': '#0b0f14' } }],
 }
-const COLOR = { arrival: '#38bdf8', departure: '#fbbf24', vehicle: '#94a3b8', unknown: '#e5e7eb' }
+const COLOR = { arrival: '#22d3ee', departure: '#f59e0b', vehicle: '#94a3b8', unknown: '#e5e7eb' }
 const RUNWAY = '#4b5563'
 const RUNWAY_ACTIVE = '#22c55e'
 
+// Probe one tile first so an offline laptop goes straight to the blank style (no-cors: only a network error rejects).
 async function loadStyle(): Promise<maplibregl.StyleSpecification> {
   try {
-    const res = await fetch(STYLE_URL, { signal: AbortSignal.timeout(4000) })
-    if (!res.ok) throw new Error(`HTTP ${res.status}`)
-    return await res.json()
+    await fetch(USGS_TILES.replace('{z}/{y}/{x}', '0/0/0'), { mode: 'no-cors', signal: AbortSignal.timeout(4000) })
+    return IMAGERY
   } catch (err) {
     console.warn('Basemap unavailable, using blank style:', err)
     return BLANK
@@ -39,7 +50,11 @@ function finals(airport: Airport): GeoJSON.FeatureCollection {
   }
 }
 
-function addAirportLayers(map: maplibregl.Map, airport: Airport) {
+// Runway width in px at true scale (KPHX latitude, 512 px tiles): drawn 1.3x so the band frames the imagery runway.
+const TRUE_WIDTH: maplibregl.DataDrivenPropertyValueSpecification<number> =
+  ['interpolate', ['exponential', 2], ['zoom'], 12, ['*', ['get', 'width_m'], 0.08], 18, ['*', ['get', 'width_m'], 5.2]]
+
+function addAirportLayers(map: maplibregl.Map, airport: Airport, imagery: boolean) {
   const geojson = airport.geojson
   map.addSource('finals', { type: 'geojson', data: finals(airport) })
   map.addLayer({
@@ -51,8 +66,23 @@ function addAirportLayers(map: maplibregl.Map, airport: Airport) {
   map.addLayer({
     id: 'taxiway', type: 'line', source: 'airport', filter: kind('taxiway'),
     layout: { 'line-cap': 'round', 'line-join': 'round' },
-    paint: { 'line-color': '#a16207', 'line-opacity': 0.75, 'line-width': ['interpolate', ['exponential', 2], ['zoom'], 12, 1.5, 17, 16] },
+    paint: imagery
+      ? { 'line-color': '#fbbf24', 'line-opacity': 0.3, 'line-width': 1 }
+      : { 'line-color': '#a16207', 'line-opacity': 0.75, 'line-width': ['interpolate', ['exponential', 2], ['zoom'], 12, 1.5, 17, 16] },
   })
+  if (imagery) {
+    // translucent band + edge lines (line-gap-width draws two parallel lines either side of the runway)
+    map.addLayer({ id: 'runway', type: 'line', source: 'airport', filter: kind('runway'), paint: { 'line-color': RUNWAY_ACTIVE, 'line-opacity': 0, 'line-width': TRUE_WIDTH } })
+    map.addLayer({
+      id: 'runway-edge', type: 'line', source: 'airport', filter: kind('runway'),
+      paint: { 'line-color': 'rgba(255,255,255,0.18)', 'line-width': 2, 'line-gap-width': TRUE_WIDTH },
+    })
+    map.addLayer({
+      id: 'hold-short', type: 'circle', source: 'airport', filter: kind('hold_short'),
+      paint: { 'circle-color': '#ef4444', 'circle-opacity': 0.8, 'circle-radius': ['interpolate', ['linear'], ['zoom'], 13, 1.5, 17, 4] },
+    })
+    return
+  }
   map.addLayer({
     id: 'runway', type: 'line', source: 'airport', filter: kind('runway'),
     paint: {
@@ -87,9 +117,9 @@ function planeElement(a: Aircraft) {
   el.className = 'aircraft'
   el.innerHTML =
     '<svg viewBox="-16 -16 32 32" width="40" height="40"><path d="M0,-14 L2.5,-5 L13,1 L13,4 L2.5,1 L2,9 L6,12 L6,14 L0,12.5 L-6,14 L-6,12 L-2,9 L-2.5,1 L-13,4 L-13,1 L-2.5,-5 Z" stroke="#0b0f14" stroke-width="1.2"/></svg>' +
-    '<div class="aircraft-label"></div>'
+    '<div class="aircraft-label"><span></span> <span class="aircraft-type"></span></div>'
   el.style.setProperty('--ac', COLOR[a.kind])
-  el.querySelector('.aircraft-label')!.textContent = a.callsign
+  el.querySelector('.aircraft-label span')!.textContent = a.callsign
   return el
 }
 
@@ -99,6 +129,9 @@ type Track = { marker: maplibregl.Marker; from: [number, number]; to: [number, n
 type View = {
   map: maplibregl.Map | null
   ready: boolean // airport layers exist in the current style
+  imagery: boolean // satellite basemap (false = blank dark fallback)
+  types: Record<string, string>
+  speaking: string | null
   tracks: Map<string, Track>
   ends: { end: RunwayEnd; runwayId: string; marker: maplibregl.Marker }[]
   runways: RunwayConfig | null
@@ -112,7 +145,13 @@ function syncRunway(v: View) {
   const ids = v.ends.filter((x) => active.has(x.end.designator)).map((x) => x.runwayId)
   for (const { end, marker } of v.ends) marker.getElement().classList.toggle('active', active.has(end.designator))
   if (!v.ready) return
-  v.map.setPaintProperty('runway', 'line-color', ['case', ['in', ['get', 'id'], ['literal', ids]], RUNWAY_ACTIVE, RUNWAY])
+  const on: maplibregl.ExpressionSpecification = ['in', ['get', 'id'], ['literal', ids]]
+  if (v.imagery) {
+    v.map.setPaintProperty('runway', 'line-opacity', ['case', on, 0.22, 0])
+    v.map.setPaintProperty('runway-edge', 'line-color', ['case', on, RUNWAY_ACTIVE, 'rgba(255,255,255,0.18)'])
+  } else {
+    v.map.setPaintProperty('runway', 'line-color', ['case', on, RUNWAY_ACTIVE, RUNWAY])
+  }
   v.map.setFilter('final', ['in', ['get', 'end'], ['literal', arr]])
 }
 
@@ -124,7 +163,8 @@ const LABEL_BOX = { w: 110, h: 30 }
 function declutter(v: View) {
   const map = v.map!
   const shown: maplibregl.Point[] = []
-  const order = [...v.tracks.entries()].sort(([a], [b]) => (RANK[v.aircraft[a]?.phase] ?? 1) - (RANK[v.aircraft[b]?.phase] ?? 1))
+  const rank = (cs: string) => (cs === v.speaking ? -1 : RANK[v.aircraft[cs]?.phase] ?? 1)
+  const order = [...v.tracks.entries()].sort(([a], [b]) => rank(a) - rank(b))
   for (const [, tr] of order) {
     const p = map.project(tr.marker.getLngLat())
     const free = shown.every((q) => Math.abs(q.x - p.x) > LABEL_BOX.w || Math.abs(q.y - p.y) > LABEL_BOX.h)
@@ -157,13 +197,26 @@ function syncAircraft(v: View) {
     }
     const el = tr.marker.getElement()
     el.style.setProperty('--ac', COLOR[a.kind])
+    el.classList.toggle('speaking', a.callsign === v.speaking)
+    el.querySelector('.aircraft-type')!.textContent = v.types[a.callsign] ?? ''
     el.querySelector('svg')!.style.transform = `rotate(${a.heading - map.getBearing()}deg)`
   }
 }
 
-export function AirportMap({ airport, runways, aircraft }: { airport: Airport; runways: RunwayConfig | null; aircraft: Record<string, Aircraft> }) {
+type Props = {
+  airport: Airport
+  runways: RunwayConfig | null
+  aircraft: Record<string, Aircraft>
+  types?: Record<string, string> // ICAO type per callsign
+  speaking?: string | null // callsign being spoken now: pulsing ring, label always shown
+  inset?: () => { top: number; right: number } // px covered by floating panels, so the airport centres in the rest
+}
+
+export function AirportMap({ airport, runways, aircraft, types = {}, speaking = null, inset }: Props) {
   const container = useRef<HTMLDivElement>(null)
-  const view = useRef<View>({ map: null, ready: false, tracks: new Map(), ends: [], runways: null, aircraft: {} })
+  const view = useRef<View>({ map: null, ready: false, imagery: false, types: {}, speaking: null, tracks: new Map(), ends: [], runways: null, aircraft: {} })
+  const insetRef = useRef(inset)
+  insetRef.current = inset
 
   // Create the map once per airport.
   useEffect(() => {
@@ -180,21 +233,30 @@ export function AirportMap({ airport, runways, aircraft }: { airport: Airport; r
         attributionControl: { compact: false },
       })
       map.touchZoomRotate.disableRotation()
+      const pad = () => ({ top: 0, right: 0, bottom: 0, left: 0, ...insetRef.current?.() })
+      map.jumpTo({ center, zoom, padding: pad() })
+      map.on('resize', () => map.jumpTo({ padding: pad() }))
       v.map = map
       let fellBack = style === BLANK
       let loaded = false
       map.once('load', () => (loaded = true))
-      // A later failure (tiles, sprite, glyphs) before the first full load: switch to the blank style.
+      const fallBack = () => {
+        if (fellBack || loaded) return
+        fellBack = true
+        v.ready = false
+        map.setStyle(BLANK, { diff: false })
+      }
+      // A later failure (tiles, sprite, glyphs) or a stall before the first full load: switch to the blank style.
       map.on('error', (e: maplibregl.ErrorEvent) => {
         console.warn('Map error:', e.error)
-        if (!fellBack && !loaded) {
-          fellBack = true
-          v.ready = false
-          map.setStyle(BLANK, { diff: false })
-        }
+        fallBack()
       })
+      const stall = window.setTimeout(fallBack, 10000)
+      map.once('remove', () => clearTimeout(stall))
       map.on('style.load', () => {
-        addAirportLayers(map, airport)
+        v.imagery = !fellBack
+        el.classList.toggle('imagery', v.imagery)
+        addAirportLayers(map, airport, v.imagery)
         v.ready = true
         syncRunway(v)
       })
@@ -228,7 +290,7 @@ export function AirportMap({ airport, runways, aircraft }: { airport: Airport; r
       cancelled = true
       cancelAnimationFrame(frame)
       v.map?.remove()
-      Object.assign(v, { map: null, ready: false, tracks: new Map(), ends: [] })
+      Object.assign(v, { map: null, ready: false, imagery: false, tracks: new Map(), ends: [] })
     }
   }, [airport])
 
@@ -238,9 +300,9 @@ export function AirportMap({ airport, runways, aircraft }: { airport: Airport; r
   }, [runways])
 
   useEffect(() => {
-    view.current.aircraft = aircraft
+    Object.assign(view.current, { aircraft, types, speaking })
     syncAircraft(view.current)
-  }, [aircraft])
+  }, [aircraft, types, speaking])
 
   return <div ref={container} className="h-full w-full" />
 }

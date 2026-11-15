@@ -20,7 +20,7 @@ function useLiveWeather() {
 function Field({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex shrink-0 flex-col">
-      <span className="text-sm font-semibold tracking-widest text-slate-500">{label}</span>
+      <span className="text-sm font-semibold tracking-[0.2em] text-slate-400">{label}</span>
       <span className="font-mono text-xl leading-tight text-slate-100 tabular-nums min-[1600px]:text-[26px]">{value}</span>
     </div>
   )
@@ -37,7 +37,7 @@ export function TopBar({ config, weather, runway, t, connected }: Props) {
     ? 'unavailable'
     : `${live.source === 'cache' ? 'cached · ' : ''}${live.metar.replace(/^(METAR|SPECI) /, '').split(' RMK')[0]}`
   return (
-    <header className="flex items-center gap-4 border-b min-[1600px]:gap-6 border-slate-800 bg-slate-950 px-6 py-3">
+    <header className="pointer-events-auto rounded-xl border border-white/10 bg-slate-950/70 shadow-2xl shadow-black/50 backdrop-blur-md flex items-center gap-4 px-5 py-2.5 min-[1600px]:gap-6">
       <div className="flex shrink-0 flex-col">
         <span className="flex items-center gap-3">
           <span className="text-2xl font-bold tracking-wide text-emerald-400 min-[1600px]:text-[28px]">{PROJECT_NAME}</span>
