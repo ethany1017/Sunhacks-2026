@@ -1,9 +1,9 @@
 import { useSyncExternalStore } from 'react'
 import type { SimEvent } from '@/types'
 
-// Plays `audio` events one at a time, in order. Lines older than MAX_AGE_S (wall clock, stamped by the backend) are
-// skipped, so a history replay after a reload stays silent and speech never lags far behind the map; the queue keeps
-// at most MAX_QUEUE lines. A playback error or a stalled file skips to the next line.
+// Plays `audio` events one at a time, in order. Lines made before this WebSocket connection opened are history (the
+// replay after a reload) and never play; lines older than MAX_AGE_S (wall clock, stamped by the backend) are skipped so
+// speech never lags far behind the map; the queue keeps at most MAX_QUEUE lines. A playback error or a stalled file skips to the next line.
 const MAX_AGE_S = 10
 const MAX_QUEUE = 3
 const LOAD_MS = 8_000 // a file that hasn't loaded by then is skipped; once loaded, its duration + 2 s
@@ -16,6 +16,7 @@ const el = typeof Audio === 'undefined' ? null : new Audio()
 let snap: Snap = { on: sessionStorage.getItem(KEY) === 'on', blocked: false, now: null }
 let queue: Line[] = []
 let stall = 0
+let since = Infinity // wall time of the current WebSocket connection; nothing plays before the first one opens
 const subs = new Set<() => void>()
 const set = (p: Partial<Snap>) => {
   snap = { ...snap, ...p }
@@ -48,10 +49,15 @@ function next() {
   })
 }
 
-// Called by the WebSocket client for every `audio` event (history replay included: those are stale and dropped).
+// Called by the WebSocket client when a connection opens: what follows first is the run's history.
+export function audioConnected() {
+  since = Date.now() / 1000 - 0.5 // ponytail: same-machine clocks assumed (backend and browser on one laptop)
+}
+
+// Called by the WebSocket client for every `audio` event.
 export function onAudio(e: Extract<SimEvent, { type: 'audio' }>) {
   const d = e.data
-  if (!snap.on || snap.blocked || !d.wall || d.wall < Date.now() / 1000 - MAX_AGE_S) return
+  if (!snap.on || snap.blocked || !d.wall || d.wall < since || d.wall < Date.now() / 1000 - MAX_AGE_S) return
   queue.push({ url: d.url, speaker: d.speaker, callsign: e.callsign, text: d.text, wall: d.wall })
   if (queue.length > MAX_QUEUE) queue = queue.slice(-MAX_QUEUE)
   if (!snap.now) next()

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { onAudio } from '@/Voice'
+import { audioConnected, onAudio } from '@/Voice'
 import type { Aircraft, Airport, Comparison, Metrics, RefereeFail, RunInfo, RunwayConfig, SimEvent, WeatherData } from '@/types'
 
 const FEED_CAP = 300
@@ -125,6 +125,7 @@ export function useTower() {
       sock.onopen = () => {
         delay = 250
         buffer = []
+        audioConnected()
         setState(INITIAL)
         setConnected(true)
       }
