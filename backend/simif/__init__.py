@@ -1,7 +1,6 @@
-"""The Simulator Interface: the only way this project talks to the airport simulator."""
+"""The Simulator Interface: the only way this project talks to the airport simulator. Fields: README.md."""
+import os
 from typing import Protocol
-
-from .stub import StubSimulator
 
 
 class Simulator(Protocol):
@@ -11,4 +10,9 @@ class Simulator(Protocol):
 
 
 def connect() -> Simulator:
-    return StubSimulator()  # the single place where a different adapter will be chosen later
+    """The in-process KPHX simulator (simif/real.py); the old offline stub only with SIMIF=stub."""
+    if os.environ.get("SIMIF") == "stub":
+        from .stub import StubSimulator
+        return StubSimulator()
+    from .real import RealSimulator
+    return RealSimulator()

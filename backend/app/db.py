@@ -9,7 +9,7 @@ BACKEND_DIR = Path(__file__).resolve().parent.parent
 EVENT_TYPES = {
     "airport", "sim_start", "sim_end", "weather", "runway_change", "aircraft_spawn", "position", "proposal",
     "ai_decision", "safety_check", "clearance", "audio", "readback", "readback_correction",
-    "sequence", "alert",
+    "sequence", "alert", "run_start", "controller_switch", "aircraft_exit", "metrics", "referee_fail", "referee_result",
 }
 SCHEMA = """CREATE TABLE IF NOT EXISTS events(
     seq INTEGER PRIMARY KEY AUTOINCREMENT, run_id INTEGER NOT NULL, t REAL NOT NULL,

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import type { Aircraft, Airport, SimEvent, WeatherData } from '@/types'
+import type { Aircraft, Airport, Metrics, RefereeFail, RunInfo, SimEvent, WeatherData } from '@/types'
 
 const FEED_CAP = 300
 
@@ -15,22 +15,30 @@ export type TowerState = {
   weather: WeatherData | null
   runway: string | null
   t: number
+  run: RunInfo | null // level and the active controller
+  verdict: 'RUNNING' | 'PASS' | 'FAIL'
+  fails: RefereeFail[]
+  metrics: Metrics | null
+  ended: boolean
 }
 
-export const INITIAL: TowerState = { airport: null, feed: [], aircraft: {}, weather: null, runway: null, t: 0 }
+export const INITIAL: TowerState = {
+  airport: null, feed: [], aircraft: {}, weather: null, runway: null, t: 0,
+  run: null, verdict: 'RUNNING', fails: [], metrics: null, ended: false,
+}
 
 // Applies a batch of events to a copy of `prev`. Mutates only the copy, so a replay of thousands of
 // events costs one state update.
 export function applyEvents(prev: TowerState, events: SimEvent[]): TowerState {
-  let s: TowerState = { ...prev, aircraft: { ...prev.aircraft } }
+  let s: TowerState = { ...prev, aircraft: { ...prev.aircraft }, fails: [...prev.fails] }
   const fresh: SimEvent[] = []
   for (const e of events) {
     if (e.type === 'airport') {
       s.airport = e.data // not a feed item; the map redraws from it
       continue
     }
-    if (e.type === 'sim_start') {
-      s = { ...INITIAL, aircraft: {}, airport: s.airport } // the layout arrives just before sim_start
+    if (e.type === 'sim_start' || e.type === 'run_start') {
+      s = { ...INITIAL, aircraft: {}, fails: [], airport: s.airport } // keep the map until the run's airport event
       fresh.length = 0
       prev = INITIAL
     }
@@ -49,10 +57,33 @@ export function applyEvents(prev: TowerState, events: SimEvent[]): TowerState {
       case 'position':
         if (!cs) break
         if (e.data.phase === 'departed') delete s.aircraft[cs]
-        else s.aircraft[cs] = { callsign: cs, kind: s.aircraft[cs]?.kind ?? 'unknown', ...e.data }
+        else s.aircraft[cs] = { callsign: cs, ...e.data, kind: e.data.kind ?? s.aircraft[cs]?.kind ?? 'unknown' }
+        break
+      case 'aircraft_exit':
+        if (cs && e.data.reason !== 'parked') delete s.aircraft[cs]
+        break
+      case 'run_start':
+        s.run = e.data
+        break
+      case 'controller_switch':
+        if (s.run) s.run = { ...s.run, controller: e.data.to, controller_label: e.data.label }
+        break
+      case 'metrics':
+        s.metrics = e.data
+        if (s.verdict === 'RUNNING') s.verdict = e.data.verdict
+        break
+      case 'referee_fail':
+        s.fails.push(e.data)
+        s.verdict = 'FAIL'
+        break
+      case 'referee_result':
+        s.verdict = e.data.verdict
+        break
+      case 'sim_end':
+        s.ended = true
         break
     }
-    if (e.type !== 'position') fresh.push(e)
+    if (e.type !== 'position' && e.type !== 'metrics') fresh.push(e)
   }
   s.feed = fresh.length ? fresh.reverse().concat(prev.feed).slice(0, FEED_CAP) : prev.feed
   return s

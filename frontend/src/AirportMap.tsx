@@ -13,7 +13,7 @@ const BLANK: maplibregl.StyleSpecification = {
   sources: {},
   layers: [{ id: 'bg', type: 'background', paint: { 'background-color': '#0b0f14' } }],
 }
-const COLOR = { arrival: '#38bdf8', departure: '#fbbf24', unknown: '#e5e7eb' }
+const COLOR = { arrival: '#38bdf8', departure: '#fbbf24', vehicle: '#94a3b8', unknown: '#e5e7eb' }
 const RUNWAY = '#4b5563'
 const RUNWAY_ACTIVE = '#22c55e'
 
@@ -50,11 +50,11 @@ function addAirportLayers(map: maplibregl.Map, geojson: Airport['geojson']) {
   })
   map.addLayer({
     id: 'hold-short', type: 'circle', source: 'airport', filter: kind('hold_short'),
-    paint: { 'circle-color': '#ef4444', 'circle-radius': 5, 'circle-stroke-color': '#0b0f14', 'circle-stroke-width': 1.5 },
+    paint: { 'circle-color': '#ef4444', 'circle-radius': ['interpolate', ['linear'], ['zoom'], 13, 2, 17, 5], 'circle-stroke-color': '#0b0f14', 'circle-stroke-width': 1.5 },
   })
   map.addLayer({
     id: 'parking', type: 'circle', source: 'airport', filter: kind('parking'),
-    paint: { 'circle-color': '#64748b', 'circle-radius': 7, 'circle-stroke-color': '#cbd5e1', 'circle-stroke-width': 1.5 },
+    paint: { 'circle-color': '#64748b', 'circle-radius': ['interpolate', ['linear'], ['zoom'], 13, 2, 17, 7], 'circle-stroke-color': '#cbd5e1', 'circle-stroke-width': 1 },
   })
 }
 
@@ -165,7 +165,7 @@ export function AirportMap({ airport, runway, aircraft }: { airport: Airport; ru
           for (const end of p.ends as RunwayEnd[]) {
             v.ends.push({ end, runwayId: p.id, marker: labelMarker(map, end.threshold, end.designator, 'runway-label') })
           }
-        } else if (p.kind === 'taxiway' && f.geometry.type === 'LineString') {
+        } else if (p.kind === 'taxiway' && p.label !== false && f.geometry.type === 'LineString') {
           const c = f.geometry.coordinates
           const i = Math.floor((c.length - 2) / 2) // middle segment, so the label sits between vertices
           const [a, b] = [c[i], c[i + 1]]

@@ -1,7 +1,7 @@
 """Seed/replay a scripted demo run into the event DB.
 
 Everything airport-specific (runways, nodes, coordinates, ICAO) is derived from the layout the simulator
-returns through simif.connect().get_airport(); it is emitted first as an `airport` event.
+returns through StubSimulator().get_airport(); it is emitted first as an `airport` event.
 Usage (from backend/): .venv/bin/python scripts/seed.py [--speed 4] [--instant]
 """
 import argparse
@@ -12,7 +12,7 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-import simif  # noqa: E402
+from simif.stub import StubSimulator  # noqa: E402  (the Phase 1 scripted demo runs on the stub airport)
 from app import airport, db  # noqa: E402
 
 KT = 0.514444  # m/s per knot
@@ -283,7 +283,7 @@ def main():
     ap.add_argument("--speed", type=float, default=4, help="sim seconds per wall second")
     ap.add_argument("--instant", action="store_true", help="write everything with no sleeping")
     args = ap.parse_args()
-    apt = simif.connect().get_airport()
+    apt = StubSimulator().get_airport()
     airport.validate(apt)
     run_id = db.start_run()
     events = build_events(apt, run_id)

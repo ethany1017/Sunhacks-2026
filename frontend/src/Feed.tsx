@@ -13,11 +13,17 @@ const WARN = 'border-amber-500 bg-amber-950/50'
 function look(e: SimEvent): Look {
   switch (e.type) {
     case 'sim_start': return { label: 'RUN START', text: `${e.data.airport} (run ${e.data.run_id}, ${e.data.speed}x)`, tone: NEUTRAL }
-    case 'sim_end': return { label: 'RUN END', text: 'Simulation complete.', tone: NEUTRAL }
+    case 'sim_end': return { label: 'RUN END', text: '', tone: NEUTRAL }
+    case 'run_start': return { label: 'RUN START', text: `${e.data.level_name}, ${e.data.controller_label}, seed ${e.data.seed}`, tone: NEUTRAL }
+    case 'controller_switch': return { label: 'CONTROLLER', text: `Now controlled by ${e.data.label}`, tone: 'border-sky-600' }
+    case 'aircraft_exit': return { label: e.data.reason.toUpperCase(), text: '', tone: e.data.reason === 'diverted' ? WARN : NEUTRAL }
+    case 'referee_fail': return { label: `REFEREE FAIL · ${e.data.rule.replaceAll('_', ' ')}`, text: e.data.reason, tone: BAD }
+    case 'referee_result':
+      return { label: `REFEREE ${e.data.verdict}`, text: `${e.data.fails.length} fail(s)`, tone: e.data.verdict === 'PASS' ? GOOD : BAD }
     case 'weather': return { label: 'WEATHER', text: e.data.raw, tone: NEUTRAL }
     case 'runway_change':
       return { label: 'RUNWAY', text: `Active runway ${e.data.runway}${e.data.previous ? ` (was ${e.data.previous})` : ''}`, tone: 'border-emerald-600' }
-    case 'aircraft_spawn': return { label: e.data.kind.toUpperCase(), text: `${e.data.aircraft_type}, ${e.data.phase}`, tone: NEUTRAL }
+    case 'aircraft_spawn': return { label: e.data.kind.toUpperCase(), text: `${e.data.aircraft_type}, ${e.data.phase.replaceAll('_', ' ')}`, tone: NEUTRAL }
     case 'proposal':
       return { label: 'PROPOSAL', text: `${e.data.action.replaceAll('_', ' ')}${e.data.runway ? ` runway ${e.data.runway}` : ''}`, tone: NEUTRAL }
     case 'ai_decision': {

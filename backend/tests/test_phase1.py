@@ -8,8 +8,12 @@ import pytest
 BACKEND = Path(__file__).resolve().parent.parent
 sys.path[:0] = [str(BACKEND), str(BACKEND / "scripts")]
 
-import simif  # noqa: E402
+from simif.stub import StubSimulator  # noqa: E402
 from app import airport, db  # noqa: E402
+
+
+PHASE1_TYPES = {"airport", "sim_start", "sim_end", "weather", "runway_change", "aircraft_spawn", "position", "proposal",
+                "ai_decision", "safety_check", "clearance", "audio", "readback", "readback_correction", "sequence", "alert"}
 
 
 @pytest.fixture
@@ -18,11 +22,11 @@ def tmp_db(tmp_path, monkeypatch):
 
 
 def test_simulator_airport_is_valid():
-    airport.validate(simif.connect().get_airport())
+    airport.validate(StubSimulator().get_airport())
 
 
 def test_validator_rejects_edge_to_missing_node():
-    apt = copy.deepcopy(simif.connect().get_airport())
+    apt = copy.deepcopy(StubSimulator().get_airport())
     graph = apt["graph"]
     graph["edges"].append({"from": graph["edges"][0]["from"], "to": "NOPE", "kind": "taxiway", "name": "X", "length_m": 1})
     with pytest.raises(airport.AirportError, match="NOPE"):
@@ -39,7 +43,8 @@ def test_emit_increasing_seq_and_rejects_unknown_type(tmp_db):
     assert [e["seq"] for e in db.events_for_run(run)] == [a["seq"], b["seq"]]
 
 
-def test_websocket_replays_then_streams(tmp_db):
+def test_websocket_replays_then_streams(tmp_db, monkeypatch):
+    monkeypatch.setenv("AUTOSTART", "0")  # no live run: this test checks replay of hand-written runs
     from fastapi.testclient import TestClient
     from app.main import app
 
@@ -57,10 +62,10 @@ def test_websocket_replays_then_streams(tmp_db):
 def test_seed_covers_every_event_type():
     import seed
 
-    apt = simif.connect().get_airport()
+    apt = StubSimulator().get_airport()
     airport.validate(apt)
     events = seed.build_events(apt, 1)
-    assert {e["type"] for e in events} == db.EVENT_TYPES and "airport" in db.EVENT_TYPES
+    assert {e["type"] for e in events} == PHASE1_TYPES and PHASE1_TYPES <= db.EVENT_TYPES
     assert [e["type"] for e in events[:2]] == ["airport", "sim_start"]
     assert events[0]["data"] == apt and events[0]["callsign"] is None
     assert [e["t"] for e in events] == sorted(e["t"] for e in events)

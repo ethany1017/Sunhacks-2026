@@ -13,6 +13,7 @@ export default defineConfig({
     strictPort: true,
     proxy: {
       '/ws': { target: backend, ws: true },
+      '/api': backend,
     },
   },
 })
