@@ -43,3 +43,31 @@ Not exact without a simulator change: a scenario file cannot carry rain or a win
 mid-day or be made denser than its real hourly rates. So `runway_config_change` is a short Normal Day (the shift lands at
 55% of the day) rather than a window around the shift, and `rain_peak` is a short Light Rain day at the level's normal
 demand rather than a denser-than-real peak.
+
+## Claude at key decisions (A4): how to wire it
+
+`backend/atc/reasoning.py` is built and tested (`tests/test_reasoning.py`, fake client) but not wired into the planner
+yet. The planner already builds key decisions as `{kind, options: [{id, label}], default}` and calls
+`self.choose(decision)` (runway flow change in `_flow`, which departure takes a gap in `_takeoff`). Wiring is:
+
+```python
+from .reasoning import Advisor
+self.advisor = Advisor()      # Planner.__init__; reads ANTHROPIC_API_KEY once
+self.choose = self._choose    # instead of `lambda decision: decision["default"]`
+
+def _choose(self, decision):
+    res = self.advisor.choose(decision, situation=..., procedures=...)   # never blocks
+    if res is None:           # Claude still answering (at most 3 s): act on nothing this pass, re-checked in 0.5 s
+        return None
+    if res["first"]:          # one ai_decision event per decision, not one per re-check
+        self.emit(self.t, "ai_decision", decision.get("callsign"), {
+            "kind": decision["kind"], "options": decision["options"], "default": decision["default"],
+            "choice": res["choice"], "explanation": res["explanation"], "source": res["source"]}, res["explanation"])
+    return res["choice"]
+```
+
+`None` needs no change at either call site: both act only when the choice is theirs. The `ai_decision` event comes
+before the proposal it leads to, and the dashboard shows the following `safety_check` on the decision card. The chosen
+option still goes through the safety engine. With no key, or no running event loop (this headless harness),
+`Advisor.choose` returns the default at once with source "fallback", so harness scores are unchanged by the wiring.
+To pass decisions with a callsign (departure gap), add `"callsign": cs` to the decision dict.

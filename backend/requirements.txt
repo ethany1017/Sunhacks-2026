@@ -6,3 +6,4 @@ numpy
 networkx
 pyproj
 shapely
+anthropic
