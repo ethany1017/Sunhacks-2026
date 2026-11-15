@@ -1,0 +1,27 @@
+{
+  "name": "kphx-dashboard",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 5173",
+    "mock": "node mock/server.mjs",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "shots": "node scripts/screenshots.mjs",
+    "verify": "node scripts/verify.mjs"
+  },
+  "devDependencies": {
+    "@types/google.maps": "3.66.10",
+    "@types/node": "26.6.6",
+    "playwright": "1.65.1",
+    "typescript": "5.9.3",
+    "vite": "7.3.8"
+  },
+  "dependencies": {
+    "@googlemaps/js-api-loader": "1.16.10",
+    "deck.gl": "9.4.1",
+    "maplibre-gl": "5.24.1",
+    "ws": "8.23.0"
+  }
+}

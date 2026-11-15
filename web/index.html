@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KPHX Autonomous Tower</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Crect width='128' height='128' rx='28' fill='%230b1220'/%3E%3Cpath fill='%2322d3ee' d='M64 14c4 0 6 8 6 16v22l44 28v8l-44-12v24l12 10v6l-18-4-18 4v-6l12-10V76L14 88v-8l44-28V30c0-8 2-16 6-16z'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="map"></div>
+    <div id="dust"></div>
+    <div id="vignette"></div>
+
+    <header id="topbar" class="glass">
+      <div class="brand">
+        <div class="logo"><svg viewBox="0 0 128 128"><path fill="currentColor" d="M64 6c5 0 7 9 7 18v26l52 33v9l-52-14v26l14 11v7l-21-5-21 5v-7l14-11V78L5 92v-9l52-33V24c0-9 2-18 7-18z"/></svg></div>
+        <div>
+          <div class="brand-name">KPHX</div>
+          <div class="brand-sub">Phoenix Sky Harbor</div>
+        </div>
+      </div>
+      <div class="sim-badge"><span class="rec"></span>SIMULATION</div>
+      <div class="clocks">
+        <div class="clock"><span class="clock-l">SIM</span><span id="clk-sim">T+00:00</span></div>
+        <div class="clock" id="clk-utc-wrap"><span class="clock-l">UTC</span><span id="clk-utc">--:--:--</span></div>
+        <div class="clock" id="clk-phx-wrap"><span class="clock-l">PHX</span><span id="clk-phx">--:--:--</span></div>
+      </div>
+      <div class="speed" id="speed">
+        <button data-act="pause" id="btn-pause" title="Pause / resume (Space)">
+          <svg viewBox="0 0 24 24" class="ic-pause"><path fill="currentColor" d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+          <svg viewBox="0 0 24 24" class="ic-play"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+        </button>
+        <button data-speed="1">1x</button>
+        <button data-speed="2">2x</button>
+        <button data-speed="5">5x</button>
+        <button data-speed="10">10x</button>
+      </div>
+      <div class="agent" id="agent">
+        <span class="agent-dot"></span>
+        <div class="agent-txt"><div class="agent-name" id="agent-name">AGENT</div><div class="agent-state" id="agent-state">idle</div></div>
+      </div>
+      <div class="metar" id="metar">
+        <svg id="wind-arrow" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l6 9h-4v11h-4V11H6z"/></svg>
+        <div class="metar-kv"><span id="m-wind">---</span><small>WIND</small></div>
+        <div class="metar-kv"><span id="m-vis">--</span><small>VIS</small></div>
+        <div class="metar-raw" id="m-raw">waiting for weather…</div>
+      </div>
+      <button id="btn-mute" class="icon-btn" title="Voice on/off (M)">
+        <svg viewBox="0 0 24 24" class="ic-on"><path fill="currentColor" d="M3 10v4h4l5 4V6L7 10zm13.5 2A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>
+        <svg viewBox="0 0 24 24" class="ic-off"><path fill="currentColor" d="M3 10v4h4l5 4V6L7 10zm13.6 2l2.4-2.4L17.6 8.2 15.2 10.6 12.8 8.2 11.4 9.6 13.8 12l-2.4 2.4 1.4 1.4 2.4-2.4 2.4 2.4 1.4-1.4z"/></svg>
+      </button>
+    </header>
+
+    <aside id="left" class="glass panel">
+      <section class="list-sec">
+        <h3><span class="dot cy"></span>Arrivals <em id="n-arr">0</em></h3>
+        <div class="list-head"><span>Flight</span><span>Gate</span><span>Rwy</span><span>ETA</span></div>
+        <div class="list" id="list-arr"></div>
+      </section>
+      <section class="list-sec">
+        <h3><span class="dot am"></span>Departures <em id="n-dep">0</em></h3>
+        <div class="list-head"><span>Flight</span><span>Gate</span><span>Rwy</span><span>ETA</span></div>
+        <div class="list" id="list-dep"></div>
+      </section>
+    </aside>
+
+    <aside id="right" class="glass panel">
+      <section class="score" id="score"></section>
+      <section class="decision">
+        <h3><span class="dot vi"></span><span id="dec-title">Agent decision</span></h3>
+        <div id="decision-body" class="scroll"></div>
+      </section>
+      <section class="timeline">
+        <h3 id="tl-title">Clearance timeline</h3>
+        <div id="timeline-body"></div>
+      </section>
+    </aside>
+
+    <section id="bottom" class="glass">
+      <div class="gantt">
+        <h3>Runway occupancy <small>past 3 min · next 3 min</small></h3>
+        <div class="gantt-body"><canvas id="gantt"></canvas></div>
+      </div>
+      <div class="voice">
+        <h3>Radio <small>ATC agent and pilots</small></h3>
+        <div class="voice-list" id="voice-list"></div>
+      </div>
+    </section>
+
+    <div id="badges">
+      <div class="badge warn" id="b-haboob"><span class="pulse-dot"></span>HABOOB ACTIVE</div>
+      <div class="badge" id="b-offline">offline map</div>
+      <div class="badge bad" id="b-reconnect"><span class="pulse-dot"></span>reconnecting…</div>
+      <div class="badge" id="b-audio">click anywhere to enable voice</div>
+    </div>
+    <div id="hints" class="glass">
+      <span><kbd>F</kbd> fullscreen</span><span><kbd>Space</kbd> pause</span><span><kbd>1</kbd>–<kbd>4</kbd> speed</span>
+      <span><kbd>H</kbd> haboob</span><span><kbd>R</kbd> reset</span><span><kbd>C</kbd> controller</span><span><kbd>M</kbd> mute</span><span><kbd>Esc</kbd> exit</span>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

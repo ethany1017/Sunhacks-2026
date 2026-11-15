@@ -81,11 +81,27 @@ Not in the hackathon demo: live traffic observation, historical replay, and gate
 
 ## Getting started
 
-[Setup and run instructions — to be added once the stack is chosen.]
+Needs Python 3.9+ and Node 20+.
+
+```bash
+make venv          # Python venv + dependencies (.venv)
+make graph         # build the KPHX taxiway graph into data/processed/
+make web-install   # dashboard dependencies
+make test          # backend tests
+make sim           # headless smoke run with the score table
+make demo          # API on :8000 and dashboard on :5173, open http://localhost:5173
+```
+
+Keys (both files are gitignored, never commit them):
+
+- `web/.env.local`: `VITE_GOOGLE_MAPS_API_KEY=...` for the Google satellite map (without it the dashboard falls back to free USGS imagery with an "offline map" badge).
+- `.env`: `ANTHROPIC_API_KEY=...` for the Claude agent. Without it the rule-based baseline controller runs the airport.
+
+Dashboard keys: Space pause, 1-4 speeds, H trigger the haboob, R reset, F fullscreen, C switch between the baseline and the Claude agent. `?offline` in the URL forces the fallback map. More detail: [`docs/API_CONTRACT.md`](docs/API_CONTRACT.md), [`docs/ASSUMPTIONS.md`](docs/ASSUMPTIONS.md).
 
 ## Tech stack
 
-Proposed, not yet agreed (see [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)): a custom Python simulator on a KPHX taxiway graph built from OpenStreetMap, an append-only JSONL event log, a small web API with WebSocket updates, and a MapLibre + deck.gl dashboard.
+A custom Python simulator on a KPHX taxiway graph built from OpenStreetMap (`sim/`), an append-only JSONL event log, a FastAPI server with WebSocket updates (`api/`), a Claude agent that runs the airport through tool calls, and a TypeScript dashboard (`web/`) with the Google Maps JavaScript API and deck.gl overlay, falling back to MapLibre with USGS imagery. Design notes in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ## Limitations
 
