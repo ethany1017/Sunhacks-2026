@@ -77,9 +77,15 @@ def test_readback_with_wrong_runway_side_must_be_noticed(tmp_path, graph) -> Non
     pending = sim.observe()["pending_readbacks"]
     assert pending and pending[0]["parsed"]["runway"] in ("25L", None)
     sim.resolve_readback(pending[0]["id"], False)                          # say again
-    for _ in range(60):
+    for _ in range(40):
         sim.step()
+    retry = sim.observe()["pending_readbacks"]
+    assert len(retry) == 1 and retry[0]["parsed"]["runway"] == "25R"       # the corrected readback, still awaiting a verdict
+    sim.resolve_readback(retry[0]["id"], True)
     assert not sim.observe()["pending_readbacks"]
+    assert sim.clearances[retry[0]["clearance_id"]].ack_t is not None          # acknowledged (then no effect: it is at the gate)
+    assert sim.score()["readback_errors_caught"] == 1 and sim.score()["readback_errors_accepted"] == 0
     sim.close()
+
 
 

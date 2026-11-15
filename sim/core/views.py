@@ -116,7 +116,8 @@ class ObservationBuffer:
             v.update(ready=ac.ready, landing_cleared=ac.landing_cleared, takeoff_cleared=ac.takeoff_cleared,
                      dep_end=ac.dep_end, arrival_end=ac.runway if ac.kind == "arrival" else None,
                      blocked_by=ac.blocked_by, stopped_s=0.0 if ac.stopped_since is None else round(sim.clock.t - ac.stopped_since, 1),
-                     frequency=ac.frequency, done=ac.done, entry_node=ac.entry_node)
+                     frequency=ac.frequency, done=ac.done, entry_node=ac.entry_node,
+                     next_node=sim._route_origin(ac)[0] if ac.kind != "vehicle" else None)   # where an explicit taxi route must start
             frame[ac.callsign] = v
         self.frames.append(frame)
 

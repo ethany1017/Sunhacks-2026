@@ -75,7 +75,6 @@ class Aircraft:
     status_text: str = ""
     hold_info: Optional[Dict[str, Any]] = None
     pending_readback: bool = False
-    ignore_hold: bool = False
     unimpeded_s: float = 0.0
     stop_s: float = 0.0
     stop_why: str = "end"
@@ -124,4 +123,5 @@ class Readback:
     due_t: float
     retry: bool = False
     delivered: bool = False
+    delivered_t: float = 0.0
     resolved: bool = False

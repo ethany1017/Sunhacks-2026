@@ -68,4 +68,5 @@ def make_readback(rng: np.random.Generator, error_rate: float, action: str, call
         text = "Roger, %s" % spoken_callsign(callsign)
     else:
         text = readback_text(action, callsign, params, heard)
-    return text, {"action": action, "runway": heard}, error
+    # parsed holds only what the words say: "Roger" names no action and no runway
+    return text, {"action": None if error == "dropped_word" else action, "runway": heard}, error

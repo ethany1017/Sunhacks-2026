@@ -53,10 +53,10 @@ Same keys, all optional except `type` and `t`; lists contain only changed or new
 `{"id":"d-9","t":120.0,"callsign":"SWA1234","action":"hold_short","summary":"Holding SWA1234 short of 07L/25R for the arrival","facts":["AAL22 on 2 mile final","07L/25R free for 40 s"],"rules":["Runway occupied: no crossing (JO 7110.65 3-7-2)"],"alternatives":[{"option":"cross now","reason":"conflicts with AAL22 landing in 38 s"}],"next_review_s":15,"voice_id":"v-31"}`
 
 ### VoiceLine
-`{"id":"v-31","t":120.0,"speaker":"agent|pilot","callsign":"SWA1234","text":"Southwest 1234, hold short of runway 7 left","status":"ok|corrected|pending"}`. The browser speaks new lines aloud (agent voice vs pilot voice).
+`{"id":"v-31","t":120.0,"speaker":"agent|pilot","callsign":"SWA1234","text":"Southwest 1234, hold short of runway 7 left","status":"ok|corrected|pending"}`. The browser speaks new lines aloud (agent voice vs pilot voice). Every pilot readback starts `pending`, right or wrong, and becomes `ok` (accepted) or `corrected` (say again).
 
 ### Score
-`{"separation_losses":0,"runway_conflicts":0,"deadlocks":0,"readback_errors_accepted":0,"completed":4,"avg_delay_s":18.2,"throughput_per_10min":6}` plus extra keys the UI may ignore: `clearance_reversals`, `clearance_amendments`, `go_arounds`, `avg_landing_occupancy_s`, `decisions`.
+`{"separation_losses":0,"runway_conflicts":0,"deadlocks":0,"readback_errors_accepted":0,"completed":4,"avg_delay_s":18.2,"throughput_per_10min":6}` plus extra keys the UI may ignore: `clearance_reversals`, `clearance_amendments`, `go_arounds`, `avg_landing_occupancy_s`, `decisions`, `readback_errors_caught`. The two readback-error counts come from the sim's private record (`Simulation.readback_truth`), never from events or `observe()`.
 
 ## Engine interface (Python)
 
@@ -82,3 +82,9 @@ class Controller:
     def on_tick(self, sim, events) -> None: ...   # may call sim tools; must return quickly
 ```
 Clearance `action` values: `taxi_via`, `hold_short`, `cross_runway`, `line_up_and_wait`, `cleared_for_takeoff`, `cleared_to_land`, `go_around`, `hold_position`, `resume_taxi`, `pushback_approved`, `contact_tower_or_ground`. The engine validates only the shape of a call (known callsign/runway/graph nodes); it never refuses a clearance because it is unsafe. Conflicts are logged for scoring.
+
+`taxi_via` params: `{"to": stand | runway end | node, "via"?: [taxiway letters], "entry"?: node}` lets the sim pick the shortest path. `{"route": [node ids], "to"?: stand | runway end}` is followed node for node: consecutive nodes must share a graph edge, and the route must include the aircraft's next node (`observe()` aircraft `next_node`; the stand node at the gate); nodes before it are dropped. With `to` a runway end the route must end on that runway (its last node is the entry); with `to` a stand it must end at the stand node. Shape errors: `route nodes A and B are not connected by a graph edge`, `route must include the aircraft's next node N ...`, `route for runway R must end at a node on that runway ...`, `route for gate G must end at its stand node ...`.
+
+Readbacks: event `readback` data is `{id, clearance_id, voice_id, text, parsed: {action, runway}, status: "pending"}` for every readback; it never says whether the readback is wrong (`parsed` holds only what the words say, so "Roger" parses to no action and no runway). Every delivered readback is listed in `observe()['pending_readbacks']` until `resolve_readback` accepts or rejects it; after 5 s of silence it is accepted (`readback.accepted` with `implicit: true`). The pilot acts on the clearance only once the readback is accepted. An accepted wrong hold-short readback makes that pilot miss that one hold point; later holds work normally.
+
+A clearance that cannot take effect in the aircraft's phase (for example `cleared_to_land` to an aircraft at a gate) is ended as soon as it is acknowledged: state `cancelled`, event `clearance.no_effect`. A `hold_short` completes when the aircraft stops at the hold point or is no longer routed over that runway.

@@ -74,7 +74,7 @@ class Physics:
             entry = run.s0 - (half + HOLD_OFFSET_M)
             if ac.s > entry + 0.5:
                 continue  # already committed to this pavement
-            if i not in ac.cleared_runs and not ac.ignore_hold:
+            if i not in ac.cleared_runs:
                 cand, reason = max(entry, ac.s), "run"
             elif self.sim.runway_busy(run.runway, ac):
                 cand, reason = max(entry, ac.s), "busy"

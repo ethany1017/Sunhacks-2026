@@ -40,6 +40,7 @@ AIR_SEP_SAME_RWY_M = 4630.0   # 2.5 nm on the same final
 AIR_SEP_OTHER_M = 1500.0
 GROUND_SEP_MARGIN_M = 5.0   # wingtip clearance below which a ground pair counts as a separation loss
 DEADLOCK_S = 60.0
+READBACK_SILENCE_S = 5.0    # no verdict from the controller this long after a readback: it stands (implicitly accepted)
 DEFAULT_CONFIG = {"arrival_runways": ["25L", "26"], "departure_runways": ["25R", "26"]}
 Resolved = Dict[str, Any]
 
@@ -67,6 +68,7 @@ class Simulation:
         self.scenario = sc
         self.seed = self._seed_override if self._seed_override is not None else sc.seed
         self.rng = np.random.default_rng(self.seed)
+        self.obs_rng = np.random.default_rng([self.seed, 1])   # observation noise only: observe() never touches self.rng
         self.clock = SimClock()
         run_dir = self._run_dir
         if run_dir is not None and self._resets:
@@ -83,6 +85,7 @@ class Simulation:
         self.voice: List[VoiceLine] = []
         self.decisions: Dict[str, Dict[str, Any]] = {}
         self.readbacks: Dict[str, Readback] = {}
+        self.readback_truth: List[Dict[str, Any]] = []   # metrics only: wrong readbacks and whether they were caught
         self.runway_cfg = {k: list(v) for k, v in DEFAULT_CONFIG.items()}
         self.pending: List[Tuple[float, int, Flight]] = sorted(
             [((f.scheduled_sim_s - FINAL_START_M / (get_type(f.type).vref_mps + 10.0) if f.kind == "arrival" else sc.start_sim_s), i, f)
@@ -220,29 +223,33 @@ class Simulation:
 
     # -- pilots and readbacks ----------------------------------------------------------------------
     def _readback_tick(self, t: float) -> None:
+        """Deliver due readbacks. Every readback, right or wrong, is pending until the controller accepts or rejects it;
+        silence for READBACK_SILENCE_S counts as acceptance. Whether it was wrong stays in the sim's private state."""
         for rb in list(self.readbacks.values()):
-            if rb.delivered or rb.due_t > t:
+            if rb.delivered:
+                if not rb.resolved and t - rb.delivered_t >= READBACK_SILENCE_S:
+                    self._resolve(rb, True, implicit=True)
+                continue
+            if rb.due_t > t:
                 continue
             c = self.clearances[rb.clearance_id]
-            rb.delivered = True
+            rb.delivered, rb.delivered_t = True, t
             if c.state not in ("issued", "acknowledged"):
                 rb.resolved = True
                 continue
             text, parsed, error = make_readback(self.rng, self.scenario.readback_error_rate, c.action, c.callsign,
                                                 c.params, c.runway, rb.retry)
-            voice = self._add_voice("pilot", c.callsign, text, "ok" if error is None else "pending")
+            voice = self._add_voice("pilot", c.callsign, text, "pending")
             rb.voice_id, rb.parsed, rb.error = voice.id, parsed, error
             self.emit("readback", c.callsign, {"id": rb.id, "clearance_id": c.id, "voice_id": voice.id, "text": text,
-                                               "parsed": parsed, "status": voice.status, "error_truth": error})
-            if error is None:
-                rb.resolved = True
-                self._acknowledge(c)
+                                               "parsed": parsed, "status": voice.status})
 
-    def _acknowledge(self, c: Clearance) -> None:
+    def _acknowledge(self, c: Clearance, apply: bool = True) -> None:
         if c.state == "issued":
             c.state, c.ack_t = "acknowledged", self.t
             self.emit("clearance.acknowledged", c.callsign, {"clearance_id": c.id, "action": c.action})
-        self._apply(c)
+        if apply:
+            self._apply(c)
 
     def resolve_readback(self, readback_id: str, accept: bool) -> Dict[str, Any]:
         """The controller's verdict on a pilot readback: accept it or say again (the pilot then reads back correctly)."""
@@ -251,19 +258,23 @@ class Simulation:
             return _err("unknown or undelivered readback %r" % readback_id)
         if rb.resolved:
             return {"ok": True, "note": "already resolved"}
+        return self._resolve(rb, accept)
+
+    def _resolve(self, rb: Readback, accept: bool, implicit: bool = False) -> Dict[str, Any]:
         rb.resolved = True
         c = self.clearances[rb.clearance_id]
         voice = next(v for v in self.voice if v.id == rb.voice_id)
+        if rb.error:
+            self.readback_truth.append({"readback_id": rb.id, "callsign": c.callsign, "clearance_id": c.id, "error": rb.error,
+                                        "caught": not accept, "t": round(self.t, 1)})
         if accept:
             voice.status = "ok"
-            self.emit("readback.accepted", c.callsign, {"readback_id": rb.id, "clearance_id": c.id, "error_truth": rb.error})
-            if rb.error:
-                self.emit("readback.error_accepted", c.callsign, {"readback_id": rb.id, "error": rb.error})
-                ac = self.aircraft[c.callsign]
-                if c.action == "hold_short":
-                    ac.ignore_hold = True
-                    return {"ok": True}
-            self._acknowledge(c)
+            self.emit("readback.accepted", c.callsign, {"readback_id": rb.id, "clearance_id": c.id, "implicit": implicit})
+            if rb.error and c.action == "hold_short":
+                self._acknowledge(c, apply=False)
+                self._miss_hold(self.aircraft[c.callsign], c.params["runway"])
+            else:
+                self._acknowledge(c)
             return {"ok": True}
         voice.status = "corrected"
         c.version += 1
@@ -432,16 +443,28 @@ class Simulation:
                 return "unknown taxiway(s) %s" % unknown
         dep_end: Optional[str] = None
         entry: Optional[str] = None
+        to = p.get("to")
         if p.get("route"):
             nodes = [str(n) for n in p["route"]]
             bad = [n for n in nodes if n not in self.graph.node_xy]
             if bad:
                 return "route contains unknown graph nodes %s" % bad[:3]
-            if any(self.graph.edge_between(a, b) is None for a, b in zip(nodes, nodes[1:])):
-                return "route nodes are not connected by graph edges"
+            gaps = [(a, b) for a, b in zip(nodes, nodes[1:]) if self.graph.edge_between(a, b) is None]
+            if gaps:
+                return "route nodes %s and %s are not connected by a graph edge" % gaps[0]
+            if origin not in nodes:
+                return "route must include the aircraft's next node %s (it taxis from there)" % origin
+            nodes = nodes[nodes.index(origin):]
             dst = nodes[-1]
+            if to in self.graph.end_runway:
+                if dst not in self.graph.runways[self.graph.end_runway[to]].chain:
+                    return "route for runway %s must end at a node on that runway, got %s" % (to, dst)
+                dep_end, entry = to, dst
+            elif to in self.graph.stands and dst != self.graph.stands[to].node:
+                return "route for gate %s must end at its stand node %s, got %s" % (to, self.graph.stands[to].node, dst)
+            return {"dst": dst, "via": None, "dep_end": dep_end, "entry": entry, "route": nodes,
+                    "gate": to if to in self.graph.stands else None}
         else:
-            to = p.get("to")
             if to in self.graph.stands:
                 dst = self.graph.stands[to].node
             elif to in self.graph.end_runway:
@@ -457,11 +480,20 @@ class Simulation:
         route = self.graph.route(origin, dst, via=via)
         if route is None:
             return "no taxi route from %s to %s" % (origin, dst)
-        return {"dst": dst, "via": via, "dep_end": dep_end, "entry": entry, "gate": p.get("to") if p.get("to") in self.graph.stands else None}
+        return {"dst": dst, "via": via, "dep_end": dep_end, "entry": entry, "route": None,
+                "gate": to if to in self.graph.stands else None}
+
+    def _taxi_nodes(self, ac: Aircraft, res: Resolved) -> Optional[List[str]]:
+        """The node list to taxi now: the explicit route from the aircraft's next node, else the shortest path."""
+        origin, _ = self._route_origin(ac)
+        if origin is None:
+            return None
+        if res["route"] is not None:
+            return res["route"][res["route"].index(origin):] if origin in res["route"] else None
+        return self.graph.route(origin, res["dst"], via=res["via"])
 
     def _taxi_text_params(self, ac: Aircraft, res: Resolved) -> Dict[str, Any]:
-        origin, _ = self._route_origin(ac)
-        nodes = self.graph.route(origin, res["dst"], via=res["via"]) or []
+        nodes = self._taxi_nodes(ac, res) or []
         tail = self._lineup_tail(res["dep_end"], res["entry"]) if res["dep_end"] else ()
         path = self.graph.build_path(nodes, tail=tail)
         runs = path.runs
@@ -502,9 +534,10 @@ class Simulation:
             if applied:
                 self.res.set(self.runway_pavement(ac.dep_end) or "", ac.callsign, "line_up", t, t + 60.0)
         elif act == "cleared_for_takeoff":
-            ac.takeoff_cleared = True
-            applied = self._clear_final_run(ac, c) if ac.path and ac.phase != "takeoff_roll" else True
-            self.res.set(self.runway_pavement(ac.dep_end) or "", ac.callsign, "takeoff", t, t + 70.0)
+            applied = ac.phase == "takeoff_roll" or (ac.path is not None and self._clear_final_run(ac, c))
+            if applied:
+                ac.takeoff_cleared = True
+                self.res.set(self.runway_pavement(ac.dep_end) or "", ac.callsign, "takeoff", t, t + 70.0)
         elif act == "cleared_to_land":
             if ac.phase == "final" or ac.phase == "go_around":
                 ac.landing_cleared = True
@@ -528,6 +561,10 @@ class Simulation:
                 ac.runway = p["runway"]
             self._complete(c)
         if not applied:
+            # it can never take effect in this phase: end it instead of leaving it acknowledged forever
+            c.state, c.done_t = "cancelled", round(t, 1)
+            if c in self.active.get(c.callsign, []):
+                self.active[c.callsign].remove(c)
             self.emit("clearance.no_effect", ac.callsign, {"clearance_id": c.id, "action": act, "phase": ac.phase})
 
     def _start_pushback(self, ac: Aircraft, c: Clearance) -> bool:
@@ -556,10 +593,8 @@ class Simulation:
 
     def _apply_taxi(self, ac: Aircraft, c: Clearance) -> bool:
         res: Resolved = c.params["_resolved"]
-        origin, prefix = self._route_origin(ac)
-        if origin is None:
-            return False
-        nodes = self.graph.route(origin, res["dst"], via=res["via"])
+        _, prefix = self._route_origin(ac)
+        nodes = self._taxi_nodes(ac, res)
         if nodes is None:
             return False
         tail = self._lineup_tail(res["dep_end"], res["entry"]) if res["dep_end"] else ()
@@ -598,8 +633,19 @@ class Simulation:
             if r.runway == pav and r.s0 - half - HOLD_OFFSET_M > ac.s + ac.speed ** 2 / (2 * A_BRAKE):
                 ac.cleared_runs.discard(i)
                 stopped = True
-        ac.ignore_hold = False
         return stopped
+
+    def _miss_hold(self, ac: Aircraft, end: str) -> None:
+        """An accepted wrong hold-short readback: the pilot does not stop at the next hold point for this runway only.
+        Later hold instructions and every other hold point on the route work normally."""
+        pav = self.runway_pavement(end)
+        if ac.path is None or pav is None:
+            return
+        half = ac.length_m / 2
+        for i, r in enumerate(ac.path.runs):
+            if r.runway == pav and r.s0 - half - HOLD_OFFSET_M > ac.s + ac.speed ** 2 / (2 * A_BRAKE):
+                ac.cleared_runs.add(i)
+                return
 
     def _cross(self, ac: Aircraft, c: Clearance) -> bool:
         pav = self.runway_pavement(c.params["runway"])
@@ -652,7 +698,7 @@ class Simulation:
         return {"ok": True, "decision_id": d["id"]}
 
     def observe(self) -> Dict[str, Any]:
-        age, ac_list = self.obs.observe(self.scenario.observation_delay_s, self.scenario.observation_noise_m, self.rng)
+        age, ac_list = self.obs.observe(self.scenario.observation_delay_s, self.scenario.observation_noise_m, self.obs_rng)
         pending = [{"id": r.id, "callsign": r.callsign, "clearance_id": r.clearance_id, "text": next(
             (v.text for v in self.voice if v.id == r.voice_id), ""), "parsed": r.parsed}
             for r in self.readbacks.values() if r.delivered and not r.resolved]
@@ -858,7 +904,8 @@ class Simulation:
                     if run is not None and ac.s - half > run.s1:
                         self._complete(c)
                         self.res.release(cs, "crossing")
-                elif c.action == "hold_short" and ac.speed < 0.2 and ac.stop_why in ("run", "busy"):
+                elif c.action == "hold_short" and ((ac.speed < 0.2 and ac.stop_why in ("run", "busy"))
+                                                   or not self._pavement_ahead(ac, c.params["runway"])):
                     self._complete(c)
                 elif c.action == "hold_position" and ac.speed < 0.2:
                     self._complete(c)
@@ -866,6 +913,11 @@ class Simulation:
                     self._complete(c)
                 elif c.action == "go_around" and ac.phase == "go_around":
                     self._complete(c)
+
+    def _pavement_ahead(self, ac: Aircraft, end: str) -> bool:
+        pav = self.runway_pavement(end)
+        p = ac.path
+        return p is not None and any(r.runway == pav and r.s1 > ac.s - ac.length_m / 2 for r in p.runs)
 
     # -- reservations and occupancy ------------------------------------------------------------------------------
     def _update_reservations(self, t: float) -> None:
@@ -997,7 +1049,7 @@ class Simulation:
     def score(self) -> Dict[str, Any]:
         n = len(self.log.events)
         if self._score_cache[0] != n:
-            self._score_cache = (n, compute_score(self.log.events, self.t))
+            self._score_cache = (n, compute_score(self.log.events, self.t, self.readback_truth))
         return self._score_cache[1]
 
     def _meta(self) -> Dict[str, Any]:

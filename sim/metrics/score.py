@@ -11,7 +11,9 @@ def _ts(ev: Dict[str, Any]) -> float:
     return ev["sim_time_ms"] / 1000.0
 
 
-def compute_score(events: EventList, t: float) -> Dict[str, Any]:
+def compute_score(events: EventList, t: float, readback_truth: Optional[EventList] = None) -> Dict[str, Any]:
+    """readback_truth is the sim's private record of wrong readbacks (never shown to a controller)."""
+    truth = readback_truth or []
     kinds: Dict[str, EventList] = {}
     for ev in events:
         kinds.setdefault(ev["kind"], []).append(ev)
@@ -24,7 +26,8 @@ def compute_score(events: EventList, t: float) -> Dict[str, Any]:
         "separation_losses": len(kinds.get("separation_loss", [])),
         "runway_conflicts": len(kinds.get("conflict", [])),
         "deadlocks": len(kinds.get("deadlock", [])),
-        "readback_errors_accepted": len(kinds.get("readback.error_accepted", [])),
+        "readback_errors_accepted": sum(1 for r in truth if not r["caught"]),
+        "readback_errors_caught": sum(1 for r in truth if r["caught"]),
         "completed": len(done),
         "avg_delay_s": round(sum(delays) / len(delays), 1) if delays else 0.0,
         "throughput_per_10min": sum(1 for e in ops if t - THROUGHPUT_WINDOW_S < _ts(e) <= t),
