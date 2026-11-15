@@ -3,7 +3,8 @@
 #   ./run_demo.sh                                   backend :8100, dashboard :5180
 #   BACKEND_PORT=8111 FRONTEND_PORT=5191 ./run_demo.sh
 #   NO_BROWSER=1 ./run_demo.sh                      don't open the browser
-#   SIM_SPEED=20 ./run_demo.sh                      sim pace (default 10x); DEMO_SEED_* in .env pick the seeds
+#   SIM_SPEED=20 ./run_demo.sh                      sim pace (default 10x)
+#   DEMO_SEED_LIGHT_RAIN=24 ./run_demo.sh           demo seeds (default Light Rain 25, Normal Day 3; shell or .env)
 set -euo pipefail
 cd "$(dirname "$0")"
 BACKEND_PORT=${BACKEND_PORT:-8100}
@@ -20,9 +21,13 @@ done
 [ -x backend/.venv/bin/python ] || { echo "Missing backend/.venv (see README: Setup)." >&2; exit 1; }
 [ -x frontend/node_modules/.bin/vite ] || { echo "Missing frontend/node_modules (run: cd frontend && npm install)." >&2; exit 1; }
 
-SIM_SPEED_ENV=${SIM_SPEED:-}
+SIM_SPEED_ENV=${SIM_SPEED:-} SEED_ND_ENV=${DEMO_SEED_NORMAL_DAY:-} SEED_LR_ENV=${DEMO_SEED_LIGHT_RAIN:-}
 if [ -f .env ]; then set -a; . ./.env; set +a; fi  # API keys; every service has an offline fallback without them
 export SIM_SPEED=${SIM_SPEED_ENV:-${SIM_SPEED:-10}}  # demo pace: 10x (a day in about 4 min); the shell, then .env, win
+# Demo seeds (the shell, then .env, win). Picked from the TRAINING seeds as days where the two controllers differ
+# (Light Rain 25: Human FAIL, Agent PASS). Not a fair sample: the honest comparison is the multi-seed tables in README.
+export DEMO_SEED_LIGHT_RAIN=${SEED_LR_ENV:-${DEMO_SEED_LIGHT_RAIN:-25}}
+export DEMO_SEED_NORMAL_DAY=${SEED_ND_ENV:-${DEMO_SEED_NORMAL_DAY:-3}}
 
 pids=()
 stop() {
