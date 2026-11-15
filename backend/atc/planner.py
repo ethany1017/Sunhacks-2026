@@ -14,7 +14,7 @@ from . import safety
 M_PER_DEG = 111320.0
 LAND_CLEAR_ETA_S = 120.0        # start offering the landing clearance this far out (the runway must be predicted clear)
 LAND_DECIDE_ETA_S = 30.0        # last chance before the 1,800 m decision point (~26 s at Vref): clear it or go around
-SHORT_FINAL_CHECK_S = 12.0      # cleared arrival this close with the runway still blocked: go around (last resort)
+SHORT_FINAL_CHECK_S = 20.0      # cleared arrival this close with the runway still blocked: go around (last resort)
 ROLLOUT_S = 72.0                # typical landing occupancy, dry (docs/LEVELS.md measures 69-77 s), times occupancy_mult
 FLOW_SWITCH_TAILWIND_KT = 4.0   # turn the airport round once the active direction has more tailwind than this
 FLOW_FINISH_ETA_S = 150.0       # on a flow change an arrival this close finishes on the old direction while legal
@@ -29,6 +29,14 @@ CONVERGE_LOOK_M = 250.0         # ground: look this far ahead along each route f
 CONFLICT_MARGIN_M = 20.0        # two route points closer than the half wingspans + this are one conflict point
 CONVERGE_WINDOW_S = 20.0        # two aircraft reaching one junction closer in time than this: one holds
 CONVERGE_MIN_STOP_M = 80.0      # ...if it is still this far from the junction (readback + braking distance)
+BODY_MIN_STOP_M = 40.0          # stop for a stopped fuselage over a junction only if it can still stop short of it
+SEE_AVOID_M = 15.0              # the pilots stop for any aircraft this close (beyond half lengths) ahead (sim README)
+SIM_CORRIDOR_M = 30.0           # the pilots stop for a stopped aircraft this close to their path (sim README)
+HOLD_REACT_S = 4.0              # hold_position: readback delay before the pilots brake
+HOLD_DECEL_MPS2 = 0.5           # assumed (gentle) taxi braking
+UNJAM_NO_RUNWAY_M = 110.0       # an unjam re-route reaches runway pavement no sooner than half a length + this (hold offset + margin)
+UNJAM_AFTER_S = 15.0            # mutual block this long: re-route one of the pair
+BODY_MARGIN_M = 10.0            # extra clearance past a's half span and a quarter of the stopped aircraft's span
 CONVERGE_CLEAR_M = 70.0
 START_DELAY_S = 5.0             # readback plus spool-up before a stopped aircraft moves
 TAXI_AVG_MPS = 5.0              # average speed from a standing start over the first few hundred metres
@@ -101,9 +109,136 @@ class Planner:
         for a in order:
             (self._arrival if a["kind"] == "arrival" else self._departure)(a)
         self._ground()
+        self._unjam()
         self._sequence()
 
     # -- ground conflicts: two aircraft converging on one node -------------------------------------------------------
+    def _under(self, b, n, a):
+        """Is node n under (or within a's half span of) the fuselage of aircraft b?"""
+        h = math.radians(b["heading_deg"])
+        ux, uy = math.sin(h) * b["length_m"] / 2, math.cos(h) * b["length_m"] / 2
+        px, py = self.xy[n][0] - b["x"], self.xy[n][1] - b["y"]
+        k = max(-1.0, min(1.0, (px * ux + py * uy) / max(ux * ux + uy * uy, 1e-6)))
+        return math.hypot(px - k * ux, py - k * uy) < a["wingspan_m"] / 2 + b["wingspan_m"] / 4 + BODY_MARGIN_M
+
+    def _route_pts(self, cs, a, maxd):
+        """Points every 8 m along a's remaining route from where it is, up to maxd: [(x, y, d, ux, uy)]."""
+        r = self._remaining(cs, a)
+        nn = a.get("next_node")
+        if nn not in r:
+            return []
+        out, prev, d = [], (a["x"], a["y"]), 0.0
+        for n in r[r.index(nn):]:
+            q = self.xy[n]
+            seg = self._dist(prev, q)
+            if seg > 1e-6:
+                ux, uy = (q[0] - prev[0]) / seg, (q[1] - prev[1]) / seg
+                k = 0.0
+                while k < seg:
+                    out.append((prev[0] + ux * k, prev[1] + uy * k, d + k, ux, uy))
+                    k += 8.0
+                d += seg
+            if d > maxd:
+                break
+            prev = q
+        return out
+
+    def _stops_clear(self, cs, other):
+        """Would cs, told to hold now, stop more than the pilots' path corridor away from other's route ahead?
+        (The simulator's pilots stop for any stopped aircraft within 30 m of their path: holding cs there would block
+        the very aircraft it waits for.)"""
+        a, o = self.ac[cs], self.ac[other]
+        v = a["speed_mps"]
+        stop = v * HOLD_REACT_S + v * v / (2 * HOLD_DECEL_MPS2)
+        mine = self._route_pts(cs, a, stop + 8.0)
+        x, y = (mine[-1][0], mine[-1][1]) if mine else (a["x"], a["y"])
+        theirs = self._route_pts(other, o, CONVERGE_LOOK_M + 100.0)
+        lim = SIM_CORRIDOR_M + a["length_m"] / 2 + BODY_MARGIN_M
+        return all(math.hypot(px - x, py - y) > lim for px, py, *_ in theirs)
+
+    def _unjam(self):
+        """Two taxiing aircraft stopped, each blocked by the other (the pilots wait for each other for ever): re-route one
+        of them on a route that keeps clear of the other."""
+        for cs, a in sorted(self.ac.items()):
+            o = a.get("blocked_by")
+            b = self.ac.get(o) if o else None
+            m = self._m(cs)
+            if b is None or a["phase"] not in ("taxi_in", "taxi_out") or a["speed_mps"] > 0.3 or \
+                    (a.get("stopped_s") or 0) < UNJAM_AFTER_S or b.get("blocked_by") != cs or b["speed_mps"] > 0.3 or \
+                    m.get("unjam") == (a.get("next_node"), o) or not m.get("route") or self._pending(cs, "taxi_via") or \
+                    self._live_action(cs, "cross_runway"):
+                continue
+            m["unjam"] = (a.get("next_node"), o)
+            near = {n for n, (x, y) in self.xy.items()
+                    if math.hypot(x - b["x"], y - b["y"]) < (a["length_m"] + b["length_m"]) / 2 + SEE_AVOID_M + SIM_CORRIDOR_M}
+            dst, end = m["route"][-1], m.get("end")
+            for start, turn in ((a.get("next_node"), False), (a.get("prev_node"), True)):
+                if not start or start in near:
+                    continue
+                route = self._route(cs, start, dst, avoid_pav=self.ends[end]["runway"] if end else None, avoid_nodes=near)
+                if not route or self._pavement_within(route, (a["x"], a["y"]), a["length_m"] / 2 + UNJAM_NO_RUNWAY_M):
+                    continue   # never start a re-route at a runway: the pilots would be inside its hold point already
+                to = end if a["phase"] == "taxi_out" and end else a.get("gate")
+                res = self._propose(a, "taxi_via", {"route": route, "to": to},
+                                    f"{cs} and {o} are stopped nose to nose, each waiting for the other: {cs} takes a route "
+                                    f"round {o}.", end=end if a["phase"] == "taxi_out" else None, route=route,
+                                    extra={"turn_round": turn, "path": self._path(route, (a["x"], a["y"]), 0.0)})
+                if res:
+                    m.pop("held", None)
+                    m["pend"] = {"cid": res["clearance_id"], "set": {"route": route, "ri": 0}}
+                    return
+
+    def _pavement_within(self, route, xy, dmax):
+        """Does the route reach runway pavement within dmax of xy (measured along it)?"""
+        d = self._dist(xy, self.xy[route[0]])
+        for u, v in zip(route, route[1:]):
+            if d > dmax:
+                return False
+            if self.g[u][v]["pavement"]:
+                return True
+            d += self.g[u][v]["length"]
+        return False
+
+    def _waits_for(self, a, b):
+        """Is a (transitively) held for b?"""
+        seen = set()
+        while a and a not in seen:
+            seen.add(a)
+            a = (self._m(a).get("held") or {}).get("by")
+            if a == b:
+                return True
+        return False
+
+    def _freeze(self, cs, a, b, min_d=BODY_MIN_STOP_M):
+        """First node ahead of a beyond min_d from which a and the stopped b would be in each other's see-and-avoid
+        cone (within half lengths + 15 m, inside +-60 deg ahead): pilots then wait for each other for ever."""
+        lim = (a["length_m"] + b["length_m"]) / 2 + SEE_AVOID_M + BODY_MARGIN_M
+        bh = math.radians(b["heading_deg"])
+        bf = (math.sin(bh), math.cos(bh))
+        r = self._remaining(cs, a)
+        nn = a.get("next_node")
+        if nn not in r:
+            return None
+        prev, d = (a["x"], a["y"]), 0.0
+        for n in r[r.index(nn):]:
+            q = self.xy[n]
+            seg = self._dist(prev, q)
+            k = 0.0
+            while k <= seg:
+                x, y = prev[0] + (q[0] - prev[0]) * k / max(seg, 1e-6), prev[1] + (q[1] - prev[1]) * k / max(seg, 1e-6)
+                rx, ry = b["x"] - x, b["y"] - y
+                dist = math.hypot(rx, ry)
+                if d + k >= min_d and dist < lim and seg > 0 and \
+                        (rx * (q[0] - prev[0]) + ry * (q[1] - prev[1])) / seg > 0.5 * dist and \
+                        -(rx * bf[0] + ry * bf[1]) > 0.5 * dist:
+                    return n
+                k += 8.0
+            d += seg
+            if d > CONVERGE_LOOK_M:
+                return None
+            prev = q
+        return None
+
     def _ahead(self, cs, a):
         """[(node, distance along the route)] for the remaining route ahead of a moving ground aircraft."""
         r = self._remaining(cs, a)
@@ -127,6 +262,9 @@ class Planner:
             node = self.xy[h["node"]]
             if h.get("push"):
                 past = o is None or o["phase"] != "pushback"
+            elif h.get("body"):   # no timeout: waiting forever beats taxiing into a parked fuselage
+                past = o is None or o["phase"] not in safety.GROUND_PHASES or not (
+                    self._under(o, h["node"], a) or self._freeze(cs, a, o, 0.0))
             else:
                 past = o is None or (h["node"] not in self._remaining(h["by"], o)
                                  and self._dist((o["x"], o["y"]), node) > CONVERGE_CLEAR_M) or \
@@ -149,6 +287,20 @@ class Planner:
                 if self._propose(self.ac[cs], "hold_position", {}, f"{hot[n]} is pushing back into the taxilane "
                                                                     f"{d:.0f} m ahead of {cs}: {cs} holds position."):
                     self._m(cs)["held"] = {"by": hot[n], "node": n, "t": self.t, "push": True}
+        still = {cs: a for cs, a in self.ac.items() if a["phase"] in safety.GROUND_PHASES and a["speed_mps"] < 0.3}
+        for cs, lst in ahead.items():   # a stopped aircraft whose fuselage sits over a junction on this route
+            a = movers[cs]
+            if self._m(cs).get("held") or self._live_action(cs, "cross_runway"):
+                continue
+            for o, b in still.items():
+                if o == cs or self._waits_for(o, cs) or abs((a["heading_deg"] - b["heading_deg"] + 180) % 360 - 180) < 40:
+                    continue   # stopped ahead in trail: the pilots' car-following stops behind it
+                n = next((n for n, d in lst if d >= BODY_MIN_STOP_M and self._under(b, n, a)), None) or \
+                    self._freeze(cs, a, b)
+                if n and self._propose(a, "hold_position", {}, f"{o} is stopped across the junction ahead of {cs}: "
+                                                                f"{cs} holds position until it moves clear."):
+                    self._m(cs)["held"] = {"by": o, "node": n, "t": self.t, "body": True}
+                    break
         names = sorted(c for c in movers if not self._m(c).get("held"))
         for i, p in enumerate(names):
             for q in names[i + 1:]:
@@ -177,8 +329,11 @@ class Planner:
                          if d_ >= CONVERGE_MIN_STOP_M and not self._live_action(x, "cross_runway")]
                 if not cands:
                     continue   # both too close to stop short of the junction: the pilots' see-and-avoid takes it
-                later = max(cands)[1]
+                cands.sort(reverse=True)   # the later one holds, unless only the other would stop clear of its path
+                later = next((x for _, x in cands if self._stops_clear(x, q if x == p else p)), cands[0][1])
                 first = q if later == p else p
+                if self._waits_for(first, later):
+                    continue   # holding it would close a wait cycle
                 a = self.ac[later]
                 if self._propose(a, "hold_position", {}, f"{later} and {first} are converging on the same junction "
                                                          f"({dp:.0f} m / {dq:.0f} m away): {later} holds position until "
@@ -245,7 +400,12 @@ class Planner:
             v = max(a["speed_mps"], 10.0)
             if ph == "landing_roll":
                 return self.t + d / ((v + 10.0) / 2.0) * occ + (a["length_m"] / 2 + 70.0) / 5.0
-            return self.t + max(a["length_m"] / 2 + 70.0 - d, 0.0) / 4.0 + 2.0
+            if a["speed_mps"] < 0.5 and a.get("blocked_by"):
+                return float("inf")   # held up by traffic before it is clear of the runway
+            rem = a["length_m"] / 2 + 70.0 - d
+            if rem <= 0:
+                return self.t + 15.0  # past where it should be clear yet still reported on the runway: long exit, don't trust
+            return self.t + rem / min(max(a["speed_mps"], 1.0), 4.0) + 2.0
         if ph == "takeoff_roll":
             return self.t + 45.0 * occ * occ
         c = a.get("clearance") or {}
@@ -382,6 +542,8 @@ class Planner:
                 runs = self._runs(route or [])
                 exp_rwy = self.si.runway_label(runs[0]) if runs else None
         self.expected[res["clearance_id"]] = (cs, action, exp_rwy)
+        if action in ("taxi_via", "cross_runway"):
+            self._m(cs).pop("held", None)   # a new movement clearance supersedes a hold_position
         if pavement:
             self._m(cs).setdefault("pav_of", {})[res["clearance_id"]] = pavement
         self.emit(self.t, "clearance", cs, {"clearance_id": res["clearance_id"], "action": action, "params": params,
@@ -545,7 +707,7 @@ class Planner:
         if a.get("landing_cleared") or self._pending(cs, "cleared_to_land"):
             if a.get("landing_cleared") and eta < SHORT_FINAL_CHECK_S and not m.get("ga"):
                 late = [o for o in self.pic["occupants"].get(a["runway"], [])
-                        if o != cs and self.pic["clear_at"].get(o, float("inf")) > self.t + eta]
+                        if o != cs and self.pic["clear_at"].get(o, float("inf")) > self.t + eta - safety.LANDING_BUFFER_S]
                 if late:
                     m["ga"] = True
                     self._propose(a, "go_around", {}, f"{cs} is {eta:.0f} s from touchdown and {', '.join(late)} is "
