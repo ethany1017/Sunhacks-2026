@@ -70,7 +70,7 @@ validation days of both levels.
 | 5 | Final grading | **Fail on the stated requirement.** Light Rain meets it. Normal Day does not (2/3, one fail). |
 | 6 | Training loop | **Done; stopped at about 08:15, before the 09:30 cutoff, because the last round found nothing to adopt.** Every round is logged in [TRAINING_LOG.md](TRAINING_LOG.md). The best version (639b0ac) is kept. |
 | 7 | Demo ready | **Pass.** See "Demo checks" below. The main flow takes 6 to 7 minutes at 10x, not 3 to 5. |
-| 8 | Ship | Tests and builds pass on the commit that was pushed. The push itself is confirmed in Claude's closing message, since this file had to be committed first. |
+| 8 | Ship | **Done.** Tests and builds pass on the shipped code. `main`, `sim` and `agent` were pushed to origin at 08:22 with a normal push (no force); `origin/main` matched local `main` and both checkouts were clean. Backup tags `backup-*-1115-0822` are local only. This row was added in a follow-up docs commit, pushed the same way. |
 | 9 | This report | Done. |
 
 ### Demo checks
@@ -124,7 +124,8 @@ Every plan went to the review council before any code changed. Where the council
    tower beating the Agent on Normal Day delay.
 7. **Demo seeds are Light Rain 25 and Normal Day 3.** Chosen from the training seeds as days where the two
    controllers differ. The README and the demo script say so.
-8. **Demo runs at 10x** and takes 6 to 7 minutes. Faster made the map unreadable.
+8. **Demo runs at 10x.** One day takes about four minutes, so the two-run flow takes 6 to 7 minutes, longer than
+   the 3 to 5 asked for. `SIM_SPEED` changes it; the rehearsals were all at 10x.
 9. **A8 was skipped** as optional.
 10. **Left the old servers on ports 8100 and 5180 running.** They were started Saturday 20:35 and may be yours.
 11. **`sim` stays at be43ff5.** No simulator change was needed after the freeze.
