@@ -60,7 +60,9 @@ been verified on this machine (no API key was available during the build).
 **Voice** (`backend/atc/voice_out.py`): every clearance and readback is spoken (tower voice and two or three pilot
 voices), cached by a hash of voice and text under `backend/audio_cache/`. ElevenLabs is used when a key is set
 (unverified: no key was available), otherwise macOS `say`. `VOICE=0` turns it off. At the 10x demo pace the dashboard
-plays roughly one line in eight and skips the rest so the audio never lags the picture.
+plays roughly one line in eight: only the newest clearance and its own readback, so speech starts about 10 sim seconds
+after the event (a line itself lasts about 48 sim seconds), and it stops on a reset. The map is satellite imagery
+(USGS); without network it falls back to the dark airport map.
 
 **Live weather** (`backend/atc/weather_live.py`): the real KPHX METAR from aviationweather.gov, refreshed every 5
 minutes and cached in `backend/weather_cache/`. It is shown in the top bar as "Live KPHX" and never drives decisions:
