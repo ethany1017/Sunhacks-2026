@@ -1,4 +1,5 @@
 """Adapter for the in-process KPHX simulator (sim/ at the repo root). The only backend module that imports `sim`."""
+import copy
 import sys
 from pathlib import Path
 
@@ -33,6 +34,7 @@ class RealSimulator:
         self.controller = None  # "human" | "agent"
         self._airport = None
         self._seen_readbacks = set()
+        self._obs = None  # this tick's observe(), enriched; see _observe()
 
     # -- lifecycle --------------------------------------------------------------------------------
     def get_levels(self):
@@ -49,9 +51,10 @@ class RealSimulator:
         lv = next((x for x in LEVELS if x["id"] == level), None)
         if lv is None:
             raise ValueError(f"unknown level {level!r}")
+        new = Simulation(lv["scenario_path"], graph=self.graph, seed=seed)  # raises on a bad seed: nothing changed yet
         if self.sim is not None:
             self.sim.close()
-        self.sim = Simulation(lv["scenario_path"], graph=self.graph, seed=seed)
+        self.sim, self._obs = new, None
         self.level, self.controller, self._seen_readbacks = lv, "human", set()  # Simulation starts with the tower
 
     def set_controller(self, kind, obj=None):
@@ -61,7 +64,7 @@ class RealSimulator:
         res = self.sim.set_controller("tower" if kind == "human" else obj)
         if not res.get("ok"):
             raise ValueError(res.get("error"))
-        self.controller = kind
+        self.controller, self._obs = kind, None
 
     @property
     def t(self):
@@ -74,6 +77,7 @@ class RealSimulator:
     def step(self):
         """Advance one 0.1 sim-second tick. Returns this tick's events in our names (t, type, callsign, data, reason)."""
         out = []
+        self._obs = None
         for e in self.sim.step():
             k, cs, d, t = e["kind"], e["entity_id"], e["data"], e["sim_time_ms"] / 1000.0
             if k == "aircraft.spawned" and d.get("kind") != "vehicle":
@@ -104,8 +108,17 @@ class RealSimulator:
             self._airport = _airport(self.graph)
         return self._airport
 
+    def _observe(self):
+        # One observe() per tick (it draws noise); issue/resolve/set_runway_config don't invalidate: changes show next tick.
+        if self._obs is None:
+            self._obs = self._enrich(self.sim.observe())
+        return copy.deepcopy(self._obs)  # callers may mutate their copy
+
     def get_state(self):
-        obs = self.sim.observe()
+        return self._observe()
+
+    @staticmethod
+    def _enrich(obs):
         current = {}
         for c in obs["clearances"]:  # issued/acknowledged, in issue order: the last one per aircraft is the current one
             current[c["callsign"]] = c
@@ -122,7 +135,7 @@ class RealSimulator:
 
     def get_readbacks(self):
         """Pilot readbacks delivered since the last call and not yet resolved."""
-        new = [r for r in self.sim.observe()["pending_readbacks"] if r["id"] not in self._seen_readbacks]
+        new = [r for r in self._observe()["pending_readbacks"] if r["id"] not in self._seen_readbacks]
         self._seen_readbacks.update(r["id"] for r in new)
         return new
 
@@ -137,7 +150,7 @@ class RealSimulator:
 
     def get_referee(self):
         """Controller-safe Referee view: {verdict, fails, day_end_s} (no score)."""
-        return self.sim.observe()["referee"]
+        return self._observe()["referee"]
 
     # -- metrics only: true state, never for controller decisions ------------------------------------------
     def metrics(self):

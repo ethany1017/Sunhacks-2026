@@ -48,10 +48,12 @@ class Runner:
         """Start (or restart) a run. ValueError for an unknown level or controller."""
         if controller not in self.sim.get_controllers():
             raise ValueError(f"unknown controller {controller!r}")
-        if self.run_id is not None and not self.ended:
-            self._add(self.sim.t, "sim_end", data={"why": "reset"}, reason="Run reset from the dashboard.")
+        active = self.run_id is not None and not self.ended
+        t_old = self.sim.t if active else 0
+        self.sim.reset(level, seed)  # raises on a bad level/seed with the old run untouched, so end it only after
+        if active:
+            self._add(t_old, "sim_end", data={"why": "reset"}, reason="Run reset from the dashboard.")
             self.flush()
-        self.sim.reset(level, seed)
         self._plug(controller)
         lv, labels = self.sim.get_level(), self.sim.get_controllers()
         self.run_id, self.ended = db.start_run(), False

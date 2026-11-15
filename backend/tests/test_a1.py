@@ -102,3 +102,47 @@ def test_agent_code_never_imports_sim():
     for d in ("atc", "app"):
         for f in (BACKEND / d).rglob("*.py"):
             assert not pat.search(f.read_text()), f
+
+
+@pytest.mark.parametrize("level,seed", [("nowhere", None), ("smoke", -1)])
+def test_failed_restart_leaves_the_run_alone(runner, level, seed):
+    runner.start("smoke", "agent")
+    for _ in range(20):
+        runner.tick()
+    run_id, t = runner.run_id, runner.sim.t
+    with pytest.raises(ValueError):
+        runner.start(level, "agent", seed)
+    with pytest.raises(ValueError):
+        runner.start("smoke", "nobody")
+    assert runner.run_id == run_id and not runner.ended and runner.sim.t == t
+    runner.tick()
+    runner.flush()
+    assert runner.sim.t > t
+    assert not any(e["type"] == "sim_end" for e in db.events_for_run(run_id))
+
+
+class _Peeker:
+    """Test controller that reads the adapter `calls` times per tick and records what it saw."""
+    name, status = "agent", "idle"
+
+    def __init__(self, calls):
+        self.calls, self.seen = calls, []
+
+    def on_tick(self, sim, events):
+        for _ in range(self.calls):
+            st = SIM.get_state()
+            SIM.get_readbacks()
+            SIM.get_referee()
+        self.seen.append([(a["callsign"], a["lat"], a["lon"]) for a in st["aircraft"]])
+
+
+def test_observation_noise_independent_of_call_count():
+    runs = []
+    for calls in (1, 10):
+        SIM.reset("smoke", 7)
+        peek = _Peeker(calls)
+        SIM.set_controller("agent", peek)
+        for _ in range(600):
+            SIM.step()
+        runs.append((peek.seen, SIM.metrics()["aircraft"]))
+    assert any(runs[0][0]) and runs[0] == runs[1]

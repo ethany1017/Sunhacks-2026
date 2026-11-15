@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from . import db
 from .runner import Runner
@@ -39,7 +39,7 @@ app.include_router(ws_router)
 class RunRequest(BaseModel):
     level: str
     controller: str
-    seed: int | None = None
+    seed: int | None = Field(None, ge=0)
 
 
 class SwitchRequest(BaseModel):
