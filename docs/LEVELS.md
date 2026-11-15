@@ -38,13 +38,14 @@ day in both levels (Light Rain seed N = Normal Day seed N plus rain). A level wi
 | `PUSHBACK_MEAN_S` | 282 s (sigma 10%) | NASA NTRS 20190027149 (Charlotte, 4.72 min) |
 | `GATE_SPACING_M` | gates at least 70 m apart, one flight per gate (44 airline gates, 80 GA stands) | assumption: OSM gate points are 9-40 m apart, closer than an airliner is long |
 | `ARRIVAL_STREAMS` | 25L and 26 (default west flow); a spawn goes to its stream's runway in the active flow (25L -> 07R, 26 -> 08) | KPHX west/east flow pairs |
-| `SPAWN_MARGIN_NM` | 1.0 NM above the radar / CWT wake minimum | assumption |
+| `SPAWN_MARGIN_NM` | 1.0 NM above the radar / CWT wake minimum, used for the schedule (both levels, so the traffic stays the same) | assumption |
 
 **Arrival spacing at spawn.** Each arrival gets the earliest slot on either stream that is at least
 `arrival_gap_s(leader, follower) = (max(3 NM, CWT wake NM) + 1 NM) / min(Vref leader, Vref follower)` behind the previous
 arrival on that stream (wake from `sim/referee/limits.py WAKE_NM`, the Referee's own table). At run time approach
 control also holds an arrival back (event `arrival.held`) while a missed approach is being resequenced on that final or
-a dependent one, or while an arrival ahead is closer than that gap at the speed it spawns with; a held arrival enters
+a dependent one, or while an arrival ahead is closer than `arrival_gap_s(leader, follower, spacing_margin_nm)` times
+(follower Vref + 20 m/s), with the level's `spacing_margin_nm` (1 NM dry, 2 NM in rain); a held arrival enters
 at the full 11 km final once clear. Time held this way is approach control's, not the tower's: it does not count toward
 the diversion clock. The 25L and 26 finals are 4,373 ft apart, independent under the Referee's 5-9-7 rule.
 
@@ -78,6 +79,7 @@ the new final's 8 km re-entry point (event `arrival.reversed`).
 | `occupancy_mult` | 1.0 | 1.15: landing roll slower by 1.15, takeoff acceleration / 1.15^2 | 14 CFR 121.195(d): wet-runway landing distance is 115% of dry |
 | `approach_mult` | 1.0 | 0.6 of the extra speed above Vref on final (Vref + 12 m/s easing to Vref instead of + 20) | assumption |
 | `go_around_rate` | 0.002 per approach | 0.05 per approach | Flight Safety Foundation go-around study (2017): about 1-3 per 1,000 approaches; rain value is an assumption |
+| `spacing_margin_nm` | 1.0 NM | 2.0 NM above the radar / wake minimum when approach control hands an arrival to the tower | assumption: with a BKN015 ceiling approach control runs instrument approaches and adds miles-in-trail; the Referee minimum is unchanged |
 
 A pilot-initiated go-around is drawn once per approach at the 1,800 m decision point, from its own random stream
 (`[seed, 2]`), only for an arrival cleared to land (reason `pilot: unstable approach in -RA BR`, pilot voice line
@@ -85,11 +87,47 @@ A pilot-initiated go-around is drawn once per approach at the 1,800 m decision p
 82-91 s wet (seeds 1, 2, 21-23); taxi top speed 0.8x and approach speed above Vref 0.6x (tests/test_levels.py). Visibility itself has no further physical effect beyond these
 multipliers (assumption); it is reported to controllers.
 
+The rain spacing is applied at run time only (`_spawn_clear` in `sim/core/engine.py`), so the schedule, and therefore
+the traffic, stays the same for one seed in both levels. Because the gap is converted to distance at Vref + 20 m/s,
+2 + 3 NM comes to about 11.9 km for a jet pair (more for a light follower or a heavy leader), longer than the 11 km final:
+in rain approach control hands over one arrival per final at a time; dry, a second jet can enter about 9.5 km behind.
+
+## Measured: Light Rain vs Normal Day, same traffic
+
+Built-in tower, default day (1500 s, Referee day end 2400 s), same seed number in both levels, after the rain spacing
+margin. "Held" = arrivals approach control held back (`arrival.held`) and the total time from their first spawn attempt
+to entering the final (or to the day end); this includes holds behind a missed approach, which dominate the totals.
+"Airborne holding" = sum of `holding_s` (time on final past the scheduled landing time). "Late" = touchdown minus
+scheduled landing time, average / max over arrivals that landed. "Peak" = arrivals scheduled in the 07h and 09h slices
+(the two arrival banks, 36.7 and 50.1 arrivals/h in BTS; 275-400 s and 525-650 s of sim time).
+
+| seed | level | held (n / s) | airborne holding (s) | late avg / max (s) | peak arrivals: n, held, late avg (s) | completed / flights | avg / total delay (s) | avg landing occupancy (s) | go-arounds |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | dry | 2 / 1715 | 1218 | 3.0 / 7 | 3, 0, 2.8 | 19 / 29 | 138 / 2630 | 69.4 | 4 |
+| 1 | rain | 5 / 1230 | 1548 | 62.8 / 354 | 3, 1, 13.6 | 18 / 29 | 162 / 2907 | 82.0 | 4 |
+| 2 | dry | 3 / 689 | 1528 | 48.0 / 291 | 2, 0, 2.5 | 17 / 28 | 62 / 1056 | 76.9 | 5 |
+| 2 | rain | 5 / 807 | 1661 | 67.2 / 326 | 2, 0, 8.4 | 17 / 28 | 196 / 3327 | 90.8 | 5 |
+| 21 | dry | 5 / 2669 | 2492 | 197.5 / 968 | 3, 1, 11.2 | 20 / 34 | 146 / 2926 | 74.4 | 7 |
+| 21 | rain | 6 / 2777 | 2549 | 125.3 / 667 | 3, 1, 26.0 | 19 / 34 | 237 / 4496 | 88.3 | 7 |
+| 22 | dry | 4 / 705 | 1261 | 9.1 / 58 | 3, 0, 2.5 | 14 / 25 | 75 / 1053 | 76.1 | 4 |
+| 22 | rain | 4 / 783 | 1417 | 22.2 / 103 | 3, 0, 8.5 | 18 / 25 | 159 / 2869 | 90.1 | 4 |
+
+What this shows: rain holds as many or more arrivals at the handover (4-6 vs 2-5), adds airborne holding on every seed
+(+57 to +330 s), raises landing occupancy by 12-15 s and the average delay by 23-134 s, and completes one flight fewer
+on seeds 1 and 21 (the same on seed 2, four more on seed 22). What it does **not** show: capacity below demand in the peaks. The default
+day has only 11-14 arrivals, 2-3 of them in each measured peak; in rain peak arrivals land 6-15 s later than dry and
+at most one per peak is held (13-27 s). So the rain effects are real and measurable but, at `DEMAND_SCALE` 1.0, the
+peak demand does not exceed the rain capacity (one arrival per final at a time, about 24 per hour per final). Raising
+`DEMAND_SCALE` (S5) is what would make the peaks exceed it. All eight runs end `REFEREE: FAIL` (stuck departure queues
+at the hold-short points after the flow change, a diversion and unhandled traffic, plus ground collisions on some),
+in both levels (Normal Day is unchanged by the rain margin; Light Rain seeds 1 and 21 also failed before it), so the totals above mix the rain effect with the built-in tower's failures.
+
 ## What a controller sees
 
 `observe()["level"]` and `snapshot()["level"]` (None for scenario files):
 `{"id": "light_rain", "name": "Light Rain", "seed": 21, "duration_s": 1500.0, "tailwind_limit_kt": 10.0,
-"effects": {"taxi_mult": 0.8, "occupancy_mult": 1.15, "approach_mult": 0.6, "go_around_rate": 0.05}}`.
+"effects": {"taxi_mult": 0.8, "occupancy_mult": 1.15, "approach_mult": 0.6, "go_around_rate": 0.05,
+"spacing_margin_nm": 2.0}}`.
 `observe()["weather"]` is the current METAR-like report (same keys as before), updated at the scheduled times (event
 `weather.update` with the new report). The future wind is not shown: a controller sees the wind change as it happens,
 as from the ATIS.

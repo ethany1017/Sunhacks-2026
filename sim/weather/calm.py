@@ -14,6 +14,7 @@ class CalmWeather:
     occupancy_mult = 1.0
     approach_mult = 1.0
     go_around_rate = 0.0
+    spacing_margin_nm = 1.0     # approach control's in-trail buffer above the radar / wake minimum (= levels.SPAWN_MARGIN_NM)
 
     def __init__(self) -> None:
         self.current: Dict[str, Any] = dict(CALM_REPORT, t=0.0)

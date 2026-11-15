@@ -1,7 +1,9 @@
 """S3 levels: seeds, repeatability, rain effects, spawn spacing and the wind-shift runway change."""
 from __future__ import annotations
 
+import copy
 import hashlib
+import math
 from typing import Any, Dict, List
 
 import pytest
@@ -100,10 +102,16 @@ def pair(tmp_path_factory, graph) -> Dict[str, Any]:
     """Normal Day and Light Rain, same seed, with the tower; records taxi and approach speeds as they fly."""
     out: Dict[str, Any] = {}
     for level in ("normal_day", "light_rain"):
-        seen = {"taxi": 0.0, "final": []}
+        seen = {"taxi": 0.0, "final": [], "spawn": []}
 
         def probe(sim: Simulation, seen: Dict[str, Any] = seen) -> None:
             for a in sim.aircraft.values():
+                if a.kind == "arrival" and a.spawn_t == sim.t:      # handed to the tower this tick: in-trail distance
+                    for o in sim.aircraft.values():                  # to each arrival ahead on the same final, vs the
+                        if o is not a and not o.removed and o.kind == "arrival" and o.phase == "final" \
+                                and o.runway == a.runway and o.wp is None:              # gap at the rain margin
+                            need = levels.arrival_gap_s(o.type, a.type, levels.LEVELS["light_rain"]["spacing_margin_nm"])
+                            seen["spawn"].append(math.hypot(o.x - a.x, o.y - a.y) / (need * (a.type.vref_mps + 20.0)))
                 if a.removed or a.kind == "vehicle":
                     continue
                 if a.phase in ("taxi_in", "taxi_out"):
@@ -124,6 +132,32 @@ def test_light_rain_has_the_documented_effects(pair) -> None:
     assert extra_wet == pytest.approx(extra_dry * rain["approach_mult"], rel=0.1)        # slower approach above Vref
     assert wet.score()["avg_landing_occupancy_s"] > dry.score()["avg_landing_occupancy_s"] * 1.08
     assert wet.level_view()["effects"]["go_around_rate"] > dry.level_view()["effects"]["go_around_rate"]
+
+
+def test_light_rain_arrivals_reach_the_tower_further_apart(pair, graph) -> None:
+    rain, dry = levels.LEVELS["light_rain"]["spacing_margin_nm"], levels.LEVELS["normal_day"]["spacing_margin_nm"]
+    assert rain > dry and pair["light_rain"][0].level_view()["effects"]["spacing_margin_nm"] == rain
+    # approach control's gate, same seed and same pair of aircraft: a gap legal dry is held in rain
+    verdict = {}
+    for level in ("normal_day", "light_rain"):
+        sim = Simulation(level=level, seed=3, graph=graph, controller=NoopController())
+        while not any(a.kind == "arrival" for a in sim.aircraft.values()):
+            sim.step()
+        lead = next(a for a in sim.aircraft.values() if a.kind == "arrival")
+        follow = copy.copy(lead)
+        follow.callsign = "TEST1"
+        speed = follow.type.vref_mps + 20.0
+        d = (levels.arrival_gap_s(lead.type, follow.type, dry) + levels.arrival_gap_s(lead.type, follow.type, rain)) / 2 * speed
+        hx, hy = math.sin(math.radians(lead.heading)), math.cos(math.radians(lead.heading))
+        follow.x, follow.y = lead.x - hx * d, lead.y - hy * d               # in trail on the same final
+        verdict[level] = sim._spawn_clear(follow)
+        sim.close()
+    assert verdict == {"normal_day": True, "light_rain": False}
+    # in a run: every rain arrival enters at least the rain gap behind the one ahead; dry, some enter closer
+    wet, d_ratios = pair["light_rain"][1]["spawn"], pair["normal_day"][1]["spawn"]
+    assert all(r >= 0.98 for r in wet) and d_ratios and min(d_ratios) < 0.98
+    held = {lv: sum(1 for e in pair[lv][0].log.events if e["kind"] == "arrival.held") for lv in pair}
+    assert held["light_rain"] > held["normal_day"]
 
 
 def test_tower_turns_the_airport_round_before_the_tailwind_limit(pair) -> None:
@@ -182,7 +216,8 @@ def test_controller_sees_the_level_and_weather(graph) -> None:
     obs, snap = sim.observe(), sim.snapshot(mark_sent=False)
     assert obs["level"] == snap["level"] and obs["level"]["id"] == "light_rain" and obs["level"]["seed"] == 21
     assert obs["level"]["tailwind_limit_kt"] == levels.TAILWIND_LIMIT_KT
-    assert set(obs["level"]["effects"]) == {"taxi_mult", "occupancy_mult", "approach_mult", "go_around_rate"}
+    assert set(obs["level"]["effects"]) == {"taxi_mult", "occupancy_mult", "approach_mult", "go_around_rate",
+                                             "spacing_margin_nm"}
     assert obs["weather"]["wx"] == "-RA BR" and obs["weather"]["vis_sm"] == 4.0
     assert set(obs["weather"]) == {"t", "metar", "wind_dir", "wind_kt", "gust_kt", "vis_sm", "wx", "temp_f"}
     with pytest.raises(ValueError):

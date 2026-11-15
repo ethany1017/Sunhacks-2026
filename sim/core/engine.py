@@ -236,7 +236,8 @@ class Simulation:
 
     def _spawn_clear(self, ac: Aircraft) -> bool:
         """Approach control only hands an arrival to the tower with legal spacing: no missed approach being resequenced
-        on that final (or a dependent one), and every arrival ahead at least the schedule's in-trail gap away."""
+        on that final (or a dependent one), and every arrival ahead at least the level's in-trail gap away (the level's
+        `spacing_margin_nm` above the radar / wake minimum: larger in rain)."""
         pav = self.runway_pavement(ac.runway)
         for o in self.aircraft.values():
             if o.removed or o.kind != "arrival" or o.phase not in ("final", "go_around"):
@@ -245,7 +246,7 @@ class Simulation:
                 continue
             if o.phase == "go_around" or o.wp is not None:
                 return False
-            if math.hypot(o.x - ac.x, o.y - ac.y) < levels.arrival_gap_s(o.type, ac.type) * (ac.type.vref_mps + 20.0):
+            if math.hypot(o.x - ac.x, o.y - ac.y) < levels.arrival_gap_s(o.type, ac.type, self.weather.spacing_margin_nm) * (ac.type.vref_mps + 20.0):
                 return False
         return True
 

@@ -50,7 +50,9 @@ PUSHBACK_MEAN_S = 282.0         # NASA NTRS 20190027149: pushback at Charlotte a
 ARRIVAL_STREAMS = ("25L", "26") # the two arrival runways of the default west-flow config; spawns map to the active flow
 GATE_SPACING_M = 70.0           # assumption: OSM gate points are 9-40 m apart (closer than an airliner is long), so a day
                                 # uses only gates at least this far apart and each flight gets its own gate
-SPAWN_MARGIN_NM = 1.0           # assumption: arrivals reach the final at the Referee's radar/wake minimum plus this margin
+SPAWN_MARGIN_NM = 1.0           # assumption: the schedule puts arrivals at the Referee's radar/wake minimum plus this margin
+                                # (both levels, so the traffic stays the same); at run time approach control uses the
+                                # level's `spacing_margin_nm` instead
 
 # -- weather (both levels): one scheduled wind shift that turns the airport around ------------------------------------------
 # PHX normally runs west flow; a shift to an easterly wind forces east flow. Wind is (direction deg, speed kt).
@@ -70,6 +72,7 @@ LEVELS: Dict[str, Dict[str, Any]] = {
         "occupancy_mult": 1.0,    # no effect on landing roll / takeoff roll
         "approach_mult": 1.0,     # full approach speed profile (Vref + 20 m/s easing to Vref)
         "go_around_rate": 0.002,  # Flight Safety Foundation go-around study (2017): about 1-3 go-arounds per 1,000 approaches
+        "spacing_margin_nm": 1.0, # approach control's in-trail buffer above the radar/wake minimum (= SPAWN_MARGIN_NM)
     },
     "light_rain": {
         "name": "Light Rain", "vis_sm": 4.0, "wx": "-RA BR", "sky": "BKN015 OVC030", "temp_c": 21, "dew_c": 18,
@@ -79,6 +82,8 @@ LEVELS: Dict[str, Dict[str, Any]] = {
                                   # (landing roll slower; takeoff acceleration / 1.15^2, see physics)
         "approach_mult": 0.6,     # assumption: stabilised earlier in rain, 60% of the extra speed above Vref on final
         "go_around_rate": 0.05,   # assumption: 25x the dry rate (unstable approaches, runway not in sight); S5 tunes it
+        "spacing_margin_nm": 2.0, # assumption: with a BKN015 ceiling approach control runs instrument approaches and adds
+                                  # extra miles-in-trail (2 NM instead of 1 above the minimum); the Referee minimum is unchanged
     },
 }
 LEVEL_IDS = tuple(LEVELS)
@@ -96,7 +101,8 @@ def level_info(level: str, seed: int, duration_s: float) -> Dict[str, Any]:
     """What a controller may know about the level (the same thing a real controller knows from the ATIS and the briefing)."""
     p = LEVELS[level]
     return {"id": level, "name": p["name"], "seed": seed, "duration_s": duration_s, "tailwind_limit_kt": TAILWIND_LIMIT_KT,
-            "effects": {k: p[k] for k in ("taxi_mult", "occupancy_mult", "approach_mult", "go_around_rate")}}
+            "effects": {k: p[k] for k in ("taxi_mult", "occupancy_mult", "approach_mult", "go_around_rate",
+                                             "spacing_margin_nm")}}
 
 
 # -- weather -----------------------------------------------------------------------------------------------------------------
@@ -117,6 +123,7 @@ class LevelWeather:
         p = LEVELS[level]
         self.taxi_mult, self.occupancy_mult = p["taxi_mult"], p["occupancy_mult"]
         self.approach_mult, self.go_around_rate = p["approach_mult"], p["go_around_rate"]
+        self.spacing_margin_nm = p["spacing_margin_nm"]
         shift = WIND_SHIFT_FRAC * duration_s
         self.schedule: List[Tuple[float, Dict[str, Any]]] = [(0.0, _metar(p, 0.0, duration_s, WIND_START))]
         for dt, d, kt in WIND_STEPS:
@@ -142,11 +149,11 @@ def hourly_rates() -> Dict[int, Tuple[float, float]]:
         return {int(r["local_hour"]): (float(r["sched_arr_per_day"]), float(r["sched_dep_per_day"])) for r in csv.DictReader(f)}
 
 
-def arrival_gap_s(leader: AircraftType, follower: AircraftType) -> float:
-    """Time between two arrivals on one final so they are at least the radar / CWT wake minimum (+ margin) apart.
+def arrival_gap_s(leader: AircraftType, follower: AircraftType, margin_nm: float = SPAWN_MARGIN_NM) -> float:
+    """Time between two arrivals on one final so they are at least the radar / CWT wake minimum (+ margin_nm) apart.
 
     The gap closes as the leader slows to Vref; flying at Vref or faster, the follower is at least gap x min(Vref) behind."""
-    sep = max(RADAR_MIN_M, WAKE_NM.get(leader.cwt, {}).get(follower.cwt, 0.0) * NM) + SPAWN_MARGIN_NM * NM
+    sep = max(RADAR_MIN_M, WAKE_NM.get(leader.cwt, {}).get(follower.cwt, 0.0) * NM) + margin_nm * NM
     return sep / min(leader.vref_mps, follower.vref_mps)
 
 
