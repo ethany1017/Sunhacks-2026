@@ -25,7 +25,6 @@ PUSH_SPEED_MPS = 1.1            # pushback speed (tug), so the push movement las
 PUSHBACK_EARLIEST_S = 282.0 * 0.75 - 15.0   # NASA NTRS 20190027149: pushback 4.72 min mean; 2.5 sigma early, minus a margin
 PUSH_SWEEP_M = 45.0             # a pushed-back aircraft (centre on the lane node) reaches about this far
 LEAD_IN_M = 90.0                # a re-route for a moving aircraft keeps this much of its current route first
-ENTRY_NEAR_M = 120.0            # a departure at its runway's hold line this close (+ half length) to its entry node is at it
 CONVERGE_LOOK_M = 250.0         # ground: look this far ahead along each route for a shared junction
 CONVERGE_WINDOW_S = 20.0        # two aircraft reaching one junction closer in time than this: one holds
 CONVERGE_MIN_STOP_M = 80.0      # ...if it is still this far from the junction (readback + braking distance)
@@ -530,8 +529,7 @@ class Planner:
                     self._taxi_out(a, m, lead[-1], why="Runway flow changed: ", lead=lead[:-1])
             return
         if at_line:
-            if a["hold"]["runway"] == dep_pav and m.get("entry") and \
-                    self._dist((a["x"], a["y"]), self.xy[m["entry"]]) < a["length_m"] / 2 + ENTRY_NEAR_M:
+            if a["hold"]["runway"] == dep_pav:   # routes never cross their own departure runway: this is the entry
                 self._takeoff(a, m)
             else:
                 self._cross(a)
