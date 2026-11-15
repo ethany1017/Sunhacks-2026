@@ -22,8 +22,9 @@ all cores), where 10x came out at about 7.7x for the Agent run; on an idle lapto
    use other ports: `BACKEND_PORT=8111 FRONTEND_PORT=5191 ./run_demo.sh`.
 2. Check the **Agent vs Human** panel: it shows `backend/eval_results/summary.json`, which is committed with the
    final grading (training seeds: Agent 6/10, Human 6/10; held-out: Agent 5/6, Human 3/6). If the panel shows anything
-   else, `git status` will show that file as modified: `git checkout backend/eval_results/summary.json` is not needed
-   on a clean checkout. Do not run `python -m app.evaluate --publish` before the demo: it overwrites these numbers.
+   else: if `git status` shows `backend/eval_results/summary.json` as modified, someone ran the harness with
+   `--publish` and the panel shows those numbers instead of the committed grading; the committed file is the graded
+   one. Do not run `python -m app.evaluate --publish` before the demo: it overwrites these numbers.
 3. `./run_demo.sh`. It opens the browser at `http://localhost:5180`. The backend starts a Normal Day Agent run by
    itself. Full screen the browser (projector: 1920x1080 or 1280x720 both fit).
 4. Check: the amber **SIMULATION ONLY** badge top left, **ONLINE** next to the sim time, the map with runways.
@@ -42,7 +43,7 @@ Say while it runs:
   wrong readback. Numbers and sources are in docs/HUMAN_MODEL.md."
 - "The Referee is part of the simulator. It watches the true state and does not care who is controlling."
 
-The **FAIL** banner appears at sim **12:49**, **77 s** after Reset (same in rehearsal runs 1-3). It reads:
+The **FAIL** banner appears at sim **12:49**, **77 s** after Reset (same in rehearsal runs 1-4, before and after `639b0ac`). It reads:
 
 > FAIL · Light Rain · seed 25 · Human
 > AAL2014, ENY2973 · collision: AAL2014 and ENY2973 collided on the ground (their footprints overlap)
@@ -58,26 +59,31 @@ Point at:
 - The decisions feed on the right: every proposal, its **SAFETY OK / SAFETY REJECTED** card, the clearance, the pilot's
   readback. AI decision cards show "Fallback" (no Claude key on this laptop: the deterministic planner decides).
 - **Safety engine blocks an unsafe proposal**: first **SAFETY REJECTED · hold short** at sim **13:22** (a runway crossing
-  for an aircraft while DAL1383 is on its takeoff roll on 07L/25R). More at 19:09 (taxi conflict, head-on route), 23:35
-  and 25:57 (hold short), 24:30 (taxi conflict). The first one appears **81 s** after Reset. At 10x the feed scrolls
+  for an aircraft while DAL1383 is on its takeoff roll on 07L/25R). More at 19:09 (taxi conflict, head-on route), 23:37
+  and 25:58 (hold short), 24:30 (taxi conflict). The first one appears **81 s** after Reset. At 10x the feed scrolls
   fast: the red card is near the top for only a few seconds, so watch for sim 13:20 and point right away. Say: "The
   planner proposed it, the safety engine said no, nothing was transmitted." A few seconds later the same crossing is
   proposed again, approved and cleared once the runway is free.
-- **No wrong readback happens in Light Rain seed 25.** The wrong-readback catch is on Normal Day seed 3 (optional step).
+- **Wrong readback caught** at sim **25:52**: UAL1633 answers just "Roger, United sixteen thirty-three", the Agent marks
+  it **READBACK WRONG** and asks for a **CORRECTION**. The cards scroll away fast; the scoreboard's **Readback errors
+  caught** counter goes to 1 and stays.
 - The scoreboard: Fails stays 0.
 
-**PASS** at sim **38:58** (all 25 aircraft handled, 0 fails, avg delay 184 s, 0 diversions). Rehearsal wall time: about
-**5 min** on the busy laptop; expected about 4 min on an idle one (not measured). The banner reads "PASS · Light Rain · seed 25 · Agent".
+**PASS** at sim **39:10** (all 25 aircraft handled, 0 fails, avg delay 183 s, 0 diversions, 1 wrong readback caught).
+Rehearsal wall time: about **4.5-5 min** on the busy laptop; expected about 4 min on an idle one (not measured). The banner reads "PASS · Light Rain · seed 25 · Agent".
 
-Rehearsal wall times (seconds after Reset):
+Rehearsal wall times (seconds after Reset). Runs 1-3 were measured before the planner change `639b0ac` (Agent PASS then
+at sim 38:58, avg delay 184 s, no wrong readback); run 4 is on `0a6abd2`:
 
 | Run | Human FAIL banner | Agent first SAFETY REJECTED | Agent PASS banner |
 |---|---|---|---|
 | 1 (online) | 77.5 | (not timed) | 302.4 |
 | 2 (offline: no DNS for the browser, proxy to nowhere for the backend) | 77.4 | 80.8 | 291.1 |
 | 3 (online) | 77.2 | 80.8 | 305.7 |
+| 4 (online, `0a6abd2`) | 77.5 | 80.8 | 272.6 |
 
-Same verdicts as the headless harness in all three (Human FAIL at sim 12:49, Agent PASS, 25 handled, avg delay 184 s).
+Same verdicts as the headless harness in all four. On `0a6abd2` (run 4 and the harness at `639b0ac`): Human FAIL at sim
+12:49, Agent PASS, 25 handled, avg delay 183 s.
 
 ## Step 3: Scoreboard and Agent vs Human (30 s)
 
@@ -99,28 +105,29 @@ validation table is in the README.
 
 ## Optional: Normal Day, wrong readback, hand-over
 
-Normal Day seed 3 is where a wrong readback gets caught (Light Rain 25 has none). Click: **Level → Normal Day**,
-**Controller → Agent**, **Reset run**. Measured in rehearsal (online, busy laptop; "est." = sim time divided by that run's pace of 9.7x, not timed):
+Normal Day seed 3 has two wrong readbacks caught. Click: **Level → Normal Day**,
+**Controller → Agent**, **Reset run**. Measured in rehearsal on `0a6abd2` (online, busy laptop; "est." = sim time divided by that run's pace of 9.1x, not timed):
 
 | Sim time | Wall time after Reset | Feed card |
 |---|---|---|
-| 07:10 | ~45 s (est.) | SAFETY REJECTED · hold short (crossing while FFT3069 is on its takeoff roll) |
-| 26:20 | 166 s | **READBACK WRONG** HAL2355 (read back "runway seven right", cleared via 07L), then **CORRECTION**: "read it back again" |
-| 28:31 | ~177 s (est.) | **READBACK WRONG** AAL2641 ("runway seven right, cleared for takeoff"), then CORRECTION |
-| 36:42 | 228 s | **PASS** · Normal Day · seed 3 · Agent (25 handled, 0 fails, avg delay 61 s, 2 wrong readbacks caught) |
+| 07:10 | ~47 s (est.) | SAFETY REJECTED · hold short (crossing while FFT3069 is on its takeoff roll) |
+| 26:20 | 179 s | **READBACK WRONG** HAL2355 (read back "runway seven right", cleared via 07L), then **CORRECTION**: "read it back again" |
+| 28:31 | ~187 s (est.) | **READBACK WRONG** AAL2641 ("runway seven right, cleared for takeoff"), then CORRECTION |
+| 36:42 | 241 s | **PASS** · Normal Day · seed 3 · Agent (25 handled, 0 fails, avg delay 61 s, 2 wrong readbacks caught) |
 
 The READBACK WRONG and CORRECTION cards scroll away within seconds; the scoreboard's **Readback errors caught** counter
 (1, then 2) stays, so point at that.
 
 Hand-over: start with **Human**, then click **Switch to Agent** mid-run; the feed shows "CONTROLLER · Now controlled by
-Agent" and the Agent takes over the traffic where it is. Rehearsed once: Normal Day seed 3, Human, switched at sim 06:39
-(40 s after Reset): PASS at sim 36:32, 225 s after Reset (25 handled, avg delay 60 s, 1 wrong readback caught).
+Agent" and the Agent takes over the traffic where it is. Rehearsed on `0a6abd2`: Normal Day seed 3, Human, switched at sim
+06:39 (40 s after Reset): PASS at sim 36:07, 230 s after Reset (25 handled, avg delay 55 s, no wrong readback caught).
+The outcome depends on the moment you click, so it can differ from this.
 
 ## The honest framing (say this)
 
 "Everything here is a simulation; it never touches real ATC. The two seeds you saw were picked from our training days
 because the controllers differ there; across all seeds, results are in the README, and the Agent still fails some
-training days (Light Rain 21, 22 and 23, where the Human fails too, and Normal Day 2 and 4, where aircraft are left at
+training days (Light Rain 22 and 23, where the Human fails too, and Normal Day 2 and 4, where aircraft are left at
 the end of the day)."
 
 ## Safety net: if Light Rain misbehaves
