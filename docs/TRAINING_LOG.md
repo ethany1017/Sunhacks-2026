@@ -22,5 +22,11 @@ Re-run after merge 1cdcf25, same agent code as round 5 plus the path-sampled sto
 | Round | Change | ND pass | ND safety fails | LR pass | LR safety fails | Practice pass |
 |---|---|---|---|---|---|---|
 | R0 (re-baseline) | as above | 3/5 (1, 3, 5) | 1 (ND4 collision) | 0/5 | 0 | 6/8 |
+| R1 | Convergence in-trail test uses route headings at the conflict point (fixed ND4 collision); tight-window fallback hold (fixed ND4 gridlock) | 4/5 | 0 | 0/5 | 0 | 6/8 |
+| R2 | Old-flow departures only within 60 s of the turn (LR22: a departure cleared on 25R after the turn was refused for tailwind once lined up and blocked 07L/25R all day; completed 4 -> 17); re-route round an aircraft stopped in the way for 90 s | 4/5 | 0 | 0/5 | 0 | 6/8 |
+| R3 (rejected) | Stopped-aircraft path rule in the safety engine + uncleared arrival routes ignored: fixed ND2's planning deadlock but ND fell to 1/5 and LR24 got 3 incursions. Reverted. | 1/5 | 0 | 0/5 | 3 | 6/8 |
+
+Final (commit 442d8a7, run after the last code edit): ND 4/5 (ND2 fails: stuck 4), LR 0/5, practice 6/8,
+zero safety fails on all 18 runs. Human on the same frozen levels: ND 5/5, LR 1/5, practice 6/8.
 
 Human reference on levels-v1 (not tuned toward): ND 5/5, LR 1/5 (4 collisions over LR).
