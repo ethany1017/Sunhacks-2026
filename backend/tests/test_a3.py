@@ -82,6 +82,10 @@ def test_wake_turbulence():
     assert safety.wake_turbulence(pic(ac("ME"), last_roll=heavy(870.0)), takeoff())[0]
     light = pic(ac("ME", wake="I", wtc="L"), last_roll={"P": {"t": 940.0, "callsign": "J", "cwt": "F", "wtc": "M"}})
     assert not safety.wake_turbulence(light, takeoff())[0]       # a light 60 s behind a jet (90 s needed)
+    sup = lambda t: {"P": {"t": t, "callsign": "S", "cwt": "A", "wtc": "J"}}
+    assert not safety.wake_turbulence(pic(ac("ME", wake="B", wtc="H"), last_roll=sup(940.0)), takeoff())[0]  # heavy 60 s behind a super
+    assert safety.wake_turbulence(pic(ac("ME", wake="C", wtc="H"), last_roll=sup(870.0)), takeoff())[0]      # 130 s: ok
+    assert safety.wake_turbulence(pic(ac("ME", wake="B", wtc="H"), last_roll=heavy(940.0)), takeoff())[0]    # heavy behind heavy
 
 
 def test_hold_short_and_crossings():
@@ -121,6 +125,16 @@ def test_taxi_conflict_sharp_turn_and_pushback():
     assert safety.taxi_conflict(pic(ac("ME")), push)[0]
 
 
+def test_taxi_conflict_route_into_a_moving_pushback():
+    me = ac("ME", x=0.0, y=-100.0, heading_deg=0.0)
+    pb = ac("PB", phase="pushback", x=0.0, y=40.0)
+    path = [{"n": "a", "xy": (0.0, -50.0), "eta": 10.0, "hdg": 0.0}, {"n": "b", "xy": (0.0, 20.0), "eta": 25.0, "hdg": 0.0}]
+    prop = {"callsign": "ME", "action": "resume_taxi", "route": ["a", "b"], "path": path}
+    pushes = {"PB": {"xy": (0.0, 20.0), "stand_xy": (0.0, 60.0), "t": 900.0, "lane": "b"}}
+    assert safety.taxi_conflict(pic(me, pb, pushbacks=pushes, hot_nodes={"b": "PB"}), prop)[0] is False
+    assert safety.taxi_conflict(pic(me, pb, pushbacks=pushes), prop)[0]           # not moving yet: no conflict
+
+
 def test_check_reports_first_failure_or_all_passed():
     ok, rule, why = safety.check(pic(ac("ME")), takeoff())
     assert ok and why.startswith("Passed tailwind, runway_occupancy")
@@ -147,6 +161,10 @@ class FakeSI:
     def runway_label(self, pav):
         return pav
 
+    @staticmethod
+    def spoken_runway(end):
+        return {"09": "zero niner", "27": "two seven"}[end]
+
 
 def bare_planner(si, p):
     pl = object.__new__(Planner)   # no airport needed for the proposal and readback paths
@@ -164,11 +182,12 @@ def test_unsafe_proposal_is_rejected_recorded_and_never_issued():
                       end="09", pavement="P")
     assert res is None and si.issued == []
     types = [e[0] for e in pl.events]
-    assert types == ["proposal", "safety_check"]
+    assert types == ["proposal", "safety_check", "alert"]             # the rejection is also an alert
+    assert pl.events[2][2]["rule"] == "runway_occupancy"
     chk = pl.events[1]
     assert chk[2]["approved"] is False and chk[2]["rule"] == "runway_occupancy" and "X" in chk[3]
     pl._propose(p["aircraft"]["ME"], "cleared_for_takeoff", {"runway": "09"}, "again", end="09", pavement="P")
-    assert len(pl.events) == 2                                   # one record per rejection episode
+    assert len(pl.events) == 3                                   # one record per rejection episode
     p["occupants"] = {}
     assert pl._propose(p["aircraft"]["ME"], "cleared_for_takeoff", {"runway": "09"}, "clear now", end="09", pavement="P")
     assert len(si.issued) == 1 and [e[0] for e in pl.events][-3:] == ["proposal", "safety_check", "clearance"]
@@ -187,6 +206,23 @@ def test_readback_wrong_is_rejected_and_correct_accepted():
     types = [(e[0], e[1]) for e in pl.events]
     assert ("readback_correction", "ME") in types and ("alert", "ME") in types
     assert not any(t[1] == "YOU" and t[0] != "readback" for t in types)
+
+
+def test_readback_for_a_clearance_issued_before_the_switch_is_checked_not_waved_through():
+    rbs = [{"id": "r1", "clearance_id": "h1", "callsign": "ME", "text": "Roger", "parsed": {"action": None, "runway": None}},
+           {"id": "r2", "clearance_id": "h2", "callsign": "YOU", "text": "cleared to land two seven",
+            "parsed": {"action": "cleared_to_land", "runway": "27"}},
+           {"id": "r3", "clearance_id": "h3", "callsign": "HIM", "text": "cleared to land zero niner",
+            "parsed": {"action": "cleared_to_land", "runway": "09"}},
+           {"id": "r4", "clearance_id": "gone", "callsign": "HER", "text": "taxi", "parsed": {"action": "taxi_via"}}]
+    si = FakeSI(rbs)
+    pl = bare_planner(si, pic())
+    pl.ends = {"09": {}, "27": {}}
+    land = "runway zero niner, cleared to land"
+    pl.live = {"h1": {"action": "cleared_to_land", "text": land}, "h2": {"action": "cleared_to_land", "text": land},
+               "h3": {"action": "cleared_to_land", "text": land}}
+    pl._readbacks()
+    assert si.resolved == [("r1", False), ("r2", False), ("r3", True), ("r4", False)]
 
 
 # -- end to end ----------------------------------------------------------------------------------------------------

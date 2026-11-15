@@ -6,6 +6,7 @@ Key decisions (runway flow, which departure takes the gap) are built as options 
 (A4 plugs Claude in there; here it always takes the default).
 """
 import math
+import re
 
 import networkx as nx
 
@@ -45,6 +46,9 @@ CONVERGE_CLEAR_M = 70.0
 START_DELAY_S = 5.0             # readback plus spool-up before a stopped aircraft moves
 TAXI_AVG_MPS = 5.0              # average speed from a standing start over the first few hundred metres
 HOLD_MAX_S = 60.0               # a hold for an aircraft that has itself stopped ends after this         # resume once the other aircraft is this far past the junction and from the holder
+PUSH_ROUTE_CLEAR_M = 90.0       # no pushback into a lane another aircraft's taxi route still passes within this...
+PUSH_HOLD_MAX_S = 200.0         # ...unless it has waited this long since ready (the Referee: stuck at 300 s)
+MUTUAL_RELEASE_S = 5.0         # the aircraft a hold waits for is stopped for the holder this long: release the hold
 FREQ = {"tower": "120.9", "ground": "132.55"}
 
 
@@ -307,8 +311,9 @@ class Planner:
                 past = o is None or (h["node"] not in self._remaining(h["by"], o)
                                  and self._dist((o["x"], o["y"]), node) > CONVERGE_CLEAR_M) or \
                 (o["speed_mps"] < 0.3 and self._dist((o["x"], o["y"]), node) > o["length_m"] / 2 + CONVERGE_CLEAR_M)
-            if not past and o is not None and o["speed_mps"] < 0.3 and self.t - h["t"] > HOLD_MAX_S:
-                past = True   # the other aircraft is stopped too (waiting itself): do not wait for it forever
+            if not past and o is not None and o["speed_mps"] < 0.3 and (
+                    self.t - h["t"] > HOLD_MAX_S or (o.get("blocked_by") == cs and (o.get("stopped_s") or 0) > MUTUAL_RELEASE_S)):
+                past = True   # the other is stopped too (waiting itself, or for us: the Referee calls 60 s a gridlock)
             if past and not self._pending(cs, "hold_position"):
                 r = self._remaining(cs, a)
                 path = self._path(r[r.index(a["next_node"]):], (a["x"], a["y"]), 0.0) if a.get("next_node") in r else []
@@ -562,6 +567,9 @@ class Planner:
                 self.rejected[key] = rule
                 self.emit(self.t, "proposal", cs, data, reason)
                 self.emit(self.t, "safety_check", cs, {"action": action, "approved": False, "rule": rule}, why)
+                self.emit(self.t, "alert", cs, {"level": "info", "message": why, "source": "safety", "action": action,
+                                                "rule": rule},
+                          f"Safety engine blocked {action.replace('_', ' ')} for {cs}: {why}")
             return None
         self.rejected.pop(key, None)
         self.emit(self.t, "proposal", cs, data, reason)
@@ -606,7 +614,16 @@ class Planner:
             exp = self.expected.get(rb["clearance_id"])
             heard = rb.get("parsed") or {}
             if exp is None:
-                ok, why = True, "Readback for a clearance this controller did not issue; accepted."
+                # Not issued by this controller (e.g. sent by the Human before a mid-run switch): check it against the
+                # clearance as observed (its action, and a runway named in its text); never accept it unchecked.
+                c = self.live.get(rb["clearance_id"])
+                hr = heard.get("runway")
+                said = hr is None or hr not in self.ends or re.search(
+                    rf"runway {self.si.spoken_runway(hr)}(?! (left|right|center))", c["text"] if c else "")
+                ok = bool(c) and heard.get("action") == c["action"] and bool(said)
+                why = (f"Readback matches the {c['action'].replace('_', ' ')} clearance issued before this controller "
+                       f"took over." if ok else "Readback does not match the clearance in force (issued before this "
+                       "controller took over); asked the pilot to read it back again.")
             else:
                 _, action, rwy = exp
                 ok = heard.get("action") == action and (rwy is None or heard.get("runway") == rwy)
@@ -818,13 +835,26 @@ class Planner:
         if ph == "at_gate" and a.get("ready") and not m.get("push"):
             sn = self.si.stand_nodes(a["gate"])
             lane = sn["lane_node"]
+            waited = self.t - m.setdefault("ready_t", self.t)
+            lx, ly = self.xy[lane]
+            inbound = next((o for o, r in self.pic["routes"].items() if o != cs and any(
+                abs(self.xy[n][0] - lx) < PUSH_ROUTE_CLEAR_M and abs(self.xy[n][1] - ly) < PUSH_ROUTE_CLEAR_M
+                and self._dist(self.xy[n], (lx, ly)) < PUSH_ROUTE_CLEAR_M for n in r[1:])), None)
+            if inbound and waited < PUSH_HOLD_MAX_S:
+                if m.get("gate_hold") != inbound:
+                    m["gate_hold"] = inbound
+                    self.emit(self.t, "alert", cs, {"level": "info", "message": "pushback held at the gate",
+                                                    "source": "metering", "for": inbound},
+                              f"{cs} waits at gate {a['gate']}: {inbound}'s taxi route passes its pushback lane; pushing "
+                              f"now would put the two nose to nose in the lane.")
+                return
             res = self._propose(a, "pushback_approved", {}, f"{cs} is ready at gate {a['gate']}: pushback approved.",
                                 extra={"lane_xy": self.xy[lane], "push_from": self.xy[sn["node"]],
                                        "push_to": self.xy[lane]})
             if res:
                 m["push"] = True
                 stand = self.si.stand_nodes(a["gate"])["node"]
-                self.pushbacks[cs] = {"xy": self.xy[lane], "t": self.t, "lane": lane,
+                self.pushbacks[cs] = {"xy": self.xy[lane], "t": self.t, "lane": lane, "stand_xy": self.xy[stand],
                                       "move_s": self._dist(self.xy[stand], self.xy[lane]) / PUSH_SPEED_MPS}
             return
         dep_ends = self.obs["runway_config"]["departure_runways"]

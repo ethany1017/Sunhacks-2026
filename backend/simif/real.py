@@ -14,6 +14,7 @@ from sim.core.physics import EXIT_SPEED, FINAL_START_M, unit  # noqa: E402
 from sim.graph.model import AirportGraph  # noqa: E402
 
 from sim.levels import HELD_OUT_SEEDS, TRAINING_SEEDS  # noqa: E402
+from sim.voice.phraseology import spoken_runway  # noqa: E402
 
 PRACTICE = ROOT / "backend/practice"
 # The one table of levels: the two real levels first (dashboard default = the first, on its first training seed), then
@@ -284,6 +285,11 @@ class RealSimulator:
     def runway_label(self, pavement):
         """The runway end name a clearance for this pavement uses in the active configuration (what readbacks repeat)."""
         return self.sim.runway_label(pavement)
+
+    @staticmethod
+    def spoken_runway(end):
+        """How a runway end is spoken in clearance text ("07L" -> "seven left"); static phraseology, no live state."""
+        return spoken_runway(end)
 
     # -- metrics only: true state, never for controller decisions ------------------------------------------
     def metrics(self):

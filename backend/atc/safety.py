@@ -19,18 +19,21 @@ CROSS_ARRIVAL_GUARD_S = 55.0     # a crossing takes 30-40 s from the clearance; 
 AIRBORNE_GAP_M = 6000 * 0.3048 * 1.25   # 25 % above the Referee's 6000 ft, measured from the departure's position
 MIN_DEPARTURE_INTERVAL_S = 45.0          # never two takeoff clearances on one runway closer than this
 # -- wake turbulence, departures on one runway (7110.65 3-9-6 / 5-8-3: 2 min behind a heavy, 3 min behind an A380) ---
-WAKE_DEPARTURE_S = {"A": 180.0, "B": 120.0, "C": 120.0, "D": 120.0}  # leader CWT -> seconds (follower not CWT A-D)
+WAKE_DEPARTURE_S = {"A": 180.0, "B": 120.0, "C": 120.0, "D": 120.0}  # leader CWT -> seconds, follower CWT E-I
+WAKE_HEAVY_BEHIND_SUPER_S = 120.0        # leader A, follower B/C/D: 2 min (assumption: 5-8-3's 2 min for a heavy
+                                         # behind a heavy, applied to a heavy behind a super; not checked against the Order)
 WAKE_LIGHT_BEHIND_LARGE_S = 90.0         # assumption (the built-in tower's value): a light behind any jet
 # -- taxi -------------------------------------------------------------------------------------------------------------
 PUSHBACK_LANE_M = 70.0       # two pushbacks into lanes this close are serialised...
 PUSHBACK_STAGGER_S = 90.0    # ...this far apart, so their push movements (at the end of ~280 s) do not overlap
+PUSH_LOOK_M = 150.0          # route stretch checked against a pushback that may be moving
 PUSH_CLEAR_M = 5.0           # margin between a pushback's swept area and any other aircraft
 CONVERGE_WINDOW_S = 20.0     # two aircraft predicted at one junction closer in time than this: the later one waits
 CONFLICT_MARGIN_M = 20.0     # route points closer than the two half wingspans + this are one junction
 SHARP_TURN_DEG = 90.0        # a turn sharper than this near the start of a route sweeps its corner (planner geometry)
 SHARP_TURN_LOOK_M = 100.0    # ... checked over the first stretch of the route only
 SHARP_TURN_CLEAR_M = 40.0    # room beyond the half sizes at that corner (a 53 m sweep collided; 3 m observation noise)
-TURN_CLEAR_M = 30.0          # turning round in place needs this much room beyond the two aircraft's half sizes
+TURN_CLEAR_M = 30.0         # turning round in place needs this much room beyond the two aircraft's half sizes
 GROUND_PHASES = ("taxi_in", "taxi_out", "pushback", "hold_short", "line_up", "runway_exit", "landing_roll")
 # -- tailwind (pilot limit, typical transport AFM; the level exposes it as tailwind_limit_kt) --------------------------
 TAILWIND_LIMIT_KT = 10.0
@@ -151,7 +154,10 @@ def wake_turbulence(pic, prop):
     if not last or last["callsign"] == cs:
         return _ok("wake_turbulence")
     me = pic["aircraft"][cs]
-    need = WAKE_DEPARTURE_S.get(last.get("cwt"), 0.0) if me.get("wake") not in WAKE_DEPARTURE_S else 0.0
+    if me.get("wake") not in WAKE_DEPARTURE_S:
+        need = WAKE_DEPARTURE_S.get(last.get("cwt"), 0.0)
+    else:   # a heavy or super follower: only behind a super (A), and nothing behind the lighter heavies
+        need = WAKE_HEAVY_BEHIND_SUPER_S if last.get("cwt") == "A" and me.get("wake") != "A" else 0.0
     if str(me.get("wtc", "")).startswith("L") and not str(last.get("wtc", "")).startswith("L"):
         need = max(need, WAKE_LIGHT_BEHIND_LARGE_S)
     if t - last["t"] < need:
@@ -253,6 +259,9 @@ def taxi_conflict(pic, prop):
             return _no("taxi_conflict", f"{o} is stopped on the route at node {n}.")
     mine = prop.get("path") or []
     me = pic["aircraft"].get(cs, {})
+    hit = _into_push(pic, cs, me, mine)
+    if hit:
+        return _no("taxi_conflict", f"{cs}'s route runs into {hit}'s pushback, which may be moving now.")
     for o, theirs in pic.get("paths", {}).items():
         if o == cs:
             continue
@@ -261,6 +270,40 @@ def taxi_conflict(pic, prop):
             return _no("taxi_conflict", f"{cs} and {o} would reach the same junction {hit[0]:.0f} s / {hit[1]:.0f} s from "
                                         f"now (closer than {CONVERGE_WINDOW_S:.0f} s apart).")
     return _ok("taxi_conflict", "No head-on, blocked or converging segment on the route.")
+
+
+def _into_push(pic, cs, me, path):
+    """A pushback that may be moving now (the planner's hot pushbacks) whose stand-to-lane sweep (plus its half length
+    past the lane) the route ahead reaches within the two half spans + PUSH_CLEAR_M."""
+    hot = {o for o in pic.get("hot_nodes", {}).values() if o != cs}
+    if not hot or not me or "x" not in me or not path:
+        return None
+    pts, prev, d = [], (me["x"], me["y"]), 0.0
+    for p in path:
+        q = p["xy"]
+        seg = ((q[0] - prev[0]) ** 2 + (q[1] - prev[1]) ** 2) ** 0.5
+        k = 0.0
+        while k < seg and d + k <= PUSH_LOOK_M:
+            pts.append((prev[0] + (q[0] - prev[0]) * k / seg, prev[1] + (q[1] - prev[1]) * k / seg))
+            k += 8.0
+        d += seg
+        if d > PUSH_LOOK_M:
+            break
+        prev = q
+    pts = pts[1:] if len(pts) > 1 else pts   # (where it stands now is no new conflict)
+    for o in sorted(hot):
+        pb, a = pic["pushbacks"].get(o), pic["aircraft"].get(o)
+        if not pb or not a or "stand_xy" not in pb:
+            continue
+        (ax, ay), (bx, by) = pb["stand_xy"], pb["xy"]
+        L = max(((bx - ax) ** 2 + (by - ay) ** 2) ** 0.5, 1e-6)
+        ux, uy = (bx - ax) / L, (by - ay) / L
+        lim = me.get("wingspan_m", 36.0) / 2 + a["wingspan_m"] / 2 + PUSH_CLEAR_M
+        for x, y in pts:
+            k = max(0.0, min(L + a["length_m"] / 2, (x - ax) * ux + (y - ay) * uy))
+            if ((x - ax - k * ux) ** 2 + (y - ay - k * uy) ** 2) ** 0.5 < lim:
+                return o
+    return None
 
 
 def converging(mine, theirs, half_spans):
