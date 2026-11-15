@@ -36,10 +36,8 @@ await p.keyboard.press("4"); await p.waitForTimeout(800);
 console.log("speed after 4:", await p.evaluate(() => window.__store.speed));
 const fps10 = await p.evaluate(() => new Promise((r) => { let n = 0; const t0 = performance.now(); const f = () => { n++; performance.now() - t0 < 3000 ? requestAnimationFrame(f) : r(n / 3); }; f(); }));
 console.log("fps at 10x:", fps10.toFixed(1));
-await p.keyboard.press("1"); await p.keyboard.press("h"); await p.waitForTimeout(1500);
-console.log("haboob badge:", await p.evaluate(() => document.getElementById("b-haboob").classList.contains("show")));
-await p.keyboard.press("r"); await p.waitForTimeout(1500);
-console.log("after reset t:", await p.evaluate(() => window.__store.t), "haboob badge:", await p.evaluate(() => document.getElementById("b-haboob").classList.contains("show")));
+await p.keyboard.press("1"); await p.keyboard.press("r"); await p.waitForTimeout(1500);
+console.log("after reset t:", await p.evaluate(() => window.__store.t));
 // reconnect
 const pid = (await import("node:child_process")).execSync("pgrep -f mock/server.mjs").toString().trim().split("\n");
 pid.forEach((x) => process.kill(+x));

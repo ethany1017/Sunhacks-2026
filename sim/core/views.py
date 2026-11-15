@@ -9,6 +9,7 @@ import numpy as np
 
 from sim.core.clock import TICK_S
 from sim.core.entities import Aircraft
+from sim.referee.limits import DIVERSION_HOLDING_S
 
 if TYPE_CHECKING:
     from sim.core.engine import Simulation
@@ -98,7 +99,9 @@ def aircraft_view(sim: "Simulation", ac: Aircraft, with_routes: bool = True) -> 
             "lon": round(lon, 7), "lat": round(lat, 7), "heading_deg": round(ac.heading, 1), "speed_mps": round(ac.speed, 2),
             "phase": ac.phase, "status_text": status_text(sim, ac), "wingspan_m": ac.wingspan_m, "length_m": ac.length_m,
             "gate": ac.gate, "runway": sim.runway_pavement(ac.runway or ac.dep_end), "route": cleared, "planned_route": planned,
-            "hold": hold, "eta_s": eta_s(sim, ac), "altitude_ft": int(ac.alt_m * FT_PER_M)}
+            "hold": hold, "eta_s": eta_s(sim, ac), "altitude_ft": int(ac.alt_m * FT_PER_M),
+            "holding_s": round(ac.holding_s, 1) if ac.kind == "arrival" else None,
+            "holding_limit_s": DIVERSION_HOLDING_S if ac.kind == "arrival" else None}
 
 
 class ObservationBuffer:

@@ -32,6 +32,7 @@ def test_busy_scenario_runs_clean_with_calm_static_weather(tmp_path, graph) -> N
     sim.run_to_completion()
     sim.close()
     assert sim.finished and sim.score()["completed"] == 12
+    assert sim.referee_report()["verdict"] == "PASS", sim.referee_report()["fails"]
     assert [e for e in sim.log.events if e["kind"] in ("conflict", "separation_loss", "deadlock")] == []
     assert sim.weather_view() == w0 and w0["vis_sm"] == 10.0 
     assert set(w0) == {"t", "metar", "wind_dir", "wind_kt", "gust_kt", "vis_sm", "wx", "temp_f"}

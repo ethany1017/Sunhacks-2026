@@ -20,9 +20,14 @@ def main() -> None:
                      run_dir=Path(args.run_dir) if args.run_dir else Path("runs") / Path(args.scenario).stem)
     sim.run_to_completion()
     sim.close()
-    status = "completed" if sim.finished else "DID NOT FINISH"
+    status = "completed" if any(e["kind"] == "scenario.complete" for e in sim.log.events) else "day ended"
     print("%s: %s at sim t=%.1f s, %d events, seed %d" % (sim.scenario.name, status, sim.t, len(sim.log.events), sim.seed))
-    print(format_table(sim.score()))
+    ref = sim.referee_report()
+    print("REFEREE: %s (%d fails)" % (ref["verdict"], len(ref["fails"])))
+    for f in ref["fails"]:
+        print("  FAIL %-18s t=%7.1f %s" % (f["rule"], f["t"], f["reason"]))
+    print(format_table(ref["score"]))
+    print("fails by rule: %s" % ", ".join("%s=%d" % kv for kv in ref["score"]["fails_by_rule"].items()))
     if sim.log.path:
         print("events: %s (sha256 %s)" % (sim.log.path, hashlib.sha256(sim.log.path.read_bytes()).hexdigest()[:16]))
     bad = [e for e in sim.log.events if e["kind"] in ("conflict", "separation_loss", "deadlock")]

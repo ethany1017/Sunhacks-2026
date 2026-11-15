@@ -61,6 +61,7 @@ class Aircraft:
     wp: Optional[Any] = None          # re-entry waypoint after a go-around
     climb_until: float = 0.0
     touchdown_t: Optional[float] = None
+    holding_s: float = 0.0            # airborne past the scheduled landing time (diverts at the Referee's limit)
     # departures
     dep_end: Optional[str] = None
     entry_node: Optional[str] = None

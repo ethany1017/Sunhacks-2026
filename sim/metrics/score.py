@@ -34,6 +34,9 @@ def compute_score(events: EventList, t: float, readback_truth: Optional[EventLis
         "clearance_reversals": sum(1 for e in amended if e["data"].get("reversal")),
         "clearance_amendments": len(amended),
         "go_arounds": len(kinds.get("go_around", [])),
+        "diversions": len(kinds.get("aircraft.diverted", [])),
+        "total_delay_s": round(sum(delays), 1),
+        "runway_operations": len(ops),
         "avg_landing_occupancy_s": round(sum(occupancy) / len(occupancy), 1) if occupancy else None,
         "decisions": len(kinds.get("decision", [])),
     }
@@ -54,8 +57,11 @@ def _occupancy_times(events: EventList) -> List[float]:
 def format_table(score: Dict[str, Any]) -> str:
     rows = [("Separation losses", score["separation_losses"]), ("Runway conflicts", score["runway_conflicts"]),
             ("Taxi deadlocks", score["deadlocks"]), ("Readback errors accepted", score["readback_errors_accepted"]),
+            ("Readback errors caught", score["readback_errors_caught"]),
             ("Clearance reversals", score["clearance_reversals"]), ("Go-arounds", score["go_arounds"]),
-            ("Aircraft completed", score["completed"]), ("Average delay (s)", score["avg_delay_s"]),
+            ("Diversions", score["diversions"]), ("Aircraft completed", score["completed"]),
+            ("Total delay (s)", score["total_delay_s"]), ("Average delay (s)", score["avg_delay_s"]),
+            ("Runway operations", score["runway_operations"]),
             ("Throughput (ops / 10 min)", score["throughput_per_10min"]),
             ("Avg landing occupancy (s)", score["avg_landing_occupancy_s"]),
             ("Decisions recorded", score["decisions"])]

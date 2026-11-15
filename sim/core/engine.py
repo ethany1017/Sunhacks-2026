@@ -18,7 +18,7 @@ import numpy as np
 from sim.core.decisions import make_decision, snapshot_summary
 from sim.core import views
 from sim.core.aircraft_types import AircraftType, get_type
-from sim.core.clock import SimClock, SPEEDS
+from sim.core.clock import TICK_S, SimClock, SPEEDS
 from sim.core.entities import (GROUND_PHASES, Aircraft, Clearance, Readback, Vehicle, VoiceLine)
 from sim.core.eventlog import EventLog, brief
 from sim.core.physics import (CROSS_EST_S, EXIT_SPEED, FINAL_START_M, REENTRY_M, GO_AROUND_A_M, GO_AROUND_CLIMB_S, HOLD_OFFSET_M,
@@ -27,6 +27,8 @@ from sim.core.reservations import Reservations
 from sim.core.scenario import Flight, Scenario
 from sim.graph.model import AirportGraph, Piece, Track
 from sim.metrics.score import compute_score
+from sim.referee import limits
+from sim.referee.referee import Referee, air_loss
 from sim.voice import phraseology
 from sim.voice.pilots import make_readback
 from sim.weather.calm import CalmWeather
@@ -36,10 +38,7 @@ ACTIONS = ("taxi_via", "hold_short", "cross_runway", "line_up_and_wait", "cleare
 RUNWAY_PARAM_ACTIONS = ("hold_short", "cross_runway", "line_up_and_wait", "cleared_for_takeoff", "cleared_to_land")
 REVERSING = ("hold_short", "hold_position", "go_around")
 LINE_UP_M = 30.0           # distance past the runway centerline node where an aircraft lines up
-AIR_SEP_SAME_RWY_M = 4630.0   # 2.5 nm on the same final
-AIR_SEP_OTHER_M = 1500.0
 GROUND_SEP_MARGIN_M = 5.0   # wingtip clearance below which a ground pair counts as a separation loss
-DEADLOCK_S = 60.0
 READBACK_SILENCE_S = 5.0    # no verdict from the controller this long after a readback: it stands (implicitly accepted)
 DEFAULT_CONFIG = {"arrival_runways": ["25L", "26"], "departure_runways": ["25R", "26"]}
 Resolved = Dict[str, Any]
@@ -100,6 +99,7 @@ class Simulation:
         self._counters = {"c": 0, "v": 0, "d": 0, "r": 0}
         self._score_cache: Tuple[int, Dict[str, Any]] = (-1, {})
         self.finished = False
+        self.referee = Referee(self)
         self._reset_sent()
         self.log.emit("scenario.start", None, 0, {"scenario": sc.name, "seed": self.seed, "flights": len(sc.flights),
                                                   "duration_s": sc.duration_s})
@@ -155,15 +155,26 @@ class Simulation:
         self._physics_tick(t)
         self._update_reservations(t)
         self._detect(t)
+        self.referee.tick(self.log.events[start:])
         self.obs.record(self)
         self._phase_events()
-        if not self.finished and not self.pending and all(a.done or a.kind == "vehicle" for a in self.aircraft.values()):
+        if not self.finished and not self.pending and all(a.done or a.removed or a.kind == "vehicle"
+                                                          for a in self.aircraft.values()):
             self.finished = True
             self.emit("scenario.complete", None, {"t": t})
+        elif not self.finished and t >= self.referee.day_end_s:
+            self.finished = True    # the day is over: whatever is not handled now fails the Referee's rule 7
+            self.emit("scenario.day_end", None, {"t": t, "day_end_s": self.referee.day_end_s})
+        if self.finished:
+            self.referee.finish()
         return self.log.events[start:]
 
+    def referee_report(self) -> Dict[str, Any]:
+        """The Referee's live state: verdict PASS | FAIL | RUNNING, the fails so far and the score."""
+        return self.referee.report()
+
     def run_to_completion(self, max_s: Optional[float] = None) -> None:
-        limit = max_s if max_s is not None else self.scenario.duration_s * 4 + 600
+        limit = max_s if max_s is not None else self.referee.day_end_s
         while not self.finished and self.t < limit:
             self.step()
         self.log.flush()
@@ -705,7 +716,8 @@ class Simulation:
         return {"t": self.t, "data_age_s": age, "aircraft": ac_list,
                 "runways": [self.res.view(r, self.t) for r in self.graph.runways],
                 "runway_config": dict(self.runway_cfg), "weather": self.weather_view(), "pending_readbacks": pending,
-                "clearances": [c.view() for c in self.clearances.values() if c.state in ("issued", "acknowledged")]}
+                "clearances": [c.view() for c in self.clearances.values() if c.state in ("issued", "acknowledged")],
+                "referee": self.referee_report()}
 
     # -- physics tick ----------------------------------------------------------------------------------------
     def runway_busy(self, runway: str, ac: Aircraft) -> bool:
@@ -724,6 +736,11 @@ class Simulation:
             if ac.removed or ac.phase in ("at_gate", "parked"):
                 continue
             ph = ac.phase
+            if ph in ("final", "go_around") and t > ac.scheduled_s:
+                ac.holding_s += TICK_S
+                if ac.holding_s >= limits.DIVERSION_HOLDING_S and not ac.landing_cleared:
+                    self._divert(ac)
+                    continue
             if ph == "final":
                 self._tick_final(ac, t)
             elif ph == "go_around":
@@ -747,6 +764,17 @@ class Simulation:
             if ac.kind != "vehicle":
                 self._stopped_timer(ac, t)
         self._complete_clearances(t)
+
+    def _divert(self, ac: Aircraft) -> None:
+        """Held too long (fuel): the arrival leaves for its alternate and is removed from the sim."""
+        ac.removed, ac.phase = True, "diverted"
+        self.res.release(ac.callsign)
+        for c in list(self.active.get(ac.callsign, [])):
+            c.state, c.done_t = "cancelled", round(self.t, 1)
+            self.active[ac.callsign].remove(c)
+        self.emit("aircraft.diverted", ac.callsign, {"holding_s": round(ac.holding_s, 1), "limit_s": limits.DIVERSION_HOLDING_S,
+                                                    "runway": ac.runway})
+        self.emit("aircraft.removed", ac.callsign, {"reason": "diverted"})
 
     def _stopped_timer(self, ac: Aircraft, t: float) -> None:
         if ac.speed < 0.1 and ac.phase in GROUND_PHASES:
@@ -980,18 +1008,20 @@ class Simulation:
                 for j in range(i + 1, len(grp)):
                     a, b = grp[i], grp[j]
                     d = math.hypot(a.x - b.x, a.y - b.y)
+                    std = "wingtip clearance"
                     if kind == "ground":
                         limit = (a.wingspan_m + b.wingspan_m) / 2 + GROUND_SEP_MARGIN_M
                     else:
-                        same = self.runway_pavement(a.runway) == self.runway_pavement(b.runway)
-                        limit = AIR_SEP_SAME_RWY_M if same else AIR_SEP_OTHER_M
+                        loss = air_loss(self, a, b)     # the Referee's separation standard (sim/referee/limits.py)
+                        d, limit, std = loss if loss else (d, 0.0, "")
                     key = ("sep", a.callsign, b.callsign)
                     if d < limit:
                         seen.add(key)
                         if key not in self._open_pairs:
                             self._open_pairs.add(key)
                             self.emit("separation_loss", a.callsign, {"a": a.callsign, "b": b.callsign, "kind": kind,
-                                                                       "distance_m": round(d, 1), "minimum_m": round(limit, 1)})
+                                                                       "distance_m": round(d, 1), "minimum_m": round(limit, 1),
+                                                                       "standard": std})
         for key in [k for k in self._open_pairs if k[0] == "sep" and k not in seen]:
             self._open_pairs.discard(key)
         self._detect_deadlocks(t, ground)
@@ -1008,7 +1038,7 @@ class Simulation:
                 cycles.add(tuple(sorted(seen[seen.index(cur):])))
         for cyc in cycles:
             since = self._wait_since.setdefault(cyc, t)
-            if t - since >= DEADLOCK_S and cyc not in self._deadlocks:
+            if t - since >= limits.DEADLOCK_S and cyc not in self._deadlocks:
                 self._deadlocks.add(cyc)
                 self.emit("deadlock", cyc[0], {"aircraft": list(cyc), "waited_s": round(t - since, 1)})
         for key in [k for k in self._wait_since if k not in cycles]:
@@ -1044,7 +1074,7 @@ class Simulation:
     def _reset_sent(self) -> None:
         """Forget what has been sent to clients: the next delta() starts from the current log position."""
         self._sent: Dict[str, Any] = {"aircraft": {}, "clearances": {}, "voice": {}, "runways": "", "weather": "", "score": "",
-                                      "meta": "", "decisions": 0, "events": len(self.log.events)}
+                                      "referee": "", "meta": "", "decisions": 0, "events": len(self.log.events)}
 
     def score(self) -> Dict[str, Any]:
         n = len(self.log.events)
@@ -1071,12 +1101,14 @@ class Simulation:
             self._sent["aircraft"] = {a["id"]: json.dumps(a, sort_keys=True) for a in aircraft}
             self._sent["clearances"] = {c.id: (c.state, c.ack_t, c.done_t) for c in self.clearances.values()}
             self._sent.update(runways=json.dumps(runways, sort_keys=True), weather=json.dumps(weather, sort_keys=True),
-                              score=json.dumps(self.score(), sort_keys=True), meta=json.dumps(self._meta(), sort_keys=True),
+                              score=json.dumps(self.score(), sort_keys=True),
+                              referee=json.dumps(self.referee_report(), sort_keys=True), meta=json.dumps(self._meta(), sort_keys=True),
                               decisions=len(self.decisions), events=len(self.log.events))
             self._sent["voice"] = {v.id: v.status for v in self.voice}
         return dict({"type": "snapshot", "t": self.t}, **self._meta(), weather=weather, aircraft=aircraft, runways=runways,
                     clearances=[c.view() for c in self.clearances.values()],
-                    decisions=list(self.decisions.values()), voice=[v.view() for v in self.voice], score=self.score())
+                    decisions=list(self.decisions.values()), voice=[v.view() for v in self.voice], score=self.score(),
+                    referee=self.referee_report())
 
     def delta(self) -> Dict[str, Any]:
         out: Dict[str, Any] = {"type": "delta", "t": self.t}
@@ -1100,7 +1132,8 @@ class Simulation:
             out["clearances"] = cl
             for c in self.clearances.values():
                 self._sent["clearances"][c.id] = (c.state, c.ack_t, c.done_t)
-        for key, val in (("runways", self._runway_views()), ("weather", self.weather_view()), ("score", self.score())):
+        for key, val in (("runways", self._runway_views()), ("weather", self.weather_view()), ("score", self.score()),
+                         ("referee", self.referee_report())):
             fp = json.dumps(val, sort_keys=True)
             if self._sent[key] != fp:
                 self._sent[key] = fp
