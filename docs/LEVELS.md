@@ -3,7 +3,7 @@
 Two seeded KPHX days, built into the simulator: **Normal Day** (`normal_day`) and **Light Rain** (`light_rain`). A level
 is `(level_id, seed, duration_s)` -> a `Scenario` (the traffic) plus a `LevelWeather` (scheduled METAR reports and the
 physical effect multipliers). Everything lives in `sim/levels.py`; every tunable value there is a plain named constant
-with its source. S5 calibration proposal below (**NOT YET FROZEN, awaiting Ethan's approval**; no version tag yet).
+with its source. **FROZEN: version `levels-v1`, approved by Ethan on 2026-11-15** (levels, Referee and fail limits; see "S5 calibration" below).
 
 Run one: `python -m sim.core.run --level normal_day --seed 1 [--duration 1500]`, or in code
 `Simulation(level="light_rain", seed=21, duration_s=None, controller="tower")`. Scenario files (`kphx_smoke.json`,
@@ -123,7 +123,11 @@ peak demand does not exceed the rain capacity (one arrival per final at a time, 
 at the hold-short points after the flow change, a diversion and unhandled traffic, plus ground collisions on some),
 in both levels (Normal Day is unchanged by the rain margin; Light Rain seeds 1 and 21 also failed before it), so the totals above mix the rain effect with the built-in tower's failures.
 
-## S5 calibration proposal (NOT YET FROZEN, awaiting Ethan's approval)
+## S5 calibration (FROZEN as `levels-v1` on 2026-11-15)
+
+Ethan approved freezing the levels (`sim/levels.py`), the Referee (`sim/referee/`) and the fail limits
+(`sim/referee/limits.py`) as they stand in this section, accepting the partly met Light Rain target described below.
+Any later change to them needs Ethan's explicit OK and a written reason that is not "so the agent passes".
 
 Calibrated against the Human controller only (`--controller human`), on training seeds only. Nothing about the Human,
 the tower, the Referee or its limits, or the physics changed.
