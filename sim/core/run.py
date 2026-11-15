@@ -12,13 +12,13 @@ from sim.metrics.score import format_table
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="Run a KPHX scenario or level to completion with the built-in tower")
+    ap = argparse.ArgumentParser(description="Run a KPHX scenario or level to completion with the built-in tower or the Human")
     ap.add_argument("scenario", nargs="?", default=None)
     ap.add_argument("--level", default=None, help="normal_day | light_rain (instead of a scenario file)")
     ap.add_argument("--duration", type=float, default=None, help="level only: scheduled traffic window in sim seconds")
     ap.add_argument("--seed", type=int, default=None)
     ap.add_argument("--run-dir", default=None)
-    ap.add_argument("--controller", default="tower")
+    ap.add_argument("--controller", default="tower", choices=("tower", "human"))
     args = ap.parse_args()
     if (args.scenario is None) == (args.level is None):
         ap.error("give a scenario file or --level")

@@ -19,7 +19,7 @@ On connect the server sends one `snapshot`, then a `delta` about every 100 ms (1
 ### snapshot
 ```json
 {"type":"snapshot","t":123.4,"speed":1,"paused":false,
- "agent":{"status":"idle","controller":"tower"},   (the active controller; always the built-in tower in the simulator)
+ "agent":{"status":"idle","controller":"tower"},   (the active controller: "tower" or "human", see docs/HUMAN_MODEL.md)
  "scenario":{"name":"kphx_busy","duration_s":480}, "level":{...Level}|null,
  "weather":{...Weather},
  "aircraft":[...Aircraft], "runways":[...Runway], "clearances":[...Clearance],
@@ -84,7 +84,8 @@ class Simulation:
     def resolve_readback(self, readback_id, accept) -> dict: ...   # accept a pilot readback or say again (see observe()['pending_readbacks'])
     def referee_report(self) -> dict: ...  # the Referee state (see Referee above)
 
-# built-in controller: sim/tower/controller.py (an optional Claude controller lives outside the simulator in agent/)
+# built-in controllers: sim/tower/controller.py ("tower"), sim/human/controller.py ("human": the tower with human limits)
+# (an optional Claude controller lives outside the simulator in agent/)
 class Controller:
     name: str
     def on_tick(self, sim, events) -> None: ...   # may call sim tools; must return quickly
