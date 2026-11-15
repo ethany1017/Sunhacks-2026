@@ -44,30 +44,29 @@ mid-day or be made denser than its real hourly rates. So `runway_config_change` 
 55% of the day) rather than a window around the shift, and `rain_peak` is a short Light Rain day at the level's normal
 demand rather than a denser-than-real peak.
 
-## Claude at key decisions (A4): how to wire it
+## Claude at key decisions (A4)
 
-`backend/atc/reasoning.py` is built and tested (`tests/test_reasoning.py`, fake client) but not wired into the planner
-yet. The planner already builds key decisions as `{kind, options: [{id, label}], default}` and calls
-`self.choose(decision)` (runway flow change in `_flow`, which departure takes a gap in `_takeoff`). Wiring is:
+Wired in `backend/atc/controller.py`: `Controller.choose` is the planner's `choose` hook and asks
+`backend/atc/reasoning.py`'s `Advisor` (tests: `backend/tests/test_reasoning.py`, `backend/tests/test_a4.py`, fake
+clients). The planner builds each key decision as `{kind, options: [{id, label}], default, callsign}`: `runway_flow`
+(turn the airport round on a tailwind, in `_flow`), `arrival_runway` (which arrival runway, in
+`_assign_arrival_runway`) and `departure_gap` (which queued departure lines up next, in `_line_up`).
 
-```python
-from .reasoning import Advisor
-self.advisor = Advisor()      # Planner.__init__; reads ANTHROPIC_API_KEY once
-self.choose = self._choose    # instead of `lambda decision: decision["default"]`
-
-def _choose(self, decision):
-    res = self.advisor.choose(decision, situation=..., procedures=...)   # never blocks
-    if res is None:           # Claude still answering (at most 3 s): act on nothing this pass, re-checked in 0.5 s
-        return None
-    if res["first"]:          # one ai_decision event per decision, not one per re-check
-        self.emit(self.t, "ai_decision", decision.get("callsign"), {
-            "kind": decision["kind"], "options": decision["options"], "default": decision["default"],
-            "choice": res["choice"], "explanation": res["explanation"], "source": res["source"]}, res["explanation"])
-    return res["choice"]
-```
-
-`None` needs no change at either call site: both act only when the choice is theirs. The `ai_decision` event comes
-before the proposal it leads to, and the dashboard shows the following `safety_check` on the decision card. The chosen
-option still goes through the safety engine. With no key, or no running event loop (this headless harness),
-`Advisor.choose` returns the default at once with source "fallback", so harness scores are unchanged by the wiring.
-To pass decisions with a callsign (departure gap), add `"callsign": cs` to the decision dict.
+- Claude picks one of the offered option ids and gives a one-line summary (JSON). An id outside the list, invalid
+  JSON, an API error or no answer within 3 s gives the planner's default with source "fallback".
+- The hook never blocks: while Claude is answering it returns None and the planner does nothing for that decision
+  this pass (re-checked 0.5 s later). The chosen option is then proposed and safety-checked exactly like the default.
+- One `ai_decision` event per decision `{kind, options, default, choice, explanation, source}`, before the proposal
+  it leads to (callsign: the arrival for `arrival_runway`, the chosen departure for `departure_gap`, none for
+  `runway_flow`). The same decision re-checked every pass reuses its answer (no new event) for 30 s wall clock, then
+  is asked again. A decision with a single option is not a decision: the default, no call, no event.
+- A `departure_gap` is one decision for the whole queue, whichever queued departure asks, so every aircraft at the
+  entry sees the same choice.
+- No `ANTHROPIC_API_KEY`: the default at once, source "fallback", explanation "Planner default: ... (no Claude API
+  key)". The run is identical to the planner alone.
+- The harness (`Runner.run_headless`, so `python -m app.evaluate` and the tests) runs without an event loop, so it
+  always takes the deterministic default, key or no key: scores are repeatable and grading never touches the
+  network. `CLAUDE_IN_HARNESS=1` runs headless days on an event loop with Claude choosing; sim time is held while an
+  answer is pending (at most 3 s per decision), so such runs are slow and depend on Claude's answers.
+- The backend reads the key from the process environment: `run_demo.sh` loads `.env`; a hand-started uvicorn needs
+  it exported first.

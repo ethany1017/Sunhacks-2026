@@ -119,7 +119,7 @@ export function Comparison({ c }: { c: Cmp | null }) {
   return (
     <div className="border-b border-slate-800 p-4">
       <div className="text-sm font-semibold tracking-widest text-slate-500">
-        AGENT VS HUMAN{c.human_impl === 'tower' ? ' · Human = built-in tower for now' : ''}
+        AGENT VS HUMAN{c.human_impl === 'tower' ? ' · Human = built-in tower (stand-in)' : ' · Human = simulated average controller'}
       </div>
       <div className="grid grid-cols-[1fr_auto_auto_auto_auto] gap-x-4 text-lg">
         {['', 'Pass', 'Fails', 'Avg delay', 'Diverted'].map((h) => <span key={h} className="text-sm font-semibold text-slate-500">{h}</span>)}

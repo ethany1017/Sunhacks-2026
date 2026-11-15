@@ -35,7 +35,7 @@ function look(e: SimEvent): Look {
     case 'runway_change': return { label: 'RUNWAY CONFIG', text: e.data.runway, tone: 'border-emerald-600' }
     case 'aircraft_spawn': return { label: e.data.kind.toUpperCase(), text: `${e.data.aircraft_type}, ${words(e.data.phase)}`, tone: NEUTRAL }
     case 'proposal': return { label: 'PROPOSAL', text: `${words(e.data.action)} ${target(e.data.params ?? {})}`, tone: NEUTRAL }
-    case 'ai_decision': return { label: 'AI DECISION', text: e.data.explanation, tone: 'border-violet-500', badge: e.data.source === 'claude' ? 'Claude' : 'Fallback' }
+    case 'ai_decision': return { label: `AI DECISION · ${DECISION_KINDS[e.data.kind] ?? words(e.data.kind)}`, text: e.data.explanation, tone: 'border-violet-500', badge: e.data.source === 'claude' ? 'Claude' : 'Fallback' }
     case 'safety_check':
       return e.data.approved
         ? { label: 'SAFETY OK', text: `${words(e.data.action)} approved (${words(e.data.rule)})`, tone: GOOD }
@@ -57,6 +57,9 @@ function look(e: SimEvent): Look {
   }
 }
 
+const DECISION_KINDS: Record<string, string> = {
+  runway_flow: 'Runway flow', arrival_runway: 'Arrival runway', departure_gap: 'Next departure',
+}
 const LABEL_COLOR: Record<string, string> = {
   [BAD]: 'text-red-300', [WARN]: 'text-amber-300', [GOOD]: 'text-emerald-400', 'border-violet-500': 'text-violet-300',
 }

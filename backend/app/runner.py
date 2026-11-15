@@ -31,6 +31,7 @@ class Runner:
         self.sim = sim or simif.connect()
         self.voice = voice  # atc.voice_out.Voice, live server only (None in run_headless, tests and the harness)
         self.run_id = None
+        self.agent = None  # our Controller while the Agent is plugged in
         self.ended = True
         self._buf = []
         self._next_pos = self._next_metrics = 0.0
@@ -89,7 +90,8 @@ class Runner:
         self.flush()
 
     def _plug(self, controller):
-        self.sim.set_controller(controller, Controller(self.sim, self._add) if controller == "agent" else None)
+        self.agent = Controller(self.sim, self._add) if controller == "agent" else None
+        self.sim.set_controller(controller, self.agent)
 
     # -- stepping ------------------------------------------------------------------------------------------
     def tick(self):
@@ -120,9 +122,20 @@ class Runner:
         return {"verdict": verdict, "controller": self.sim.controller, **{k: score.get(k) for k in SCORE_KEYS}}
 
     def run_headless(self):
-        """Run to the end of the day as fast as possible (tests, harness)."""
+        """Run to the end of the day as fast as possible (tests, harness). No event loop runs here, so the agent takes
+        the planner's deterministic default at every key decision (repeatable scores, no network) unless
+        CLAUDE_IN_HARNESS=1, which runs the day on an event loop and holds sim time while Claude answers (<= 3 s)."""
+        if os.environ.get("CLAUDE_IN_HARNESS", "0") == "1":
+            return asyncio.run(self._run_headless_with_claude())
         while not self.ended:
             self.tick()
+        self.flush()
+
+    async def _run_headless_with_claude(self):
+        while not self.ended:
+            self.tick()
+            while self.agent is not None and self.agent.pending():
+                await asyncio.sleep(0.01)
         self.flush()
 
     def _add(self, t, type, callsign=None, data=None, reason=""):

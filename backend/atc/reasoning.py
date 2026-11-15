@@ -2,9 +2,9 @@
 already built; the chosen option still goes through the safety engine like any other proposal. Any failure (no key,
 timeout, API error, invalid JSON, an id not in the list) gives the planner's default with source "fallback".
 
-Not wired into the planner yet: docs/EVAL.md "Claude at key decisions (A4)" has the exact wiring for its `choose` hook
-(`Advisor.choose` below never blocks; it returns None while Claude is answering, then the answer, emitted once as an
-`ai_decision` event). With no API key or no running event loop it returns the default at once.
+Wired in atc/controller.py (`Controller.choose` is the planner's `choose` hook; docs/EVAL.md "Claude at key decisions
+(A4)"). `Advisor.choose` below never blocks; it returns None while Claude is answering, then the answer, emitted once
+as an `ai_decision` event. With no API key or no running event loop it returns the default at once.
 """
 import asyncio
 import json
@@ -44,8 +44,9 @@ def prompt(situation, options, default, procedures=""):
             f"Valid options:\n{opts}\n\nPlanner default: {default}\nReply with the JSON object only.")
 
 
-async def decide(situation, options, default, procedures="", client=None, model=None, timeout=TIMEOUT_S):
-    """-> {choice, explanation, source}. Never raises; returns within `timeout` seconds."""
+async def decide(situation, options, default, procedures="", client=None, model=None, timeout=None):
+    """-> {choice, explanation, source}. Never raises; returns within `timeout` (default TIMEOUT_S) seconds."""
+    timeout = TIMEOUT_S if timeout is None else timeout
     if client is None:
         return _fallback(options, default, "no Claude API key")
     try:
@@ -71,8 +72,8 @@ async def decide(situation, options, default, procedures="", client=None, model=
 
 class Advisor:
     """Sync adapter for the planner's tick: fires `decide` as a task and hands the answer over on a later tick.
-    The same decision (kind, option ids, default) gets one answer, reused on every re-check for ANSWER_TTL_S, so a
-    "keep" answer does not stand forever while the situation behind the same options changes."""
+    The same decision (kind, callsign, option ids, default) gets one answer, reused on every re-check for ANSWER_TTL_S,
+    so a "keep" answer does not stand forever while the situation behind the same options changes."""
 
     def __init__(self, client=None):
         self.client = client if client is not None else make_client()
@@ -83,7 +84,7 @@ class Advisor:
         """{choice, explanation, source, first} now, or None while Claude is still answering (at most TIMEOUT_S).
         `first` is True the first time a decision's answer is handed over."""
         options, default = decision["options"], decision["default"]
-        k = (decision["kind"], tuple(o["id"] for o in options), default)
+        k = (decision["kind"], decision.get("callsign"), tuple(o["id"] for o in options), default)
         got = self.answers.get(k)
         if got is not None and not isinstance(got, asyncio.Task) and time.monotonic() - self.since[k] > ANSWER_TTL_S:
             got = None  # stale: ask again
