@@ -41,3 +41,6 @@ backend/audio_cache/
 web/.env.local
 __pycache__/
 *.pyc
+
+# Voice clips made at runtime (rebuilt on demand; samples/ is committed)
+backend/voice/cache/

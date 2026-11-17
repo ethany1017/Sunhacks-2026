@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Voice Cast</title>
+<style>
+  :root { --bg: #0d1017; --card: #161b26; --line: #262d3d; --text: #e6e9f0; --dim: #8b93a7; --tower: #7dd3fc; --pilot: #fbbf24; --on: #34d399; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  main { max-width: 920px; margin: 0 auto; padding: 28px 16px 60px; }
+  header { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 22px; }
+  h1 { margin: 0; font-size: 22px; letter-spacing: .02em; }
+  .sub { color: var(--dim); font-size: 13px; margin-top: 4px; }
+  button { font: inherit; cursor: pointer; border: 1px solid var(--line); background: var(--card); color: var(--text); border-radius: 8px; padding: 8px 14px; }
+  button:hover { border-color: #3a4357; }
+  h2 { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); margin: 26px 0 10px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 10px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: flex; gap: 12px; cursor: pointer; transition: border-color .15s; }
+  .card:hover { border-color: #3a4357; }
+  .card.playing { border-color: var(--on); box-shadow: 0 0 0 1px var(--on) inset; }
+  .play { flex: none; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: #1f2636; }
+  .tower .play { color: var(--tower); } .pilot .play { color: var(--pilot); }
+  .playing .play { color: var(--on); }
+  .name { font-weight: 600; }
+  .meta { color: var(--dim); font-size: 12.5px; }
+  .text { font-size: 13px; margin-top: 6px; color: #c7ccd8; }
+  .tag { display: inline-block; font-size: 11px; padding: 1px 6px; border-radius: 5px; background: #222a3a; color: var(--dim); margin-left: 4px; }
+  .err { color: #fca5a5; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div>
+      <h1>Voice cast</h1>
+      <div class="sub" id="sub">Loading…</div>
+    </div>
+    <button id="all">▶ Play all</button>
+  </header>
+  <h2>Towers</h2><div class="grid" id="towers"></div>
+  <h2>Pilots</h2><div class="grid" id="pilots"></div>
+</main>
+<script>
+const audio = new Audio();
+let queue = [], current = null;
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+function play(card) {
+  document.querySelectorAll(".card.playing").forEach((c) => c.classList.remove("playing"));
+  if (current === card && !audio.paused) { audio.pause(); current = null; queue = []; return; }
+  current = card;
+  card.classList.add("playing");
+  audio.src = "../samples/" + card.dataset.file;
+  audio.play();
+}
+audio.addEventListener("ended", () => {
+  if (current) current.classList.remove("playing");
+  current = null;
+  const next = queue.shift();
+  if (next) setTimeout(() => play(next), 350);
+});
+
+fetch("../samples/manifest.json").then((r) => r.json()).then((m) => {
+  document.getElementById("sub").textContent =
+    `${m.clips.length} voices · ${m.source === "builtin" ? "built-in ElevenLabs voices (stand-ins for your library picks)" : "your library voices"} · model ${m.model_id}`;
+  for (const c of m.clips) {
+    const el = document.createElement("div");
+    el.className = "card " + c.kind;
+    el.dataset.file = c.file;
+    el.innerHTML = `<div class="play">▶</div><div><div class="name">${esc(c.name)}${c.source === "builtin" ? `<span class="tag">${esc(c.voice)}</span>` : ""}</div>
+      <div class="meta">${esc(c.position)}</div><div class="text">“${esc(c.text)}”</div></div>`;
+    el.addEventListener("click", () => { queue = []; play(el); });
+    document.getElementById(c.kind === "tower" ? "towers" : "pilots").appendChild(el);
+  }
+  document.getElementById("all").addEventListener("click", () => {
+    const cards = [...document.querySelectorAll(".card")];
+    queue = cards.slice(1);
+    play(cards[0]);
+  });
+}).catch(() => { document.getElementById("sub").innerHTML = '<span class="err">No samples yet: run python3 backend/voice/generate_samples.py</span>'; });
+</script>
+</body>
+</html>

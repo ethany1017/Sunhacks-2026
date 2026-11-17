@@ -1220,6 +1220,8 @@ class Simulation:
             self._resets += 1
             self._init_state()
             self.clock.speed, self.clock.paused = speed, paused
+            if self.controller_name == "tower":     # a fresh tower: the old one remembers clearances from the last run
+                self.set_controller("tower")
         else:
             return _err("unknown control action %r" % action)
         return {"ok": True, "state": {"paused": self.clock.paused, "speed": self.clock.speed, "controller": self.controller_name}}

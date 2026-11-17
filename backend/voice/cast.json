@@ -1,0 +1,191 @@
+{
+  "_comment": "Voice cast for pilots and towers. \"source\" picks which id every role uses: \"builtin\" (ElevenLabs default voices, free plan), \"designed\" (custom voices from design_voices.py; saving them needs a paid plan) or \"library\" (your library picks; needs a paid plan). Roles missing the chosen id fall back to their built-in voice. \"model_id\" is the default model; a role can override it, and \"style\" is a v3 audio tag put in front of every line (only eleven_v3 reads tags).",
+  "source": "builtin",
+  "model_id": "eleven_flash_v2_5",
+  "towers": [
+    {
+      "role": "tower_north",
+      "position": "Phoenix Tower (north, runway 8/26)",
+      "name": "Alexander Kensington",
+      "builtin": {
+        "name": "Daniel",
+        "id": "onwK4e9ZLuTAKqWW03F9"
+      },
+      "library_id": "mZ8K1MPRiT5wDQaasg3i",
+      "design": {
+        "description": "Calm, authoritative American male air traffic controller in his fifties. Deep, measured voice, crisp clipped radio delivery, unhurried and completely in control.",
+        "text": "Southwest twenty-four thirteen, Phoenix Tower, wind two six zero at eight, runway two six, cleared for takeoff."
+      }
+    },
+    {
+      "role": "tower_south",
+      "position": "Phoenix Tower (south, runways 7L/25R and 7R/25L)",
+      "name": "Donovan",
+      "builtin": {
+        "name": "Eric",
+        "id": "cjVigY5qzO86Huf0OWal"
+      },
+      "library_id": "DMyrgzQFny3JI1Y1paM5",
+      "design": {
+        "description": "Confident American male air traffic controller in his thirties. Brisk, efficient and slightly gravelly, fast clipped radio cadence, no wasted words.",
+        "text": "American nineteen eighty-two, Phoenix Tower, runway two five left, cleared to land, traffic holding short."
+      }
+    },
+    {
+      "role": "ground",
+      "position": "Phoenix Ground",
+      "name": "Jessica S",
+      "builtin": {
+        "name": "Laura",
+        "id": "FGY2WhTYpPnrIDTdsKH5"
+      },
+      "library_id": "lLgB6ZeIe84FSJa9pO1a",
+      "design": {
+        "description": "Professional American female air traffic controller in her forties. Clear, firm and quick, friendly efficiency, crisp radio delivery.",
+        "text": "SkyWest fifty-one forty, Phoenix Ground, runway two five right, taxi via Tango, Echo, hold short of two five left."
+      }
+    }
+  ],
+  "pilots": [
+    {
+      "name": "Amrut Deshmukh",
+      "style": "[strong Indian accent]",
+      "model_id": "eleven_v3",
+      "builtin": {
+        "name": "Callum",
+        "id": "N2lVS1w4EtoT3dr4eOWO"
+      },
+      "library_id": "vO7hjeAjmsdlGgUdvPpe",
+      "design": {
+        "description": "A middle-aged male airline captain from Mumbai, India, with a very strong, unmistakably Indian English accent and classic Indian intonation and rhythm. Warm, polite, confident, slightly formal, speaking over a cockpit radio.",
+        "text": "Phoenix Tower, good evening sir, Air India one two one, established ILS two five left. Cleared to land two five left, Air India one two one, thank you very much."
+      }
+    },
+    {
+      "name": "Rob",
+      "style": "[relaxed Southern drawl]",
+      "model_id": "eleven_v3",
+      "builtin": {
+        "name": "Roger",
+        "id": "CwhRBWXzGAHq8TQ4Fs17"
+      },
+      "library_id": "sB7vwSCyX0tQmU24cW2C",
+      "design": {
+        "description": "Laid-back American male airline captain in his fifties with a relaxed Southern drawl. Friendly, unhurried, a little gravelly, speaking over a cockpit radio.",
+        "text": "Afternoon Phoenix, Southwest twenty-four thirteen, holding short two six, ready to go. Cleared for takeoff two six, Southwest twenty-four thirteen."
+      }
+    },
+    {
+      "name": "Jack John",
+      "style": "[energetic, Midwestern accent]",
+      "model_id": "eleven_v3",
+      "builtin": {
+        "name": "Chris",
+        "id": "iP95p4xoKVk53GoZ742B"
+      },
+      "library_id": "7EzWGsX10sAS4c9m9cPf",
+      "design": {
+        "description": "Young American male first officer in his late twenties with a Midwestern accent. Energetic, quick and eager, speaking over a cockpit radio.",
+        "text": "Phoenix Ground, Frontier nineteen sixty-five, gate B nine, ready to push. Taxi to two five right via Tango, Echo, Frontier nineteen sixty-five."
+      }
+    },
+    {
+      "name": "W. L. Oxley",
+      "style": "[dry, refined British accent]",
+      "model_id": "eleven_v3",
+      "builtin": {
+        "name": "George",
+        "id": "JBFqnCBsd6RMkjVDRZzb"
+      },
+      "library_id": "gOkFV1JMCt0G0n9xmBwV",
+      "design": {
+        "description": "Older British male airline captain in his sixties with a refined, received-pronunciation English accent. Dry, unflappable and precise, speaking over a cockpit radio.",
+        "text": "Phoenix Tower, good afternoon, Speedbird two eight niner, ten miles final two five left. Cleared to land, two five left, Speedbird two eight niner."
+      }
+    },
+    {
+      "name": "Adam",
+      "style": "[tired, matter-of-fact]",
+      "model_id": "eleven_v3",
+      "builtin": {
+        "name": "Adam",
+        "id": "pNInz6obpgDQGcFmaJgB"
+      },
+      "library_id": "s3TPKV1kjDlVtZbl4Ksh",
+      "design": {
+        "description": "American male regional airline pilot in his thirties with a neutral accent. Matter-of-fact, steady, slightly tired at the end of a long day, speaking over a cockpit radio.",
+        "text": "Phoenix Tower, Envoy thirty-four ten, on the visual two six. Runway two six, cleared to land, Envoy thirty-four ten, appreciate it."
+      }
+    },
+    {
+      "name": "Brian",
+      "style": "[deep, slow and gravelly]",
+      "model_id": "eleven_v3",
+      "builtin": {
+        "name": "Brian",
+        "id": "nPczCjzI2devNBz1zQrb"
+      },
+      "library_id": "Gubgw9l4dtIoQA9YZHgx",
+      "design": {
+        "description": "Deep-voiced American male cargo pilot in his forties. Slow, low and gravelly, calm and economical, speaking over a cockpit radio.",
+        "text": "Phoenix Tower, FedEx fourteen oh two heavy, eight mile final two five left. Two five left, cleared to land, FedEx fourteen oh two heavy."
+      }
+    },
+    {
+      "name": "Archer",
+      "style": "[cheerful, broad Australian accent]",
+      "model_id": "eleven_v3",
+      "builtin": {
+        "name": "Charlie",
+        "id": "IKne3meq5aSn9XLyUdCD"
+      },
+      "library_id": "Fahco4VZzobUeiPqni1S",
+      "design": {
+        "description": "Australian male airline pilot in his forties with a broad Australian accent. Cheerful, easygoing and confident, speaking over a cockpit radio.",
+        "text": "G'day Phoenix Ground, Qantas seven niner, clear of two five left at Bravo. Taxi to gate F two via Bravo, Qantas seven niner, cheers."
+      }
+    },
+    {
+      "name": "James",
+      "style": "[smooth and confident]",
+      "model_id": "eleven_v3",
+      "builtin": {
+        "name": "Liam",
+        "id": "TX3LPaxmHKxFdv7VOQHJ"
+      },
+      "library_id": "lUTamkMw7gOzZbFIwmq4",
+      "design": {
+        "description": "American male airline captain in his forties with a smooth, polished West Coast accent. Relaxed authority, very clear diction, speaking over a cockpit radio.",
+        "text": "Phoenix Tower, Alaska six forty-four, holding short two five left at Delta. Cross runway two five left at Delta, Alaska six forty-four."
+      }
+    },
+    {
+      "name": "Hope",
+      "style": "[confident and upbeat]",
+      "model_id": "eleven_v3",
+      "builtin": {
+        "name": "Matilda",
+        "id": "XrExE9yKIg1WjnnlVkGX"
+      },
+      "library_id": "OYTbf65OHHFELVut7v2H",
+      "design": {
+        "description": "American female airline captain in her thirties. Confident, clear and upbeat, crisp professional diction, speaking over a cockpit radio.",
+        "text": "Phoenix Tower, Delta eleven twenty-two, ten miles out on the ILS two five left. Cleared to land two five left, Delta eleven twenty-two."
+      }
+    },
+    {
+      "name": "Jessica Anne Bogart",
+      "style": "[calm, slight Texan accent]",
+      "model_id": "eleven_v3",
+      "builtin": {
+        "name": "Jessica",
+        "id": "cgSgspJ2msm6clMCkdW9"
+      },
+      "library_id": "g6xIsTj2HwM6VR4iXFCw",
+      "design": {
+        "description": "American female first officer in her forties with a slight Texan accent. Calm, warm and steady, speaking over a cockpit radio.",
+        "text": "Phoenix Tower, United three oh seven, holding short two five right. Line up and wait, runway two five right, United three oh seven."
+      }
+    }
+  ]
+}
